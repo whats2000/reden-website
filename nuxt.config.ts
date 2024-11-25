@@ -1,7 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify from 'vite-plugin-vuetify';
 import transformAssetUrls = vuetify.transformAssetUrls;
-import { createProxyServer } from 'httpxy';
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',

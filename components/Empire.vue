@@ -11,6 +11,13 @@ const props = defineProps<{
 const fatalError = ref('');
 type GameState = 'wait' | 'prepare' | 'play' | 'finish' | 'spectate';
 const state = ref<GameState>(props.state ?? 'wait');
+watch(state, (value) => {
+  if (value === 'finish') {
+    moveQueue.value = [];
+    cursorX.value = -1;
+    cursorY.value = -1;
+  }
+});
 const room = ref({
   id: 0,
   created: 0,
@@ -59,12 +66,6 @@ const moveQueueDisplay = computed<Record<number, Record<number, Direction[]>>>(
     return ret;
   },
 );
-if (import.meta.client) {
-  console.log('moveQueue init', [...moveQueue.value]);
-  watch(moveQueue, (val) => {
-    console.log('moveQueue', [...val]);
-  });
-}
 const colorMap = ref<string[]>([randomColor(), randomColor()]);
 const nameMap = ref<string[]>([]);
 type UnitData = {
@@ -251,12 +252,10 @@ onMounted(() => {
           break;
         case '1':
           alert('您赢了！');
-          moveQueue.value = [];
           state.value = 'finish';
           break;
         case '0':
           const name = nameMap.value[packet.k];
-          moveQueue.value = [];
           state.value = 'finish';
           alert(`你被${name}杀死了`);
           break;
@@ -452,7 +451,11 @@ onUnmounted(() => {
       <template #text>
         还剩
         {{
-          void timer || Math.ceil((room.created + 90000 - Date.now()) / 1000)
+          void timer ||
+          Math.max(
+            Math.ceil((room.created + 90000 - Date.now()) / 1000),
+            -114514,
+          )
         }}
         秒
       </template>
@@ -469,16 +472,10 @@ onUnmounted(() => {
       </template>
     </v-empty-state>
     <div
-      v-if="state === 'play' || state === 'finish'"
+      v-if="state === 'play' || state === 'finish' || state === 'spectate'"
       ref="container"
       class="w-100 d-flex justify-center container position-relative"
-      @wheel.prevent.stop="handleScroll"
-      @mousedown.prevent="
-        (e) => {
-          mouseDown = true;
-          mousePrevPosition = [e.clientX, e.clientY];
-        }
-      "
+      @touchend="mouseDown = false"
       @touchstart="
         (e) => {
           if (e.touches.length == 1) {
@@ -490,6 +487,13 @@ onUnmounted(() => {
               e.touches[0].clientY - e.touches[1].clientY,
             );
           }
+        }
+      "
+      @wheel.prevent.stop="handleScroll"
+      @mousedown.prevent="
+        (e) => {
+          mouseDown = true;
+          mousePrevPosition = [e.clientX, e.clientY];
         }
       "
       @mouseup.prevent="mouseDown = false"
@@ -511,7 +515,6 @@ onUnmounted(() => {
           }
         }
       "
-      @touchend="mouseDown = false"
     >
       <table ref="table" class="position-relative map">
         <tr v-for="(row, x) in map" :key="x">

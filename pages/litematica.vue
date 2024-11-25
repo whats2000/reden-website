@@ -110,19 +110,22 @@ const generators = computed<Record<string, Machine>>(() => {
   return {};
 });
 
-function submit(e: SubmitEventPromise) {
-  e.preventDefault();
-  e.then((e) => {
-    if (e.valid) {
-      // open a new window to download
-      window.open(
-        `/api/mc-services/yisibite/${name.value}?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
-      );
-      setTimeout(() => {
-        refreshNuxtData();
-      }, 1000);
-    }
-  });
+async function submit(e: SubmitEventPromise) {
+  if ((await e).valid) {
+    // open a new window to download
+    window.open(
+      `/api/mc-services/yisibite/${name.value}?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
+    );
+    setTimeout(() => {
+      refreshNuxtData();
+    }, 1000);
+  }
+}
+
+function openMaterials() {
+  window.open(
+    `/api/mc-services/yisibite/${name.value}/materials?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
+  );
 }
 
 if (import.meta.client) {
@@ -133,7 +136,7 @@ const selected = computed(() => generators.value[name.value]);
 </script>
 
 <template>
-  <v-form class="content-common" fast-fail @submit="submit">
+  <v-form class="content-common" fast-fail @submit.prevent="submit">
     <v-row>
       <v-col>
         <h1>
@@ -267,6 +270,17 @@ const selected = computed(() => generators.value[name.value]);
                 :loading="loading"
                 class="ma-3"
                 color="primary"
+                variant="outlined"
+                type="button"
+                @click="openMaterials"
+              >
+                材料列表
+              </v-btn>
+              <v-btn
+                :disabled="selected?.available === false"
+                :loading="loading"
+                class="ma-3"
+                color="primary"
                 type="submit"
               >
                 {{ $t('litematica_generator.download') }}
@@ -274,11 +288,11 @@ const selected = computed(() => generators.value[name.value]);
             </v-row>
           </v-card-text>
         </v-card>
-        <v-row>
-          <v-spacer />
-          <LitematicaUpload v-if="useAppStore().logined" class="ma-4" />
-        </v-row>
       </v-col>
+    </v-row>
+    <v-row>
+      <v-spacer />
+      <LitematicaUpload v-if="useAppStore().logined" class="ma-4" />
     </v-row>
     <v-row v-if="!useAppStore().logined" class="text-sm-body-1">
       <v-col>

@@ -5,6 +5,7 @@ import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
 import Feature from '@/pages/feature/index.vue';
 import { discordInvite, githubLink } from '@/utils/constants';
 import '@/assets/main.css';
+import { useBackendMeta } from '~/store/meta';
 
 const introContent = ref<HTMLElement | null>(null);
 const localePath = useLocalePath();
@@ -14,9 +15,23 @@ useSeoMeta({
   title: t('reden.title.home_full') + ' - Reden',
   description: t('reden.description'),
 });
+
+const backendInfo = useBackendMeta();
 </script>
 
 <template>
+  <div v-if="backendInfo.developmentMode">
+    <v-alert closable icon="mdi-alert">
+      <template #title>
+        <span>开发模式选项</span>
+      </template>
+      <template #text>
+        <v-btn href="/api/account/login-test-account" color="primary">
+          登录测试账号
+        </v-btn>
+      </template>
+    </v-alert>
+  </div>
   <div class="main-page">
     <div>
       <v-row>
