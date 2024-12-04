@@ -14,7 +14,7 @@ import { getTimezone } from 'countries-and-timezones';
 const props = withDefaults(
   defineProps<{
     user?: Profile;
-    canEdit: boolean;
+    canEdit?: boolean;
     applyPreference?: boolean;
   }>(),
   {

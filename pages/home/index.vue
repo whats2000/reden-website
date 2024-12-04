@@ -75,6 +75,23 @@ function installWebhook() {
     })
     .catch((e) => toastError(e, 'Failed to update webhook'));
 }
+
+const personalToken = ref('');
+function getPersonalToken() {
+  doFetchPut('/api/account/access-token', {
+    note: `Personal Token ${new Date().toISOString()}`,
+    scope: ['user.read', 'backup.write'],
+    expiresAt: Date.now() + 1000 * 60 * 60 * 24 * 30,
+  }).then((response) => {
+    if (response.ok) {
+      response.text().then((data) => {
+        personalToken.value = data;
+      });
+    } else {
+      toastError(response);
+    }
+  });
+}
 </script>
 
 <template>
@@ -133,6 +150,36 @@ function installWebhook() {
     </div>
 
     <div class="flex-column">
+      <v-btn>
+        生成个人密钥
+        <v-dialog activator="parent" max-width="600">
+          <v-card v-if="!personalToken">
+            <v-form @submit.prevent="getPersonalToken">
+              <v-card-title>生成个人密钥</v-card-title>
+              <v-card-text>
+                <v-alert color="error">
+                  请妥善保管个人密钥，不要泄露给他人
+                </v-alert>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn type="submit"> 生成</v-btn>
+              </v-card-actions>
+            </v-form>
+          </v-card>
+          <v-card v-if="personalToken">
+            <v-card-title>个人密钥</v-card-title>
+            <v-card-text>
+              <v-alert color="error">
+                请妥善保管个人密钥，不要泄露给他人
+              </v-alert>
+              {{ personalToken }}
+            </v-card-text>
+            <v-card-actions>
+              <v-btn @click="personalToken = ''"> Close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-btn>
       <v-timeline></v-timeline>
     </div>
   </div>
