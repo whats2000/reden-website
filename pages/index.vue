@@ -1,11 +1,12 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref } from 'vue';
 import RedStoneSection from '@/components/RedStoneSection.vue';
 import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
 import Feature from '@/pages/feature/index.vue';
-import { discordInvite, githubLink } from '@/utils/constants';
+import { discordInvite, doFetchGet, githubLink } from '@/utils/constants';
 import '@/assets/main.css';
 import { useBackendMeta } from '~/store/meta';
+import { toast } from 'vuetify-sonner';
 
 const introContent = ref<HTMLElement | null>(null);
 const localePath = useLocalePath();
@@ -26,7 +27,14 @@ const backendInfo = useBackendMeta();
         <span>开发模式选项</span>
       </template>
       <template #text>
-        <v-btn href="/api/account/login-test-account" color="primary">
+        <v-btn
+          color="primary"
+          @click="
+            doFetchGet('/api/account/login-test-account').then(() =>
+              toast('登录成功'),
+            )
+          "
+        >
           登录测试账号
         </v-btn>
       </template>
@@ -41,27 +49,27 @@ const backendInfo = useBackendMeta();
             {{ $t('reden.description') }}
           </p>
         </v-col>
-        <v-col cols="3" class="icon">
+        <v-col class="icon" cols="3">
           <v-img src="/reden_256.png" width="148" />
         </v-col>
       </v-row>
       <div class="buttons">
         <v-btn
-          class="main-button"
-          prepend-icon="mdi-download"
-          size="x-large"
-          rounded="rounded"
-          color="primary"
           :to="localePath('/download')"
+          class="main-button"
+          color="primary"
+          prepend-icon="mdi-download"
+          rounded="rounded"
+          size="x-large"
         >
           {{ $t('reden.download') }}
         </v-btn>
         <v-btn
-          class="main-button"
           :href="githubLink"
+          class="main-button"
           prepend-icon="mdi-github"
-          size="x-large"
           rounded="rounded"
+          size="x-large"
           variant="outlined"
         >
           Github
@@ -70,8 +78,8 @@ const backendInfo = useBackendMeta();
           class="main-button"
           href="https://wiki.redenmc.com"
           prepend-icon="mdi-book-open"
-          size="x-large"
           rounded="rounded"
+          size="x-large"
           variant="outlined"
         >
           {{ $t('reden.wiki') }}
@@ -80,7 +88,7 @@ const backendInfo = useBackendMeta();
     </div>
   </div>
 
-  <div class="intro-content" ref="introContent">
+  <div ref="introContent" class="intro-content">
     <Feature />
     <div class="community-intro content-common">
       <v-row>
@@ -112,7 +120,7 @@ const backendInfo = useBackendMeta();
 
       <RedstoneSectionTitle :title="$t('reden.home.community_intro.title')" />
       <RedStoneSection :size="3">
-        <template #title> Open Source </template>
+        <template #title> Open Source</template>
         <template #text>
           <p>
             {{ $t('reden.home.community_intro.open_source') }}
@@ -121,17 +129,17 @@ const backendInfo = useBackendMeta();
         <template #action>
           <v-btn
             :href="githubLink"
-            color="primary"
-            variant="outlined"
-            rounded="rounded"
             class="main-button"
+            color="primary"
+            rounded="rounded"
+            variant="outlined"
           >
             Github
           </v-btn>
         </template>
       </RedStoneSection>
       <RedStoneSection :size="3">
-        <template #title> Sponsors </template>
+        <template #title> Sponsors</template>
         <template #text>
           <p>
             {{ $t('reden.home.community_intro.sponsor') }}
@@ -140,17 +148,17 @@ const backendInfo = useBackendMeta();
         <template #action>
           <v-btn
             :to="localePath('/sponsors')"
-            color="primary"
-            variant="outlined"
-            rounded="rounded"
             class="main-button"
+            color="primary"
+            rounded="rounded"
+            variant="outlined"
           >
             Sponsors
           </v-btn>
         </template>
       </RedStoneSection>
       <RedStoneSection :size="3">
-        <template #title> Wiki </template>
+        <template #title> Wiki</template>
         <template #text>
           <p>
             {{ $t('reden.home.community_intro.wiki') }}
@@ -158,18 +166,18 @@ const backendInfo = useBackendMeta();
         </template>
         <template #action>
           <v-btn
-            href="//wiki.redenmc.com"
-            color="primary"
-            variant="outlined"
-            rounded="rounded"
             class="main-button"
+            color="primary"
+            href="//wiki.redenmc.com"
+            rounded="rounded"
+            variant="outlined"
           >
             Wiki
           </v-btn>
         </template>
       </RedStoneSection>
       <RedStoneSection :size="3">
-        <template #title> Discord </template>
+        <template #title> Discord</template>
         <template #text>
           <p>
             {{ $t('reden.home.community_intro.discord') }}
@@ -178,10 +186,10 @@ const backendInfo = useBackendMeta();
         <template #action>
           <v-btn
             :href="discordInvite"
-            color="primary"
-            variant="outlined"
-            rounded="rounded"
             class="main-button"
+            color="primary"
+            rounded="rounded"
+            variant="outlined"
           >
             Discord
           </v-btn>
