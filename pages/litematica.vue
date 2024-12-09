@@ -4,10 +4,11 @@ import { useAppStore } from '~/store/app';
 import { type SubmitEventPromise, useDisplay } from 'vuetify';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
-import LitematicaUpload from '~/components/yisibite/LitematicaUpload.vue';
 import SizeInput from '~/components/yisibite/SizeInput.vue';
 import 'assets/main.css';
 import { useFetch } from 'nuxt/app';
+import { doFetchGet, doFetchPut, toastError } from '~/utils/constants';
+import { toast } from 'vuetify-sonner';
 
 const route = useRoute();
 const router = useRouter();
@@ -133,6 +134,62 @@ if (import.meta.client) {
 }
 
 const selected = computed(() => generators.value[name.value]);
+
+const uploadFile = ref<File>();
+const uploadPath = ref('');
+const uploadName = ref('');
+
+const cache = ref<{
+  name: string;
+  approved: boolean;
+  approvedBy: Profile;
+}>();
+const uploadCache = (name: string) => {
+  console.log('uploadCache', name);
+  const existing = generators.value[name];
+  if (existing) {
+    uploadName.value = existing.name;
+  }
+  if (name) {
+    doFetchGet(`/api/mc-services/yisibite/${name}/approval`)
+      .then(async (res) => {
+        if (res.status == 404) {
+          cache.value = {
+            name: '404 Not Found',
+            approved: false,
+          };
+        } else {
+          if (!res.ok) return Promise.reject(res);
+          cache.value = await res.json();
+        }
+      })
+      .catch((e) => toastError(e));
+  }
+};
+
+async function submitUpload(e: SubmitEventPromise) {
+  console.log(uploadFile.value);
+  const a = await e;
+  if (a.valid) {
+    loading.value = true;
+    doFetchPut(
+      `/api/mc-services/yisibite/${uploadPath.value}?name=${uploadName.value}`,
+      uploadFile.value!,
+    )
+      .then((res) => {
+        if (!res.ok) return Promise.reject(res);
+        toast('OK', {
+          cardProps: {
+            color: 'green',
+          },
+        });
+      })
+      .catch((e) => toastError(e))
+      .finally(() => (loading.value = false));
+  } else {
+    await toastError(a.errors[0].errorMessages.join(' '));
+  }
+}
 </script>
 
 <template>
@@ -149,7 +206,7 @@ const selected = computed(() => generators.value[name.value]);
     </v-row>
 
     <v-row>
-      <v-col style="min-width: 200px" cols="12">
+      <v-col cols="12" style="min-width: 200px">
         {{ $t('litematica_generator.select') }}
       </v-col>
       <v-select
@@ -157,13 +214,13 @@ const selected = computed(() => generators.value[name.value]);
         :item-title="(item) => generators[item]?.name"
         :item-value="(item) => item"
         :items="Object.keys(generators)"
+        active
         density="comfortable"
         hide-details
-        active
         @update:model-value="router.replace({ query: { m: name } })"
       >
         <template #item="{ item, props }">
-          <v-list-item v-bind="props" :subtitle="item.value">
+          <v-list-item :subtitle="item.value" v-bind="props">
             <template #append>
               <v-chip v-if="!mobile && generators[item.value]">
                 {{
@@ -188,7 +245,7 @@ const selected = computed(() => generators.value[name.value]);
           </v-chip>
         </template>
       </v-select>
-      <v-col cols="12" v-if="false">
+      <v-col v-if="false" cols="12">
         <v-card border>
           <v-card-actions>
             {{ selected.name }}
@@ -270,8 +327,8 @@ const selected = computed(() => generators.value[name.value]);
                 :loading="loading"
                 class="ma-3"
                 color="primary"
-                variant="outlined"
                 type="button"
+                variant="outlined"
                 @click="openMaterials"
               >
                 材料列表
@@ -292,7 +349,74 @@ const selected = computed(() => generators.value[name.value]);
     </v-row>
     <v-row>
       <v-spacer />
-      <LitematicaUpload v-if="useAppStore().logined" class="ma-4" />
+      <v-btn class="ma-4">
+        Upload
+        <v-dialog activator="parent" max-width="600">
+          <v-card>
+            <v-card-title>Upload Machine</v-card-title>
+            <v-form @submit.prevent="submitUpload">
+              <v-col>
+                <v-combobox
+                  clearable
+                  v-model="uploadPath"
+                  label="path"
+                  @update:model-value="uploadCache(uploadPath)"
+                  :items="Object.keys(generators)"
+                >
+                  <template #details>
+                    {{
+                      cache?.approved
+                        ? 'Approved'
+                        : cache?.approved === false
+                          ? cache?.name
+                          : 'Querying'
+                    }}
+                  </template>
+                </v-combobox>
+                <v-text-field v-model="uploadName" label="name" />
+                <a
+                  href="https://v8g1c-my.sharepoint.com/:w:/g/personal/zly2006_redenmc_com1/Eb_9sZGN-EhBsMU8sCkfN7sBNO7FdK81OUumXFAhb5byxQ"
+                  >View requirements and the format here</a
+                >
+                <v-file-input
+                  v-model="uploadFile"
+                  :rules="[
+                    () =>
+                      (uploadFile?.name?.endsWith('.litematic') ?? false) ||
+                      'Must be litematica files.',
+                  ]"
+                  clearable
+                  label="file"
+                  @update:modelValue="
+                    (files) => {
+                      const file = (
+                        files instanceof Array ? files[0] : files
+                      ) as File;
+                      if (name == '') {
+                        name = uploadFile.name.replace('.litematic', '');
+                      }
+                      if (uploadPath == '') {
+                        uploadPath = uploadFile.name
+                          .replace('.litematic', '')
+                          .replaceAll(/[^\w\-.+]/g, '')
+                          .toLowerCase();
+                      }
+                    }
+                  "
+                />
+              </v-col>
+              <v-col>
+                <v-row>
+                  <v-spacer />
+                  <v-btn :loading="loading" color="primary" type="submit"
+                    >Upload
+                  </v-btn>
+                </v-row>
+              </v-col>
+            </v-form>
+          </v-card>
+        </v-dialog>
+      </v-btn>
     </v-row>
     <v-row v-if="!useAppStore().logined" class="text-sm-body-1">
       <v-col>
