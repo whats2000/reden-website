@@ -66,6 +66,10 @@ function deleteItem(item: Backup) {
         key: 'localPath',
       },
       {
+        title: '世界名称',
+        key: 'worldName',
+      },
+      {
         title: '创建时间',
         key: 'createdAt',
       },
@@ -91,6 +95,12 @@ function deleteItem(item: Backup) {
     <template #[`item.actions`]="{ item }">
       <v-btn :href="item.webUrl" color="primary">查看</v-btn>
       <v-btn @click="deleteItem(item)" color="error">删除</v-btn>
+    </template>
+    <template #[`item.user`]="{ item }">
+      {{ item.user.username }}
+    </template>
+    <template #[`item.createdAt`]="{ item }">
+      {{ new Date(item.createdAt).toLocaleString() }}
     </template>
   </v-data-table-server>
 </template>
