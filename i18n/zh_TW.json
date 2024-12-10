@@ -116,13 +116,13 @@
       "username_desc": ""
     },
     "editProfile": "",
+    "my_backup": "",
     "oauth": {
       "link_account": "",
       "unlink_account": ""
     },
     "password": "",
-    "username": "",
-    "my_backup": ""
+    "username": ""
   },
   "reden": {
     "description": "為紅石機器開發者提供一站式工作環境，成為最好的紅石調試和教學工具。",

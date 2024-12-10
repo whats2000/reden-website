@@ -3,6 +3,9 @@ import { useRoute } from '#vue-router';
 import { ref } from 'vue';
 import { doFetchGet, type Profile } from '~/utils/constants';
 
+definePageMeta({
+  title: 'profile.my_backup',
+});
 type Parameter = {
   search: string;
   pageSize: string;
@@ -75,8 +78,12 @@ function deleteItem(item: Backup) {
       构成犯罪的将会移交公安机关处理。
     </p>
     <p>
-      云备份存档为zip压缩文件，您可以在下载后通过指令导入进 X Backup
-      模组的增量备份数据库中。（还没写）
+      云备份存档为zip压缩文件，您可以在下载后
+      <span style="color: green">手动解压</span>
+      到服务器的存档文件夹中，也可以
+      <span style="color: green"
+        >通过指令导入进 X Backup 模组的增量备份数据库中。（还没写）
+      </span>
     </p>
   </div>
   <v-data-table-server

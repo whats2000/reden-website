@@ -119,13 +119,13 @@
       "username_timer": "你可以在{0}小时后修改用户名"
     },
     "editProfile": "编辑个人资料",
+    "my_backup": "我的云备份",
     "oauth": {
       "link_account": "连接账户",
       "unlink_account": "取消连接"
     },
     "password": "密码",
-    "username": "用户名",
-    "my_backup": "我的备份"
+    "username": "用户名"
   },
   "reden": {
     "description": "为红石机器开发者提供一站式工作环境，成为最好的红石调试和教学工具。",
