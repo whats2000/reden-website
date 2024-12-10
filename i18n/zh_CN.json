@@ -124,7 +124,8 @@
       "unlink_account": "取消连接"
     },
     "password": "密码",
-    "username": "用户名"
+    "username": "用户名",
+    "my_backup": "我的备份"
   },
   "reden": {
     "description": "为红石机器开发者提供一站式工作环境，成为最好的红石调试和教学工具。",

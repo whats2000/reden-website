@@ -180,6 +180,15 @@ function getPersonalToken() {
           </v-card>
         </v-dialog>
       </v-btn>
+      <v-btn
+        :to="localePath('/x-backup/me')"
+        class="text-none"
+        color="secondary"
+        rounded="lg"
+        variant="outlined"
+      >
+        {{ $t('profile.my_backup') }}
+      </v-btn>
       <v-timeline></v-timeline>
     </div>
   </div>
