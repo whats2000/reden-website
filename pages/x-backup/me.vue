@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useRoute } from '#vue-router';
 import { ref } from 'vue';
 import { doFetchGet, type Profile } from '~/utils/constants';
@@ -23,6 +23,7 @@ const totalItems = ref(10000000); // use a very large number to avoid reload
 const serverItems = ref<Backup[]>([]);
 const loading = ref(false);
 const search = ref(query.search || '');
+const downloading = ref(false);
 
 async function loadItems(options: {
   page: number;
@@ -57,7 +58,26 @@ function deleteItem(item: Backup) {
 
 <template>
   <div>
-    <h1>我的备份</h1>
+    <h1>我的云备份</h1>
+    <p>
+      云备份功能尚处于内测阶段，如有问题请联系管理员。 关注<a
+        class="router"
+        href="https://space.bilibili.com/1545239761/dynamic"
+        >我的B站</a
+      >获取最新消息。 在内测阶段，我们将提供免费的云备份服务，但<span
+        style="color: red"
+        >不保证数据的安全性</span
+      >，请自行备份重要数据。
+    </p>
+    <p>请注意，云备份功能仅用于存档文件的备份，不包括服务器的配置文件等。</p>
+    <p style="color: red">
+      请勿上传任何违法违规内容，严禁逆向工程、破解、压力测试等行为，一经发现将会被封禁账号。
+      构成犯罪的将会移交公安机关处理。
+    </p>
+    <p>
+      云备份存档为zip压缩文件，您可以在下载后通过指令导入进 X Backup
+      模组的增量备份数据库中。（还没写）
+    </p>
   </div>
   <v-data-table-server
     :headers="[
@@ -86,15 +106,17 @@ function deleteItem(item: Backup) {
     ]"
     :items="serverItems"
     :items-length="totalItems"
-    :page="page"
     :items-per-page="pageSize"
     :loading="loading"
+    :page="page"
     :search="search"
     @update:options="loadItems"
   >
     <template #[`item.actions`]="{ item }">
-      <v-btn :href="item.webUrl" color="primary">查看</v-btn>
-      <v-btn @click="deleteItem(item)" color="error">删除</v-btn>
+      <v-btn :href="item.webUrl" :loading="downloading" color="primary"
+        >查看/下载
+      </v-btn>
+      <v-btn color="error" @click="deleteItem(item)">删除</v-btn>
     </template>
     <template #[`item.user`]="{ item }">
       {{ item.user.username }}
