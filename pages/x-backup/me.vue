@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { useRoute } from '#vue-router';
 import { ref } from 'vue';
-import { doFetchGet, type Profile } from '~/utils/constants';
+import { doFetchDelete, doFetchGet, type Profile } from '~/utils/constants';
+import { toast } from 'vuetify-sonner';
 
 definePageMeta({
   title: 'profile.my_backup',
@@ -18,6 +19,8 @@ type Backup = {
   createdAt: string;
   user: Profile;
   webUrl: string;
+  itemId: string;
+  cloudDriveId: number;
 };
 const query = { ...useRoute().query } as Parameter;
 const page = ref(Number(query.page) || 1);
@@ -56,6 +59,27 @@ async function loadItems(options: {
 
 function deleteItem(item: Backup) {
   console.log(item);
+  if (item.cloudDriveId == 1) {
+    doFetchDelete(`/api/backup/v1/onedrive/${item.itemId}`).then((response) => {
+      if (response.ok) {
+        loadItems({
+          page: page.value,
+          itemsPerPage: pageSize.value,
+          sortBy: [],
+          sortDesc: false,
+        });
+        toast('删除成功', {
+          cardProps: {
+            color: 'green',
+          },
+        });
+      } else {
+        toastError(response);
+      }
+    });
+  } else {
+    toastError('暂不支持删除此云盘的备份');
+  }
 }
 </script>
 
