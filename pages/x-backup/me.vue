@@ -148,7 +148,7 @@ function deleteItem(item: Backup) {
       <v-btn :href="item.webUrl" :loading="downloading" color="primary"
         >查看/下载
       </v-btn>
-      <v-btn color="error" @click="deleteItem(item)">
+      <v-btn color="error">
         删除
         <v-dialog activator="parent" max-width="500">
           <template #default="{ isActive }">
