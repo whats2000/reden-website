@@ -15,6 +15,7 @@ type Parameter = {
   order: 'asc' | 'desc';
 };
 type Backup = {
+  worldName: string;
   localPath: string;
   createdAt: string;
   user: Profile;
@@ -147,7 +148,31 @@ function deleteItem(item: Backup) {
       <v-btn :href="item.webUrl" :loading="downloading" color="primary"
         >查看/下载
       </v-btn>
-      <v-btn color="error" @click="deleteItem(item)">删除</v-btn>
+      <v-btn color="error" @click="deleteItem(item)">
+        删除
+        <v-dialog activator="parent" max-width="500">
+          <template #default="{ isActive }">
+            <v-card>
+              <v-card-title>删除备份</v-card-title>
+              <v-card-text>
+                <p>确定要删除此备份吗？</p>
+                <p>备份路径： {{ item.localPath }}</p>
+                <p>世界名称： {{ item.worldName }}</p>
+                <p>
+                  备份时间： {{ new Date(item.createdAt).toLocaleString() }}
+                </p>
+                <p>此操作不可逆，请谨慎操作。</p>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn color="error" @click="deleteItem(item)">确定</v-btn>
+                <v-btn color="secondary" @click="isActive.value = false"
+                  >取消</v-btn
+                >
+              </v-card-actions>
+            </v-card>
+          </template>
+        </v-dialog>
+      </v-btn>
     </template>
     <template #[`item.user`]="{ item }">
       {{ item.user.username }}
