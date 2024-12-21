@@ -392,6 +392,14 @@ async function submitUpload(e: SubmitEventPromise) {
                       const file = (
                         files instanceof Array ? files[0] : files
                       ) as File;
+                      if (!uploadFile) {
+                        toast('Please select a file', {
+                          cardProps: {
+                            color: 'error',
+                          },
+                        });
+                        return;
+                      }
                       if (name == '') {
                         name = uploadFile.name.replace('.litematic', '');
                       }
@@ -427,8 +435,14 @@ async function submitUpload(e: SubmitEventPromise) {
     </v-row>
     <v-row>
       <v-col>
-        {{ $t('litematica_generator.contribute') }}
-        <a class="router" href="mailto:me@redenmc.com">me@redenmc.com</a>
+        <h3>FAQ</h3>
+        <h4>17x17的空置域应该输入多少？</h4>
+        <p>17x16=272，272的大小包含了两边各一格的铁砧墙宽度。</p>
+        <h4>没有找到你想要的机器？</h4>
+        <p>
+          {{ $t('litematica_generator.contribute') }}
+          <a class="router" href="mailto:me@redenmc.com">me@redenmc.com</a>
+        </p>
         <br />
         <div class="text-center v-card-subtitle w-100">
           {{ $t('litematica_generator.total_downloads', [total]) }}

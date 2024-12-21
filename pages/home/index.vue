@@ -219,7 +219,7 @@ function getPersonalToken() {
                         'backup/*',
                       ]"
                       multiple
-                    ></v-select>
+                    />
                   </v-col>
                 </v-row>
               </v-card-text>
