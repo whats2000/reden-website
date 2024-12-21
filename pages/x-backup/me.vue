@@ -19,7 +19,8 @@ type Backup = {
   localPath: string;
   createdAt: string;
   user: Profile;
-  webUrl: string;
+  restUrl: string;
+  zipSize: number;
   itemId: string;
   cloudDriveId: number;
 };
@@ -61,7 +62,7 @@ async function loadItems(options: {
 function deleteItem(item: Backup) {
   console.log(item);
   if (item.cloudDriveId == 1) {
-    doFetchDelete(`/api/backup/v1/onedrive/${item.itemId}`).then((response) => {
+    doFetchDelete(item.restUrl).then((response) => {
       if (response.ok) {
         loadItems({
           page: page.value,
@@ -130,6 +131,10 @@ function deleteItem(item: Backup) {
         key: 'user',
       },
       {
+        title: '存档大小',
+        key: 'zipSize',
+      },
+      {
         title: '操作',
         key: 'actions',
         sortable: false,
@@ -145,7 +150,7 @@ function deleteItem(item: Backup) {
     @update:options="loadItems"
   >
     <template #[`item.actions`]="{ item }">
-      <v-btn :href="item.webUrl" :loading="downloading" color="primary"
+      <v-btn :href="item.restUrl" :loading="downloading" color="primary"
         >查看/下载
       </v-btn>
       <v-btn color="error">
@@ -166,8 +171,8 @@ function deleteItem(item: Backup) {
               <v-card-actions>
                 <v-btn color="error" @click="deleteItem(item)">确定</v-btn>
                 <v-btn color="secondary" @click="isActive.value = false"
-                  >取消</v-btn
-                >
+                  >取消
+                </v-btn>
               </v-card-actions>
             </v-card>
           </template>
@@ -179,6 +184,22 @@ function deleteItem(item: Backup) {
     </template>
     <template #[`item.createdAt`]="{ item }">
       {{ new Date(item.createdAt).toLocaleString() }}
+    </template>
+    <template #[`item.zipSize`]="{ item }">
+      {{
+        (() => {
+          const kb = item.zipSize / 1024;
+          const mb = kb / 1024;
+          const gb = mb / 1024;
+          if (gb > 1) {
+            return gb.toFixed(2) + ' GB';
+          } else if (mb > 1) {
+            return mb.toFixed(2) + ' MB';
+          } else {
+            return kb.toFixed(2) + ' KB';
+          }
+        })()
+      }}
     </template>
   </v-data-table-server>
 </template>

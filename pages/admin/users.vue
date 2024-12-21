@@ -171,6 +171,7 @@ function isBanned(user: Profile) {
   font-size: 1.3rem;
   text-decoration: none;
   color: currentColor;
+  text-wrap: nowrap;
 }
 
 .username:hover {
