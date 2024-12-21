@@ -22,7 +22,7 @@ type Backup = {
   restUrl: string;
   zipSize: number;
   itemId: string;
-  cloudDriveId: number;
+  cloudDriveId: string;
 };
 const query = { ...useRoute().query } as Parameter;
 const page = ref(Number(query.page) || 1);
@@ -61,7 +61,7 @@ async function loadItems(options: {
 
 function deleteItem(item: Backup) {
   console.log(item);
-  if (item.cloudDriveId == 1) {
+  if (item.cloudDriveId === 'OneDrive') {
     doFetchDelete(item.restUrl).then((response) => {
       if (response.ok) {
         loadItems({
@@ -80,7 +80,7 @@ function deleteItem(item: Backup) {
       }
     });
   } else {
-    toastError('暂不支持删除此云盘的备份');
+    toastError('', '暂不支持删除此云盘的备份');
   }
 }
 </script>
@@ -117,22 +117,27 @@ function deleteItem(item: Backup) {
       {
         title: '存档路径',
         key: 'localPath',
+        sortable: false,
       },
       {
         title: '世界名称',
         key: 'worldName',
+        sortable: false,
       },
       {
         title: '创建时间',
         key: 'createdAt',
+        sortable: false,
       },
       {
         title: '创建者',
         key: 'user',
+        sortable: false,
       },
       {
         title: '存档大小',
         key: 'zipSize',
+        sortable: false,
       },
       {
         title: '操作',
