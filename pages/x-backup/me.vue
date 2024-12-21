@@ -59,7 +59,7 @@ async function loadItems(options: {
   }
 }
 
-function deleteItem(item: Backup) {
+function deleteItem(item: Backup, onSuccess: () => void) {
   console.log(item);
   if (item.cloudDriveId === 'OneDrive') {
     doFetchDelete(item.restUrl).then((response) => {
@@ -174,7 +174,12 @@ function deleteItem(item: Backup) {
                 <p>此操作不可逆，请谨慎操作。</p>
               </v-card-text>
               <v-card-actions>
-                <v-btn color="error" @click="deleteItem(item)">确定</v-btn>
+                <v-btn
+                  color="error"
+                  @click="deleteItem(item, () => (isActive.value = false))"
+                >
+                  确定
+                </v-btn>
                 <v-btn color="secondary" @click="isActive.value = false"
                   >取消
                 </v-btn>
