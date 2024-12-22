@@ -24,13 +24,19 @@ const unitDisplay: Record<string, string> = {
   HKD: 'HK$',
 };
 
-const { data: sponsors } = await useFetch<Sponsor[]>(`/api/sponsors`);
+const { data: sponsors, refresh } = await useFetch<Sponsor[]>(`/api/sponsors`);
 const sorted = computed(
   () =>
     sponsors.value?.sort((a: Sponsor, b: Sponsor) => {
       return b.amount - a.amount;
     }) ?? [],
 );
+
+if (import.meta.client) {
+  onMounted(() => {
+    refresh();
+  });
+}
 </script>
 
 <template>

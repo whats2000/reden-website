@@ -10,7 +10,6 @@ export const reCAPTCHAKey = '6Lczc24pAAAAAAxzBZbRy8CZc_ba06Qn_3OJ_Vg-';
 export const cloudflareCAPTCHAKey = '0x4AAAAAAARtCTyyGc1nbVUm';
 export const discordInvite = 'https://discord.gg/fCxmEyFgAd';
 export const githubLink = 'https://github.com/zly2006/reden-is-what-we-made';
-// export const theme = ref(useAppStore(pinia).theme);
 export const usernameRegex =
   /^[a-zA-Z\-\u4e00-\u9fa5][\w\-\u4e00-\u9fa5]{3,19}$/;
 export const zh_cn = 'zh_cn';
@@ -73,14 +72,13 @@ export const doFetchPost = (url: string, data: any) =>
     headers: {
       'Content-Type': 'application/json',
       'X-Requested-With': 'Reden',
-      'X-CSRF-Token':
-        useAppStore(/*pinia*/).csrfToken || '[Reden] no csrf token',
+      'X-CSRF-Token': useAppStore().csrfToken || '[Reden] no csrf token',
     },
     credentials: 'include',
     body: JSON.stringify(data),
   }).then((res) => {
     if (res.status === 401) {
-      useAppStore(/*pinia*/).logout();
+      useAppStore().logout();
     }
     return res;
   });
@@ -105,7 +103,7 @@ export function doFetchPut(url: string, data: any) {
   const { fetchBody, isJson } = getPayloadType(data);
   const headers: { [key: string]: string } = {
     'X-Requested-With': 'Reden',
-    'X-CSRF-Token': useAppStore(/*pinia*/).csrfToken || '[Reden] no csrf token',
+    'X-CSRF-Token': useAppStore().csrfToken || '[Reden] no csrf token',
   };
   if (isJson) {
     headers['Content-Type'] = 'application/json';

@@ -1,5 +1,6 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useLocalePath } from '#i18n';
+import { toast } from 'vuetify-sonner';
 
 /**
  * 用vue写一个云备份服务的计划选择界面，使用vuetify，注意界面的质感、圆角、渐变色、图标和配色的使用，包括：
@@ -90,8 +91,8 @@ const localePath = useLocalePath();
 function goToCheckout(key: Plan['key']) {
   if (key === 'free') {
     router.push(localePath('/x-backup/me'));
-  } else if (key === 'storage') {
-    router.push(localePath('/x-backup/buy-storage'));
+  } else {
+    toast.primary('暂不支持此计划');
   }
 }
 </script>
@@ -103,14 +104,14 @@ function goToCheckout(key: Plan['key']) {
         <v-col
           v-for="plan in plans"
           :key="plan.name"
-          cols="12"
-          :sm="plan.smCols ?? 6"
           :md="plan.mdCols ?? 4"
+          :sm="plan.smCols ?? 6"
+          cols="12"
         >
           <v-card
             :color="plan.color"
-            class="pa-4 rounded-xl"
             :elevation="plan.elevation"
+            class="pa-4 rounded-xl"
             hover
             outlined
           >
@@ -124,17 +125,18 @@ function goToCheckout(key: Plan['key']) {
             <v-divider></v-divider>
             <v-card-text class="text-center">
               <div v-for="feature in plan.features" :key="feature" class="my-2">
-                <v-icon class="mr-2" :color="plan.iconColor"
-                  >mdi-check-circle</v-icon
-                >{{ feature }}
+                <v-icon :color="plan.iconColor" class="mr-2"
+                  >mdi-check-circle
+                </v-icon>
+                {{ feature }}
               </div>
             </v-card-text>
             <v-btn
               :color="plan.buttonColor"
               block
               @click="goToCheckout(plan.key)"
-              >选择此计划</v-btn
-            >
+              >选择此计划
+            </v-btn>
           </v-card>
         </v-col>
       </v-row>
