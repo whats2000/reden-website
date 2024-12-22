@@ -3,7 +3,12 @@ import { ref } from 'vue';
 import RedStoneSection from '@/components/RedStoneSection.vue';
 import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
 import Feature from '@/pages/feature/index.vue';
-import { discordInvite, doFetchGet, githubLink } from '@/utils/constants';
+import {
+  discordInvite,
+  doFetchGet,
+  githubLink,
+  toastError,
+} from '@/utils/constants';
 import '@/assets/main.css';
 import { useBackendMeta } from '~/store/meta';
 import { toast } from 'vuetify-sonner';
@@ -30,9 +35,13 @@ const backendInfo = useBackendMeta();
         <v-btn
           color="primary"
           @click="
-            doFetchGet('/api/account/login-test-account').then(() =>
-              toast('登录成功'),
-            )
+            doFetchGet('/api/account/login-test-account').then((res) => {
+              if (res.ok) {
+                toast('登录成功');
+              } else {
+                toastError(res);
+              }
+            })
           "
         >
           登录测试账号

@@ -1,5 +1,6 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { onMounted, type Ref, ref } from 'vue';
+import { useDisplay } from 'vuetify';
 
 // todo: 不透明度渐变
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -16,6 +17,10 @@ if (size === undefined || size < 1) {
   throw new Error('size must be greater than 0');
 }
 const sizz = Math.floor(size);
+
+const { mobile } = useDisplay({
+  mobileBreakpoint: 500,
+});
 
 let lightLine: Ref<Element | null> = ref(null);
 let card: Ref<Element | null> = ref(null);
@@ -72,7 +77,7 @@ const autoPlay = ref(true);
 <template>
   <div class="line">
     <div ref="card">
-      <v-card class="card" :min-height="sizz * 100 - 80">
+      <v-card :min-height="sizz * 100 - 80" class="card">
         <template #title>
           <slot name="title" />
         </template>
@@ -85,16 +90,17 @@ const autoPlay = ref(true);
           </div>
         </template>
         <template #image>
-          <div class="bg-img-wrap">
+          <div :class="{ 'bg-img-wrap': !mobile }">
             <slot v-if="video == undefined" name="image" />
             <video
-              :src="video"
               v-if="video != undefined"
-              style="object-fit: scale-down; height: 260px; right: 0"
               :autoplay="autoPlay"
+              :src="video"
+              height="220"
               loop
               muted
               playsinline
+              style="object-fit: cover; object-position: center"
             />
           </div>
         </template>
@@ -115,11 +121,11 @@ const autoPlay = ref(true);
       </v-card>
     </div>
     <div class="darkLine lineLayout">
-      <div class="photo r0" v-for="n in sizz" :key="n"></div>
+      <div v-for="n in sizz" :key="n" class="photo r0"></div>
     </div>
 
-    <div class="lightLine lineLayout invisible" ref="lightLine">
-      <div v-show="leverOn" class="photo r15" v-for="n in sizz" :key="n"></div>
+    <div ref="lightLine" class="lightLine lineLayout invisible">
+      <div v-for="n in sizz" v-show="leverOn" :key="n" class="photo r15"></div>
     </div>
   </div>
 </template>
@@ -236,7 +242,9 @@ const autoPlay = ref(true);
 .bg-img-wrap {
   display: flex;
   width: 100%;
+  height: 100%;
   justify-content: end;
+  left: 0;
 }
 
 .my-text-wrap {
