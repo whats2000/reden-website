@@ -280,13 +280,18 @@ async function submitUpload(e: SubmitEventPromise) {
           </v-radio-group>
         </v-expand-transition>
       </v-col>
-      <v-col v-if="selected?.link" cols="12">
-        <a :href="selected.link" class="router">
+      <v-col v-if="selected?.link" class="overflow-hidden" cols="12">
+        <a :href="selected.link" class="router nowrap">
           <v-icon>mdi-link</v-icon>
           {{ selected.link }}
         </a>
       </v-col>
-      <v-col v-if="selected?.note" cols="12" v-html="selected.note" />
+      <v-col
+        v-if="selected?.note"
+        class="overflow-hidden"
+        cols="12"
+        v-html="selected.note"
+      />
     </v-row>
 
     <v-row>
@@ -357,11 +362,11 @@ async function submitUpload(e: SubmitEventPromise) {
             <v-form @submit.prevent="submitUpload">
               <v-col>
                 <v-combobox
-                  clearable
                   v-model="uploadPath"
+                  :items="Object.keys(generators)"
+                  clearable
                   label="path"
                   @update:model-value="uploadCache(uploadPath)"
-                  :items="Object.keys(generators)"
                 >
                   <template #details>
                     {{
@@ -455,5 +460,9 @@ async function submitUpload(e: SubmitEventPromise) {
 <style scoped>
 p {
   font-size: 1em;
+}
+
+.nowrap {
+  white-space: nowrap;
 }
 </style>
