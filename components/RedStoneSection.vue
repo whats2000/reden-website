@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { onMounted, type Ref, ref } from 'vue';
-import { useDisplay } from 'vuetify';
+import { useDisplay, useTheme } from 'vuetify';
+import { useElementHover } from '@vueuse/core';
 
 // todo: 不透明度渐变
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { size, imageTransparentPercentage, video } = defineProps({
+const props = defineProps({
   size: Number,
   imageTransparentPercentage: Number,
   leverOn: {
@@ -13,10 +13,14 @@ const { size, imageTransparentPercentage, video } = defineProps({
   },
   video: String,
 });
-if (size === undefined || size < 1) {
+if (props.size === undefined || props.size < 1) {
   throw new Error('size must be greater than 0');
 }
-const sizz = Math.floor(size);
+const size = Math.floor(props.size);
+const theme = useTheme();
+const themeBackground = computed(() => {
+  return theme.current.value.colors.background;
+});
 
 const { mobile } = useDisplay({
   mobileBreakpoint: 500,
@@ -24,6 +28,22 @@ const { mobile } = useDisplay({
 
 let lightLine: Ref<Element | null> = ref(null);
 let card: Ref<Element | null> = ref(null);
+const lineFullyVisible = ref(false);
+const showLightLine = computed(() => {
+  return lineFullyVisible.value && props.leverOn;
+});
+watch(showLightLine, (value) => {
+  if (value) {
+    if (lightLine.value?.classList.contains('invisible')) {
+      lightLine.value?.classList.add('light-line-animate');
+      lightLine.value?.classList.remove('invisible');
+    }
+  } else {
+    lightLine.value?.classList.remove('light-line-animate');
+    lightLine.value?.classList.add('invisible');
+  }
+});
+const hovering = useElementHover(card);
 onMounted(() => {
   let observer = new IntersectionObserver(
     (it) => {
@@ -47,18 +67,14 @@ onMounted(() => {
         ) {
           // only operate when the element is at the bottom of the screen
           if (entry.intersectionRatio == 1) {
-            if (entry.target.classList.contains('invisible')) {
-              entry.target.classList.add('light-line-animate');
-              entry.target.classList.remove('invisible');
-            }
+            lineFullyVisible.value = true;
             card.value?.classList?.add('card-active');
             card.value?.classList?.remove('card-invisible');
           } else {
-            entry.target.classList.remove('light-line-animate');
             card.value?.classList?.remove('card-active');
           }
           if (entry.intersectionRatio == 0) {
-            entry.target.classList.add('invisible');
+            lineFullyVisible.value = false;
             card.value?.classList?.add('card-invisible');
           }
         }
@@ -69,6 +85,10 @@ onMounted(() => {
     },
   );
   observer.observe(lightLine.value as Element);
+
+  card.value?.addEventListener('mouseenter', () => {
+    console.log('mouseenter');
+  });
 });
 
 const autoPlay = ref(true);
@@ -77,7 +97,7 @@ const autoPlay = ref(true);
 <template>
   <div class="line">
     <div ref="card">
-      <v-card :min-height="sizz * 100 - 80" class="card">
+      <v-card :min-height="size * 100 - 80" class="card">
         <template #title>
           <slot name="title" />
         </template>
@@ -90,7 +110,12 @@ const autoPlay = ref(true);
           </div>
         </template>
         <template #image>
-          <div :class="{ 'bg-img-wrap': !mobile }">
+          <div
+            :class="{
+              'bg-img-wrap': !mobile,
+              'bg-blur': hovering,
+            }"
+          >
             <slot v-if="video == undefined" name="image" />
             <video
               v-if="video != undefined"
@@ -105,49 +130,29 @@ const autoPlay = ref(true);
           </div>
         </template>
         <template #actions>
-          <!--
-          <v-tooltip text="Auto play">
-            <template #activator="{ props }">
-              <v-btn
-                :icon="autoPlay ? 'mdi-pause' : 'mdi-play'"
-                @click="autoPlay = !autoPlay"
-                v-bind="props">
-              </v-btn>
-            </template>
-          </v-tooltip>
-          -->
           <slot name="action" />
         </template>
       </v-card>
     </div>
     <div class="darkLine lineLayout">
-      <div v-for="n in sizz" :key="n" class="photo r0"></div>
+      <div v-for="n in size" :key="n" class="photo r0"></div>
     </div>
 
-    <div ref="lightLine" class="lightLine lineLayout invisible">
-      <div v-for="n in sizz" v-show="leverOn" :key="n" class="photo r15"></div>
+    <div
+      ref="lightLine"
+      :class="{
+        lightLine: true,
+        lineLayout: true,
+        invisible: !showLightLine,
+        'light-line-animate': showLightLine,
+      }"
+    >
+      <div v-for="n in size" :key="n" class="photo r15"></div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.pistonBase {
-  background: url('/image/homepage/section/piston_base.png') no-repeat;
-  background-size: 100px 100px;
-}
-
-.pistonHead {
-  position: absolute;
-  background: url('/image/homepage/section/piston_head.png') no-repeat;
-  background-size: 100px 100px;
-}
-
-.pistonSide {
-  position: absolute;
-  background: url('/image/homepage/section/piston_side.png') no-repeat;
-  background-size: 100px 100px;
-}
-
 .photo {
   height: 100px;
   image-rendering: pixelated;
@@ -251,5 +256,17 @@ const autoPlay = ref(true);
   min-width: 200px;
   max-width: 350px;
   font-size: 16px;
+}
+
+.darkLine {
+  width: 50px;
+}
+
+.bg-blur {
+  filter: blur(8px);
+  opacity: 0.5;
+  transition:
+    filter 0.5s,
+    opacity 0.5s;
 }
 </style>

@@ -4,11 +4,13 @@ import Lever from 'public/image/homepage/section/lever.png';
 import LeverBase from 'public/image/homepage/section/lever_base.png';
 import LampOff from 'public/image/homepage/section/redstone_lamp.png';
 import LampOn from 'public/image/homepage/section/redstone_lamp_on.png';
+import { toast } from 'vuetify-sonner';
 
 const { title } = defineProps({
   title: String,
 });
 
+let clickTimes = 0;
 const all = ref<Element>();
 const leverOn = ref(false);
 onMounted(() => {
@@ -34,11 +36,18 @@ onMounted(() => {
 });
 const lampOnStyle = 'url(' + LampOn + ')';
 const lampOffStyle = 'url(' + LampOff + ')';
+function toggleLever() {
+  clickTimes++;
+  leverOn.value = clickTimes % 2 === 0;
+  if (clickTimes > 5) {
+    toast.secondary('不许再点了，再点我就生气了！');
+  }
+}
 </script>
 
 <template>
   <div class="redstone-section-title" draggable="false">
-    <div class="lever-all" ref="all" @click="leverOn = !leverOn">
+    <div class="lever-all" ref="all" @click="toggleLever">
       <img
         :src="Lever"
         :class="{ 'lever-on': leverOn, 'lever-off': !leverOn }"

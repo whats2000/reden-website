@@ -159,60 +159,42 @@ export async function toastError(
 ) {
   if (e instanceof Error) {
     console.log('error', e);
-    toast(message || 'Error', {
+    toast.error(message || 'Error', {
       description: e.message,
       duration: 3e3,
-      cardProps: {
-        color: 'error',
-      },
     });
   } else if (e instanceof Response) {
     try {
       const data: ErrorResponse = await e.json();
       if (message) {
-        toast(message, {
+        toast.error(message, {
           description: `${e.status} ${data.error}`,
           duration: 3e3,
-          cardProps: {
-            color: 'error',
-          },
         });
       } else {
-        toast(`${e.status} ${data.error}`, {
+        toast.error(`${e.status} ${data.error}`, {
           description: data.error_description || e.statusText,
           duration: 3e3,
-          cardProps: {
-            color: 'error',
-          },
         });
       }
     } catch (_) {
       // not json
-      toast(message || 'Error', {
+      toast.error(message || 'Error', {
         description: `Status: ${e.status} ${e.statusText}`,
         duration: 3e3,
-        cardProps: {
-          color: 'error',
-        },
       });
     }
   } else if (e instanceof Object && e.error) {
     console.log('error', e);
-    toast(message || 'Error', {
+    toast.error(message || 'Error', {
       description: e.error + (e.error_description || ''),
       duration: 3e3,
-      cardProps: {
-        color: 'error',
-      },
     });
   } else {
     console.log('error', e);
-    toast('Error', {
+    toast.error('Error', {
       description: message,
       duration: 3e3,
-      cardProps: {
-        color: 'error',
-      },
     });
   }
 }

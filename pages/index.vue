@@ -65,7 +65,7 @@ const backendInfo = useBackendMeta();
       <div class="buttons">
         <v-btn
           :to="localePath('/download')"
-          class="main-button"
+          class="ma-2"
           color="primary"
           prepend-icon="mdi-download"
           rounded="rounded"
@@ -75,7 +75,7 @@ const backendInfo = useBackendMeta();
         </v-btn>
         <v-btn
           :href="githubLink"
-          class="main-button"
+          class="ma-2"
           prepend-icon="mdi-github"
           rounded="rounded"
           size="x-large"
@@ -84,7 +84,7 @@ const backendInfo = useBackendMeta();
           Github
         </v-btn>
         <v-btn
-          class="main-button"
+          class="ma-2"
           href="https://wiki.redenmc.com"
           prepend-icon="mdi-book-open"
           rounded="rounded"
@@ -99,8 +99,8 @@ const backendInfo = useBackendMeta();
 
   <div ref="introContent" class="intro-content">
     <Feature />
-    <div class="community-intro content-common">
-      <v-row>
+    <div class="content-common">
+      <v-row class="community-intro">
         <v-col>
           <v-card color="light-blue">
             <v-card-title>
@@ -126,84 +126,86 @@ const backendInfo = useBackendMeta();
           </v-card>
         </v-col>
       </v-row>
-
-      <RedstoneSectionTitle :title="$t('reden.home.community_intro.title')" />
-      <RedStoneSection :size="3">
-        <template #title> Open Source</template>
-        <template #text>
-          <p>
-            {{ $t('reden.home.community_intro.open_source') }}
-          </p>
+      <RedstoneSectionTitle :title="$t('reden.home.community_intro.title')">
+        <template #default="{ leverOn }">
+          <RedStoneSection :lever-on="leverOn" :size="3">
+            <template #title> Open Source</template>
+            <template #text>
+              <p>
+                {{ $t('reden.home.community_intro.open_source') }}
+              </p>
+            </template>
+            <template #action>
+              <v-btn
+                :href="githubLink"
+                class="ma-2"
+                color="primary"
+                rounded="rounded"
+                variant="outlined"
+              >
+                Github
+              </v-btn>
+            </template>
+          </RedStoneSection>
+          <RedStoneSection :lever-on="leverOn" :size="3">
+            <template #title> Sponsors</template>
+            <template #text>
+              <p>
+                {{ $t('reden.home.community_intro.sponsor') }}
+              </p>
+            </template>
+            <template #action>
+              <v-btn
+                :to="localePath('/sponsors')"
+                class="ma-2"
+                color="primary"
+                rounded="rounded"
+                variant="outlined"
+              >
+                Sponsors
+              </v-btn>
+            </template>
+          </RedStoneSection>
+          <RedStoneSection :lever-on="leverOn" :size="3">
+            <template #title> Wiki</template>
+            <template #text>
+              <p>
+                {{ $t('reden.home.community_intro.wiki') }}
+              </p>
+            </template>
+            <template #action>
+              <v-btn
+                class="ma-2"
+                color="primary"
+                href="//wiki.redenmc.com"
+                rounded="rounded"
+                variant="outlined"
+              >
+                Wiki
+              </v-btn>
+            </template>
+          </RedStoneSection>
+          <RedStoneSection :lever-on="leverOn" :size="3">
+            <template #title> Discord</template>
+            <template #text>
+              <p>
+                {{ $t('reden.home.community_intro.discord') }}
+              </p>
+            </template>
+            <template #action>
+              <v-btn
+                :href="discordInvite"
+                class="ma-2"
+                color="primary"
+                rounded="rounded"
+                variant="outlined"
+              >
+                Discord
+              </v-btn>
+            </template>
+          </RedStoneSection>
         </template>
-        <template #action>
-          <v-btn
-            :href="githubLink"
-            class="main-button"
-            color="primary"
-            rounded="rounded"
-            variant="outlined"
-          >
-            Github
-          </v-btn>
-        </template>
-      </RedStoneSection>
-      <RedStoneSection :size="3">
-        <template #title> Sponsors</template>
-        <template #text>
-          <p>
-            {{ $t('reden.home.community_intro.sponsor') }}
-          </p>
-        </template>
-        <template #action>
-          <v-btn
-            :to="localePath('/sponsors')"
-            class="main-button"
-            color="primary"
-            rounded="rounded"
-            variant="outlined"
-          >
-            Sponsors
-          </v-btn>
-        </template>
-      </RedStoneSection>
-      <RedStoneSection :size="3">
-        <template #title> Wiki</template>
-        <template #text>
-          <p>
-            {{ $t('reden.home.community_intro.wiki') }}
-          </p>
-        </template>
-        <template #action>
-          <v-btn
-            class="main-button"
-            color="primary"
-            href="//wiki.redenmc.com"
-            rounded="rounded"
-            variant="outlined"
-          >
-            Wiki
-          </v-btn>
-        </template>
-      </RedStoneSection>
-      <RedStoneSection :size="3">
-        <template #title> Discord</template>
-        <template #text>
-          <p>
-            {{ $t('reden.home.community_intro.discord') }}
-          </p>
-        </template>
-        <template #action>
-          <v-btn
-            :href="discordInvite"
-            class="main-button"
-            color="primary"
-            rounded="rounded"
-            variant="outlined"
-          >
-            Discord
-          </v-btn>
-        </template>
-      </RedStoneSection>
+      </RedstoneSectionTitle>
     </div>
   </div>
 </template>
@@ -234,13 +236,5 @@ body {
 
 * {
   touch-action: manipulation;
-}
-
-.main-button {
-  margin: 6px;
-}
-
-.v-col {
-  min-width: 180px;
 }
 </style>

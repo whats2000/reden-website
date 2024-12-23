@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import RedStoneSection from '@/components/RedStoneSection.vue';
 import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
 
@@ -10,64 +10,71 @@ definePageMeta({
 
 <template>
   <div class="features-intro content-common">
-    <RedstoneSectionTitle :title="$t('reden.home.feature_intro.title')" />
-    <RedStoneSection video="/video/nether_protal.mp4" :size="3">
-      <template #title> Undo </template>
-      <template #text>
-        <p>
-          {{ $t('reden.home.feature_intro.undo') }}
-        </p>
-      </template>
-      <template #action>
-        <v-btn
-          :to="localePath('/feature/undo')"
-          color="primary"
-          rounded="rounded"
-          variant="outlined"
-          class="main-button"
+    <RedstoneSectionTitle :title="$t('reden.home.feature_intro.title')">
+      <template #default="{ leverOn }">
+        <RedStoneSection
+          :lever-on="leverOn"
+          :size="3"
+          video="/video/nether_portal.mp4"
         >
-          {{ $t('reden.learn_more') }}
-        </v-btn>
+          <template #title> Undo</template>
+          <template #text>
+            <p>
+              {{ $t('reden.home.feature_intro.undo') }}
+            </p>
+          </template>
+          <template #action>
+            <v-btn
+              :to="localePath('/feature/undo')"
+              class="main-button"
+              color="primary"
+              rounded="rounded"
+              variant="outlined"
+            >
+              {{ $t('reden.learn_more') }}
+            </v-btn>
+          </template>
+        </RedStoneSection>
+        <RedStoneSection :lever-on="leverOn" :size="3">
+          <template #title> RVC</template>
+          <template #text>
+            <p>
+              {{ $t('reden.home.feature_intro.rvc') }}
+            </p>
+          </template>
+          <template #action>
+            <v-btn
+              :to="localePath('/feature/rvc')"
+              class="main-button"
+              color="primary"
+              rounded="rounded"
+              variant="outlined"
+            >
+              {{ $t('reden.learn_more') }}
+            </v-btn>
+          </template>
+        </RedStoneSection>
+        <RedStoneSection :lever-on="leverOn" :size="3">
+          <template #title> Reden Debugger</template>
+          <template #text>
+            <p>
+              {{ $t('reden.home.feature_intro.debugger') }}
+            </p>
+          </template>
+          <template #action>
+            <v-btn
+              :to="localePath('/feature/debugger')"
+              class="main-button"
+              color="primary"
+              rounded="rounded"
+              variant="outlined"
+            >
+              {{ $t('reden.learn_more') }}
+            </v-btn>
+          </template>
+        </RedStoneSection>
       </template>
-    </RedStoneSection>
-    <RedStoneSection :size="3">
-      <template #title> RVC </template>
-      <template #text>
-        <p>
-          {{ $t('reden.home.feature_intro.rvc') }}
-        </p>
-      </template>
-      <template #action>
-        <v-btn
-          :to="localePath('/feature/rvc')"
-          color="primary"
-          variant="outlined"
-          rounded="rounded"
-          class="main-button"
-        >
-          {{ $t('reden.learn_more') }}
-        </v-btn>
-      </template>
-    </RedStoneSection>
-    <RedStoneSection :size="3">
-      <template #title> Reden Debugger </template>
-      <template #text>
-        <p>
-          {{ $t('reden.home.feature_intro.debugger') }}
-        </p>
-      </template>
-      <template #action>
-        <v-btn
-          :to="localePath('/feature/debugger')"
-          color="primary"
-          variant="outlined"
-          rounded="rounded"
-          class="main-button"
-        >
-          {{ $t('reden.learn_more') }}
-        </v-btn>
-      </template>
-    </RedStoneSection>
+    </RedstoneSectionTitle>
   </div>
 </template>
 

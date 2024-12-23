@@ -66,7 +66,7 @@ export default defineNuxtConfig({
   },
   routeRules: {
     '/api/**': {
-      proxy: 'http://localhost:10005/api/**',
+      proxy: 'https://redenmc.com/api/**',
     },
   },
   sitemap: {
