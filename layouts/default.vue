@@ -251,8 +251,16 @@ function toggleTheme() {
             </reden-router>
           </div>
           <div class="footer-list-item">
-            <reden-router href="https://github.com/RedenMC">
+            <reden-router to="https://github.com/RedenMC">
               {{ $t('reden.footer.reden_ecosystem.github_organization') }}
+            </reden-router>
+          </div>
+          <div class="footer-list-item">
+            <reden-router
+              to="https://api.redenmc.com/openapi/"
+              no-external-icon
+            >
+              OpenAPI
             </reden-router>
           </div>
         </v-col>
@@ -330,12 +338,19 @@ function toggleTheme() {
           <v-dialog v-model="dialogCookies" max-width="500">
             <v-card>
               <v-card-title>Manage Cookies</v-card-title>
-              <v-card-text> Todo... </v-card-text>
+              <v-card-text>
+                This website uses cookies only for basic functions, such as
+                login and language settings. We do not use cookies for
+                advertising or tracking. By using this website, you agree to our
+                <reden-router class="router" to="/privacy">
+                  Privacy Policy
+                </reden-router>
+              </v-card-text>
             </v-card>
           </v-dialog>
-          <a href="javascript:void(0)" @click="dialogCookies = !dialogCookies"
-            >Cookies</a
-          >
+          <a href="javascript:void(0)" @click="dialogCookies = !dialogCookies">
+            Cookies
+          </a>
         </span>
         <span class="bottom-right">
           <a href="https://status.redenmc.com">Status</a>
