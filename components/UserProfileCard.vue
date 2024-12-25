@@ -54,12 +54,9 @@ function fileSelected() {
     .then((response) => {
       if (response.ok) {
         console.log('avatar updated');
-        toast('Success', {
+        toast.success('Success', {
           description: 'Avatar updated',
           duration: 3e4,
-          cardProps: {
-            color: 'green',
-          },
         });
         window.location.reload();
       } else {
@@ -75,12 +72,9 @@ function deleteAvatar() {
     .then((response) => {
       if (response.ok) {
         console.log('avatar deleted');
-        toast('Success', {
+        toast.success('Success', {
           description: 'Avatar deleted',
           duration: 3e4,
-          cardProps: {
-            color: 'green',
-          },
         });
         window.location.reload();
       } else {

@@ -17,12 +17,9 @@ function save() {
   doFetchPut(`/api/admin/user/${props.item.id}`, mutableCopy.value)
     .then(async (res) => {
       if (res.ok) {
-        toast('Success', {
+        toast.success('Success', {
           description: 'User updated',
           duration: 3000,
-          cardProps: {
-            color: 'green',
-          },
         });
       } else {
         return Promise.reject(res);

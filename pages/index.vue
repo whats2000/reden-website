@@ -28,25 +28,21 @@ const backendInfo = useBackendMeta();
 <template>
   <div v-if="backendInfo.developmentMode">
     <v-alert closable icon="mdi-alert">
-      <template #title>
-        <span>开发模式选项</span>
-      </template>
-      <template #text>
-        <v-btn
-          color="primary"
-          @click="
-            doFetchGet('/api/account/login-test-account').then((res) => {
-              if (res.ok) {
-                toast('登录成功');
-              } else {
-                toastError(res);
-              }
-            })
-          "
-        >
-          登录测试账号
-        </v-btn>
-      </template>
+      <v-alert-title> 开发模式选项 </v-alert-title>
+      <v-btn
+        color="primary"
+        @click="
+          doFetchGet('/api/account/login-test-account').then((res) => {
+            if (res.ok) {
+              toast.success('登录成功');
+            } else {
+              toastError(res);
+            }
+          })
+        "
+      >
+        登录测试账号
+      </v-btn>
     </v-alert>
   </div>
   <div class="main-page">

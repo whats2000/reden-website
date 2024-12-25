@@ -47,12 +47,9 @@ function logout() {
     .then((response) => {
       if (response.ok) {
         router.push('/');
-        toast('Logout Successful', {
+        toast.success('Logout Successful', {
           description: 'You have been logged out',
           duration: 1000,
-          cardProps: {
-            color: 'green',
-          },
         });
       } else {
         return Promise.reject(response);

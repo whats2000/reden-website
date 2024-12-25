@@ -23,12 +23,9 @@ function verifyMinecraft() {
         doFetchGet('/api/account/minecraft/verify')
           .then((response) => {
             if (response.ok) {
-              toast('Success', {
+              toast.success('Success', {
                 description: 'Minecraft account verified',
                 duration: 1000,
-                cardProps: {
-                  color: 'green',
-                },
               });
               status.value =
                 'Minecraft account verified, please refresh the page';

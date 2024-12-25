@@ -58,12 +58,9 @@ function login() {
       const data: LoginResponse = await response.json();
       useAppStore().login(username.value, -1);
       useAppStore().setCsrfToken(data.csrf_token);
-      toast('Login Successful', {
+      toast.success('Login Successful', {
         description: 'You have been logged in',
         duration: 1000,
-        cardProps: {
-          color: 'green',
-        },
       });
       setTimeout(() => {
         if (data.redirect !== undefined) {

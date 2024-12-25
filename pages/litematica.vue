@@ -178,11 +178,7 @@ async function submitUpload(e: SubmitEventPromise) {
     )
       .then((res) => {
         if (!res.ok) return Promise.reject(res);
-        toast('OK', {
-          cardProps: {
-            color: 'green',
-          },
-        });
+        toast.success('Uploaded');
       })
       .catch((e) => toastError(e))
       .finally(() => (loading.value = false));

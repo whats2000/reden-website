@@ -85,12 +85,9 @@ function changePassword() {
   doFetchPost('/api/account/security/change-password', body)
     .then((response) => {
       if (response.ok) {
-        toast(t('profile.edit.success'), {
+        toast.success(t('profile.edit.success'), {
           description: 'Password Updated',
           duration: 1000,
-          cardProps: {
-            color: 'green',
-          },
         });
         fetchUser(user).then(() => {
           oldPassword.value = '';
@@ -116,12 +113,9 @@ function saveInfo() {
   doFetchPost('/api/account/update', user.value)
     .then((response) => {
       if (response.ok) {
-        toast(t('profile.edit.success'), {
+        toast.success(t('profile.edit.success'), {
           description: t('profile.edit.information_saved'),
           duration: 1000,
-          cardProps: {
-            color: 'green',
-          },
         });
         fetchUser(user).then(() => {
           userCopy.value = JSON.parse(JSON.stringify(user.value));
@@ -145,12 +139,9 @@ function savePreferences() {
   doFetchPost('/api/account/update/preference', user.value?.preference)
     .then((response) => {
       if (response.ok) {
-        toast(t('profile.edit.success'), {
+        toast.success(t('profile.edit.success'), {
           description: t('profile.edit.preferencesSaved'),
           duration: 1000,
-          cardProps: {
-            color: 'green',
-          },
         });
         userCopy.value!.preference = JSON.parse(
           JSON.stringify(user.value?.preference),

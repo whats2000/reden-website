@@ -43,12 +43,9 @@ function register(e: SubmitEventPromise) {
     doFetchPost('/api/account/register/start', req)
       .then((res) => {
         if (res.ok) {
-          toast(t('register.toast.successful.title'), {
+          toast.success(t('register.toast.successful.title'), {
             description: t('register.toast.successful.message'),
             duration: 1000,
-            cardProps: {
-              color: 'green',
-            },
           });
           registerOk.value = true;
         } else {

@@ -347,10 +347,4 @@ export const badgeDefs: { [keys: string]: BadgeDef } = {
     icon: 'mdi-account-heart',
     url: '/sponsors',
   },
-  'no-quark': {
-    translate: 'no-quark',
-    hover_translate: 'user.no_quark_hover',
-    icon: '',
-    color: '#025669',
-  },
 };

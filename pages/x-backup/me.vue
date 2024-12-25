@@ -70,11 +70,7 @@ function deleteItem(item: Backup, onSuccess: () => void) {
           sortBy: [],
           sortDesc: false,
         });
-        toast('删除成功', {
-          cardProps: {
-            color: 'green',
-          },
-        });
+        toast.success('删除成功');
       } else {
         toastError(response);
       }
