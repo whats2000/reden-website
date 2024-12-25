@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { VSonner } from 'vuetify-sonner';
 import { discordInvite, githubLink, zh_cn } from '@/utils/constants';
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useDisplay, useTheme } from 'vuetify';
 import { useAppStore } from '~/store/app';
@@ -36,7 +36,6 @@ let a = {
 };
 
 const { locale } = useI18n();
-const dialogCookies = ref(false);
 
 const { mobile } = useDisplay({
   mobileBreakpoint: 500,
@@ -257,8 +256,8 @@ function toggleTheme() {
           </div>
           <div class="footer-list-item">
             <reden-router
-              to="https://api.redenmc.com/openapi/"
               no-external-icon
+              to="https://api.redenmc.com/openapi/"
             >
               OpenAPI
             </reden-router>
@@ -335,20 +334,21 @@ function toggleTheme() {
         </a>
         <span class="bottom-right"> Privacy </span>
         <span class="router bottom-right">
-          <v-dialog v-model="dialogCookies" max-width="500">
-            <v-card>
-              <v-card-title>Manage Cookies</v-card-title>
-              <v-card-text>
-                This website uses cookies only for basic functions, such as
-                login and language settings. We do not use cookies for
-                advertising or tracking. By using this website, you agree to our
-                <reden-router class="router" to="/privacy">
-                  Privacy Policy
-                </reden-router>
-              </v-card-text>
-            </v-card>
-          </v-dialog>
-          <a href="javascript:void(0)" @click="dialogCookies = !dialogCookies">
+          <a href="javascript:void(0)">
+            <v-dialog activator="parent" max-width="500">
+              <v-card>
+                <v-card-title>Manage Cookies</v-card-title>
+                <v-card-text>
+                  This website uses cookies only for basic functions, such as
+                  login and language settings. We do not use cookies for
+                  advertising or tracking. By using this website, you agree to
+                  our
+                  <reden-router class="router" to="/privacy">
+                    Privacy Policy
+                  </reden-router>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
             Cookies
           </a>
         </span>
