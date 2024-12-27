@@ -6,6 +6,13 @@ import { toast } from 'vuetify-sonner';
 import { useBackendMeta } from '@/store/meta';
 import 'vue-turnstile';
 
+if (import.meta.client) {
+  console.log(
+    '%c[Reden] Welcome to Reden',
+    'background: linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff); color: #fff; font-size: 1.2em; font-weight: bold; padding: 5px;',
+  );
+}
+
 export const reCAPTCHAKey = '6Lczc24pAAAAAAxzBZbRy8CZc_ba06Qn_3OJ_Vg-';
 export const cloudflareCAPTCHAKey = '0x4AAAAAAARtCTyyGc1nbVUm';
 export const discordInvite = 'https://discord.gg/fCxmEyFgAd';
@@ -204,13 +211,14 @@ export type ErrorResponse = {
   error_description: string;
 };
 
-export const fetchUser = (userRef: Ref<Profile | undefined>) =>
-  doFetchGet('/api/account/profile')
+export function fetchUser(userRef: Ref<Profile | undefined>) {
+  useNuxtApp();
+  return doFetchGet('/api/account/profile')
     .then(async (response) => {
       if (response.ok) {
         const data: Profile = await response.json();
         userRef.value = data;
-        useAppStore(/*pinia*/).updateCache(data);
+        useAppStore().updateCache(data);
       } else {
         if (response.status === 401) {
           toast('Error', {
@@ -220,12 +228,23 @@ export const fetchUser = (userRef: Ref<Profile | undefined>) =>
               color: 'error',
             },
           });
-          window.location.href = '/login';
+          const localeRoute = useLocaleRoute();
+          useRouter().push(
+            localeRoute({
+              path: '/login',
+              hash: '#status=401',
+            })!,
+          );
+          console.log(
+            '%c[Reden] User is not logged in',
+            'color: #f00; font-weight: bold; font-size: 1.2em;background-color: #000',
+          );
         }
         return Promise.reject(await response.json());
       }
     })
     .catch((e) => toastError(e, 'Failed to get user profile'));
+}
 
 export type OAuthAccount = {
   type: string;
