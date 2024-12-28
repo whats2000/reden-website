@@ -6,7 +6,6 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import SizeInput from '~/components/yisibite/SizeInput.vue';
 import 'assets/main.css';
-import { useFetch } from 'nuxt/app';
 import { doFetchGet, doFetchPut, toastError } from '~/utils/constants';
 import { toast } from 'vuetify-sonner';
 
@@ -127,10 +126,6 @@ function openMaterials() {
   window.open(
     `/api/mc-services/yisibite/${name.value}/materials?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
   );
-}
-
-if (import.meta.client) {
-  refreshNuxtData();
 }
 
 const selected = computed(() => generators.value[name.value]);

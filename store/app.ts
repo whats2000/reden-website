@@ -12,32 +12,13 @@ type AppState = {
   theme: 'light' | 'dark';
 };
 
-function state(): AppState {
-  console.log('import.meta', import.meta);
-  if (import.meta.client) {
-    const data = localStorage.getItem('redenCache');
-    if (data) {
-      console.log('loaded localStorage', data);
-      return JSON.parse(data);
-    }
-  }
-  return {
-    logined: false,
-    username: undefined,
-    uid: -1,
-    csrfToken: null,
-    userCache: undefined,
-    theme: 'dark',
-  };
-}
-
 const storage = useLocalStorage<AppState>('redenCache', {
   logined: false,
   username: undefined,
   uid: -1,
   csrfToken: null,
   userCache: undefined,
-  theme: 'dark',
+  theme: 'light',
 });
 
 export const useAppStore = defineStore('reden', {
@@ -79,10 +60,6 @@ export const useAppStore = defineStore('reden', {
     setCsrfToken(token: string) {
       this.logined = true;
       this.csrfToken = token;
-      this.save();
-    },
-    setTheme(theme: 'light' | 'dark') {
-      this.theme = theme;
       this.save();
     },
     logout() {

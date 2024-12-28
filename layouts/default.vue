@@ -14,7 +14,16 @@ const theme = useTheme();
 const appStore = useAppStore();
 onMounted(() => {
   // set body background color
-  console.log(JSON.stringify(theme.themes.value[appStore.theme]!.colors));
+  const colors: Record<string, string> =
+    theme.themes.value[appStore.theme]!.colors;
+  const css: string[] = [];
+  let themeText = `theme: ${theme.name.value}\n`;
+  for (const key in colors) {
+    themeText += `%c${key} %c${colors[key]}`;
+    css.push('color:unset;');
+    css.push(`background:${colors[key]}`);
+  }
+  console.log(themeText, ...css);
   document.body.style.backgroundColor =
     theme.themes.value[appStore.theme]!.colors.background;
 });
