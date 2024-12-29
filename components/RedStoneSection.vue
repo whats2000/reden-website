@@ -26,8 +26,8 @@ const { mobile } = useDisplay({
   mobileBreakpoint: 500,
 });
 
-let lightLine: Ref<Element | null> = ref(null);
-let card: Ref<Element | null> = ref(null);
+let lightLine = useTemplateRef<Element>('lightLine');
+let card = useTemplateRef<Element>('card');
 const lineFullyVisible = ref(false);
 const showLightLine = computed(() => {
   return lineFullyVisible.value && props.leverOn;

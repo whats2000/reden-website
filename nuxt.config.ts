@@ -41,16 +41,16 @@ export default defineNuxtConfig({
         transformAssetUrls,
       },
     },
-    server: {
-      proxy: {
-        '/api': 'https://api.redenmc.com/api/**',
-        '/ws': {
-          target: 'ws://localhost:10005',
-          ws: true,
-          rewriteWsOrigin: true,
-        },
-      },
-    },
+    // server: {
+    //   proxy: {
+    //     '/api': 'https://api.redenmc.com/api/**',
+    //     '/ws': {
+    //       target: 'ws://localhost:10005',
+    //       ws: true,
+    //       rewriteWsOrigin: true,
+    //     },
+    //   },
+    // },
   },
   features: {
     inlineStyles: false,
