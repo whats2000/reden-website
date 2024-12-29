@@ -1,15 +1,14 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import { useAppStore } from '~/store/app';
-import { type SubmitEventPromise, useDisplay } from 'vuetify';
+import { type SubmitEventPromise } from 'vuetify';
 import { useI18n } from 'vue-i18n';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import SizeInput from '~/components/yisibite/SizeInput.vue';
 import 'assets/main.css';
 import type { Machine, MachineDef } from '~/pages/litematica/index.vue';
 
 const route = useRoute();
-const router = useRouter();
 const xSize = ref(0);
 const ySize = ref(0);
 const zSize = ref(0);
@@ -80,6 +79,9 @@ const generators = computed<Record<string, Machine>>(() => {
         message: t('litematica_generator.not_found', { name }),
       });
     }
+    useHead({
+      title: machines[name].name + ' - Reden' + t('litematica_generator.title'),
+    });
     return Object.keys(machines)
       .sort()
       .reduce((obj: Record<string, Machine>, key) => {

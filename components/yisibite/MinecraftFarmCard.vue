@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useElementHover } from '@vueuse/core';
-import { toast } from 'vuetify-sonner';
+import { type Profile } from '@/utils/constants';
 
 export type Item = {
   id: string;
@@ -18,6 +18,7 @@ defineProps<{
 
 const card = useTemplateRef<Element>('card');
 const isHovering = useElementHover(card);
+const localePath = useLocalePath();
 </script>
 <template>
   <v-card
@@ -31,7 +32,7 @@ const isHovering = useElementHover(card);
     max-width="360"
     min-width="280"
     rounded="xl"
-    @click="toast.success('Clicked on ' + item.name)"
+    :to="localePath(`/litematica/${item.id}`)"
   >
     <v-img
       :src="item.thumbnailUrl"
@@ -43,9 +44,9 @@ const isHovering = useElementHover(card);
     <v-card-subtitle class="opacity-100"
       >by
       <v-avatar size="24">
-        <v-img :src="item.author.avatarUrl" />
+        <v-img :src="item.author?.avatarUrl" />
       </v-avatar>
-      {{ item.author.username }}
+      {{ item.author?.username }}
     </v-card-subtitle>
 
     <v-card-text
