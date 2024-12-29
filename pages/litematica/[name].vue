@@ -79,8 +79,10 @@ const generators = computed<Record<string, Machine>>(() => {
         message: t('litematica_generator.not_found', { name }),
       });
     }
+    console.log('machine', machines[name]);
     useHead({
-      title: machines[name].name + ' - Reden' + t('litematica_generator.title'),
+      title:
+        machines[name]?.name + ' - Reden' + t('litematica_generator.title'),
     });
     return Object.keys(machines)
       .sort()
@@ -131,7 +133,7 @@ const bvid = computed(() => {
   <v-form class="content-common" fast-fail @submit.prevent="submit">
     <v-row>
       <h1>
-        {{ selected.name }}
+        {{ selected?.name }}
         <v-chip v-if="selected">
           {{
             $t('litematica_generator.download_count', {
@@ -181,21 +183,18 @@ const bvid = computed(() => {
           <v-card-text>
             <SizeInput
               v-if="selected.hasX"
-              :key="selected.name + 'x'"
               v-model="xSize"
               :def="selected"
               xyz="x"
             />
             <SizeInput
               v-if="selected.hasY"
-              :key="selected.name + 'y'"
               v-model="ySize"
               :def="selected"
               xyz="y"
             />
             <SizeInput
               v-if="selected.hasZ"
-              :key="selected.name + 'z'"
               v-model="zSize"
               :def="selected"
               xyz="z"

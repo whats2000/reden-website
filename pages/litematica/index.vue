@@ -48,20 +48,30 @@ for (const [key, def] of Object.entries(serverResponse.value ?? {})) {
       class="mb-4 mr-4"
       color="primary"
       prepend-icon="mdi-arrow-left"
-      variant="outlined"
       rounded="lg"
+      variant="outlined"
     >
       回到旧版生成器
     </v-btn>
     <v-btn
-      href="https://docs.qq.com/form/page/DVHdSUXJLQUpDVktQ"
-      class="mb-4"
+      class="mb-4 mr-4"
       color="primary"
+      href="https://docs.qq.com/form/page/DVHdSUXJLQUpDVktQ"
       prepend-icon="mdi-comment-quote"
-      variant="outlined"
       rounded="lg"
+      variant="outlined"
     >
       新版意见反馈
+    </v-btn>
+    <v-btn
+      class="mb-4 mr-4"
+      color="primary"
+      href="https://space.bilibili.com/1545239761"
+      prepend-icon="custom:Bilibili"
+      rounded="lg"
+      variant="outlined"
+    >
+      请在B站关注我，有故障请私信
     </v-btn>
     <v-row align="start" justify="center">
       <v-col v-for="item in items" :key="item.id" md="4" sm="6" xs="12">

@@ -316,6 +316,7 @@ function toggleTheme() {
               external-icon
               to="https://space.bilibili.com/1545239761"
             >
+              <v-icon icon="custom:Bilibili" />
               {{ $t('reden.footer.follow_us.bilibili') }}
             </reden-router>
           </div>

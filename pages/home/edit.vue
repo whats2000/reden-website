@@ -130,7 +130,6 @@ function saveInfo() {
     });
 }
 function changed(a: Record<string, unknown>, b: Record<string, unknown>) {
-  console.log('comparing', a, 'and', b);
   return Object.keys(a).some((key: string) => a[key] !== b[key]);
 }
 function savePreferences() {
