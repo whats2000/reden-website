@@ -111,6 +111,20 @@ function openMaterials() {
 }
 
 const selected = computed(() => generators.value[name]);
+const biliPlayer = useTemplateRef<HTMLIFrameElement>('biliPlayer');
+const bvid = computed(() => {
+  if (selected.value?.link) {
+    const match = selected.value.link.match(/bilibili.com\/video\/(BV[^/?]+)/);
+    if (match) {
+      console.log('bvid', match[1]);
+      return match[1];
+    } else {
+      console.log('bvid', selected.value.link);
+      return selected.value.link;
+    }
+  }
+  return '';
+});
 </script>
 
 <template>
@@ -126,8 +140,23 @@ const selected = computed(() => generators.value[name]);
           }}
         </v-chip>
       </h1>
+      <v-img
+        v-if="!bvid && selected?.imageUrl"
+        :src="selected.imageUrl"
+        width="100%"
+      />
       <v-col v-if="selected?.link" class="overflow-hidden" cols="12">
-        <a :href="selected.link" class="router nowrap">
+        <iframe
+          v-if="bvid"
+          ref="biliPlayer"
+          :src="`https://player.bilibili.com/player.html?isOutside=true&bvid=${bvid}`"
+          :style="{
+            height: `${((biliPlayer?.clientWidth ?? 0) / 16) * 9}px`,
+          }"
+          allowfullscreen
+          class="bili-player"
+        />
+        <a v-else :href="selected.link" class="router nowrap">
           <v-icon>mdi-link</v-icon>
           {{ selected.link }}
         </a>
@@ -231,5 +260,10 @@ p {
 
 .nowrap {
   white-space: nowrap;
+}
+
+.bili-player {
+  width: 100%;
+  border-width: 0;
 }
 </style>
