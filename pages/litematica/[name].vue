@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import SizeInput from '~/components/yisibite/SizeInput.vue';
 import 'assets/main.css';
+import type { Machine, MachineDef } from '~/pages/litematica/index.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -23,22 +24,6 @@ useSeoMeta({
   ogDescription: t('litematica_generator.og_description'),
   ogImage: 'https://redenmc.com/reden_256.png',
 });
-
-export type MachineDef = {
-  name: string;
-  downloads?: number;
-  available?: boolean | null;
-  hasX?: boolean;
-  hasY?: boolean;
-  hasZ?: boolean;
-  note?: string;
-  link?: string;
-  linkChina?: string;
-};
-
-export type Machine = MachineDef & {
-  conditions: { [key: string]: ((v: number) => any)[] };
-};
 
 const { data: total } = await useFetch('/api/mc-services/yisibite/total');
 const { data: serverResponse } = await useFetch<{

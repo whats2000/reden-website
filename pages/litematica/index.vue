@@ -37,6 +37,9 @@ export type MachineDef = {
   note?: string;
   link?: string;
   linkChina?: string;
+  thumbnailUrl?: string;
+  imageUrl?: string;
+  author?: Partial<Profile>;
 };
 
 export type Machine = MachineDef & {

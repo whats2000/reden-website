@@ -2,17 +2,18 @@
 import { useElementHover } from '@vueuse/core';
 import { toast } from 'vuetify-sonner';
 
-type Item = {
-  id: number;
+export type Item = {
+  id: string;
   name: string;
   description: string;
   upvotes: number;
   downloads: number;
   author: Partial<Profile>;
-  thumbnailUrl: string;
+  imageUrl?: string;
+  thumbnailUrl?: string;
 };
 defineProps<{
-  item: Item;
+  item: Partial<Item>;
 }>();
 
 const card = useTemplateRef<Element>('card');
@@ -62,12 +63,9 @@ const isHovering = useElementHover(card);
     </v-card-text>
 
     <v-card-actions class="stat-line">
-      6 years ago
       <v-spacer />
       <v-icon size="18">mdi-download-outline</v-icon>
       {{ item.downloads }}
-      <v-icon size="16">mdi-thumb-up-outline</v-icon>
-      {{ item.upvotes }}
     </v-card-actions>
   </v-card>
 </template>
