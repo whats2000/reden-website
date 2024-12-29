@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { useAppStore } from '~/store/app';
 import { type SubmitEventPromise } from 'vuetify';
 import { useI18n } from 'vue-i18n';
@@ -24,7 +24,9 @@ useSeoMeta({
   ogImage: 'https://redenmc.com/reden_256.png',
 });
 
-const { data: total } = await useFetch('/api/mc-services/yisibite/total');
+const { data: total } = await useFetch('/api/mc-services/yisibite/total', {
+  key: 'total',
+});
 const { data: serverResponse } = await useFetch<{
   [key: string]: MachineDef & {
     conditions?: {
@@ -33,7 +35,9 @@ const { data: serverResponse } = await useFetch<{
       z: string[];
     };
   };
-}>('/api/mc-services/yisibite/');
+}>('/api/mc-services/yisibite/', {
+  key: 'generators',
+});
 const generators = computed<Record<string, Machine>>(() => {
   if (serverResponse.value) {
     let machines: { [key: string]: Machine } = {};
@@ -112,21 +116,18 @@ function openMaterials() {
   );
 }
 
-const selected = computed(() => generators.value[name]);
+const selected = generators.value[name];
 const biliPlayer = useTemplateRef<HTMLIFrameElement>('biliPlayer');
-const bvid = computed(() => {
-  if (selected.value?.link) {
-    const match = selected.value.link.match(/bilibili.com\/video\/(BV[^/?]+)/);
+const bvid = (() => {
+  if (selected?.link) {
+    const match = selected.link.match(/bilibili.com\/video\/(BV[^/?]+)/);
     if (match) {
       console.log('bvid', match[1]);
       return match[1];
-    } else {
-      console.log('bvid', selected.value.link);
-      return selected.value.link;
     }
   }
   return '';
-});
+})();
 </script>
 
 <template>
@@ -164,7 +165,7 @@ const bvid = computed(() => {
         </a>
       </v-col>
       <v-col
-        v-if="false && selected?.note"
+        v-if="selected?.note"
         class="overflow-hidden"
         cols="12"
         v-html="selected.note"

@@ -32,7 +32,9 @@ const selecting = ref(true);
 const { mobile } = useDisplay({
   mobileBreakpoint: 600,
 });
-const { data: total } = await useFetch('/api/mc-services/yisibite/total');
+const { data: total } = await useFetch('/api/mc-services/yisibite/total', {
+  key: 'total',
+});
 
 const { data: serverResponse } = await useFetch<{
   [key: string]: MachineDef & {
@@ -42,7 +44,9 @@ const { data: serverResponse } = await useFetch<{
       z: string[];
     };
   };
-}>('/api/mc-services/yisibite/');
+}>('/api/mc-services/yisibite/', {
+  key: 'generators',
+});
 const generators = computed<Record<string, Machine>>(() => {
   if (serverResponse.value) {
     let machines: { [key: string]: Machine } = {};

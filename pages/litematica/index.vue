@@ -21,11 +21,15 @@ export type MachineDef = {
 export type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
 };
-const { data: total } = await useFetch('/api/mc-services/yisibite/total');
+const { data: total } = await useFetch('/api/mc-services/yisibite/total', {
+  key: 'total',
+});
 
 const { data: serverResponse } = await useFetch<{
   [key: string]: MachineDef;
-}>('/api/mc-services/yisibite/');
+}>('/api/mc-services/yisibite/', {
+  key: 'generators',
+});
 const localePath = useLocalePath();
 
 const items: Item[] = [];
