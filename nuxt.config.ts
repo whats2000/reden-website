@@ -43,7 +43,7 @@ export default defineNuxtConfig({
     },
     server: {
       proxy: {
-        '/api': 'http://localhost:10005',
+        '/api': 'https://api.redenmc.com/api/**',
         '/ws': {
           target: 'ws://localhost:10005',
           ws: true,
@@ -66,10 +66,7 @@ export default defineNuxtConfig({
   },
   routeRules: {
     '/api/**': {
-      proxy:
-        process.env.NODE_ENV === 'production'
-          ? 'https://api.redenmc.com/api/**'
-          : 'http://localhost:10005/api/**',
+      proxy: 'https://api.redenmc.com/api/**',
     },
   },
   sitemap: {

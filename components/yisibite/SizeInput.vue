@@ -36,7 +36,7 @@
   </v-row>
 </template>
 <script lang="ts" setup>
-import { type Machine } from '~/pages/litematica.vue';
+import { type Machine } from '~/pages/litematica/index.vue';
 import { computed } from 'vue';
 import { debugMessages } from '@/utils/constants';
 
