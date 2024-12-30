@@ -63,7 +63,7 @@ if (!serverResponse.value) {
   if (status.value === 'error') {
     console.error(serverResponse.value, status.value, error.value);
     throw createError({
-      status: error.value?.status ?? 500,
+      status: error.value?.statusCode ?? 500,
       message: JSON.stringify(error.value),
     });
   }

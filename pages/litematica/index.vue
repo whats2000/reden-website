@@ -18,6 +18,15 @@ export type MachineDef = {
   author?: Partial<Profile>;
 };
 
+const { t } = useI18n();
+useSeoMeta({
+  title: t('litematica_generator.title') + ' - Reden',
+  ogTitle: t('litematica_generator.title') + ' - Reden',
+  description: t('litematica_generator.og_description'),
+  ogDescription: t('litematica_generator.og_description'),
+  ogImage: 'https://redenmc.com/reden_256.png',
+});
+
 export type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
 };
@@ -48,7 +57,9 @@ if (!serverResponse.value) {
 const localePath = useLocalePath();
 
 const items: Item[] = [];
-for (const [key, def] of Object.entries(serverResponse.value ?? {})) {
+for (const [key, def] of Object.entries(serverResponse.value ?? {}).sort(
+  ([, a], [, b]) => (b.downloads ?? 0) - (a.downloads ?? 0),
+)) {
   items.push({
     id: key,
     name: def.name,
