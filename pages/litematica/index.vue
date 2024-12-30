@@ -77,6 +77,9 @@ for (const [key, def] of Object.entries(serverResponse.value ?? {})) {
     >
       请在B站关注我，有故障请私信
     </v-btn>
+    <v-row>
+      <v-select :items="['Select']"> </v-select>
+    </v-row>
     <v-row align="start" justify="center">
       <v-col v-for="item in items" :key="item.id" md="4" sm="6" xs="12">
         <MinecraftFarmCard :item="item" />

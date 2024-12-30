@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useElementHover } from '@vueuse/core';
 import { type Profile } from '@/utils/constants';
+import { useDisplay } from 'vuetify';
 
 export type Item = {
   id: string;
@@ -15,6 +16,9 @@ export type Item = {
 defineProps<{
   item: Partial<Item>;
 }>();
+const { mobile } = useDisplay({
+  mobileBreakpoint: 500,
+});
 
 const card = useTemplateRef<Element>('card');
 const isHovering = useElementHover(card);
@@ -26,27 +30,35 @@ const localePath = useLocalePath();
     :class="{
       'hover-card': isHovering,
     }"
+    :to="localePath(`/litematica/${item.id}`)"
     border
     class="mx-auto"
     elevation="4"
     max-width="360"
     min-width="280"
     rounded="xl"
-    :to="localePath(`/litematica/${item.id}`)"
   >
     <v-img
+      v-if="!mobile"
       :src="item.thumbnailUrl"
       class="thumbnail-img"
       cover
       height="200px"
     />
     <v-card-title class="card-title">{{ item.name }}</v-card-title>
-    <v-card-subtitle class="opacity-100"
-      >by
-      <v-avatar size="24">
-        <v-img :src="item.author?.avatarUrl" />
-      </v-avatar>
-      {{ item.author?.username }}
+    <v-card-subtitle class="opacity-100">
+      <div class="d-flex flex-row">
+        by
+        <v-avatar size="24">
+          <v-img :src="item.author?.avatarUrl" />
+        </v-avatar>
+        {{ item.author?.username }}
+        <v-spacer />
+        <span class="stat-line" v-if="mobile">
+          <v-icon size="18">mdi-download-outline</v-icon>
+          {{ item.downloads }}
+        </span>
+      </div>
     </v-card-subtitle>
 
     <v-card-text
@@ -64,9 +76,11 @@ const localePath = useLocalePath();
     </v-card-text>
 
     <v-card-actions class="stat-line">
-      <v-spacer />
-      <v-icon size="18">mdi-download-outline</v-icon>
-      {{ item.downloads }}
+      <template v-if="!mobile">
+        <v-spacer />
+        <v-icon size="18">mdi-download-outline</v-icon>
+        {{ item.downloads }}
+      </template>
     </v-card-actions>
   </v-card>
 </template>
@@ -94,7 +108,9 @@ const localePath = useLocalePath();
 .stat-line {
   opacity: 60%;
   padding: 0 10px !important;
+  min-height: 10px !important;
   font-size: 0.75rem;
+  line-height: 24px;
 }
 
 .card-title {
