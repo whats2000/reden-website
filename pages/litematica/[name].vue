@@ -61,11 +61,11 @@ if (!serverResponse.value) {
     },
   );
   if (status.value === 'error') {
-    createError({
-      status: 500,
+    console.error(serverResponse.value, status.value, error.value);
+    throw createError({
+      status: error.value?.status ?? 500,
       message: JSON.stringify(error.value),
     });
-    console.error(serverResponse.value, status.value, error.value);
   }
 }
 const generators = computed<Record<string, Machine>>(() => {
