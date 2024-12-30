@@ -16,9 +16,10 @@ export type Item = {
 defineProps<{
   item: Partial<Item>;
 }>();
-const { mobile } = useDisplay({
+const { mobile: _mobile } = useDisplay({
   mobileBreakpoint: 500,
 });
+const mobile = computed(() => (import.meta.server ? false : _mobile.value));
 
 const card = useTemplateRef<Element>('card');
 const isHovering = useElementHover(card);
@@ -54,7 +55,7 @@ const localePath = useLocalePath();
         </v-avatar>
         {{ item.author?.username }}
         <v-spacer />
-        <span class="stat-line" v-if="mobile">
+        <span v-if="mobile" class="stat-line">
           <v-icon size="18">mdi-download-outline</v-icon>
           {{ item.downloads }}
         </span>

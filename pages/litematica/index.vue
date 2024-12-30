@@ -21,15 +21,30 @@ export type MachineDef = {
 export type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
 };
-const { data: total } = await useFetch('/api/mc-services/yisibite/total', {
-  key: 'total',
-});
+const { data: total } = useNuxtData('total');
+if (!total.value) {
+  await useFetch('/api/mc-services/yisibite/total', {
+    dedupe: 'defer',
+    cache: 'force-cache',
+    key: 'total',
+    headers: {
+      Authorization: process.env.REDEN_API_TOKEN as string,
+    },
+  });
+}
 
-const { data: serverResponse } = await useFetch<{
-  [key: string]: MachineDef;
-}>('/api/mc-services/yisibite/', {
-  key: 'generators',
-});
+const { data: serverResponse } =
+  useNuxtData<Record<string, MachineDef>>('generators');
+if (!serverResponse.value) {
+  await useFetch<Record<string, MachineDef>>('/api/mc-services/yisibite/', {
+    dedupe: 'defer',
+    cache: 'force-cache',
+    key: 'generators',
+    headers: {
+      Authorization: process.env.REDEN_API_TOKEN as string,
+    },
+  });
+}
 const localePath = useLocalePath();
 
 const items: Item[] = [];
@@ -77,9 +92,6 @@ for (const [key, def] of Object.entries(serverResponse.value ?? {})) {
     >
       请在B站关注我，有故障请私信
     </v-btn>
-    <v-row>
-      <v-select :items="['Select']"> </v-select>
-    </v-row>
     <v-row align="start" justify="center">
       <v-col v-for="item in items" :key="item.id" md="4" sm="6" xs="12">
         <MinecraftFarmCard :item="item" />

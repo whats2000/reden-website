@@ -34,6 +34,9 @@ const { mobile } = useDisplay({
 });
 const { data: total } = await useFetch('/api/mc-services/yisibite/total', {
   key: 'total',
+  headers: {
+    Authorization: process.env.REDEN_API_TOKEN as string,
+  },
 });
 
 const { data: serverResponse } = await useFetch<{
@@ -46,6 +49,9 @@ const { data: serverResponse } = await useFetch<{
   };
 }>('/api/mc-services/yisibite/', {
   key: 'generators',
+  headers: {
+    Authorization: process.env.REDEN_API_TOKEN as string,
+  },
 });
 const generators = computed<Record<string, Machine>>(() => {
   if (serverResponse.value) {

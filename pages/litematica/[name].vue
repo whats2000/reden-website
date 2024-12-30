@@ -7,6 +7,7 @@ import { useRoute } from 'vue-router';
 import SizeInput from '~/components/yisibite/SizeInput.vue';
 import 'assets/main.css';
 import type { Machine, MachineDef } from '~/pages/litematica/index.vue';
+import { useNuxtApp } from '#app';
 
 const route = useRoute();
 const xSize = ref(0);
@@ -24,10 +25,18 @@ useSeoMeta({
   ogImage: 'https://redenmc.com/reden_256.png',
 });
 
-const { data: total } = await useFetch('/api/mc-services/yisibite/total', {
-  key: 'total',
-});
-const { data: serverResponse } = await useFetch<{
+const { data: total } = useNuxtData<string>('total');
+if (!total.value) {
+  await useFetch('/api/mc-services/yisibite/total', {
+    dedupe: 'defer',
+    key: 'total',
+    cache: 'force-cache',
+    headers: {
+      Authorization: process.env.REDEN_API_TOKEN as string,
+    },
+  });
+}
+type ServerResponse = {
   [key: string]: MachineDef & {
     conditions?: {
       x: string[];
@@ -35,9 +44,30 @@ const { data: serverResponse } = await useFetch<{
       z: string[];
     };
   };
-}>('/api/mc-services/yisibite/', {
-  key: 'generators',
-});
+};
+const { data: serverResponse } = useNuxtData<ServerResponse>('generators');
+const nuxtApp = useNuxtApp();
+if (!serverResponse.value) {
+  console.log('fetching');
+  const { status, error } = await useFetch<ServerResponse>(
+    '/api/mc-services/yisibite/',
+    {
+      dedupe: 'defer',
+      key: 'generators',
+      cache: 'force-cache',
+      headers: {
+        Authorization: process.env.REDEN_API_TOKEN as string,
+      },
+    },
+  );
+  if (status.value === 'error') {
+    createError({
+      status: 500,
+      message: JSON.stringify(error.value),
+    });
+    console.error(serverResponse.value, status.value, error.value);
+  }
+}
 const generators = computed<Record<string, Machine>>(() => {
   if (serverResponse.value) {
     let machines: { [key: string]: Machine } = {};
@@ -83,7 +113,6 @@ const generators = computed<Record<string, Machine>>(() => {
         message: t('litematica_generator.not_found', { name }),
       });
     }
-    console.log('machine', machines[name]);
     useHead({
       title:
         machines[name]?.name + ' - Reden' + t('litematica_generator.title'),
@@ -116,18 +145,18 @@ function openMaterials() {
   );
 }
 
-const selected = generators.value[name];
+const selected = computed(() => generators.value[name]);
 const biliPlayer = useTemplateRef<HTMLIFrameElement>('biliPlayer');
-const bvid = (() => {
-  if (selected?.link) {
-    const match = selected.link.match(/bilibili.com\/video\/(BV[^/?]+)/);
+const bvid = computed(() => {
+  if (selected.value?.link) {
+    const match = selected.value.link.match(/bilibili.com\/video\/(BV[^/?]+)/);
     if (match) {
       console.log('bvid', match[1]);
       return match[1];
     }
   }
   return '';
-})();
+});
 </script>
 
 <template>
@@ -144,7 +173,7 @@ const bvid = (() => {
         </v-chip>
       </h1>
       <v-img
-        v-if="!bvid && selected?.imageUrl"
+        v-if="nuxtApp.ssrContext || (!bvid && selected?.imageUrl)"
         :src="selected.imageUrl"
         width="100%"
       />
