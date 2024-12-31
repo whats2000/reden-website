@@ -30,30 +30,26 @@ useSeoMeta({
 export type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
 };
-const { data: total } = useNuxtData('total');
-if (!total.value) {
-  await useFetch('/api/mc-services/yisibite/total', {
-    dedupe: 'defer',
-    cache: 'force-cache',
-    key: 'total',
-    headers: {
-      Authorization: process.env.REDEN_API_TOKEN as string,
-    },
-  });
-}
+const { data: total } = await useFetch('/api/mc-services/yisibite/total', {
+  dedupe: 'defer',
+  cache: 'force-cache',
+  key: 'total',
+  headers: {
+    Authorization: process.env.REDEN_API_TOKEN as string,
+  },
+});
 
-const { data: serverResponse } =
-  useNuxtData<Record<string, MachineDef>>('generators');
-if (!serverResponse.value) {
-  await useFetch<Record<string, MachineDef>>('/api/mc-services/yisibite/', {
+const { data: serverResponse } = await useFetch<Record<string, MachineDef>>(
+  '/api/mc-services/yisibite/',
+  {
     dedupe: 'defer',
     cache: 'force-cache',
     key: 'generators',
     headers: {
       Authorization: process.env.REDEN_API_TOKEN as string,
     },
-  });
-}
+  },
+);
 const localePath = useLocalePath();
 
 const items: Item[] = [];
@@ -70,9 +66,39 @@ for (const [key, def] of Object.entries(serverResponse.value ?? {}).sort(
     author: def.author ?? {},
   });
 }
+
+const isClient = import.meta.client;
+const notification = ref(true);
 </script>
 <template>
   <v-container class="pa-4">
+    <v-alert v-if="isClient && notification" class="mb-3" type="info">
+      <template #title>
+        <v-alert-title> 暂停服务通知</v-alert-title>
+      </template>
+      <template #text>
+        投影生成器服务将在2025年1月8日起暂停服务，进行数据和服务器迁移，以及代码重构。
+        <br />
+        如果你觉得这个服务对你有帮助，请在B站关注我，以及
+        <router-link class="router" style="color: red" to="/sponsors">
+          给我打钱！
+        </router-link>
+        <br />
+        若您不想被强制使用夸克下载，可以打钱之后加群708842363联系我，我会给你的账户开通权限。多少随意，大于5元即可。
+        <v-row justify="center">
+          <v-col style="max-width: 400px">
+            <v-btn
+              :icon="undefined"
+              block
+              variant="outlined"
+              @click="notification = false"
+            >
+              我知道了
+            </v-btn>
+          </v-col>
+        </v-row>
+      </template>
+    </v-alert>
     <v-btn
       :to="localePath('/litematica/old')"
       class="mb-4 mr-4"
