@@ -45,28 +45,25 @@ type ServerResponse = {
     };
   };
 };
-const { data: serverResponse } = useNuxtData<ServerResponse>('generators');
 const nuxtApp = useNuxtApp();
-if (!serverResponse.value) {
-  console.log('fetching');
-  const { status, error } = await useFetch<ServerResponse>(
-    '/api/mc-services/yisibite/',
-    {
-      dedupe: 'defer',
-      key: 'generators',
-      cache: 'force-cache',
-      headers: {
-        Authorization: process.env.REDEN_API_TOKEN as string,
-      },
-    },
-  );
-  if (status.value === 'error') {
-    console.error(serverResponse.value, status.value, error.value);
-    throw createError({
-      status: error.value?.statusCode ?? 500,
-      message: JSON.stringify(error.value),
-    });
-  }
+const {
+  data: serverResponse,
+  status,
+  error,
+} = await useFetch<ServerResponse>('/api/mc-services/yisibite/', {
+  dedupe: 'defer',
+  key: 'generators',
+  cache: 'force-cache',
+  headers: {
+    Authorization: process.env.REDEN_API_TOKEN as string,
+  },
+});
+if (status.value === 'error') {
+  console.error(serverResponse.value, status.value, error.value);
+  throw createError({
+    status: error.value?.statusCode ?? 500,
+    message: JSON.stringify(error.value),
+  });
 }
 const generators = computed<Record<string, Machine>>(() => {
   if (serverResponse.value) {
@@ -151,7 +148,6 @@ const bvid = computed(() => {
   if (selected.value?.link) {
     const match = selected.value.link.match(/bilibili.com\/video\/(BV[^/?]+)/);
     if (match) {
-      console.log('bvid', match[1]);
       return match[1];
     }
   }

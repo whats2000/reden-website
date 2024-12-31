@@ -78,6 +78,7 @@ const notification = ref(true);
       </template>
       <template #text>
         投影生成器服务将在2025年1月8日起暂停服务，进行数据和服务器迁移，以及代码重构。
+        本次维护预计持续2-3天，敬请谅解。
         <br />
         如果你觉得这个服务对你有帮助，请在B站关注我，以及
         <router-link class="router" style="color: red" to="/sponsors">
