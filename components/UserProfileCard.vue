@@ -164,7 +164,7 @@ function deleteAvatar() {
         >
           <v-icon class="profile-item-icon">mdi-github</v-icon>
           <span v-if="user?.githubId != null">
-            <a :href="'//github.com/' + user.githubId">
+            <a :href="'https://github.com/' + user.githubId">
               {{ user!.githubId }}
             </a>
           </span>

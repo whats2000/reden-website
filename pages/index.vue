@@ -12,7 +12,9 @@ import {
 import '@/assets/main.css';
 import { useBackendMeta } from '~/store/meta';
 import { toast } from 'vuetify-sonner';
+import { useAppStore } from '~/store/app';
 
+const appStore = useAppStore();
 const introContent = ref<HTMLElement | null>(null);
 const localePath = useLocalePath();
 
@@ -34,6 +36,7 @@ const backendInfo = useBackendMeta();
         @click="
           doFetchGet('/api/account/login-test-account').then((res) => {
             if (res.ok) {
+              appStore.login('test', 1);
               toast.success('登录成功');
             } else {
               toastError(res);
