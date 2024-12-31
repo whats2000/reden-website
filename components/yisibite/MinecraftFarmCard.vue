@@ -108,7 +108,7 @@ const localePath = useLocalePath();
 
 .stat-line {
   opacity: 60%;
-  padding: 0 10px !important;
+  padding: 8px 14px !important;
   min-height: 10px !important;
   font-size: 0.75rem;
   line-height: 24px;

@@ -206,7 +206,7 @@ const tab = ref(
           <v-tabs v-model="tab" color="primary">
             <v-tab value="picture">图片</v-tab>
             <v-tab v-if="bvid" value="bilibili">
-              <v-icon>custom:Bilibili</v-icon>
+              <v-icon size="lg">custom:Bilibili</v-icon>
               Bilibili
             </v-tab>
           </v-tabs>
