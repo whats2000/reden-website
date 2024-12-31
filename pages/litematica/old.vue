@@ -8,7 +8,11 @@ import SizeInput from '~/components/yisibite/SizeInput.vue';
 import 'assets/main.css';
 import { doFetchGet, doFetchPut, toastError } from '~/utils/constants';
 import { toast } from 'vuetify-sonner';
-import type { Machine, MachineDef } from '~/pages/litematica/index.vue';
+import type {
+  ListLitematicaResponse,
+  Machine,
+  MachineDef,
+} from '~/pages/litematica/index.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -39,20 +43,9 @@ const { data: total } = await useFetch('/api/mc-services/yisibite/total', {
   },
 });
 
-const { data: serverResponse } = await useFetch<{
-  [key: string]: MachineDef & {
-    conditions?: {
-      x: string[];
-      y: string[];
-      z: string[];
-    };
-  };
-}>('/api/mc-services/yisibite/', {
-  key: 'generators',
-  headers: {
-    Authorization: process.env.REDEN_API_TOKEN as string,
-  },
-});
+const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
+  '/api/mc-services/yisibite/',
+);
 const generators = computed<Record<string, Machine>>(() => {
   if (serverResponse.value) {
     let machines: { [key: string]: Machine } = {};
@@ -78,16 +71,16 @@ const generators = computed<Record<string, Machine>>(() => {
       };
       const defaultChecker = [min(0), max(1000), mod(1, 0)];
       machines[key] = {
-        ...serverResponse.value[key],
+        ...serverResponse.value.d[key],
         conditions: {
           x:
-            serverResponse.value[key].conditions?.x?.map((s) => eval(s)) ??
+            serverResponse.value.d[key].conditions?.x?.map((s) => eval(s)) ??
             defaultChecker,
           y:
-            serverResponse.value[key].conditions?.y?.map((s) => eval(s)) ??
+            serverResponse.value.d[key].conditions?.y?.map((s) => eval(s)) ??
             defaultChecker,
           z:
-            serverResponse.value[key].conditions?.z?.map((s) => eval(s)) ??
+            serverResponse.value.d[key].conditions?.z?.map((s) => eval(s)) ??
             defaultChecker,
         },
       };

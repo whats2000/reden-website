@@ -48,9 +48,9 @@ const localePath = useLocalePath();
     />
     <v-card-title class="card-title">{{ item.name }}</v-card-title>
     <v-card-subtitle class="opacity-100">
-      <div class="d-flex flex-row">
-        by
-        <v-avatar size="24">
+      <div class="d-flex flex-row" style="line-height: 24px">
+        by&nbsp;
+        <v-avatar v-if="item.author?.avatarUrl" size="24">
           <v-img :src="item.author?.avatarUrl" />
         </v-avatar>
         {{ item.author?.username }}

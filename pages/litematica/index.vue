@@ -31,21 +31,28 @@ useSeoMeta({
 export type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
 };
-const { data: total } = await useFetch('/api/mc-services/yisibite/total', {
-  dedupe: 'defer',
-  cache: 'force-cache',
-  key: 'total',
-  headers: {
-    Authorization: process.env.REDEN_API_TOKEN as string,
-  },
-});
+export type ListLitematicaResponse = {
+  readonly d: Record<
+    string,
+    MachineDef & {
+      conditions?: {
+        x: string[];
+        y: string[];
+        z: string[];
+      };
+    }
+  >;
+  readonly downloads: number;
+  readonly count: number;
+};
+const { locale } = useI18n();
 
-const { data: serverResponse } = await useFetch<Record<string, MachineDef>>(
-  '/api/mc-services/yisibite/',
+const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
+  `/api/mc-services/yisibite/?lang=${locale.value}`,
   {
     dedupe: 'defer',
     cache: 'force-cache',
-    key: 'generators',
+    key: `generators${locale.value}`,
     headers: {
       Authorization: process.env.REDEN_API_TOKEN as string,
     },
@@ -54,7 +61,7 @@ const { data: serverResponse } = await useFetch<Record<string, MachineDef>>(
 const localePath = useLocalePath();
 
 const items: Item[] = [];
-for (const [key, def] of Object.entries(serverResponse.value ?? {}).sort(
+for (const [key, def] of Object.entries(serverResponse.value?.d ?? {}).sort(
   ([, a], [, b]) => (b.downloads ?? 0) - (a.downloads ?? 0),
 )) {
   items.push({
@@ -137,7 +144,9 @@ const notification = ref(true);
       </v-col>
     </v-row>
     <div class="text-center v-card-subtitle w-100">
-      {{ $t('litematica_generator.total_downloads', [total]) }}
+      {{
+        $t('litematica_generator.total_downloads', [serverResponse?.downloads])
+      }}
     </div>
   </v-container>
 </template>

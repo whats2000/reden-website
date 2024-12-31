@@ -6,8 +6,10 @@ import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import SizeInput from '~/components/yisibite/SizeInput.vue';
 import 'assets/main.css';
-import type { Machine, MachineDef } from '~/pages/litematica/index.vue';
-import { useNuxtApp } from '#app';
+import type {
+  ListLitematicaResponse,
+  Machine,
+} from '~/pages/litematica/index.vue';
 
 const route = useRoute();
 const xSize = ref(0);
@@ -15,7 +17,7 @@ const ySize = ref(0);
 const zSize = ref(0);
 const loading = ref(false);
 const name = route.params.name as string;
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const localePath = useLocalePath();
 useSeoMeta({
   title: name + ' - Reden' + t('litematica_generator.title'),
@@ -25,39 +27,16 @@ useSeoMeta({
   ogImage: 'https://redenmc.com/reden_256.png',
 });
 
-const { data: total } = useNuxtData<string>('total');
-if (!total.value) {
-  await useFetch('/api/mc-services/yisibite/total', {
-    dedupe: 'defer',
-    key: 'total',
-    cache: 'force-cache',
-    headers: {
-      Authorization: process.env.REDEN_API_TOKEN as string,
-    },
-  });
-}
-type ServerResponse = {
-  [key: string]: MachineDef & {
-    conditions?: {
-      x: string[];
-      y: string[];
-      z: string[];
-    };
-  };
-};
-const nuxtApp = useNuxtApp();
 const {
   data: serverResponse,
   status,
   error,
-} = await useFetch<ServerResponse>('/api/mc-services/yisibite/', {
-  dedupe: 'defer',
-  key: 'generators',
-  cache: 'force-cache',
-  headers: {
-    Authorization: process.env.REDEN_API_TOKEN as string,
+} = await useFetch<ListLitematicaResponse>(
+  `/api/mc-services/yisibite/?lang=${locale.value}`,
+  {
+    key: `generators`,
   },
-});
+);
 if (status.value === 'error') {
   console.error(serverResponse.value, status.value, error.value);
   throw createError({
@@ -89,18 +68,13 @@ const generators = computed<Record<string, Machine>>(() => {
         return f;
       };
       const defaultChecker = [min(0), max(2006), mod(1, 0)];
+      const dto: ListLitematicaResponse['d'][''] = serverResponse.value.d[key];
       machines[key] = {
-        ...serverResponse.value[key],
+        ...dto,
         conditions: {
-          x:
-            serverResponse.value[key].conditions?.x?.map((s) => eval(s)) ??
-            defaultChecker,
-          y:
-            serverResponse.value[key].conditions?.y?.map((s) => eval(s)) ??
-            defaultChecker,
-          z:
-            serverResponse.value[key].conditions?.z?.map((s) => eval(s)) ??
-            defaultChecker,
+          x: dto.conditions?.x?.map((s) => eval(s)) ?? defaultChecker,
+          y: dto.conditions?.y?.map((s) => eval(s)) ?? defaultChecker,
+          z: dto.conditions?.z?.map((s) => eval(s)) ?? defaultChecker,
         },
       };
     }
@@ -154,12 +128,16 @@ const bvid = computed(() => {
   return '';
 });
 const tabs = computed(() => {
-  const tabs = [
-    {
+  const tabs: {
+    key: string;
+    title: string;
+  }[] = [];
+  if (selected.value.imageUrl) {
+    tabs.push({
       key: 'picture',
       title: '图片',
-    },
-  ];
+    });
+  }
   if (bvid.value) {
     tabs.push({
       key: 'bilibili',
@@ -169,42 +147,50 @@ const tabs = computed(() => {
   return tabs;
 });
 const tab = ref(
-  import.meta.server ? 'picture' : tabs.value[tabs.value.length - 1].key,
+  import.meta.server ? 'picture' : tabs.value[tabs.value.length - 1]?.key,
 );
 </script>
 
 <template>
   <v-form class="content-common" fast-fail @submit.prevent="submit">
-    <v-row>
+    <v-btn
+      :to="localePath('/litematica')"
+      prepend-icon="mdi-arrow-left"
+      variant="outlined"
+    >
+      查看所有可生成的机器
+    </v-btn>
+    <v-row justify="center">
       <h1>
         {{ selected?.name }}
-        <v-chip v-if="selected">
-          {{
-            $t('litematica_generator.download_count', {
-              count: selected?.downloads,
-            })
-          }}
-        </v-chip>
       </h1>
     </v-row>
-    <v-row>
-      by
+    <v-row justify="center" style="line-height: 32px">
+      by&nbsp;
       <router-link
         v-if="selected.author"
         :to="`/@${selected.author.username}`"
         class="d-flex flex-row router"
       >
-        <v-avatar size="24">
+        <v-avatar v-if="selected.author.avatarUrl" size="24">
           <v-img :src="selected.author.avatarUrl" />
         </v-avatar>
         {{ selected.author.username }}
       </router-link>
+      <v-spacer style="max-width: 30px" />
+      <v-chip v-if="selected">
+        {{
+          $t('litematica_generator.download_count', {
+            count: selected?.downloads,
+          })
+        }}
+      </v-chip>
     </v-row>
     <v-row>
-      <v-col>
+      <v-col v-if="tabs.length !== 0">
         <v-card>
           <v-tabs v-model="tab" color="primary">
-            <v-tab value="picture">图片</v-tab>
+            <v-tab v-if="selected.imageUrl" value="picture">图片</v-tab>
             <v-tab v-if="bvid" value="bilibili">
               <v-icon size="lg">custom:Bilibili</v-icon>
               Bilibili
@@ -213,12 +199,8 @@ const tab = ref(
 
           <v-card-text>
             <v-tabs-window v-model="tab">
-              <v-tabs-window-item value="picture">
-                <v-img
-                  v-if="selected?.imageUrl"
-                  :src="selected.imageUrl"
-                  width="100%"
-                />
+              <v-tabs-window-item v-if="selected?.imageUrl" value="picture">
+                <v-img :src="selected.imageUrl" width="100%" />
               </v-tabs-window-item>
 
               <v-tabs-window-item v-if="bvid" value="bilibili">
@@ -324,7 +306,11 @@ const tab = ref(
         </p>
         <br />
         <div class="text-center v-card-subtitle w-100">
-          {{ $t('litematica_generator.total_downloads', [total]) }}
+          {{
+            $t('litematica_generator.total_downloads', [
+              serverResponse?.downloads,
+            ])
+          }}
         </div>
       </v-col>
     </v-row>
