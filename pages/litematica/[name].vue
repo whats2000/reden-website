@@ -153,6 +153,24 @@ const bvid = computed(() => {
   }
   return '';
 });
+const tabs = computed(() => {
+  const tabs = [
+    {
+      key: 'picture',
+      title: '图片',
+    },
+  ];
+  if (bvid.value) {
+    tabs.push({
+      key: 'bilibili',
+      title: 'Bilibili',
+    });
+  }
+  return tabs;
+});
+const tab = ref(
+  import.meta.server ? 'picture' : tabs.value[tabs.value.length - 1].key,
+);
 </script>
 
 <template>
@@ -183,23 +201,43 @@ const bvid = computed(() => {
       </router-link>
     </v-row>
     <v-row>
-      <v-img
-        v-if="nuxtApp.ssrContext || (!bvid && selected?.imageUrl)"
-        :src="selected.imageUrl"
-        width="100%"
-      />
+      <v-col>
+        <v-card>
+          <v-tabs v-model="tab" color="primary">
+            <v-tab value="picture">图片</v-tab>
+            <v-tab v-if="bvid" value="bilibili">
+              <v-icon>custom:Bilibili</v-icon>
+              Bilibili
+            </v-tab>
+          </v-tabs>
+
+          <v-card-text>
+            <v-tabs-window v-model="tab">
+              <v-tabs-window-item value="picture">
+                <v-img
+                  v-if="selected?.imageUrl"
+                  :src="selected.imageUrl"
+                  width="100%"
+                />
+              </v-tabs-window-item>
+
+              <v-tabs-window-item v-if="bvid" value="bilibili">
+                <iframe
+                  ref="biliPlayer"
+                  :src="`https://player.bilibili.com/player.html?isOutside=true&bvid=${bvid}`"
+                  :style="{
+                    height: `${((biliPlayer?.clientWidth ?? 0) / 16) * 9}px`,
+                  }"
+                  allowfullscreen
+                  class="bili-player"
+                />
+              </v-tabs-window-item>
+            </v-tabs-window>
+          </v-card-text>
+        </v-card>
+      </v-col>
       <v-col v-if="selected?.link" class="overflow-hidden" cols="12">
-        <iframe
-          v-if="bvid"
-          ref="biliPlayer"
-          :src="`https://player.bilibili.com/player.html?isOutside=true&bvid=${bvid}`"
-          :style="{
-            height: `${((biliPlayer?.clientWidth ?? 0) / 16) * 9}px`,
-          }"
-          allowfullscreen
-          class="bili-player"
-        />
-        <a v-else :href="selected.link" class="router nowrap">
+        <a v-if="!bvid" :href="selected.link" class="router nowrap">
           <v-icon>mdi-link</v-icon>
           {{ selected.link }}
         </a>
