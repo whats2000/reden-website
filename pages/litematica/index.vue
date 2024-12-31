@@ -11,6 +11,7 @@ export type MachineDef = {
   hasY?: boolean;
   hasZ?: boolean;
   note?: string;
+  summary?: string;
   link?: string;
   linkChina?: string;
   thumbnailUrl?: string;

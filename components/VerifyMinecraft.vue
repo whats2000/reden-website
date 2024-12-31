@@ -70,8 +70,8 @@ function verifyMinecraft() {
       </template>
     </v-tooltip>
   </span>
-  <span v-else>
-    No verified minecraft account linked
+  <span v-else
+    >No verified minecraft account linked
     <a
       v-if="showActions"
       class="router"
@@ -79,7 +79,7 @@ function verifyMinecraft() {
       @click="verifyMinecraft"
     >
       Verify Now!
-      <v-dialog width="500" activator="parent">
+      <v-dialog activator="parent" width="500">
         <v-card :loading="verifyingMinecraft" title="Verify Minecraft">
           <v-card-text>{{ status }}</v-card-text>
 

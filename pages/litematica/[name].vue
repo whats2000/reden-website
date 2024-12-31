@@ -168,6 +168,21 @@ const bvid = computed(() => {
           }}
         </v-chip>
       </h1>
+    </v-row>
+    <v-row>
+      by
+      <router-link
+        v-if="selected.author"
+        :to="`/@${selected.author.username}`"
+        class="d-flex flex-row router"
+      >
+        <v-avatar size="24">
+          <v-img :src="selected.author.avatarUrl" />
+        </v-avatar>
+        {{ selected.author.username }}
+      </router-link>
+    </v-row>
+    <v-row>
       <v-img
         v-if="nuxtApp.ssrContext || (!bvid && selected?.imageUrl)"
         :src="selected.imageUrl"
