@@ -70,6 +70,7 @@ const generators = computed<Record<string, Machine>>(() => {
         return f;
       };
       const defaultChecker = [min(0), max(1000), mod(1, 0)];
+      console.log(serverResponse.value.d);
       machines[key] = {
         ...serverResponse.value.d[key],
         conditions: {
@@ -138,10 +139,6 @@ const uploadCache = (name: string) => {
     doFetchGet(`/api/mc-services/yisibite/${name}/approval`)
       .then(async (res) => {
         if (res.status == 404) {
-          cache.value = {
-            name: '404 Not Found',
-            approved: false,
-          };
         } else {
           if (!res.ok) return Promise.reject(res);
           cache.value = await res.json();
@@ -308,7 +305,6 @@ async function submitUpload(e: SubmitEventPromise) {
             <v-row>
               <v-spacer />
               <v-btn
-                :disabled="selected?.available === false"
                 :loading="loading"
                 class="ma-3"
                 color="primary"
@@ -319,7 +315,6 @@ async function submitUpload(e: SubmitEventPromise) {
                 材料列表
               </v-btn>
               <v-btn
-                :disabled="selected?.available === false"
                 :loading="loading"
                 class="ma-3"
                 color="primary"

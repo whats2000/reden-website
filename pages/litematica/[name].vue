@@ -173,7 +173,7 @@ const tab = ref(
         :to="`/@${selected.author.username}`"
         class="d-flex flex-row router"
       >
-        <v-avatar v-if="selected.author.avatarUrl" size="24">
+        <v-avatar v-if="selected.author.avatarUrl" size="32">
           <v-img :src="selected.author.avatarUrl" />
         </v-avatar>
         {{ selected.author.username }}

@@ -51,7 +51,6 @@ const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
   `/api/mc-services/yisibite/?lang=${locale.value}`,
   {
     dedupe: 'defer',
-    cache: 'force-cache',
     key: `generators${locale.value}`,
     headers: {
       Authorization: process.env.REDEN_API_TOKEN as string,
@@ -78,10 +77,47 @@ for (const [key, def] of Object.entries(serverResponse.value?.d ?? {}).sort(
 
 const isClient = import.meta.client;
 const notification = ref(true);
+const maintaining = false;
 </script>
 <template>
   <v-container class="pa-4">
-    <v-alert v-if="isClient && notification" class="mb-3" type="info">
+    <v-alert
+      v-if="maintaining && isClient && notification"
+      class="mb-3"
+      type="warning"
+    >
+      <template #title>
+        <v-alert-title> 本生成器正在维护！</v-alert-title>
+      </template>
+      <template #text>
+        投影生成器服务正在进行维护，进行数据和服务器迁移，以及代码重构。
+        期间可能会有不稳定的情况，如果你遇到问题，请稍后重试。
+        <br />
+        如果你觉得这个服务对你有帮助，请在B站关注我，以及
+        <router-link class="router" style="color: red" to="/sponsors">
+          给我打钱！
+        </router-link>
+        <br />
+        若您不想被强制使用夸克下载，可以打钱之后加群708842363联系我，我会给你的账户开通权限。多少随意，大于5元即可。
+        <v-row justify="center">
+          <v-col style="max-width: 400px">
+            <v-btn
+              :icon="undefined"
+              block
+              variant="outlined"
+              @click="notification = false"
+            >
+              我知道了
+            </v-btn>
+          </v-col>
+        </v-row>
+      </template>
+    </v-alert>
+    <v-alert
+      v-if="!maintaining && isClient && notification"
+      class="mb-3"
+      type="info"
+    >
       <template #title>
         <v-alert-title> 暂停服务通知</v-alert-title>
       </template>
