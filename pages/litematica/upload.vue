@@ -14,7 +14,6 @@ const { t, locale } = useI18n();
 const id = ref<string>('');
 const switchLocalePath = useSwitchLocalePath();
 const router = useRouter();
-// const language = ref<string>('en');
 const name = ref<string>();
 const summary = ref<string>();
 const description = ref<string>();

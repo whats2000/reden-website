@@ -60,15 +60,6 @@
     "register": "去註冊",
     "title": "登入 Reden"
   },
-  "page404": {},
-  "profile": {
-    "edit": {
-      "email": {},
-      "password": {},
-      "preference": {}
-    },
-    "oauth": {}
-  },
   "reden": {
     "description": "為紅石機器開發者提供一站式工作環境，成為最好的紅石調試和教學工具。",
     "download": "下載",
@@ -99,8 +90,7 @@
         "rvc": "Reden 版本控制 (RVC)",
         "title": "Reden Mod",
         "undo_redo": "撤銷 & 重作"
-      },
-      "social": {}
+      }
     },
     "home": {
       "community_intro": {

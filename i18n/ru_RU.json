@@ -59,14 +59,6 @@
     "register": "Register",
     "title": "Login to Reden"
   },
-  "page404": {},
-  "profile": {
-    "edit": {
-      "password": {},
-      "preference": {}
-    },
-    "oauth": {}
-  },
   "reden": {
     "description": "Provide a one-stop working environment for redstone developers and become the best redstone debugging and teaching tool.",
     "download": "Download",
@@ -97,8 +89,7 @@
         "rvc": "Reden Version Control",
         "title": "Reden Mod",
         "undo_redo": "Undo & Redo"
-      },
-      "social": {}
+      }
     },
     "home": {
       "community_intro": {

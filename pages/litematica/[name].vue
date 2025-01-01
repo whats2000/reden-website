@@ -20,13 +20,6 @@ const loading = ref(false);
 const name = route.params.name as string;
 const { t, locale } = useI18n();
 const localePath = useLocalePath();
-useSeoMeta({
-  title: name + ' - Reden' + t('litematica_generator.title'),
-  ogTitle: name + ' - Reden' + t('litematica_generator.title'),
-  description: t('litematica_generator.og_description'),
-  ogDescription: t('litematica_generator.og_description'),
-  ogImage: 'https://redenmc.com/reden_256.png',
-});
 
 const {
   data: serverResponse,
@@ -120,6 +113,19 @@ function openMaterials() {
 }
 
 const selected = computed(() => generators.value[name]);
+
+useSeoMeta({
+  title: t('litematica_generator.web_title', {
+    name: selected.value.name,
+  }),
+  ogTitle: t('litematica_generator.web_title', {
+    name: selected.value.name,
+  }),
+  description: selected.value.note ?? t('litematica_generator.og_description'),
+  ogDescription:
+    selected.value.note ?? t('litematica_generator.og_description'),
+  ogImage: 'https://redenmc.com/reden_256.png',
+});
 const biliPlayer = useTemplateRef<HTMLIFrameElement>('biliPlayer');
 const bvid = computed(() => parseBVID(selected.value?.link));
 const tabs = computed(() => {
