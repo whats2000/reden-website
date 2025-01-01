@@ -29,20 +29,15 @@
   },
   "admin": {
     "title": {
-      "admin": "",
       "users": "All Users"
     }
   },
-  "also_try_our_other_online_services:": "",
   "en": "Английский",
   "litematica_generator": {
-    "chunks": "",
-    "contribute": "",
     "description": "Generate Litematica files online from Reden projects, e.g. World Eaters",
     "download": "Download",
     "download_count": "{count} downloads",
     "not_logged_in": "Guest users can only generate 5 times per minute, please log in to unlock this limit",
-    "og_description": "",
     "select": "What do you want to generate today?",
     "size_description": "The size of the machine in x, y, z. for world eaters, the z size is the distance between the starting side and the returning side.",
     "size_max": "The maximum size of the machine is {size}",
@@ -51,9 +46,7 @@
     "size_x": "Size in x",
     "size_y": "Size in y",
     "size_z": "Size in z",
-    "suggestion_notice": "",
-    "title": "Litematica Online Generator",
-    "total_downloads": ""
+    "title": "Litematica Online Generator"
   },
   "login": {
     "button": {
@@ -66,60 +59,13 @@
     "register": "Register",
     "title": "Login to Reden"
   },
-  "page404": {
-    "back": "",
-    "evolving": "",
-    "help": "",
-    "title": ""
-  },
+  "page404": {},
   "profile": {
     "edit": {
-      "back": "",
-      "basic_information": "",
-      "bio": "",
-      "changeEmail": "",
-      "failed_to_save_information": "",
-      "information_saved": "",
-      "password": {
-        "changePassword": "",
-        "confirm": "",
-        "desc": "",
-        "first": "",
-        "mew": "",
-        "old": "",
-        "passwordsDoNotMatch": "",
-        "requirements": ""
-      },
-      "preference": {
-        "pronouns": "",
-        "showEmail": "",
-        "show_email_desc": "",
-        "show_github": "",
-        "show_github_desc": "",
-        "show_minecraft_uuid": "",
-        "show_minecraft_uuid_desc": "",
-        "show_timezone": "",
-        "show_timezone_desc": "",
-        "timezone": "",
-        "timezone_desc": ""
-      },
-      "preferences": "",
-      "preferencesSaved": "",
-      "save": "",
-      "save_preferences": "",
-      "success": "",
-      "third_party_accounts": "",
-      "username": "",
-      "username_desc": ""
+      "password": {},
+      "preference": {}
     },
-    "editProfile": "",
-    "my_backup": "",
-    "oauth": {
-      "link_account": "",
-      "unlink_account": ""
-    },
-    "password": "",
-    "username": ""
+    "oauth": {}
   },
   "reden": {
     "description": "Provide a one-stop working environment for redstone developers and become the best redstone debugging and teaching tool.",
@@ -152,9 +98,7 @@
         "title": "Reden Mod",
         "undo_redo": "Undo & Redo"
       },
-      "social": {
-        "title": ""
-      }
+      "social": {}
     },
     "home": {
       "community_intro": {
@@ -174,18 +118,14 @@
     "learn_more": "Learn More",
     "my_account": "My Account",
     "title": {
-      "404": "",
       "debugger": "Reden Debugger",
       "download": "Download",
       "edit_profile": "Edit Profile",
-      "features": "",
       "home": "Home",
-      "home_full": "",
       "my_account": "My Account",
       "rvc": "RVC",
       "undo": "Undo"
     },
-    "user_not_found": "",
     "wiki": "Wiki"
   },
   "register": {

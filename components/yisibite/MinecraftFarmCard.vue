@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useElementHover } from '@vueuse/core';
-import { type Profile } from '@/utils/constants';
+import { number2text, type Profile, timeSince } from '@/utils/constants';
 import { useDisplay } from 'vuetify';
 
 export type Item = {
@@ -12,6 +12,7 @@ export type Item = {
   author: Partial<Profile>;
   imageUrl?: string;
   thumbnailUrl?: string;
+  updatedAt: number;
 };
 defineProps<{
   item: Partial<Item>;
@@ -49,7 +50,7 @@ const localePath = useLocalePath();
     <v-card-title class="card-title">{{ item.name }}</v-card-title>
     <v-card-subtitle class="opacity-100">
       <div class="d-flex flex-row" style="line-height: 24px">
-        by&nbsp;
+        by
         <v-avatar v-if="item.author?.avatarUrl" size="24">
           <v-img :src="item.author?.avatarUrl" />
         </v-avatar>
@@ -78,9 +79,10 @@ const localePath = useLocalePath();
 
     <v-card-actions class="stat-line">
       <template v-if="!mobile">
+        {{ timeSince(item.updatedAt ?? Date.now()) }}
         <v-spacer />
         <v-icon size="18">mdi-download-outline</v-icon>
-        {{ item.downloads }}
+        {{ number2text(item.downloads ?? 0) }}
       </template>
     </v-card-actions>
   </v-card>

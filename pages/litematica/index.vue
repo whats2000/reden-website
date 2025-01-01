@@ -5,17 +5,17 @@ import MinecraftFarmCard, {
 
 export type MachineDef = {
   name: string;
+  key: string;
   downloads?: number;
-  available?: boolean | null;
   hasX?: boolean;
   hasY?: boolean;
   hasZ?: boolean;
   note?: string;
   summary?: string;
   link?: string;
-  linkChina?: string;
   thumbnailUrl?: string;
   imageUrl?: string;
+  updatedAt?: number;
   author?: Partial<Profile>;
 };
 
@@ -65,13 +65,14 @@ for (const [key, def] of Object.entries(serverResponse.value?.d ?? {}).sort(
   ([, a], [, b]) => (b.downloads ?? 0) - (a.downloads ?? 0),
 )) {
   items.push({
+    ...def,
     id: key,
-    name: def.name,
     description: def.note || '',
     upvotes: 0,
     downloads: def.downloads || 0,
     thumbnailUrl: def.thumbnailUrl,
     author: def.author ?? {},
+    updatedAt: def.updatedAt ?? 0,
   });
 }
 
@@ -137,6 +138,16 @@ const notification = ref(true);
       variant="outlined"
     >
       请在B站关注我，有故障请私信
+    </v-btn>
+    <v-btn
+      :to="localePath('/litematica/upload')"
+      class="mb-4 mr-4"
+      color="primary"
+      prepend-icon="mdi-upload"
+      rounded="lg"
+      variant="outlined"
+    >
+      上传你的机器
     </v-btn>
     <v-row align="start" justify="center">
       <v-col v-for="item in items" :key="item.id" md="4" sm="6" xs="12">

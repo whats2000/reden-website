@@ -304,6 +304,37 @@ export async function isInChina() {
   }
 }
 
+export function number2text(num: number) {
+  if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
+  if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
+  return num.toString();
+}
+
+export function timeSince(time: number) {
+  let diff = (Date.now() - time) / 1e3;
+  if (diff < 60) return 'just now';
+  diff /= 60;
+  if (diff < 60) return Math.floor(diff) + 'm ago';
+  diff /= 60;
+  if (diff < 24) return Math.floor(diff) + 'h ago';
+  diff /= 24;
+  if (diff < 30) return Math.floor(diff) + 'd ago';
+  diff /= 30;
+  if (diff < 12) return Math.floor(diff) + 'mon ago';
+  diff /= 12;
+  return Math.floor(diff) + 'yr ago';
+}
+
+export function parseBVID(link?: string) {
+  if (link) {
+    const match = link.match(/bilibili.com\/video\/(BV[^/?]+)/);
+    if (match) {
+      return match[1];
+    }
+  }
+  return null;
+}
+
 export type Captcha = {
   provider: string;
   token: string;

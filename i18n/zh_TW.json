@@ -29,20 +29,16 @@
   },
   "admin": {
     "title": {
-      "admin": "",
       "users": "All Users"
     }
   },
-  "also_try_our_other_online_services:": "",
   "en": "English",
   "litematica_generator": {
-    "chunks": "",
     "contribute": "想要你的機器（例如世界吞噬者）被收錄在這裡？現在就為 Reden 做出貢獻！聯絡我傳送郵件至",
     "description": "在這裡線上生成投影檔案，例如世界吞噬者",
     "download": "下載",
     "download_count": "{count} 次下載",
     "not_logged_in": "遊客使用者每分鐘只能生成 5 次，登入後解鎖此限制",
-    "og_description": "",
     "select": "今天你想生成什麼？",
     "size_description": "機器的 x, y, z 尺寸。對於世界吞噬者，z 尺寸是出發站和返回站之間的距離。",
     "size_max": "機器的最大尺寸為 {size}",
@@ -51,9 +47,7 @@
     "size_x": "x 方向尺寸",
     "size_y": "y 方向尺寸",
     "size_z": "z 方向尺寸",
-    "suggestion_notice": "",
-    "title": "投影藍圖線上生成器",
-    "total_downloads": ""
+    "title": "投影藍圖線上生成器"
   },
   "login": {
     "button": {
@@ -66,63 +60,14 @@
     "register": "去註冊",
     "title": "登入 Reden"
   },
-  "page404": {
-    "back": "",
-    "evolving": "",
-    "help": "",
-    "title": ""
-  },
+  "page404": {},
   "profile": {
     "edit": {
-      "back": "",
-      "basic_information": "",
-      "bio": "",
-      "changeEmail": "",
-      "email": {
-        "desc": ""
-      },
-      "failed_to_save_information": "",
-      "information_saved": "",
-      "password": {
-        "changePassword": "",
-        "confirm": "",
-        "desc": "",
-        "first": "",
-        "mew": "",
-        "old": "",
-        "passwordsDoNotMatch": "",
-        "requirements": ""
-      },
-      "preference": {
-        "pronouns": "",
-        "showEmail": "",
-        "show_email_desc": "",
-        "show_github": "",
-        "show_github_desc": "",
-        "show_minecraft_uuid": "",
-        "show_minecraft_uuid_desc": "",
-        "show_timezone": "",
-        "show_timezone_desc": "",
-        "timezone": "",
-        "timezone_desc": ""
-      },
-      "preferences": "",
-      "preferencesSaved": "",
-      "save": "",
-      "save_preferences": "",
-      "success": "",
-      "third_party_accounts": "",
-      "username": "",
-      "username_desc": ""
+      "email": {},
+      "password": {},
+      "preference": {}
     },
-    "editProfile": "",
-    "my_backup": "",
-    "oauth": {
-      "link_account": "",
-      "unlink_account": ""
-    },
-    "password": "",
-    "username": ""
+    "oauth": {}
   },
   "reden": {
     "description": "為紅石機器開發者提供一站式工作環境，成為最好的紅石調試和教學工具。",
@@ -155,9 +100,7 @@
         "title": "Reden Mod",
         "undo_redo": "撤銷 & 重作"
       },
-      "social": {
-        "title": ""
-      }
+      "social": {}
     },
     "home": {
       "community_intro": {
@@ -177,18 +120,14 @@
     "learn_more": "了解更多",
     "my_account": "我的帳號",
     "title": {
-      "404": "",
       "debugger": "Reden Debugger",
       "download": "Download",
       "edit_profile": "Edit Profile",
-      "features": "",
       "home": "首頁",
-      "home_full": "",
       "my_account": "My Account",
       "rvc": "RVC",
       "undo": "Undo"
     },
-    "user_not_found": "",
     "wiki": "Wiki"
   },
   "register": {

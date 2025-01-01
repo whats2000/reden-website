@@ -10,9 +10,11 @@ const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
   },
 );
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const id = ref<string>('');
-const language = ref<string>('en');
+const switchLocalePath = useSwitchLocalePath();
+const router = useRouter();
+// const language = ref<string>('en');
 const name = ref<string>();
 const summary = ref<string>();
 const description = ref<string>();
@@ -42,7 +44,7 @@ async function submit(e: SubmitEventPromise) {
     }
   }
   const response = await doFetchPost(
-    `/api/mc-services/yisibite/${id.value}/info/${language.value}`,
+    `/api/mc-services/yisibite/${id.value}/info/${locale.value}`,
     {
       name: name.value,
       summary: summary.value,
@@ -69,7 +71,7 @@ async function submit(e: SubmitEventPromise) {
           <v-skeleton-loader v-if="!serverResponse" />
           <v-combobox
             v-model="id"
-            :items="Object.keys(serverResponse ?? {})"
+            :items="Object.keys(serverResponse.d)"
             label="Machine"
             required
             @update:model-value="
@@ -113,21 +115,23 @@ async function submit(e: SubmitEventPromise) {
             </template>
           </v-file-input>
           <v-select
-            v-model="language"
+            v-model="locale"
             :item-title="(item) => t(item)"
             :item-value="(item) => item"
             :items="['en', 'zh_cn', 'zh_tw']"
             density="comfortable"
             label="Language"
             required
-            @update:model-value="(lang) => console.log(lang)"
+            @update:model-value="
+              (lang) => router.replace(switchLocalePath(lang))
+            "
           />
           <v-row>
             <v-col>
               You are editing machine
               {{ name ?? id }}
               information in
-              {{ t(language) }}
+              {{ t(locale) }}
             </v-col>
           </v-row>
           <v-text-field v-model="name" density="comfortable" label="Name" />

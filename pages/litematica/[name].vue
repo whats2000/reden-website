@@ -10,6 +10,7 @@ import type {
   ListLitematicaResponse,
   Machine,
 } from '~/pages/litematica/index.vue';
+import { parseBVID } from '~/utils/constants';
 
 const route = useRoute();
 const xSize = ref(0);
@@ -47,7 +48,7 @@ if (status.value === 'error') {
 const generators = computed<Record<string, Machine>>(() => {
   if (serverResponse.value) {
     let machines: { [key: string]: Machine } = {};
-    for (let key in serverResponse.value) {
+    for (let key in serverResponse.value.d) {
       const min = (size: number) => {
         const f = (v: number) =>
           v >= size || t('litematica_generator.size_min', { size });
@@ -69,6 +70,8 @@ const generators = computed<Record<string, Machine>>(() => {
       };
       const defaultChecker = [min(0), max(2006), mod(1, 0)];
       const dto: ListLitematicaResponse['d'][''] = serverResponse.value.d[key];
+      console.log('dto', dto);
+      console.log('dtos', serverResponse.value);
       machines[key] = {
         ...dto,
         conditions: {
@@ -118,15 +121,7 @@ function openMaterials() {
 
 const selected = computed(() => generators.value[name]);
 const biliPlayer = useTemplateRef<HTMLIFrameElement>('biliPlayer');
-const bvid = computed(() => {
-  if (selected.value?.link) {
-    const match = selected.value.link.match(/bilibili.com\/video\/(BV[^/?]+)/);
-    if (match) {
-      return match[1];
-    }
-  }
-  return '';
-});
+const bvid = computed(() => parseBVID(selected.value?.link));
 const tabs = computed(() => {
   const tabs: {
     key: string;
@@ -156,7 +151,7 @@ const tab = ref(
     <v-btn
       :to="localePath('/litematica')"
       prepend-icon="mdi-arrow-left"
-      variant="outlined"
+      variant="tonal"
     >
       查看所有可生成的机器
     </v-btn>
@@ -263,7 +258,6 @@ const tab = ref(
             <v-row>
               <v-spacer />
               <v-btn
-                :disabled="selected?.available === false"
                 :loading="loading"
                 class="ma-3"
                 color="primary"
@@ -274,7 +268,6 @@ const tab = ref(
                 材料列表
               </v-btn>
               <v-btn
-                :disabled="selected?.available === false"
                 :loading="loading"
                 class="ma-3"
                 color="primary"
