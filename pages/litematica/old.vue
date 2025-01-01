@@ -49,7 +49,7 @@ const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
 const generators = computed<Record<string, Machine>>(() => {
   if (serverResponse.value) {
     let machines: { [key: string]: Machine } = {};
-    for (let key in serverResponse.value) {
+    for (let key in serverResponse.value.d) {
       const min = (size: number) => {
         const f = (v: number) =>
           v >= size || t('litematica_generator.size_min', { size });

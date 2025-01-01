@@ -311,18 +311,34 @@ export function number2text(num: number) {
 }
 
 export function timeSince(time: number) {
-  let diff = (Date.now() - time) / 1e3;
-  if (diff < 60) return 'just now';
-  diff /= 60;
-  if (diff < 60) return Math.floor(diff) + 'm ago';
-  diff /= 60;
-  if (diff < 24) return Math.floor(diff) + 'h ago';
-  diff /= 24;
-  if (diff < 30) return Math.floor(diff) + 'd ago';
-  diff /= 30;
-  if (diff < 12) return Math.floor(diff) + 'mon ago';
-  diff /= 12;
-  return Math.floor(diff) + 'yr ago';
+  const { locale } = useI18n();
+  if (locale.value === 'zh_cn') {
+    let diff = (Date.now() - time) / 1e3;
+    if (diff < 60) return '刚刚';
+    diff /= 60;
+    if (diff < 60) return Math.floor(diff) + '分钟前';
+    diff /= 60;
+    if (diff < 24) return Math.floor(diff) + '小时前';
+    diff /= 24;
+    if (diff < 30) return Math.floor(diff) + '天前';
+    diff /= 30;
+    if (diff < 12) return Math.floor(diff) + '月前';
+    diff /= 12;
+    return Math.floor(diff) + '年前';
+  } else {
+    let diff = (Date.now() - time) / 1e3;
+    if (diff < 60) return 'just now';
+    diff /= 60;
+    if (diff < 60) return Math.floor(diff) + 'm ago';
+    diff /= 60;
+    if (diff < 24) return Math.floor(diff) + 'h ago';
+    diff /= 24;
+    if (diff < 30) return Math.floor(diff) + 'd ago';
+    diff /= 30;
+    if (diff < 12) return Math.floor(diff) + 'mon ago';
+    diff /= 12;
+    return Math.floor(diff) + 'yr ago';
+  }
 }
 
 export function parseBVID(link?: string) {

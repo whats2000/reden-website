@@ -27,6 +27,11 @@ useSeoMeta({
   ogDescription: t('litematica_generator.og_description'),
   ogImage: 'https://redenmc.com/reden_256.png',
 });
+const localePath = useLocalePath();
+const router = useRouter();
+if (router.currentRoute.value.query.m) {
+  router.push(localePath(`/litematica/${router.currentRoute.value.query.m}`));
+}
 
 export type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
@@ -57,7 +62,6 @@ const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
     },
   },
 );
-const localePath = useLocalePath();
 
 const items: Item[] = [];
 for (const [key, def] of Object.entries(serverResponse.value?.d ?? {}).sort(
