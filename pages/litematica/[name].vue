@@ -61,7 +61,8 @@ const generators = computed<Record<string, Machine>>(() => {
         f.rem = rem;
         return f;
       };
-      const defaultChecker = [min(0), max(2006)];
+      // Default checkers ensure these function wont be deleted in output.
+      const defaultChecker = [min(0), max(2006), mod(1, 0)];
       const dto: ListLitematicaResponse['d'][''] = serverResponse.value.d[key];
       machines[key] = {
         ...dto,
