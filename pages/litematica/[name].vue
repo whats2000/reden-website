@@ -21,22 +21,25 @@ const name = route.params.name as string;
 const { t, locale } = useI18n();
 const localePath = useLocalePath();
 
-const {
-  data: serverResponse,
-  status,
-  error,
-} = await useFetch<ListLitematicaResponse>(
-  `/api/mc-services/yisibite/?lang=${locale.value}`,
-  {
-    key: `generators`,
-  },
+const { data: serverResponse } = useNuxtData<ListLitematicaResponse>(
+  `generators${locale.value}`,
 );
-if (status.value === 'error') {
-  console.error(serverResponse.value, status.value, error.value);
-  throw createError({
-    status: error.value?.statusCode ?? 500,
-    message: JSON.stringify(error.value),
-  });
+
+if (!serverResponse.value) {
+  const { data, status, error } = await useFetch<ListLitematicaResponse>(
+    `/api/mc-services/yisibite/?lang=${locale.value}`,
+    {
+      key: `generators${locale.value}`,
+    },
+  );
+  serverResponse.value = data.value;
+  if (status.value === 'error') {
+    console.error(serverResponse.value, status.value, error.value);
+    throw createError({
+      status: error.value?.statusCode ?? 500,
+      message: JSON.stringify(error.value),
+    });
+  }
 }
 const generators = computed<Record<string, Machine>>(() => {
   if (serverResponse.value) {
@@ -155,9 +158,9 @@ const tab = ref(
   <v-form class="content-common" fast-fail @submit.prevent="submit">
     <v-btn
       :to="localePath('/litematica')"
+      class="mb-3"
       prepend-icon="mdi-arrow-left"
       variant="tonal"
-      class="mb-3"
     >
       查看所有可生成的机器
     </v-btn>
