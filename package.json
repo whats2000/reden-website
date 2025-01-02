@@ -10,7 +10,6 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@mdi/font": "^7.4.47",
     "@nuxtjs/i18n": "^8.5.2",
     "@pinia/nuxt": "^0.5.4",
     "@vueuse/core": "^10.9.0",
@@ -32,6 +31,7 @@
     "vuetify-sonner": "^0.3.2"
   },
   "devDependencies": {
+    "@mdi/font": "^7.4.47",
     "@nuxtjs/sitemap": "^6.0.0",
     "@types/randomcolor": "^0.5.9",
     "prettier": "3.2.5",

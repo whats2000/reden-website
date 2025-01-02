@@ -2,6 +2,7 @@
 import type { ListLitematicaResponse } from '~/pages/litematica/index.vue';
 import type { SubmitEventPromise } from 'vuetify';
 import { toast } from 'vuetify-sonner';
+import { getGlobalThis } from '@vue/shared';
 
 const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
   '/api/mc-services/yisibite/',
@@ -19,6 +20,7 @@ const summary = ref<string>();
 const description = ref<string>();
 const file = ref<File>();
 const image = ref<File>();
+const imageUri = ref<string>();
 const link = ref<string>();
 const uploading = ref(false);
 
@@ -80,6 +82,7 @@ async function submit(e: SubmitEventPromise) {
                   summary = serverResponse.d[id].summary;
                   description = serverResponse.d[id].note;
                   link = serverResponse.d[id].link;
+                  imageUri = serverResponse.d[id].thumbnailUrl;
                 }
               }
             "
@@ -144,8 +147,40 @@ async function submit(e: SubmitEventPromise) {
             density="comfortable"
             label="Description"
           />
-          <v-text-field v-model="link" density="comfortable" label="Link" />
-          <v-file-input v-model="image" density="comfortable" label="Image" />
+          <v-text-field v-model="link" density="comfortable" label="Link">
+            <template #details>
+              <template v-if="parseBVID(link)">
+                已解析的 Bilibili BV 号：
+                {{ parseBVID(link) }}
+              </template>
+            </template>
+          </v-text-field>
+          <v-file-input
+            v-model="image"
+            density="comfortable"
+            label="Image"
+            @update:model-value="
+              () => {
+                if (image) {
+                  imageUri = getGlobalThis().URL.createObjectURL(image);
+                } else {
+                  getGlobalThis().URL.revokeObjectURL(imageUri);
+                  imageUri = undefined;
+                }
+              }
+            "
+          >
+            <template #append-inner>
+              <div class="d-flex flex-row justify-center">
+                <img
+                  style="max-height: 240px"
+                  v-if="imageUri"
+                  :src="imageUri"
+                  alt="thumbnail"
+                />
+              </div>
+            </template>
+          </v-file-input>
         </v-card-text>
         <v-card-actions>
           <v-spacer />

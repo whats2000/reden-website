@@ -9,7 +9,7 @@ import 'vue-turnstile';
 if (import.meta.client) {
   console.log(
     '%c[Reden] Welcome to Reden',
-    'background: linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff); color: #fff; font-size: 1.2em; font-weight: bold; padding: 5px;',
+    'background: linear-gradient(to right, #ff0000, #ff7f00, #00ff00, #0000ff, #4b0082, #8b00ff); color: #fff; font-size: 1.2em; font-weight: bold; padding: 5px;',
   );
 }
 

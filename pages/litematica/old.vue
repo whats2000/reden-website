@@ -70,7 +70,6 @@ const generators = computed<Record<string, Machine>>(() => {
         return f;
       };
       const defaultChecker = [min(0), max(1000), mod(1, 0)];
-      console.log(serverResponse.value.d);
       machines[key] = {
         ...serverResponse.value.d[key],
         conditions: {

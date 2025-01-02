@@ -61,10 +61,8 @@ const generators = computed<Record<string, Machine>>(() => {
         f.rem = rem;
         return f;
       };
-      const defaultChecker = [min(0), max(2006), mod(1, 0)];
+      const defaultChecker = [min(0), max(2006)];
       const dto: ListLitematicaResponse['d'][''] = serverResponse.value.d[key];
-      console.log('dto', dto);
-      console.log('dtos', serverResponse.value);
       machines[key] = {
         ...dto,
         conditions: {
@@ -158,6 +156,7 @@ const tab = ref(
       :to="localePath('/litematica')"
       prepend-icon="mdi-arrow-left"
       variant="tonal"
+      class="mb-3"
     >
       查看所有可生成的机器
     </v-btn>
