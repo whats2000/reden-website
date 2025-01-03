@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { getGlobalThis } from '@vue/shared';
+
 const insFather = ref<Element>();
 const ins = computed(() => {
   return insFather.value?.querySelector('ins') ?? undefined;
@@ -31,17 +33,21 @@ onMounted(() => {
       console.log('adsbygoogle.push()', ins.value);
     }
   }, 1000);
-  setInterval(() => {
-    document
-      .querySelectorAll<HTMLElement>('.adsbygoogle[data-ad-status="unfilled"]')
-      .forEach((ins) => {
-        let element = ins;
-        while (element.parentElement?.childElementCount === 1) {
-          element = element.parentElement;
-        }
-        element.remove();
-      });
-  }, 1000);
+  if (!getGlobalThis().google_adtest) {
+    setInterval(() => {
+      document
+        .querySelectorAll<HTMLElement>(
+          '.adsbygoogle[data-ad-status="unfilled"]',
+        )
+        .forEach((ins) => {
+          let element = ins;
+          while (element.parentElement?.childElementCount === 1) {
+            element = element.parentElement;
+          }
+          element.remove();
+        });
+    }, 1000);
+  }
 });
 onUnmounted(() => {
   clearInterval(interval);

@@ -26,8 +26,10 @@ onMounted(() => {
     css.push(`background:${colors[key]}`);
   }
   console.log(themeText, ...css);
-  document.body.style.backgroundColor =
-    theme.themes.value[appStore.theme]!.colors.background;
+});
+watch(currentTheme, (theme) => {
+  document.body.style.backgroundColor = theme.colors.background;
+  console.log(document.body.style.backgroundColor);
 });
 
 const { locale } = useI18n();

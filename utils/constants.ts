@@ -228,6 +228,7 @@ export function fetchUser(userRef: Ref<Profile | undefined>) {
               color: 'error',
             },
           });
+          useAppStore().logout();
           const localeRoute = useLocaleRoute();
           useRouter().push(
             localeRoute({
