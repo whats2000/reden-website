@@ -82,7 +82,14 @@ export const doFetchPost = (url: string, data: any) =>
       'X-CSRF-Token': useAppStore().csrfToken || '[Reden] no csrf token',
     },
     credentials: 'include',
-    body: JSON.stringify(data),
+    body:
+      typeof data === 'string'
+        ? data
+        : typeof data === 'object'
+          ? JSON.stringify(data)
+          : typeof data === 'number'
+            ? data.toString()
+            : data,
   }).then((res) => {
     if (res.status === 401) {
       useAppStore().logout();
