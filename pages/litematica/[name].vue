@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useAppStore } from '~/store/app';
-import { type SubmitEventPromise } from 'vuetify';
+import { type SubmitEventPromise, useDisplay } from 'vuetify';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import SizeInput from '~/components/yisibite/SizeInput.vue';
@@ -43,6 +43,7 @@ if (!serverResponse.value) {
     });
   }
 }
+const { mobile } = useDisplay();
 const generators = computed<Record<string, Machine>>(() => {
   if (serverResponse.value) {
     let machines: { [key: string]: Machine } = {};
@@ -320,9 +321,10 @@ const tab = ref(
       </v-col>
     </v-row>
     <bottom-bar-ad />
+    <bottom-bar-ad v-if="mobile" />
   </v-form>
 
-  <div style="position: absolute; right: 10px; top: 90px">
+  <div v-if="!mobile" style="position: absolute; right: 10px; top: 90px">
     <sidebar-ad />
   </div>
 </template>
