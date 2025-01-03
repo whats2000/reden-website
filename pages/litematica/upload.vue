@@ -3,6 +3,7 @@ import type { ListLitematicaResponse } from '~/pages/litematica/index.vue';
 import type { SubmitEventPromise } from 'vuetify';
 import { toast } from 'vuetify-sonner';
 import { getGlobalThis } from '@vue/shared';
+import LitematicaUpload from '~/components/LitematicaUpload.vue';
 
 const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
   '/api/mc-services/yisibite/',
@@ -65,6 +66,8 @@ async function submit(e: SubmitEventPromise) {
 </script>
 
 <template>
+  <ListLitematicaResponse />
+  <LitematicaUpload />
   <div class="d-flex justify-center w-100">
     <v-form v-if="serverResponse" @submit.prevent="submit">
       <v-card max-width="700" width="700">

@@ -194,7 +194,6 @@ const { mobile, mdAndUp } = useDisplay({
           请在B站关注我，有故障请私信
         </v-btn>
         <v-btn
-          :to="localePath('/litematica/upload')"
           class="mb-4 mr-4"
           color="primary"
           prepend-icon="mdi-upload"
@@ -202,6 +201,11 @@ const { mobile, mdAndUp } = useDisplay({
           variant="outlined"
         >
           上传你的机器
+          <v-dialog max-width="900" activator="parent">
+            <v-card variant="flat">
+              <LitematicaUpload />
+            </v-card>
+          </v-dialog>
         </v-btn>
         <v-row align="start" justify="center">
           <v-col

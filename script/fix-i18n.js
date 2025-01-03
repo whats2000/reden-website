@@ -18,6 +18,7 @@ function fixI18n(lang) {
   }
 
   removeEmptyValues(i18n);
+  removeEmptyValues(i18n);
   // leave a blank line at the end
   fs.writeFileSync(i18nPath, JSON.stringify(i18n, null, 2) + '\n');
 }

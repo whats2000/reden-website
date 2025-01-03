@@ -248,6 +248,14 @@
     "paypal": "Support us with PayPal",
     "title": "Sponsors"
   },
+  "upload": {
+    "step": {
+      "image": "Image",
+      "translation": "Information",
+      "under-review": "Under Review",
+      "upload": "Upload"
+    }
+  },
   "user": {
     "contributor": "Contributor",
     "contributor_hover": "This user has contributed to this project",

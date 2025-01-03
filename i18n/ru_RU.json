@@ -171,6 +171,9 @@
     "paypal": "Support us with PayPal",
     "title": "Sponsors"
   },
+  "upload": {
+    "step": {}
+  },
   "user": {
     "contributor": "Contributor",
     "contributor_hover": "This user has contributed to this project",

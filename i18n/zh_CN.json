@@ -247,6 +247,14 @@
     "paypal": "使用 PayPal 支持我们",
     "title": "赞助者"
   },
+  "upload": {
+    "step": {
+      "image": "图像",
+      "translation": "基本信息",
+      "under-review": "等待审核",
+      "upload": "上传"
+    }
+  },
   "user": {
     "contributor": "贡献者",
     "contributor_hover": "此用户参与过本项目的开发",

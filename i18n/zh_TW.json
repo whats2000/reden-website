@@ -172,6 +172,9 @@
     "paypal": "使用 PayPal 支援我們",
     "title": "贊助者"
   },
+  "upload": {
+    "step": {}
+  },
   "user": {
     "contributor": "貢獻者",
     "contributor_hover": "此用戶參與過本項目的開發",

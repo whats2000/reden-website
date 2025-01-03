@@ -9,7 +9,7 @@
 a.router {
   text-decoration: none;
 
-  color: inherit;
+  color: rgb(var(--v-theme-primary-darken-1));
   transition: all 0.5s ease-in-out;
 }
 .v-footer a {
@@ -27,11 +27,11 @@ a.router {
   transition: all 0.5s ease-in-out;
 }
 
-.v-main a.router {
+a.router {
   color: rgb(var(--v-theme-primary-darken-1));
 }
 
-.v-main a.router:hover {
+a.router:hover {
   color: rgb(var(--v-theme-primary));
   opacity: 1;
   text-decoration: underline;
