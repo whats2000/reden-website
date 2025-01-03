@@ -3,7 +3,21 @@ import GoogleAd from '~/components/ads/GoogleAd.vue';
 </script>
 
 <template>
-  <google-ad ad-slot="5306364279" />
+  <google-ad>
+    <ins
+      class="adsbygoogle"
+      data-ad-client="ca-pub-4957320708232906"
+      data-ad-format="fluid"
+      data-ad-layout-key="-6t+ed+2i-1n-4w"
+      data-ad-slot="5306364279"
+      style="
+        display: inline-block;
+        width: 100%;
+        height: 150px;
+        max-height: 150px;
+      "
+    />
+  </google-ad>
 </template>
 
 <style scoped>

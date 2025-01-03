@@ -13,7 +13,7 @@ import GoogleAd from '~/components/ads/GoogleAd.vue';
           data-ad-layout-key="-6t+ed+2i-1n-4w"
           data-ad-slot="5905130073"
           style="display: block"
-        ></ins>
+        />
       </google-ad>
     </div>
   </div>

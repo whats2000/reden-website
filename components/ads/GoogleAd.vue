@@ -31,6 +31,17 @@ onMounted(() => {
       console.log('adsbygoogle.push()', ins.value);
     }
   }, 1000);
+  setInterval(() => {
+    document
+      .querySelectorAll<HTMLElement>('.adsbygoogle[data-ad-status="unfilled"]')
+      .forEach((ins) => {
+        let element = ins;
+        while (element.parentElement?.childElementCount === 1) {
+          element = element.parentElement;
+        }
+        element.remove();
+      });
+  }, 1000);
 });
 onUnmounted(() => {
   clearInterval(interval);
@@ -47,10 +58,10 @@ onUpdated(() => {
   <div ref="insFather">
     <slot>
       <ins
-        class="adsbygoogle"
-        data-ad-client="ca-pub-4957320708232906"
         :data-ad-format="adFormat ?? 'auto'"
         :data-ad-slot="adSlot"
+        class="adsbygoogle"
+        data-ad-client="ca-pub-4957320708232906"
         data-full-width-responsive="true"
       />
     </slot>

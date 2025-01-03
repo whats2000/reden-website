@@ -83,7 +83,7 @@ for (const [key, def] of Object.entries(serverResponse.value?.d ?? {}).sort(
   });
 }
 // Add some null items to make the layout more interesting
-for (let i = 0; i < 2; i++) {
+for (let i = 0; i < Math.ceil(items.length / 10); i++) {
   items.splice(Math.floor(Math.random() * items.length), 0, null);
 }
 

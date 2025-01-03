@@ -320,6 +320,7 @@ const tab = ref(
         </div>
       </v-col>
     </v-row>
+    <bottom-bar-ad />
   </v-form>
 </template>
 
