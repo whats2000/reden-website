@@ -12,6 +12,7 @@ import type {
 } from '~/pages/litematica/index.vue';
 import { parseBVID } from '~/utils/constants';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
+import SidebarAd from '~/components/ads/SidebarAd.vue';
 
 const route = useRoute();
 const xSize = ref(0);
@@ -172,6 +173,7 @@ const tab = ref(
     </v-row>
     <v-row justify="center" style="line-height: 32px">
       by&nbsp;
+      <!--suppress HtmlUnknownTarget -->
       <router-link
         v-if="selected.author"
         :to="`/@${selected.author.username}`"
@@ -222,9 +224,6 @@ const tab = ref(
             </v-tabs-window>
           </v-card-text>
         </v-card>
-      </v-col>
-      <v-col cols="12">
-        <bottom-bar-ad />
       </v-col>
       <v-col v-if="selected?.link" class="overflow-hidden" cols="12">
         <a v-if="!bvid" :href="selected.link" class="router nowrap">
@@ -322,6 +321,10 @@ const tab = ref(
     </v-row>
     <bottom-bar-ad />
   </v-form>
+
+  <div style="position: absolute; right: 10px; top: 90px">
+    <sidebar-ad />
+  </div>
 </template>
 
 <style scoped>

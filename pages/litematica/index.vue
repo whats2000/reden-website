@@ -228,6 +228,7 @@ const { mobile, mdAndUp } = useDisplay({
         </div>
       </div>
       <div v-if="mdAndUp" style="width: 150px">
+        <div data-some-item="aaa" />
         <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
       </div>
     </div>
