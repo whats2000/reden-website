@@ -11,6 +11,7 @@ import type {
   Machine,
 } from '~/pages/litematica/index.vue';
 import { parseBVID } from '~/utils/constants';
+import BottomBarAd from '~/components/ads/BottomBarAd.vue';
 
 const route = useRoute();
 const xSize = ref(0);
@@ -221,6 +222,9 @@ const tab = ref(
             </v-tabs-window>
           </v-card-text>
         </v-card>
+      </v-col>
+      <v-col cols="12">
+        <bottom-bar-ad />
       </v-col>
       <v-col v-if="selected?.link" class="overflow-hidden" cols="12">
         <a v-if="!bvid" :href="selected.link" class="router nowrap">

@@ -68,11 +68,7 @@ watch(i18nHead, (value) => {
         />
       </template>
     </Head>
-    <Body
-      :style="{
-        backgroundColor: currentTheme.colors.background,
-      }"
-    >
+    <Body :style="`background-color: ${currentTheme.colors.background}`">
       <v-app :theme="appStore.theme">
         <v-app-bar :elevation="2" class="reden-app-bar" color="transparent">
           <template #prepend>

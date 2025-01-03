@@ -36,8 +36,8 @@ const localePath = useLocalePath();
     border
     class="mx-auto"
     elevation="4"
-    max-width="360"
-    min-width="280"
+    max-width="460"
+    min-width="260"
     rounded="xl"
   >
     <v-img
@@ -49,7 +49,7 @@ const localePath = useLocalePath();
     />
     <v-card-title class="card-title">{{ item.name }}</v-card-title>
     <v-card-subtitle class="opacity-100">
-      <div class="d-flex flex-row" style="line-height: 24px">
+      <div class="d-flex flex-row author-line" style="line-height: 24px">
         by
         <v-avatar v-if="item.author?.avatarUrl" size="24">
           <v-img :src="item.author?.avatarUrl" />
@@ -77,7 +77,7 @@ const localePath = useLocalePath();
       />
     </v-card-text>
 
-    <v-card-actions class="stat-line">
+    <v-card-actions class="stat-line py-2">
       <template v-if="!mobile">
         {{ timeSince(item.updatedAt ?? Date.now()) }}
         <v-spacer />
@@ -110,15 +110,25 @@ const localePath = useLocalePath();
 
 .stat-line {
   opacity: 60%;
-  padding: 8px 14px !important;
+  padding: 0 14px;
   min-height: 10px !important;
   font-size: 0.75rem;
   line-height: 24px;
 }
 
 .card-title {
-  font-size: 1.25rem;
+  font-size: 1rem;
   text-wrap: pretty;
+}
+
+@media (min-width: 800px) {
+  .card-title {
+    font-size: 1.25rem;
+  }
+}
+
+.author-line {
+  font-size: 0.75rem;
 }
 
 .content-position {

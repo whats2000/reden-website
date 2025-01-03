@@ -2,6 +2,10 @@
 import MinecraftFarmCard, {
   type Item,
 } from '~/components/yisibite/MinecraftFarmCard.vue';
+import { useDisplay } from 'vuetify';
+import SidebarAd from '~/components/ads/SidebarAd.vue';
+import BottomBarAd from '~/components/ads/BottomBarAd.vue';
+import BlockAd from '~/components/ads/BlockAd.vue';
 
 export type MachineDef = {
   name: string;
@@ -63,7 +67,7 @@ const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
   },
 );
 
-const items: Item[] = [];
+const items: (Item | null)[] = [];
 for (const [key, def] of Object.entries(serverResponse.value?.d ?? {}).sort(
   ([, a], [, b]) => (b.downloads ?? 0) - (a.downloads ?? 0),
 )) {
@@ -78,10 +82,17 @@ for (const [key, def] of Object.entries(serverResponse.value?.d ?? {}).sort(
     updatedAt: def.updatedAt ?? 0,
   });
 }
+// Add some null items to make the layout more interesting
+for (let i = 0; i < 2; i++) {
+  items.splice(Math.floor(Math.random() * items.length), 0, null);
+}
 
 const isClient = import.meta.client;
 const notification = ref(true);
 const maintaining = false;
+const { mobile, mdAndUp } = useDisplay({
+  mobileBreakpoint: 600,
+});
 </script>
 <template>
   <v-container class="pa-4">
@@ -149,57 +160,88 @@ const maintaining = false;
         </v-row>
       </template>
     </v-alert>
-    <v-btn
-      :to="localePath('/litematica/old')"
-      class="mb-4 mr-4"
-      color="primary"
-      prepend-icon="mdi-arrow-left"
-      rounded="lg"
-      variant="outlined"
-    >
-      回到旧版生成器
-    </v-btn>
-    <v-btn
-      class="mb-4 mr-4"
-      color="primary"
-      href="https://docs.qq.com/form/page/DVHdSUXJLQUpDVktQ"
-      prepend-icon="mdi-comment-quote"
-      rounded="lg"
-      variant="outlined"
-    >
-      新版意见反馈
-    </v-btn>
-    <v-btn
-      class="mb-4 mr-4"
-      color="primary"
-      href="https://space.bilibili.com/1545239761"
-      prepend-icon="custom:Bilibili"
-      rounded="lg"
-      variant="outlined"
-    >
-      请在B站关注我，有故障请私信
-    </v-btn>
-    <v-btn
-      :to="localePath('/litematica/upload')"
-      class="mb-4 mr-4"
-      color="primary"
-      prepend-icon="mdi-upload"
-      rounded="lg"
-      variant="outlined"
-    >
-      上传你的机器
-    </v-btn>
-    <v-row align="start" justify="center">
-      <v-col v-for="item in items" :key="item.id" md="4" sm="6" xs="12">
-        <MinecraftFarmCard :item="item" />
-      </v-col>
-    </v-row>
-    <div class="text-center v-card-subtitle w-100">
-      {{
-        $t('litematica_generator.total_downloads', [serverResponse?.downloads])
-      }}
+    <div class="w-100 d-flex flex-row justify-center">
+      <div v-if="mdAndUp" style="width: 150px" />
+      <div class="content-common" style="max-width: 970px">
+        <v-btn
+          :to="localePath('/litematica/old')"
+          class="mb-4 mr-4"
+          color="primary"
+          prepend-icon="mdi-arrow-left"
+          rounded="lg"
+          variant="outlined"
+        >
+          回到旧版生成器
+        </v-btn>
+        <v-btn
+          class="mb-4 mr-4"
+          color="primary"
+          href="https://docs.qq.com/form/page/DVHdSUXJLQUpDVktQ"
+          prepend-icon="mdi-comment-quote"
+          rounded="lg"
+          variant="outlined"
+        >
+          新版意见反馈
+        </v-btn>
+        <v-btn
+          class="mb-4 mr-4"
+          color="primary"
+          href="https://space.bilibili.com/1545239761"
+          prepend-icon="custom:Bilibili"
+          rounded="lg"
+          variant="outlined"
+        >
+          请在B站关注我，有故障请私信
+        </v-btn>
+        <v-btn
+          :to="localePath('/litematica/upload')"
+          class="mb-4 mr-4"
+          color="primary"
+          prepend-icon="mdi-upload"
+          rounded="lg"
+          variant="outlined"
+        >
+          上传你的机器
+        </v-btn>
+        <v-row align="start" justify="center">
+          <v-col
+            v-for="item in items"
+            :key="item?.id || Math.random().toString()"
+            :class="{
+              'max-height-300': !item,
+            }"
+            lg="4"
+            md="6"
+            sm="6"
+            xs="12"
+          >
+            <MinecraftFarmCard v-if="item" :item="item" />
+            <BlockAd v-if="!item" />
+          </v-col>
+        </v-row>
+        <div class="text-center v-card-subtitle w-100">
+          {{
+            $t('litematica_generator.total_downloads', [
+              serverResponse?.downloads,
+            ])
+          }}
+        </div>
+      </div>
+      <div v-if="mdAndUp" style="width: 150px">
+        <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
+      </div>
     </div>
+    <BottomBarAd />
   </v-container>
 </template>
 
-<style scoped></style>
+<style scoped>
+.v-container {
+  max-width: 100% !important;
+}
+
+.max-height-300 {
+  max-height: 300px !important;
+  height: 300px !important;
+}
+</style>
