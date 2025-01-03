@@ -12,6 +12,7 @@ const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();
 
 const theme = useTheme();
+const currentTheme = computed(() => theme.current.value);
 const appStore = useAppStore();
 onMounted(() => {
   // set body background color
@@ -49,8 +50,8 @@ watch(i18nHead, (value) => {
 </script>
 
 <template>
-  <html :lang="i18nHead.htmlAttrs?.lang">
-    <head>
+  <Html :lang="i18nHead.htmlAttrs?.lang">
+    <Head>
       <template v-for="link in i18nHead.link" :key="link.hid">
         <Link
           :id="link.hid"
@@ -66,10 +67,10 @@ watch(i18nHead, (value) => {
           :property="meta.property"
         />
       </template>
-    </head>
-    <body
+    </Head>
+    <Body
       :style="{
-        backgroundColor: theme.themes.value[appStore.theme]?.colors.background,
+        backgroundColor: currentTheme.colors.background,
       }"
     >
       <v-app :theme="appStore.theme">
@@ -399,8 +400,8 @@ watch(i18nHead, (value) => {
           </div>
         </v-footer>
       </v-app>
-    </body>
-  </html>
+    </Body>
+  </Html>
 </template>
 
 <style scoped>
