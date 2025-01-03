@@ -85,10 +85,6 @@ onMounted(() => {
     },
   );
   observer.observe(lightLine.value as Element);
-
-  card.value?.addEventListener('mouseenter', () => {
-    console.log('mouseenter');
-  });
 });
 
 const autoPlay = ref(true);

@@ -34,13 +34,15 @@ onMounted(() => {
   );
   observer.observe(all.value!);
 });
-const lampOnStyle = 'url(' + LampOn + ')';
-const lampOffStyle = 'url(' + LampOff + ')';
+const lampOnStyle = `url(${LampOn})`;
+const lampOffStyle = `url(${LampOff})`;
 function toggleLever() {
   clickTimes++;
   leverOn.value = clickTimes % 2 === 0;
   if (clickTimes > 5) {
-    toast.secondary('不许再点了，再点我就生气了！');
+    toast.secondary(
+      'java.lang.StackOverflowError: Lever is clicked too many times! Update suppression!',
+    );
   }
 }
 </script>
