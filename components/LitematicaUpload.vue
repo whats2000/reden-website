@@ -59,15 +59,29 @@ const removePicture = (index: number) => {
 
 onMounted(() => {
   // 页面加载后清除input的值，防止重复上传相同文件不触发change事件
+  if (fileInput.value) {
+    fileInput.value.value = '';
+  }
   if (pictureInput.value) {
     pictureInput.value.value = '';
   }
 });
 
-const localizedData = ref({
-  name: '',
-  summary: '',
-  description: '',
+const localizedData = ref<
+  Record<
+    string,
+    {
+      name?: string;
+      summary?: string;
+      description?: string;
+    }
+  >
+>({
+  en: {
+    name: '',
+    summary: '',
+    description: '',
+  },
 });
 
 const handleFileChange = (event: Event) => {
@@ -123,6 +137,7 @@ async function uploadLocalizedData() {
 }
 
 const minHeight = 490;
+const backing = ref(false);
 </script>
 <template>
   <v-tabs v-model="state" color="primary">
@@ -140,16 +155,20 @@ const minHeight = 490;
   <v-card-text>
     <v-tabs-window v-model="state">
       <v-tabs-window-item value="upload">
-        <v-card border class="rounded-xl" :min-height="minHeight">
-          <v-card-title> 上传机器设计</v-card-title>
+        <v-card :min-height="minHeight" border class="rounded-xl">
+          <v-card-title> {{ $t('upload.btn.upload_design') }}</v-card-title>
           <v-card-text class="text-center">
+            <v-alert class="w-100" position="absolute" type="warning">
+              Warning: This feature is still under development and may not work
+              as expected. <br />警告：此功能仍在开发中，可能无法正常工作。
+            </v-alert>
             <v-icon class="my-15" color="primary" size="100"
               >mdi-cloud-upload
             </v-icon>
             <div class="mt-4 opacity-60">
-              <p>上传蓝图或存档</p>
-              <p>支持的文件格式：.litematica .schem .zip 等</p>
-              <p>最大文件大小：100MB</p>
+              <p>{{ $t('upload.desc.upload_schematic_or_world_save') }}</p>
+              <p>{{ $t('upload.desc.design_supports_file_formats') }}</p>
+              <p>{{ $t('upload.desc.design_maximal_file_size') }}</p>
             </div>
             <input
               ref="fileInput"
@@ -159,16 +178,19 @@ const minHeight = 490;
               @change="handleFileChange"
             />
             <v-btn class="mt-4" color="primary" @click="fileInput?.click()">
-              选择文件
+              {{ $t('upload.btn.select_files') }}
             </v-btn>
             <p v-if="selectedFiles.length > 0" class="line-h-24">
               <span v-if="selectedFiles.length == 1">
-                {{ selectedFiles[0].name }} ({{
-                  formatFileSize(selectedFiles[0].size)
-                }})
+                {{ selectedFiles[0].name }}
+                ({{ formatFileSize(selectedFiles[0].size) }})
               </span>
               <span v-else-if="selectedFiles.length > 1">
-                已选择 {{ selectedFiles.length }} 个文件
+                {{
+                  $t('upload.desc.selected_count_files', {
+                    count: selectedFiles.length,
+                  })
+                }}
               </span>
               <v-btn
                 color="error"
@@ -184,16 +206,18 @@ const minHeight = 490;
       </v-tabs-window-item>
 
       <v-tabs-window-item value="translation">
-        <v-card border class="rounded-xl" :min-height="minHeight">
+        <v-card :min-height="minHeight" border class="rounded-xl">
           <v-card-title>
             <v-row class="justify-space-between">
               <v-col class="mb-1 mb-md-3" cols="12" sm="6">
-                <span class="text-h5"> 编辑信息 </span>
+                <span class="text-h5">
+                  {{ t('upload.step.translation') }}
+                </span>
               </v-col>
               <v-col class="py-0 py-sm-2 pb-1" cols="12" sm="6">
                 <div class="d-flex flex-row justify-end flex-wrap">
                   <div class="opacity-60 language-sel-tr">
-                    请选择要编辑哪种语言的信息
+                    {{ $t('upload.desc.please_select_which_language_to_edit') }}
                   </div>
                   <v-select
                     v-model="language"
@@ -214,26 +238,26 @@ const minHeight = 490;
           </v-card-title>
           <v-card-text>
             <v-text-field
-              v-model="localizedData.name"
+              v-model="localizedData[language].name"
+              :label="$t('common.name')"
               color="primary"
               dense
-              label="名称"
               outlined
               variant="underlined"
             />
             <v-text-field
-              v-model="localizedData.summary"
+              v-model="localizedData[language].summary"
+              :label="$t('common.summary')"
               color="primary"
               dense
-              label="简介"
               outlined
               variant="underlined"
             />
             <v-textarea
-              v-model="localizedData.description"
+              v-model="localizedData[language].description"
+              :label="$t('common.description')"
               color="primary"
               dense
-              label="介绍"
               outlined
               variant="underlined"
             />
@@ -245,22 +269,22 @@ const minHeight = 490;
               variant="elevated"
               @click="uploadLocalizedData"
             >
-              保存
+              {{ $t('common.save') }}
             </v-btn>
           </v-card-actions>
         </v-card>
       </v-tabs-window-item>
 
       <v-tabs-window-item value="image">
-        <v-card border class="rounded-xl" :min-height="minHeight">
-          <v-card-title>上传图片</v-card-title>
+        <v-card :min-height="minHeight" border class="rounded-xl">
+          <v-card-title>{{ $t('upload.step.image') }}</v-card-title>
           <v-card-text class="text-center">
             <v-icon class="my-8" color="primary" size="100"
               >mdi-image-plus
             </v-icon>
             <div class="mt-4 opacity-60">
-              <p>上传图片 (最多3张)</p>
-              <p>单张图片最大 2MB</p>
+              <p>{{ $t('upload.desc.upload_images') }}</p>
+              <p>{{ $t('upload.desc.maximum_size_per_image') }}</p>
             </div>
             <input
               ref="pictureInput"
@@ -275,14 +299,14 @@ const minHeight = 490;
               color="primary"
               @click="triggerPictureInput"
             >
-              选择图片
+              {{ $t('upload.btn.select_files') }}
             </v-btn>
             <v-btn
               class="mt-4 mx-4"
               variant="outlined"
               @click="state = 'under-review'"
             >
-              下一步
+              {{ $t('common.next') }}
             </v-btn>
 
             <div v-if="selectedPictures.length > 0" class="mt-4">
@@ -297,8 +321,8 @@ const minHeight = 490;
                   contain
                   max-height="150"
                   max-width="150"
-                  min-width="100"
                   min-height="100"
+                  min-width="100"
                 >
                   <template v-slot:placeholder>
                     <v-row
@@ -333,32 +357,53 @@ const minHeight = 490;
       </v-tabs-window-item>
 
       <v-tabs-window-item value="under-review">
-        <v-card border class="rounded-xl" :min-height="minHeight">
-          <v-card-title>审核中</v-card-title>
+        <v-card :min-height="minHeight" border class="rounded-xl">
+          <v-card-title>
+            {{ $t('upload.step.under-review') }}
+          </v-card-title>
           <v-card-text class="text-center">
-            <v-icon class="my-8" color="green" size="100"
-              >mdi-clock-time-four-outline
+            <v-icon class="my-8" color="green" size="100">
+              mdi-clock-time-four-outline
             </v-icon>
             <div class="mt-4 opacity-60 text-center">
-              <p>您的机器设计正在审核中，请稍候。</p>
-              <p>审核通常需要一到二天时间。</p>
-              <p>当审核通过后，您将收到邮件通知。</p>
+              <p>
+                {{
+                  $t(
+                    'upload.desc.your_machine_design_is_under_review_please_wait_with_patience',
+                  )
+                }}
+              </p>
+              <p></p>
+              <p>
+                {{ $t('upload.desc.review_usually_takes_one_to_two_days') }}
+              </p>
+              <p>
+                {{
+                  $t(
+                    'upload.desc.you_will_receive_an_email_notification_when_approved',
+                  )
+                }}
+              </p>
             </div>
             <div class="mt-6">
-              <p>如有任何疑问，请联系我们：</p>
               <p>
-                邮箱：<a class="router" href="mailto:info@redenmc.com"
+                {{
+                  $t('upload.desc.please_contact_us_if_you_have_any_questions')
+                }}
+                <a class="router" href="mailto:info@redenmc.com"
                   >info@redenmc.com</a
                 >
               </p>
             </div>
             <v-btn
+              :href="localePath('/litematica')"
+              :loading="backing"
               class="mt-6"
               color="primary"
-              :href="localePath('/litematica')"
               variant="outlined"
+              @click="backing = true"
             >
-              返回
+              {{ $t('common.back') }}
             </v-btn>
           </v-card-text>
         </v-card>

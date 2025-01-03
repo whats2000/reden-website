@@ -34,6 +34,14 @@
     }
   },
   "also_try_our_other_online_services:": "Also try our other online services:",
+  "common": {
+    "back": "Back",
+    "description": "Description",
+    "name": "Name",
+    "next": "Next",
+    "save": "Save",
+    "summary": "Summary"
+  },
   "en": "English",
   "litematica_generator": {
     "chunks": "chunks",
@@ -56,6 +64,9 @@
     "suggestion_notice": "These suggested values are for your reference only",
     "title": "Litematica Online Generator",
     "total_downloads": "We have provided {0} downloads in total.",
+    "upload": {
+      "button_msg": "Upload New Design"
+    },
     "web_title": "Generate {name} online - Reden Litematica Generator"
   },
   "login": {
@@ -249,8 +260,25 @@
     "title": "Sponsors"
   },
   "upload": {
+    "btn": {
+      "select_files": "Select Files",
+      "upload_design": "Upload Design"
+    },
+    "desc": {
+      "design_maximal_file_size": "Maximal file size: 100MB",
+      "design_supports_file_formats": "Supports file formats: .litematica .schem .zip etc.",
+      "maximum_size_per_image": "Maximum 2MB per image",
+      "please_contact_us_if_you_have_any_questions": "Please contact us if you have any questions:",
+      "please_select_which_language_to_edit": "Please select which language to edit",
+      "review_usually_takes_one_to_two_days": "Review usually takes one to two days.",
+      "selected_count_files": "Selected {count} files",
+      "upload_images": "Upload images (up to 3)",
+      "upload_schematic_or_world_save": "Upload schematic or world save.",
+      "you_will_receive_an_email_notification_when_approved": "You will receive an email notification when the design is approved.",
+      "your_machine_design_is_under_review_please_wait_with_patience": "Your machine design is under review, please wait with patience."
+    },
     "step": {
-      "image": "Image",
+      "image": "Images",
       "translation": "Information",
       "under-review": "Under Review",
       "upload": "Upload"

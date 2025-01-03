@@ -32,6 +32,7 @@
       "users": "All Users"
     }
   },
+  "common": {},
   "en": "English",
   "litematica_generator": {
     "contribute": "想要你的機器（例如世界吞噬者）被收錄在這裡？現在就為 Reden 做出貢獻！聯絡我傳送郵件至",
@@ -173,7 +174,8 @@
     "title": "贊助者"
   },
   "upload": {
-    "step": {}
+    "btn": {},
+    "desc": {}
   },
   "user": {
     "contributor": "貢獻者",

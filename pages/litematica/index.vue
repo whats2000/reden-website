@@ -163,36 +163,38 @@ const { mobile, mdAndUp } = useDisplay({
     <div class="w-100 d-flex flex-row justify-center">
       <div v-if="mdAndUp" style="width: 150px" />
       <div class="content-common" style="max-width: 970px">
-        <v-btn
-          :to="localePath('/litematica/old')"
-          class="mb-4 mr-4"
-          color="primary"
-          prepend-icon="mdi-arrow-left"
-          rounded="lg"
-          variant="outlined"
-        >
-          回到旧版生成器
-        </v-btn>
-        <v-btn
-          class="mb-4 mr-4"
-          color="primary"
-          href="https://docs.qq.com/form/page/DVHdSUXJLQUpDVktQ"
-          prepend-icon="mdi-comment-quote"
-          rounded="lg"
-          variant="outlined"
-        >
-          新版意见反馈
-        </v-btn>
-        <v-btn
-          class="mb-4 mr-4"
-          color="primary"
-          href="https://space.bilibili.com/1545239761"
-          prepend-icon="custom:Bilibili"
-          rounded="lg"
-          variant="outlined"
-        >
-          请在B站关注我，有故障请私信
-        </v-btn>
+        <template v-if="locale === 'zh_cn'">
+          <v-btn
+            :to="localePath('/litematica/old')"
+            class="mb-4 mr-4"
+            color="primary"
+            prepend-icon="mdi-arrow-left"
+            rounded="lg"
+            variant="outlined"
+          >
+            回到旧版生成器
+          </v-btn>
+          <v-btn
+            class="mb-4 mr-4"
+            color="primary"
+            href="https://docs.qq.com/form/page/DVHdSUXJLQUpDVktQ"
+            prepend-icon="mdi-comment-quote"
+            rounded="lg"
+            variant="outlined"
+          >
+            新版意见反馈
+          </v-btn>
+          <v-btn
+            class="mb-4 mr-4"
+            color="primary"
+            href="https://space.bilibili.com/1545239761"
+            prepend-icon="custom:Bilibili"
+            rounded="lg"
+            variant="outlined"
+          >
+            请在B站关注我，有故障请私信
+          </v-btn>
+        </template>
         <v-btn
           class="mb-4 mr-4"
           color="primary"
@@ -200,7 +202,7 @@ const { mobile, mdAndUp } = useDisplay({
           rounded="lg"
           variant="outlined"
         >
-          上传你的机器
+          {{ $t('litematica_generator.upload.button_msg') }}
           <v-dialog max-width="900" activator="parent">
             <v-card variant="flat">
               <LitematicaUpload />

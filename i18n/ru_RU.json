@@ -32,6 +32,7 @@
       "users": "All Users"
     }
   },
+  "common": {},
   "en": "Английский",
   "litematica_generator": {
     "description": "Generate Litematica files online from Reden projects, e.g. World Eaters",
@@ -172,7 +173,8 @@
     "title": "Sponsors"
   },
   "upload": {
-    "step": {}
+    "btn": {},
+    "desc": {}
   },
   "user": {
     "contributor": "Contributor",

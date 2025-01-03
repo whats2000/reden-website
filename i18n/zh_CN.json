@@ -34,6 +34,14 @@
     }
   },
   "also_try_our_other_online_services:": "快来试试我们的其他在线服务：",
+  "common": {
+    "back": "返回",
+    "description": "介绍",
+    "name": "名称",
+    "next": "下一步",
+    "save": "保存",
+    "summary": "简介"
+  },
   "en": "English",
   "litematica_generator": {
     "chunks": "区块",
@@ -55,6 +63,9 @@
     "suggestion_notice": "建议值仅供参考，可能无法正确生成有效投影",
     "title": "投影蓝图在线生成器",
     "total_downloads": "我们已累计提供 {0} 次下载服务。",
+    "upload": {
+      "button_msg": "上传你的机器"
+    },
     "web_title": "在线生成{name} - Reden投影蓝图在线生成器"
   },
   "login": {
@@ -248,8 +259,25 @@
     "title": "赞助者"
   },
   "upload": {
+    "btn": {
+      "select_files": "选择文件",
+      "upload_design": "上传机器设计"
+    },
+    "desc": {
+      "design_maximal_file_size": "最大文件大小：100MB",
+      "design_supports_file_formats": "支持的文件格式：.litematica .schem .zip 等",
+      "maximum_size_per_image": "单张图片最大 2MB",
+      "please_contact_us_if_you_have_any_questions": "如有任何疑问，请联系我们：",
+      "please_select_which_language_to_edit": "请选择要编辑哪种语言的信息",
+      "review_usually_takes_one_to_two_days": "审核通常需要一到二天时间。",
+      "selected_count_files": "已选择 {count} 个文件",
+      "upload_images": "上传图片 (最多3张)",
+      "upload_schematic_or_world_save": "上传蓝图或存档",
+      "you_will_receive_an_email_notification_when_approved": "当审核通过后，您将收到邮件通知。",
+      "your_machine_design_is_under_review_please_wait_with_patience": "您的机器设计正在审核中，请耐心等待。"
+    },
     "step": {
-      "image": "图像",
+      "image": "上传图像",
       "translation": "基本信息",
       "under-review": "等待审核",
       "upload": "上传"

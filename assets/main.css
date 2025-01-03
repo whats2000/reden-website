@@ -27,11 +27,11 @@ a.router {
   transition: all 0.5s ease-in-out;
 }
 
-a.router {
+.v-main a.router {
   color: rgb(var(--v-theme-primary-darken-1));
 }
 
-a.router:hover {
+.v-main a.router:hover {
   color: rgb(var(--v-theme-primary));
   opacity: 1;
   text-decoration: underline;
