@@ -9,6 +9,7 @@ import 'assets/main.css';
 import type {
   ListLitematicaResponse,
   Machine,
+  MachineDef,
 } from '~/pages/litematica/index.vue';
 import { parseBVID } from '~/utils/constants';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
@@ -19,9 +20,14 @@ const xSize = ref(0);
 const ySize = ref(0);
 const zSize = ref(0);
 const loading = ref(false);
-const name = route.params.name as string;
+const machineId = route.params.name as string;
 const { t, locale } = useI18n();
 const localePath = useLocalePath();
+const appStore = useAppStore();
+const openEditDialog = ref(false);
+const { data: localizedData } = useNuxtData<Record<string, MachineDef>>(
+  `edit-${machineId}`,
+);
 
 const { data: serverResponse } = useNuxtData<ListLitematicaResponse>(
   `generators${locale.value}`,
@@ -67,7 +73,7 @@ const generators = computed<Record<string, Machine>>(() => {
         f.rem = rem;
         return f;
       };
-      // Default checkers ensure these function wont be deleted in output.
+      // Default checkers ensure these function won't be deleted in output.
       const defaultChecker = [min(0), max(2006), mod(1, 0)];
       const dto: ListLitematicaResponse['d'][''] = serverResponse.value.d[key];
       machines[key] = {
@@ -79,15 +85,17 @@ const generators = computed<Record<string, Machine>>(() => {
         },
       };
     }
-    if (!machines[name]) {
+    if (!machines[machineId]) {
       throw createError({
         status: 404,
-        message: t('litematica_generator.not_found', { name }),
+        message: t('litematica_generator.not_found', { name: machineId }),
       });
     }
     useHead({
       title:
-        machines[name]?.name + ' - Reden' + t('litematica_generator.title'),
+        machines[machineId]?.name +
+        ' - Reden' +
+        t('litematica_generator.title'),
     });
     return Object.keys(machines)
       .sort()
@@ -103,7 +111,7 @@ async function submit(e: SubmitEventPromise) {
   if ((await e).valid) {
     // open a new window to download
     window.open(
-      `/api/mc-services/yisibite/${name}?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
+      `/api/mc-services/yisibite/${machineId}?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
     );
     setTimeout(() => {
       refreshNuxtData();
@@ -113,11 +121,11 @@ async function submit(e: SubmitEventPromise) {
 
 function openMaterials() {
   window.open(
-    `/api/mc-services/yisibite/${name}/materials?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
+    `/api/mc-services/yisibite/${machineId}/materials?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
   );
 }
 
-const selected = computed(() => generators.value[name]);
+const selected = computed(() => generators.value[machineId]);
 
 useSeoMeta({
   title: t('litematica_generator.web_title', {
@@ -126,9 +134,10 @@ useSeoMeta({
   ogTitle: t('litematica_generator.web_title', {
     name: selected.value.name,
   }),
-  description: selected.value.note ?? t('litematica_generator.og_description'),
+  description:
+    selected.value.description ?? t('litematica_generator.og_description'),
   ogDescription:
-    selected.value.note ?? t('litematica_generator.og_description'),
+    selected.value.description ?? t('litematica_generator.og_description'),
   ogImage: 'https://redenmc.com/reden_256.png',
 });
 const biliPlayer = useTemplateRef<HTMLIFrameElement>('biliPlayer');
@@ -194,6 +203,44 @@ const tab = ref(
         }}
       </v-chip>
     </v-row>
+    <v-row v-if="appStore.logined">
+      <v-col cols="12">
+        <v-btn
+          color="primary"
+          rounded="lg"
+          variant="outlined"
+          @click="
+            () => {
+              if (!localizedData) {
+                useFetch(`/api/mc-services/yisibite/${machineId}/info`, {
+                  key: `edit-${machineId}`,
+                });
+              }
+            }
+          "
+        >
+          编辑此机器
+          <v-dialog
+            v-model="openEditDialog"
+            activator="parent"
+            close-on-back
+            max-width="900"
+            persistent
+          >
+            <v-card variant="flat">
+              <LitematicaUpload v-model:machine="localizedData" edit-mode />
+              <div class="position-absolute top-0 right-0">
+                <v-btn
+                  icon="mdi-close"
+                  variant="plain"
+                  @click="openEditDialog = false"
+                />
+              </div>
+            </v-card>
+          </v-dialog>
+        </v-btn>
+      </v-col>
+    </v-row>
     <v-row>
       <v-col v-if="tabs.length !== 0">
         <v-card>
@@ -233,10 +280,10 @@ const tab = ref(
         </a>
       </v-col>
       <v-col
-        v-if="selected?.note"
+        v-if="selected?.description"
         class="overflow-hidden"
         cols="12"
-        v-html="selected.note"
+        v-html="selected.description"
       />
     </v-row>
 

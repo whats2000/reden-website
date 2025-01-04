@@ -9,6 +9,7 @@
 a.router {
   text-decoration: none;
 
+  /*noinspection CssUnresolvedCustomProperty*/
   color: rgb(var(--v-theme-primary-darken-1));
   transition: all 0.5s ease-in-out;
 }
@@ -30,10 +31,12 @@ a.router {
 }
 
 .v-main a.router {
+  /*noinspection CssUnresolvedCustomProperty*/
   color: rgb(var(--v-theme-primary-darken-1));
 }
 
 .v-main a.router:hover {
+  /*noinspection CssUnresolvedCustomProperty*/
   color: rgb(var(--v-theme-primary));
   opacity: 1;
   text-decoration: underline;

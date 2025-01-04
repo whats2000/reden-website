@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-import MinecraftFarmCard, {
-  type Item,
-} from '~/components/yisibite/MinecraftFarmCard.vue';
+import MinecraftFarmCard from '~/components/yisibite/MinecraftFarmCard.vue';
 import { useDisplay } from 'vuetify';
 import SidebarAd from '~/components/ads/SidebarAd.vue';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
@@ -14,7 +12,7 @@ export type MachineDef = {
   hasX?: boolean;
   hasY?: boolean;
   hasZ?: boolean;
-  note?: string;
+  description?: string;
   summary?: string;
   link?: string;
   thumbnailUrl?: string;
@@ -67,20 +65,11 @@ const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
   },
 );
 
-const items: (Item | null)[] = [];
-for (const [key, def] of Object.entries(serverResponse.value?.d ?? {}).sort(
+const items: (MachineDef | null)[] = [];
+for (const [, def] of Object.entries(serverResponse.value?.d ?? {}).sort(
   ([, a], [, b]) => (b.downloads ?? 0) - (a.downloads ?? 0),
 )) {
-  items.push({
-    ...def,
-    id: key,
-    description: def.note || '',
-    upvotes: 0,
-    downloads: def.downloads || 0,
-    thumbnailUrl: def.thumbnailUrl,
-    author: def.author ?? {},
-    updatedAt: def.updatedAt ?? 0,
-  });
+  items.push(def);
 }
 // Add some null items to make the layout more interesting
 for (let i = 0; i < Math.ceil(items.length / 10); i++) {
@@ -90,7 +79,7 @@ for (let i = 0; i < Math.ceil(items.length / 10); i++) {
 const isClient = import.meta.client;
 const notification = ref(true);
 const maintaining = false;
-const { mobile, mdAndUp } = useDisplay({
+const { mdAndUp } = useDisplay({
   mobileBreakpoint: 600,
 });
 </script>
@@ -225,7 +214,7 @@ const { mobile, mdAndUp } = useDisplay({
         <v-row align="start" justify="center">
           <v-col
             v-for="item in items"
-            :key="item?.id || Math.random().toString()"
+            :key="item?.key || Math.random().toString()"
             :class="{
               'max-height-300': !item,
             }"
@@ -256,10 +245,6 @@ const { mobile, mdAndUp } = useDisplay({
 </template>
 
 <style scoped>
-.v-container {
-  max-width: 100% !important;
-}
-
 .max-height-300 {
   max-height: 300px !important;
   height: 300px !important;

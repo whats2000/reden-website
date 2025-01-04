@@ -2,20 +2,9 @@
 import { useElementHover } from '@vueuse/core';
 import { number2text, type Profile, timeSince } from '@/utils/constants';
 import { useDisplay } from 'vuetify';
-
-export type Item = {
-  id: string;
-  name: string;
-  description: string;
-  upvotes: number;
-  downloads: number;
-  author: Partial<Profile>;
-  imageUrl?: string;
-  thumbnailUrl?: string;
-  updatedAt: number;
-};
+import type { MachineDef } from '~/pages/litematica/index.vue';
 defineProps<{
-  item: Partial<Item>;
+  item: Partial<MachineDef>;
 }>();
 const { mobile: _mobile } = useDisplay({
   mobileBreakpoint: 500,
@@ -32,7 +21,7 @@ const localePath = useLocalePath();
     :class="{
       'hover-card': isHovering,
     }"
-    :to="localePath(`/litematica/${item.id}`)"
+    :to="localePath(`/litematica/${item.key}`)"
     border
     class="mx-auto"
     elevation="4"

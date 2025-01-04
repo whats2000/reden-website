@@ -261,7 +261,9 @@
   },
   "upload": {
     "btn": {
+      "finish_editing": "Finish Editing",
       "select_files": "Select Files",
+      "start_uploading": "Finish and Upload",
       "upload_design": "Upload Design"
     },
     "desc": {

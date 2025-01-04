@@ -8,7 +8,10 @@ const props = defineProps<{
   /**
    * Localized DTOs
    */
-  machine?: Record<string, MachineDef>;
+  machine?: Record<string, MachineDef> | null;
+}>();
+const emit = defineEmits<{
+  'update:machine': [Record<string, Partial<MachineDef>>];
 }>();
 
 const localePath = useLocalePath();
@@ -20,7 +23,19 @@ watch(state, (newState) => {
     availableSteps.value.push(newState);
   }
 });
-const availableSteps = ref<State[]>(['upload']);
+const refreshProps = () => {
+  if (props.editMode) {
+    state.value = 'translation';
+  }
+  localizedData.value = {
+    ...localizedData.value,
+    ...props.machine,
+  };
+  machineId.value = Object.entries(props.machine ?? {})?.[0]?.[1]?.key;
+};
+const availableSteps = ref<State[]>(
+  props.editMode ? ['upload', 'translation', 'image'] : ['upload'],
+);
 const selectedFiles = ref<File[]>([]);
 const fileInput = useTemplateRef<HTMLInputElement>('fileInput');
 const pictureInput = useTemplateRef<HTMLInputElement>('pictureInput');
@@ -33,35 +48,38 @@ const uploading = ref(false);
 
 async function doUploadAll() {
   uploading.value = true;
-  if (
-    selectedFiles.value.length != 1 ||
-    !selectedFiles.value[0].name.endsWith('.litematic')
-  ) {
-    toast.error(
-      'Litematica generator only support uploading 1 litematica file',
-      {
-        duration: 1e4,
-      },
-    );
-    return;
-  } else {
-    const file = selectedFiles.value[0];
-    const response = await doFetchPut(
-      `/api/mc-services/yisibite/${machineId.value}`,
-      file,
-    );
-    if (response.ok) {
-      toast.success('File uploaded successfully');
-      await delay(1e3);
-    } else {
-      await toastError(response, 'Failed to upload file');
+  if (!props.editMode || selectedFiles.value.length > 0) {
+    if (
+      selectedFiles.value.length != 1 ||
+      !selectedFiles.value[0].name.endsWith('.litematic')
+    ) {
+      toast.error(
+        'Litematica generator only support uploading 1 litematica file',
+        {
+          duration: 1e4,
+        },
+      );
       return;
+    } else {
+      const file = selectedFiles.value[0];
+      const response = await doFetchPut(
+        `/api/mc-services/yisibite/${machineId.value}`,
+        file,
+      );
+      if (response.ok) {
+        toast.success('File uploaded successfully');
+        await delay(1e3);
+      } else {
+        await toastError(response, 'Failed to upload file');
+        return;
+      }
     }
   }
   for (const lang of availableLocales) {
     const data = localizedData.value[lang];
-    console.log(lang, data);
+    console.log('uploading', lang, data);
     if (localizedData.value[lang]?.name) {
+      localizedData.value[lang].key = machineId.value;
       const response = await doFetchPost(
         `/api/mc-services/yisibite/${machineId.value}/info/${lang}`,
         {
@@ -79,6 +97,7 @@ async function doUploadAll() {
       }
     }
   }
+  emit('update:machine', localizedData.value);
 
   state.value = 'under-review';
   availableSteps.value = ['under-review'];
@@ -133,32 +152,7 @@ onMounted(() => {
   }
 });
 
-const localizedData = ref<
-  Record<
-    string,
-    {
-      name?: string;
-      summary?: string;
-      description?: string;
-    }
-  >
->({
-  en: {
-    name: '',
-    summary: '',
-    description: '',
-  },
-  zh_cn: {
-    name: '',
-    summary: '',
-    description: '',
-  },
-  zh_tw: {
-    name: '',
-    summary: '',
-    description: '',
-  },
-});
+const localizedData = ref<Record<string, Partial<MachineDef>>>({});
 
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
@@ -199,6 +193,13 @@ const formatFileSize = (bytes: number): string => {
 const { t, availableLocales, locale } = useI18n();
 const language = ref<string>(locale.value);
 
+function getLocalizedData(language: string) {
+  if (!localizedData.value[language]) {
+    localizedData.value[language] = {};
+  }
+  return localizedData.value[language];
+}
+
 const uploadingLocalizedData = ref(false);
 
 function delay(ms: number) {
@@ -214,7 +215,9 @@ async function uploadLocalizedData() {
 
 const minHeight = 490;
 const maxHeight = 490;
-const backing = ref(false);
+const goingBack = ref(false);
+refreshProps();
+watch(props, refreshProps);
 </script>
 <template>
   <v-tabs v-model="state" color="primary">
@@ -240,10 +243,6 @@ const backing = ref(false);
         >
           <v-card-title> {{ $t('upload.btn.upload_design') }}</v-card-title>
           <v-card-text class="text-center">
-            <v-alert class="left-0 right-0" position="absolute" type="warning">
-              Warning: This feature is still under development and may not work
-              as expected. <br />警告：此功能仍在开发中，可能无法正常工作。
-            </v-alert>
             <v-icon class="my-15" color="primary" size="100"
               >mdi-cloud-upload
             </v-icon>
@@ -284,9 +283,10 @@ const backing = ref(false);
             </p>
             <div
               v-if="editMode"
-              class="mt-2 mx-auto opacity-60 text-pre-line"
+              class="mt-2 mx-auto text-pre-line text-warning"
               style="max-width: 400px"
             >
+              <v-icon>mdi-alert-circle</v-icon>
               {{ $t('upload.desc.existing_machine_design') }}
             </div>
           </v-card-text>
@@ -299,7 +299,7 @@ const backing = ref(false);
           :max-height="maxHeight"
           :min-height="minHeight"
           border
-          class="rounded-xl"
+          class="rounded-xl overflow-y-scroll"
         >
           <v-card-title>
             <v-row class="justify-space-between">
@@ -341,7 +341,7 @@ const backing = ref(false);
               variant="underlined"
             />
             <v-text-field
-              v-model="localizedData[language].name"
+              v-model="getLocalizedData(language).name"
               :label="$t('common.name')"
               color="primary"
               dense
@@ -350,7 +350,7 @@ const backing = ref(false);
               @update:model-value="console.log(localizedData)"
             />
             <v-text-field
-              v-model="localizedData[language].summary"
+              v-model="getLocalizedData(language).summary"
               :label="$t('common.summary')"
               color="primary"
               dense
@@ -358,7 +358,7 @@ const backing = ref(false);
               variant="underlined"
             />
             <v-textarea
-              v-model="localizedData[language].description"
+              v-model="getLocalizedData(language).description"
               :label="$t('common.description')"
               color="primary"
               dense
@@ -417,13 +417,18 @@ const backing = ref(false);
             >
               {{ $t('upload.btn.select_files') }}
             </v-btn>
+            <br />
             <v-btn
               :loading="uploading"
-              class="mt-4 mx-4"
+              class="mt-4 mx-4 text-none"
               variant="outlined"
               @click="doUploadAll"
             >
-              {{ $t('common.next') }}
+              {{
+                editMode
+                  ? $t('upload.btn.finish_editing')
+                  : $t('upload.btn.start_uploading')
+              }}
             </v-btn>
 
             <div v-if="selectedPictures.length > 0" class="mt-4">
@@ -516,11 +521,11 @@ const backing = ref(false);
             </div>
             <v-btn
               :href="localePath('/litematica')"
-              :loading="backing"
+              :loading="goingBack"
               class="mt-6"
               color="primary"
               variant="outlined"
-              @click="backing = true"
+              @click="goingBack = true"
             >
               {{ $t('common.back') }}
             </v-btn>

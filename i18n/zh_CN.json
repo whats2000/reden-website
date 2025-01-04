@@ -260,7 +260,9 @@
   },
   "upload": {
     "btn": {
+      "finish_editing": "完成编辑",
       "select_files": "选择文件",
+      "start_uploading": "完成并上传",
       "upload_design": "上传机器设计"
     },
     "desc": {
