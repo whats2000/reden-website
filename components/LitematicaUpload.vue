@@ -13,13 +13,21 @@ watch(state, (newState) => {
 });
 const availableSteps = ref<State[]>(['upload']);
 const selectedFiles = ref<File[]>([]);
-const uploading = ref(false);
 const fileInput = useTemplateRef<HTMLInputElement>('fileInput');
 const pictureInput = useTemplateRef<HTMLInputElement>('pictureInput');
 const selectedPictures = ref<File[]>([]);
 const imageUris = ref<string[]>([]);
 const pictureError = ref<string | null>(null);
 const machineId = ref<string>();
+
+const uploading = ref(false);
+async function doUploadAll() {
+  uploading.value = true;
+  await delay(2000);
+  state.value = 'under-review';
+  availableSteps.value = ['under-review'];
+  uploading.value = false;
+}
 
 const triggerPictureInput = () => {
   if (pictureInput.value) {
@@ -335,7 +343,8 @@ const backing = ref(false);
             <v-btn
               class="mt-4 mx-4"
               variant="outlined"
-              @click="state = 'under-review'"
+              :loading="uploading"
+              @click="doUploadAll"
             >
               {{ $t('common.next') }}
             </v-btn>
