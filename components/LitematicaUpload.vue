@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { toast } from 'vuetify-sonner';
 
 const localePath = useLocalePath();
 type State = 'upload' | 'translation' | 'image' | 'under-review';
@@ -18,6 +19,7 @@ const pictureInput = useTemplateRef<HTMLInputElement>('pictureInput');
 const selectedPictures = ref<File[]>([]);
 const imageUris = ref<string[]>([]);
 const pictureError = ref<string | null>(null);
+const machineId = ref<string>();
 
 const triggerPictureInput = () => {
   if (pictureInput.value) {
@@ -82,12 +84,32 @@ const localizedData = ref<
     summary: '',
     description: '',
   },
+  zh_cn: {
+    name: '',
+    summary: '',
+    description: '',
+  },
+  zh_tw: {
+    name: '',
+    summary: '',
+    description: '',
+  },
 });
 
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
   if (target.files?.length ?? 0 >= 1) {
     selectedFiles.value = Array.from(target.files!);
+    const obj = localizedData.value[language.value]!;
+    if (!obj.name) {
+      obj.name = selectedFiles.value[0].name.replace('.litematic', '');
+      toast.success('Auto-filled name from file name');
+    }
+    if (!machineId.value) {
+      machineId.value = obj.name!.toLowerCase().replace(/[^a-z0-9]/g, '');
+      toast.success('Auto-filled id from name');
+    }
+
     state.value = 'translation';
   }
 };
@@ -238,12 +260,21 @@ const backing = ref(false);
           </v-card-title>
           <v-card-text>
             <v-text-field
+              v-model="machineId"
+              label="ID"
+              color="primary"
+              dense
+              outlined
+              variant="underlined"
+            />
+            <v-text-field
               v-model="localizedData[language].name"
               :label="$t('common.name')"
               color="primary"
               dense
               outlined
               variant="underlined"
+              @update:model-value="console.log(localizedData)"
             />
             <v-text-field
               v-model="localizedData[language].summary"

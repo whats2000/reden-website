@@ -23,10 +23,11 @@ onMounted(() => {
     console.log('Referrer:', document.referrer);
     doFetchPost('/api/log/referrer', document.referrer || '');
   }
+  const script = document.createElement('script');
   if (import.meta.dev) {
     getGlobalThis().google_adtest = 'on';
+    script.dataset.adbreakTest = 'on';
   }
-  const script = document.createElement('script');
   script.src =
     'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4957320708232906';
   script.crossOrigin = 'anonymous';
