@@ -5,6 +5,9 @@ on:
     branches: [ new ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   synchronize-with-crowdin:
@@ -27,7 +30,7 @@ jobs:
           pull_request_base_branch_name: 'main'
         env:
           # A classic GitHub Personal Access Token with the 'repo' scope selected (the user should have write access to the repository).
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
           # A numeric ID, found at https://crowdin.com/project/<projectName>/tools/api
           CROWDIN_PROJECT_ID: 677348
