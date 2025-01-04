@@ -43,7 +43,23 @@ const selectedPictures = ref<File[]>([]);
 const imageUris = ref<string[]>([]);
 const pictureStepError = ref<string>();
 const machineId = ref<string>();
-
+const disallowedFilename = [
+  '\r',
+  '\n',
+  '/',
+  '\\',
+  '\u0000',
+  '\u000c',
+  '`',
+  '?',
+  '*',
+  '<',
+  '>',
+  '|',
+  ':',
+  "'",
+  '"',
+];
 const uploading = ref(false);
 
 async function doUploadAll() {
@@ -158,7 +174,7 @@ const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
   if (target.files?.length ?? 0 >= 1) {
     selectedFiles.value = Array.from(target.files!);
-    const obj = localizedData.value[language.value]!;
+    const obj = getLocalizedData(language.value);
     if (!obj.name) {
       obj.name = selectedFiles.value[0].name.replace('.litematic', '');
       toast.success('Auto-filled name from file name');
@@ -171,6 +187,14 @@ const handleFileChange = (event: Event) => {
     state.value = 'translation';
   }
 };
+
+const {
+  error: isIdTakenResponse,
+  status: isIdTakenStatus,
+  refresh: checkIdTaken,
+} = useFetch(() => `/api/mc-services/yisibite/${machineId.value}/info`, {
+  dedupe: 'defer',
+});
 
 const triggerFileInput = () => {
   if (fileInput.value) {
@@ -295,88 +319,120 @@ watch(props, refreshProps);
       </v-tabs-window-item>
 
       <v-tabs-window-item value="translation">
-        <v-card
-          :max-height="maxHeight"
-          :min-height="minHeight"
-          border
-          class="rounded-xl overflow-y-scroll"
-        >
-          <v-card-title>
-            <v-row class="justify-space-between">
-              <v-col class="mb-1 mb-md-3" cols="12" sm="6">
-                <span class="text-h5">
-                  {{ t('upload.step.translation') }}
-                </span>
-              </v-col>
-              <v-col class="py-0 py-sm-2 pb-1" cols="12" sm="6">
-                <div class="d-flex flex-row justify-end flex-wrap">
-                  <div class="opacity-60 language-sel-tr">
-                    {{ $t('upload.desc.please_select_which_language_to_edit') }}
+        <v-form fast-fail>
+          <v-card
+            :max-height="maxHeight"
+            :min-height="minHeight"
+            border
+            class="rounded-xl overflow-y-scroll"
+          >
+            <v-card-title>
+              <v-row class="justify-space-between">
+                <v-col class="mb-1 mb-md-3" cols="12" sm="6">
+                  <span class="text-h5">
+                    {{ t('upload.step.translation') }}
+                  </span>
+                </v-col>
+                <v-col class="py-0 py-sm-2 pb-1" cols="12" sm="6">
+                  <div class="d-flex flex-row justify-end flex-wrap">
+                    <div class="opacity-60 language-sel-tr">
+                      {{
+                        $t('upload.desc.please_select_which_language_to_edit')
+                      }}
+                    </div>
+                    <v-select
+                      v-model="language"
+                      :item-title="(i) => t(i)"
+                      :item-value="(i) => i"
+                      :items="availableLocales"
+                      class="d-inline-block"
+                      color="primary"
+                      density="compact"
+                      hide-details
+                      max-width="200px"
+                      outlined
+                      variant="underlined"
+                    />
                   </div>
-                  <v-select
-                    v-model="language"
-                    :item-title="(i) => t(i)"
-                    :item-value="(i) => i"
-                    :items="availableLocales"
-                    class="d-inline-block"
-                    color="primary"
-                    density="compact"
-                    hide-details
-                    max-width="200px"
-                    outlined
-                    variant="underlined"
-                  />
-                </div>
-              </v-col>
-            </v-row>
-          </v-card-title>
-          <v-card-text>
-            <v-text-field
-              v-model="machineId"
-              :disabled="editMode"
-              color="primary"
-              dense
-              label="ID"
-              outlined
-              variant="underlined"
-            />
-            <v-text-field
-              v-model="getLocalizedData(language).name"
-              :label="$t('common.name')"
-              color="primary"
-              dense
-              outlined
-              variant="underlined"
-              @update:model-value="console.log(localizedData)"
-            />
-            <v-text-field
-              v-model="getLocalizedData(language).summary"
-              :label="$t('common.summary')"
-              color="primary"
-              dense
-              outlined
-              variant="underlined"
-            />
-            <v-textarea
-              v-model="getLocalizedData(language).description"
-              :label="$t('common.description')"
-              color="primary"
-              dense
-              outlined
-              variant="underlined"
-            />
-          </v-card-text>
-          <v-card-actions>
-            <v-btn
-              :loading="uploadingLocalizedData"
-              color="primary"
-              variant="elevated"
-              @click="uploadLocalizedData"
-            >
-              {{ $t('common.save') }}
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+                </v-col>
+              </v-row>
+            </v-card-title>
+            <v-card-text>
+              <v-text-field
+                v-model="machineId"
+                :disabled="editMode"
+                :rules="[
+                  (v) => !!v || 'ID is required',
+                  (v) =>
+                    /^[a-z0-9\-_]+$/.test(v) ||
+                    $t('upload.desc.id_can_only_contain'),
+                  (_) =>
+                    isIdTakenResponse?.statusCode === 404 ||
+                    $t('upload.desc.id_is_taken'),
+                ]"
+                color="primary"
+                label="ID"
+                outlined
+                variant="underlined"
+                @update:model-value="checkIdTaken"
+              >
+                <template v-if="!editMode" #details>
+                  <template v-if="isIdTakenStatus === 'pending'">
+                    Checking if this ID is taken...
+                  </template>
+                  <template v-else-if="isIdTakenResponse?.statusCode === 404">
+                    <v-icon color="success">mdi-check</v-icon>
+                    ID is available
+                  </template>
+                  <template v-else-if="!isIdTakenResponse?.statusCode">
+                    <v-icon color="error">mdi-close</v-icon>
+                    ID is taken
+                  </template>
+                </template>
+              </v-text-field>
+              <v-text-field
+                v-model="getLocalizedData(language).name"
+                :label="$t('common.name')"
+                color="primary"
+                outlined
+                variant="underlined"
+                @update:model-value="console.log(localizedData)"
+                :rules="[
+                  (v) =>
+                    !disallowedFilename.some((c) => v.includes(c)) ||
+                    $t('upload.desc.name_cannot_contain_special_characters'),
+                ]"
+              />
+              <v-text-field
+                v-model="getLocalizedData(language).summary"
+                :label="$t('common.summary')"
+                color="primary"
+                hide-details
+                outlined
+                variant="underlined"
+              />
+              <v-textarea
+                v-model="getLocalizedData(language).description"
+                :label="$t('common.description')"
+                color="primary"
+                hide-details
+                outlined
+                variant="underlined"
+              />
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                :loading="uploadingLocalizedData"
+                block
+                color="primary"
+                variant="elevated"
+                @click="uploadLocalizedData"
+              >
+                {{ $t('common.save') }}
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-form>
       </v-tabs-window-item>
 
       <v-tabs-window-item value="image">
