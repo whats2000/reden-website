@@ -32,7 +32,6 @@
       "users": "All Users"
     }
   },
-  "common": {},
   "en": "English",
   "litematica_generator": {
     "contribute": "想要你的機器（例如世界吞噬者）被收錄在這裡？現在就為 Reden 做出貢獻！聯絡我傳送郵件至",
@@ -172,10 +171,6 @@
     "notice": "Reden 是一個開源專案，永遠對所有人免費。我們沒有從任何公司或組織獲得資金。我們依靠您的支持來維持專案運行。當您支持我們時，您會在此頁面被列出，因此請確保在您捐款時提供您的姓名和電子郵件。感謝您的支持！",
     "paypal": "使用 PayPal 支援我們",
     "title": "贊助者"
-  },
-  "upload": {
-    "btn": {},
-    "desc": {}
   },
   "user": {
     "contributor": "貢獻者",

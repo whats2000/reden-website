@@ -266,6 +266,7 @@
     "desc": {
       "design_maximal_file_size": "最大文件大小：100MB",
       "design_supports_file_formats": "支持的文件格式：.litematica .schem .zip 等",
+      "existing_machine_design": "你正在编辑一个已有的机器设计。上传新文件将覆盖现有文件。",
       "maximum_size_per_image": "单张图片最大 2MB",
       "please_contact_us_if_you_have_any_questions": "如有任何疑问，请联系我们：",
       "please_select_which_language_to_edit": "请选择要编辑哪种语言的信息",

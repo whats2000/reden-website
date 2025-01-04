@@ -267,6 +267,7 @@
     "desc": {
       "design_maximal_file_size": "Maximal file size: 100MB",
       "design_supports_file_formats": "Supports file formats: .litematica .schem .zip etc.",
+      "existing_machine_design": "You are editing an existing machine design.\n Uploading a new file will overwrite the existing one.",
       "maximum_size_per_image": "Maximum 2MB per image",
       "please_contact_us_if_you_have_any_questions": "Please contact us if you have any questions:",
       "please_select_which_language_to_edit": "Please select which language to edit",

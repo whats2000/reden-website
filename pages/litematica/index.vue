@@ -203,9 +203,22 @@ const { mobile, mdAndUp } = useDisplay({
           variant="outlined"
         >
           {{ $t('litematica_generator.upload.button_msg') }}
-          <v-dialog max-width="900" activator="parent">
+          <v-dialog
+            #default="{ isActive }"
+            activator="parent"
+            close-on-back
+            max-width="900"
+            persistent
+          >
             <v-card variant="flat">
               <LitematicaUpload />
+              <div class="position-absolute top-0 right-0">
+                <v-btn
+                  icon="mdi-close"
+                  variant="plain"
+                  @click="isActive.value = false"
+                />
+              </div>
             </v-card>
           </v-dialog>
         </v-btn>

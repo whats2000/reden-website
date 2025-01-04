@@ -67,7 +67,7 @@ async function submit(e: SubmitEventPromise) {
 
 <template>
   <ListLitematicaResponse />
-  <LitematicaUpload />
+  <LitematicaUpload edit-mode />
   <div class="d-flex justify-center w-100">
     <v-form v-if="serverResponse" @submit.prevent="submit">
       <v-card max-width="700" width="700">

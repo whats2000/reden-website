@@ -32,7 +32,6 @@
       "users": "All Users"
     }
   },
-  "common": {},
   "en": "Английский",
   "litematica_generator": {
     "description": "Generate Litematica files online from Reden projects, e.g. World Eaters",
@@ -171,10 +170,6 @@
     "notice": "Reden is an open-source project and always free for everyone. We receive no funding from any company or organization. We rely on your support to keep the project running. When you support us, you will be listed here as a sponsor so please make sure you provide your name and email address when you donate. Thank you for your support!",
     "paypal": "Support us with PayPal",
     "title": "Sponsors"
-  },
-  "upload": {
-    "btn": {},
-    "desc": {}
   },
   "user": {
     "contributor": "Contributor",

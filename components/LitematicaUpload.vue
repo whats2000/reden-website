@@ -1,6 +1,15 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { toast } from 'vuetify-sonner';
+import type { MachineDef } from '~/pages/litematica/index.vue';
+
+const props = defineProps<{
+  editMode?: boolean;
+  /**
+   * Localized DTOs
+   */
+  machine?: Record<string, MachineDef>;
+}>();
 
 const localePath = useLocalePath();
 type State = 'upload' | 'translation' | 'image' | 'under-review';
@@ -17,13 +26,60 @@ const fileInput = useTemplateRef<HTMLInputElement>('fileInput');
 const pictureInput = useTemplateRef<HTMLInputElement>('pictureInput');
 const selectedPictures = ref<File[]>([]);
 const imageUris = ref<string[]>([]);
-const pictureError = ref<string | null>(null);
+const pictureStepError = ref<string>();
 const machineId = ref<string>();
 
 const uploading = ref(false);
+
 async function doUploadAll() {
   uploading.value = true;
-  await delay(2000);
+  if (
+    selectedFiles.value.length != 1 ||
+    !selectedFiles.value[0].name.endsWith('.litematic')
+  ) {
+    toast.error(
+      'Litematica generator only support uploading 1 litematica file',
+      {
+        duration: 1e4,
+      },
+    );
+    return;
+  } else {
+    const file = selectedFiles.value[0];
+    const response = await doFetchPut(
+      `/api/mc-services/yisibite/${machineId.value}`,
+      file,
+    );
+    if (response.ok) {
+      toast.success('File uploaded successfully');
+      await delay(1e3);
+    } else {
+      await toastError(response, 'Failed to upload file');
+      return;
+    }
+  }
+  for (const lang of availableLocales) {
+    const data = localizedData.value[lang];
+    console.log(lang, data);
+    if (localizedData.value[lang]?.name) {
+      const response = await doFetchPost(
+        `/api/mc-services/yisibite/${machineId.value}/info/${lang}`,
+        {
+          name: data.name,
+          summary: data.summary,
+          description: data.description,
+          link: null,
+        },
+      );
+      if (response.ok) {
+        toast.success(`${t(lang)} uploaded successfully`);
+      } else {
+        await toastError(response, 'Failed to upload info');
+        return;
+      }
+    }
+  }
+
   state.value = 'under-review';
   availableSteps.value = ['under-review'];
   uploading.value = false;
@@ -42,15 +98,15 @@ const handlePictureChange = (event: Event) => {
   if (!files) return;
 
   if (selectedPictures.value.length + files.length > 3) {
-    pictureError.value = '最多只能上传3张图片';
+    pictureStepError.value = '最多只能上传3张图片';
     return;
   }
-  pictureError.value = null;
+  pictureStepError.value = undefined;
 
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
     if (file.size > 2 * 1024 * 1024) {
-      pictureError.value = '图片大小不能超过2MB';
+      pictureStepError.value = '图片大小不能超过2MB';
       selectedPictures.value = [];
       imageUris.value = [];
       return;
@@ -142,16 +198,6 @@ const formatFileSize = (bytes: number): string => {
 
 const { t, availableLocales, locale } = useI18n();
 const language = ref<string>(locale.value);
-const id = ref<string>('');
-const switchLocalePath = useSwitchLocalePath();
-const router = useRouter();
-const name = ref<string>();
-const summary = ref<string>();
-const description = ref<string>();
-const file = ref<File>();
-const image = ref<File>();
-const imageUri = ref<string>();
-const link = ref<string>();
 
 const uploadingLocalizedData = ref(false);
 
@@ -167,6 +213,7 @@ async function uploadLocalizedData() {
 }
 
 const minHeight = 490;
+const maxHeight = 490;
 const backing = ref(false);
 </script>
 <template>
@@ -185,10 +232,15 @@ const backing = ref(false);
   <v-card-text>
     <v-tabs-window v-model="state">
       <v-tabs-window-item value="upload">
-        <v-card :min-height="minHeight" border class="rounded-xl">
+        <v-card
+          :max-height="maxHeight"
+          :min-height="minHeight"
+          border
+          class="rounded-xl"
+        >
           <v-card-title> {{ $t('upload.btn.upload_design') }}</v-card-title>
           <v-card-text class="text-center">
-            <v-alert class="w-100" position="absolute" type="warning">
+            <v-alert class="left-0 right-0" position="absolute" type="warning">
               Warning: This feature is still under development and may not work
               as expected. <br />警告：此功能仍在开发中，可能无法正常工作。
             </v-alert>
@@ -230,13 +282,25 @@ const backing = ref(false);
                 @click="(selectedFiles = []), (availableSteps = ['upload'])"
               />
             </p>
+            <div
+              v-if="editMode"
+              class="mt-2 mx-auto opacity-60 text-pre-line"
+              style="max-width: 400px"
+            >
+              {{ $t('upload.desc.existing_machine_design') }}
+            </div>
           </v-card-text>
           <v-card-actions></v-card-actions>
         </v-card>
       </v-tabs-window-item>
 
       <v-tabs-window-item value="translation">
-        <v-card :min-height="minHeight" border class="rounded-xl">
+        <v-card
+          :max-height="maxHeight"
+          :min-height="minHeight"
+          border
+          class="rounded-xl"
+        >
           <v-card-title>
             <v-row class="justify-space-between">
               <v-col class="mb-1 mb-md-3" cols="12" sm="6">
@@ -269,9 +333,10 @@ const backing = ref(false);
           <v-card-text>
             <v-text-field
               v-model="machineId"
-              label="ID"
+              :disabled="editMode"
               color="primary"
               dense
+              label="ID"
               outlined
               variant="underlined"
             />
@@ -315,11 +380,23 @@ const backing = ref(false);
       </v-tabs-window-item>
 
       <v-tabs-window-item value="image">
-        <v-card :min-height="minHeight" border class="rounded-xl">
+        <v-card
+          :max-height="maxHeight"
+          :min-height="minHeight"
+          border
+          class="rounded-xl"
+        >
           <v-card-title>{{ $t('upload.step.image') }}</v-card-title>
           <v-card-text class="text-center">
-            <v-icon class="my-8" color="primary" size="100"
-              >mdi-image-plus
+            <v-alert
+              v-if="pictureStepError"
+              :title="pictureStepError"
+              class="mt-2 left-0 right-0 z-10"
+              position="absolute"
+              type="error"
+            />
+            <v-icon class="my-8" color="primary" size="100">
+              mdi-image-plus
             </v-icon>
             <div class="mt-4 opacity-60">
               <p>{{ $t('upload.desc.upload_images') }}</p>
@@ -341,9 +418,9 @@ const backing = ref(false);
               {{ $t('upload.btn.select_files') }}
             </v-btn>
             <v-btn
+              :loading="uploading"
               class="mt-4 mx-4"
               variant="outlined"
-              :loading="uploading"
               @click="doUploadAll"
             >
               {{ $t('common.next') }}
@@ -364,7 +441,7 @@ const backing = ref(false);
                   min-height="100"
                   min-width="100"
                 >
-                  <template v-slot:placeholder>
+                  <template #placeholder>
                     <v-row
                       align="center"
                       class="fill-height ma-0"
@@ -373,7 +450,7 @@ const backing = ref(false);
                       <v-progress-circular
                         color="grey-lighten-1"
                         indeterminate
-                      ></v-progress-circular>
+                      />
                     </v-row>
                   </template>
                 </v-img>
@@ -389,15 +466,17 @@ const backing = ref(false);
                 />
               </div>
             </div>
-            <div v-if="pictureError" class="mt-2 text-error">
-              {{ pictureError }}
-            </div>
           </v-card-text>
         </v-card>
       </v-tabs-window-item>
 
       <v-tabs-window-item value="under-review">
-        <v-card :min-height="minHeight" border class="rounded-xl">
+        <v-card
+          :max-height="maxHeight"
+          :min-height="minHeight"
+          border
+          class="rounded-xl"
+        >
           <v-card-title>
             {{ $t('upload.step.under-review') }}
           </v-card-title>

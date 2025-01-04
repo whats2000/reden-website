@@ -175,7 +175,7 @@ export async function toastError(
     console.log('error', e);
     toast.error(message || 'Error', {
       description: e.message,
-      duration: 3e3,
+      duration: 5e3,
     });
   } else if (e instanceof Response) {
     try {
@@ -183,32 +183,32 @@ export async function toastError(
       if (message) {
         toast.error(message, {
           description: `${e.status} ${data.error}`,
-          duration: 3e3,
+          duration: 5e3,
         });
       } else {
         toast.error(`${e.status} ${data.error}`, {
           description: data.error_description || e.statusText,
-          duration: 3e3,
+          duration: 5e3,
         });
       }
     } catch (_) {
       // not json
       toast.error(message || 'Error', {
         description: `Status: ${e.status} ${e.statusText}`,
-        duration: 3e3,
+        duration: 5e3,
       });
     }
   } else if (e instanceof Object && e.error) {
     console.log('error', e);
     toast.error(message || 'Error', {
       description: e.error + (e.error_description || ''),
-      duration: 3e3,
+      duration: 5e3,
     });
   } else {
     console.log('error', e);
     toast.error('Error', {
       description: message,
-      duration: 3e3,
+      duration: 5e3,
     });
   }
 }

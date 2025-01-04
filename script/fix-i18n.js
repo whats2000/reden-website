@@ -11,6 +11,9 @@ function fixI18n(lang) {
     Object.keys(obj).forEach((key) => {
       if (typeof obj[key] === 'object') {
         removeEmptyValues(obj[key]);
+        if (obj[key] && Object.keys(obj[key]).length === 0) {
+          delete obj[key];
+        }
       } else if (obj[key] === '') {
         delete obj[key];
       }
