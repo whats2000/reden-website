@@ -135,9 +135,9 @@ useSeoMeta({
     name: selected.value.name,
   }),
   description:
-    selected.value.description ?? t('litematica_generator.og_description'),
+    selected.value.description + t('litematica_generator.og_description'),
   ogDescription:
-    selected.value.description ?? t('litematica_generator.og_description'),
+    selected.value.description + t('litematica_generator.og_description'),
   ogImage: 'https://redenmc.com/reden_256.png',
 });
 const biliPlayer = useTemplateRef<HTMLIFrameElement>('biliPlayer');
@@ -170,12 +170,48 @@ const tab = ref(
   <v-form class="content-common" fast-fail @submit.prevent="submit">
     <v-btn
       :to="localePath('/litematica')"
-      class="mb-3"
+      class="mb-3 text-capitalize mr-3"
       prepend-icon="mdi-arrow-left"
       variant="tonal"
     >
-      查看所有可生成的机器
+      {{ $t('litematica_generator.view_all_designs') }}
     </v-btn>
+    <v-btn
+      v-if="appStore.logined"
+      class="mb-3 text-capitalize"
+      color="primary"
+      variant="outlined"
+      @click="
+        () => {
+          if (!localizedData) {
+            useFetch(`/api/mc-services/yisibite/${machineId}/info`, {
+              key: `edit-${machineId}`,
+            });
+          }
+        }
+      "
+    >
+      {{ $t('litematica_generator.upload.edit_or_improve_translation') }}
+      <v-dialog
+        v-model="openEditDialog"
+        activator="parent"
+        close-on-back
+        max-width="900"
+        persistent
+      >
+        <v-card variant="flat">
+          <LitematicaUpload v-model:machine="localizedData" edit-mode />
+          <div class="position-absolute top-0 right-0">
+            <v-btn
+              icon="mdi-close"
+              variant="plain"
+              @click="openEditDialog = false"
+            />
+          </div>
+        </v-card>
+      </v-dialog>
+    </v-btn>
+
     <v-row justify="center">
       <h1>
         {{ selected?.name }}
@@ -202,44 +238,6 @@ const tab = ref(
           })
         }}
       </v-chip>
-    </v-row>
-    <v-row v-if="appStore.logined">
-      <v-col cols="12">
-        <v-btn
-          color="primary"
-          rounded="lg"
-          variant="outlined"
-          @click="
-            () => {
-              if (!localizedData) {
-                useFetch(`/api/mc-services/yisibite/${machineId}/info`, {
-                  key: `edit-${machineId}`,
-                });
-              }
-            }
-          "
-        >
-          编辑此机器
-          <v-dialog
-            v-model="openEditDialog"
-            activator="parent"
-            close-on-back
-            max-width="900"
-            persistent
-          >
-            <v-card variant="flat">
-              <LitematicaUpload v-model:machine="localizedData" edit-mode />
-              <div class="position-absolute top-0 right-0">
-                <v-btn
-                  icon="mdi-close"
-                  variant="plain"
-                  @click="openEditDialog = false"
-                />
-              </div>
-            </v-card>
-          </v-dialog>
-        </v-btn>
-      </v-col>
     </v-row>
     <v-row>
       <v-col v-if="tabs.length !== 0">

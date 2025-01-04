@@ -65,8 +65,10 @@
     "title": "Litematica Online Generator",
     "total_downloads": "We have provided {0} downloads in total.",
     "upload": {
-      "button_msg": "Upload New Design"
+      "button_msg": "Upload New Design",
+      "edit_or_improve_translation": "Edit or Improve Translation"
     },
+    "view_all_designs": "View All Designs",
     "web_title": "Generate {name} online - Reden Litematica Generator"
   },
   "login": {

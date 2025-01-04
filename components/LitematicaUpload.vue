@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { toast } from 'vuetify-sonner';
 import type { MachineDef } from '~/pages/litematica/index.vue';
+import { useDisplay } from 'vuetify';
 
 const props = defineProps<{
   editMode?: boolean;
@@ -13,6 +14,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update:machine': [Record<string, Partial<MachineDef>>];
 }>();
+const { height } = useDisplay();
 
 const localePath = useLocalePath();
 type State = 'upload' | 'translation' | 'image' | 'under-review';
@@ -237,8 +239,8 @@ async function uploadLocalizedData() {
   state.value = 'image';
 }
 
-const minHeight = 490;
-const maxHeight = 490;
+const minHeight = Math.max(490, height.value - 100);
+const maxHeight = Math.max(490, height.value - 100);
 const goingBack = ref(false);
 refreshProps();
 watch(props, refreshProps);

@@ -64,8 +64,10 @@
     "title": "投影蓝图在线生成器",
     "total_downloads": "我们已累计提供 {0} 次下载服务。",
     "upload": {
-      "button_msg": "上传你的机器"
+      "button_msg": "上传你的机器",
+      "edit_or_improve_translation": "编辑此机器或改进其翻译"
     },
+    "view_all_designs": "查看所有可生成的机器",
     "web_title": "在线生成{name} - Reden投影蓝图在线生成器"
   },
   "login": {
