@@ -8,16 +8,23 @@ function fixI18n(lang) {
   const i18n = JSON.parse(fs.readFileSync(i18nPath, 'utf8'));
 
   function removeEmptyValues(obj) {
-    Object.keys(obj).forEach((key) => {
-      if (typeof obj[key] === 'object') {
-        removeEmptyValues(obj[key]);
-        if (obj[key] && Object.keys(obj[key]).length === 0) {
-          delete obj[key];
+    if (typeof obj !== 'object') {
+      return obj;
+    }
+    const sorted = {};
+    Object.keys(obj)
+      .toSorted()
+      .forEach((key) => {
+        if (typeof obj[key] === 'object') {
+          if (obj[key] && Object.keys(obj[key]).length === 0) {
+            return;
+          }
+        } else if (obj[key] === '') {
+          return;
         }
-      } else if (obj[key] === '') {
-        delete obj[key];
-      }
-    });
+        sorted[key] = removeEmptyValues(obj[key]);
+      });
+    return sorted;
   }
 
   removeEmptyValues(i18n);
