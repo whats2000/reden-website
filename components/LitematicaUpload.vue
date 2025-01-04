@@ -89,6 +89,7 @@ async function doUploadAll() {
         await delay(1e3);
       } else {
         await toastError(response, 'Failed to upload file');
+        uploading.value = false;
         return;
       }
     }
@@ -111,6 +112,7 @@ async function doUploadAll() {
         toast.success(`${t(lang)} uploaded successfully`);
       } else {
         await toastError(response, 'Failed to upload info');
+        uploading.value = false;
         return;
       }
     }
@@ -239,8 +241,8 @@ async function uploadLocalizedData() {
   state.value = 'image';
 }
 
-const minHeight = Math.max(490, height.value - 100);
-const maxHeight = Math.max(490, height.value - 100);
+const minHeight = Math.max(490, height.value - 300);
+const maxHeight = Math.max(490, height.value - 300);
 const goingBack = ref(false);
 refreshProps();
 watch(props, refreshProps);
@@ -369,6 +371,7 @@ watch(props, refreshProps);
                     /^[a-z0-9\-_]+$/.test(v) ||
                     $t('upload.desc.id_can_only_contain'),
                   (_) =>
+                    editMode ||
                     isIdTakenResponse?.statusCode === 404 ||
                     $t('upload.desc.id_is_taken'),
                 ]"
@@ -376,7 +379,7 @@ watch(props, refreshProps);
                 label="ID"
                 outlined
                 variant="underlined"
-                @update:model-value="checkIdTaken"
+                @update:model-value="() => editMode && checkIdTaken()"
               >
                 <template v-if="!editMode" #details>
                   <template v-if="isIdTakenStatus === 'pending'">
