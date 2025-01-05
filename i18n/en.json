@@ -274,6 +274,7 @@
       "existing_machine_design": "You are editing an existing machine design.\n Uploading a new file will overwrite the existing one.",
       "id_can_only_contain": "ID can only contain a-z, 0-9, - and _",
       "id_is_taken": "ID is taken, please choose another one",
+      "litematica_generator_only_support_uploading_1_litematica_file": "Litematica generator mode only support uploading 1 litematica file",
       "maximum_size_per_image": "Maximum 2MB per image",
       "name_cannot_contain_special_characters": "Name cannot contain special characters",
       "please_contact_us_if_you_have_any_questions": "Please contact us if you have any questions:",

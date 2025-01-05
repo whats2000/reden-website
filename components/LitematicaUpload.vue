@@ -72,7 +72,9 @@ async function doUploadAll() {
       !selectedFiles.value[0].name.endsWith('.litematic')
     ) {
       toast.error(
-        'Litematica generator only support uploading 1 litematica file',
+        t(
+          'upload.desc.litematica_generator_only_support_uploading_1_litematica_file',
+        ),
         {
           duration: 1e4,
         },

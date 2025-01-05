@@ -15,22 +15,23 @@ function fixI18n(lang) {
     Object.keys(obj)
       .toSorted()
       .forEach((key) => {
-        if (typeof obj[key] === 'object') {
-          if (obj[key] && Object.keys(obj[key]).length === 0) {
+        const value = removeEmptyValues(obj[key]);
+        if (typeof value === 'object') {
+          if (value && Object.keys(value).length === 0) {
             return;
           }
-        } else if (obj[key] === '') {
+        } else if (value === '') {
           return;
         }
-        sorted[key] = removeEmptyValues(obj[key]);
+        sorted[key] = value;
       });
     return sorted;
   }
-
-  removeEmptyValues(i18n);
-  removeEmptyValues(i18n);
   // leave a blank line at the end
-  fs.writeFileSync(i18nPath, JSON.stringify(i18n, null, 2) + '\n');
+  fs.writeFileSync(
+    i18nPath,
+    JSON.stringify(removeEmptyValues(i18n), null, 2) + '\n',
+  );
 }
 
 fixI18n('zh_CN');
