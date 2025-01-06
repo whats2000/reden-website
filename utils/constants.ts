@@ -9,7 +9,18 @@ import 'vue-turnstile';
 if (import.meta.client) {
   console.log(
     '%c[Reden] Welcome to Reden',
-    'background: linear-gradient(to right, #ff0000, #ff7f00, #00ff00, #0000ff, #4b0082, #8b00ff); color: #fff; font-size: 1.2em; font-weight: bold; padding: 5px;',
+    `background: linear-gradient(135deg, #ff0000, #ff7f00, #00ff00, #0000ff, #4b0082, #8b00ff);
+     color: #fff;
+     font-size: 1.5em;
+     font-weight: bold;
+     padding: 5px;
+     border-radius: 5px;
+     text-shadow: 1px 1px 2px #000;
+    `,
+  );
+  console.log(
+    'This website is open sourced under AGPL-3.0 License, feel free to use it in your projects. ' +
+      'https://github.com/RedenMC/reden-website',
   );
 }
 
