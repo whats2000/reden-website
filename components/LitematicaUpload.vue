@@ -26,7 +26,7 @@ watch(state, (newState) => {
   }
 });
 const refreshProps = () => {
-  if (props.editMode) {
+  if (props.editMode && state.value === 'upload') {
     state.value = 'translation';
   }
   localizedData.value = {
@@ -400,15 +400,15 @@ watch(props, refreshProps);
               <v-text-field
                 v-model="getLocalizedData(language).name"
                 :label="$t('common.name')"
-                color="primary"
-                outlined
-                variant="underlined"
-                @update:model-value="console.log(localizedData)"
                 :rules="[
                   (v) =>
                     !disallowedFilename.some((c) => v.includes(c)) ||
                     $t('upload.desc.name_cannot_contain_special_characters'),
                 ]"
+                color="primary"
+                outlined
+                variant="underlined"
+                @update:model-value="console.log(localizedData)"
               />
               <v-text-field
                 v-model="getLocalizedData(language).summary"

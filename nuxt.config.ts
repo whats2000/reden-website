@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxtjs/i18n',
     '@nuxtjs/sitemap',
+    '@nuxt/content',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error
@@ -19,6 +20,16 @@ export default defineNuxtConfig({
       });
     },
   ],
+  content: {
+    experimental: {
+      search: {
+        indexed: true,
+      },
+    },
+    api: {
+      baseURL: '/_my_content',
+    },
+  },
   i18n: {
     strategy: 'prefix_and_default',
     vueI18n: './i18n.config.ts',
@@ -69,9 +80,9 @@ export default defineNuxtConfig({
   routeRules: {
     '/api/**': {
       proxy:
-        // process.env.NODE_ENV === 'development' ?
-        //   'https://api.redenmc.com/api/**' :
-        'http://localhost:10005/api/**',
+        process.env.NODE_ENV === 'development'
+          ? 'https://api.redenmc.com/api/**'
+          : 'http://localhost:10005/api/**',
     },
   },
   sitemap: {

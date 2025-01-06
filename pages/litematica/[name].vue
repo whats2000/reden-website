@@ -14,6 +14,7 @@ import type {
 import { parseBVID } from '~/utils/constants';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
 import SidebarAd from '~/components/ads/SidebarAd.vue';
+import { parseCondition, type Condition } from '~/utils/conditionParser';
 
 const route = useRoute();
 const xSize = ref(0);
@@ -54,34 +55,20 @@ const generators = computed<Record<string, Machine>>(() => {
   if (serverResponse.value) {
     let machines: { [key: string]: Machine } = {};
     for (let key in serverResponse.value.d) {
-      const min = (size: number) => {
-        const f = (v: number) =>
-          v >= size || t('litematica_generator.size_min', { size });
-        f.min = size;
-        return f;
-      };
-      const max = (size: number) => {
-        const f = (v: number) =>
-          v <= size || t('litematica_generator.size_max', { size });
-        f.max = size;
-        return f;
-      };
-      const mod = (mod: number, rem: number) => {
-        const f = (v: number) =>
-          v % mod === rem || t('litematica_generator.size_mod', { mod, rem });
-        f.mod = mod;
-        f.rem = rem;
-        return f;
-      };
-      // Default checkers ensure these function won't be deleted in output.
-      const defaultChecker = [min(0), max(2006), mod(1, 0)];
+      const defaultChecker: Condition[] = [() => true];
       const dto: ListLitematicaResponse['d'][''] = serverResponse.value.d[key];
       machines[key] = {
         ...dto,
         conditions: {
-          x: dto.conditions?.x?.map((s) => eval(s)) ?? defaultChecker,
-          y: dto.conditions?.y?.map((s) => eval(s)) ?? defaultChecker,
-          z: dto.conditions?.z?.map((s) => eval(s)) ?? defaultChecker,
+          x:
+            dto.conditions?.x?.map((s) => parseCondition(s, t)) ??
+            defaultChecker,
+          y:
+            dto.conditions?.y?.map((s) => parseCondition(s, t)) ??
+            defaultChecker,
+          z:
+            dto.conditions?.z?.map((s) => parseCondition(s, t)) ??
+            defaultChecker,
         },
       };
     }
@@ -257,15 +244,14 @@ const tab = ref(
               </v-tabs-window-item>
 
               <v-tabs-window-item v-if="bvid" value="bilibili">
-                <iframe
-                  ref="biliPlayer"
-                  :src="`https://player.bilibili.com/player.html?isOutside=true&bvid=${bvid}`"
-                  :style="{
-                    height: `${((biliPlayer?.clientWidth ?? 0) / 16) * 9}px`,
-                  }"
-                  allowfullscreen
-                  class="bili-player"
-                />
+                <div class="bili-player-wrapper">
+                  <iframe
+                    ref="biliPlayer"
+                    :src="`https://player.bilibili.com/player.html?isOutside=true&bvid=${bvid}`"
+                    allowfullscreen
+                    class="bili-player"
+                  />
+                </div>
               </v-tabs-window-item>
             </v-tabs-window>
           </v-card-text>
@@ -383,8 +369,18 @@ p {
   white-space: nowrap;
 }
 
+.bili-player-wrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+}
+
 .bili-player {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100%;
   border-width: 0;
 }
 </style>

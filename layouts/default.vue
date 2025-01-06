@@ -70,336 +70,330 @@ watch(i18nHead, (value) => {
         />
       </template>
     </Head>
-    <Body :style="`background-color: ${currentTheme.colors.background}`">
-      <v-app :theme="appStore.theme">
-        <v-app-bar :elevation="2" class="reden-app-bar" color="transparent">
-          <template #prepend>
-            <template v-if="mobile">
-              <v-btn v-show="mobile" icon="mdi-menu" title="Menu">
-                <v-icon>mdi-menu</v-icon>
-                <v-menu :close-on-content-click="true" activator="parent">
-                  <v-list class="w-100 router">
-                    <v-list-item :to="localePath('/')">
+    <Body :style="`background-color: ${currentTheme.colors.background}`" />
+  </Html>
+  <v-app :theme="appStore.theme">
+    <v-app-bar :elevation="2" class="reden-app-bar" color="transparent">
+      <template #prepend>
+        <template v-if="mobile">
+          <v-btn v-show="mobile" icon="mdi-menu" title="Menu">
+            <v-icon>mdi-menu</v-icon>
+            <v-menu :close-on-content-click="true" activator="parent">
+              <v-list class="w-100 router">
+                <v-list-item :to="localePath('/')">
+                  <template #prepend>
+                    <v-icon>mdi-home</v-icon>
+                  </template>
+                  <v-list-item-title> Home</v-list-item-title>
+                </v-list-item>
+                <v-list-item :to="localePath('/feature')">
+                  <template #prepend>
+                    <v-icon>mdi-view-dashboard</v-icon>
+                  </template>
+                  <v-list-item-title> Features</v-list-item-title>
+                </v-list-item>
+                <v-divider />
+                <template v-if="useAppStore().logined">
+                  <reden-router :to="localePath('/home')">
+                    <v-list-item link>
                       <template #prepend>
-                        <v-icon>mdi-home</v-icon>
+                        <v-avatar
+                          v-if="useAppStore().userCache?.avatarUrl"
+                          :image="useAppStore().userCache?.avatarUrl"
+                          :size="40"
+                        />
+                        <v-icon v-else> mdi-account</v-icon>
                       </template>
-                      <v-list-item-title> Home</v-list-item-title>
+                      <v-list-item-title> My Profile</v-list-item-title>
                     </v-list-item>
-                    <v-list-item :to="localePath('/feature')">
+                  </reden-router>
+                  <v-list-item>
+                    <v-list-item-title> My Machines</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-title> My Stars</v-list-item-title>
+                  </v-list-item>
+                </template>
+                <template v-else>
+                  <reden-router :to="localePath('/login')">
+                    <v-list-item link>
                       <template #prepend>
-                        <v-icon>mdi-view-dashboard</v-icon>
+                        <v-icon>mdi-account</v-icon>
                       </template>
-                      <v-list-item-title> Features</v-list-item-title>
+                      <v-list-item-title> Login</v-list-item-title>
                     </v-list-item>
-                    <v-divider />
-                    <template v-if="useAppStore().logined">
-                      <reden-router :to="localePath('/home')">
-                        <v-list-item link>
-                          <template #prepend>
-                            <v-avatar
-                              v-if="useAppStore().userCache?.avatarUrl"
-                              :image="useAppStore().userCache?.avatarUrl"
-                              :size="40"
-                            />
-                            <v-icon v-else> mdi-account</v-icon>
-                          </template>
-                          <v-list-item-title> My Profile</v-list-item-title>
-                        </v-list-item>
-                      </reden-router>
-                      <v-list-item>
-                        <v-list-item-title> My Machines</v-list-item-title>
-                      </v-list-item>
-                      <v-list-item>
-                        <v-list-item-title> My Stars</v-list-item-title>
-                      </v-list-item>
-                    </template>
-                    <template v-else>
-                      <reden-router :to="localePath('/login')">
-                        <v-list-item link>
-                          <template #prepend>
-                            <v-icon>mdi-account</v-icon>
-                          </template>
-                          <v-list-item-title> Login</v-list-item-title>
-                        </v-list-item>
-                      </reden-router>
+                  </reden-router>
 
-                      <reden-router :to="localePath('/register')">
-                        <v-list-item link>
-                          <template #prepend>
-                            <v-icon>mdi-account-plus</v-icon>
-                          </template>
-                          <v-list-item-title> Register</v-list-item-title>
-                        </v-list-item>
-                      </reden-router>
-                    </template>
-                    <template v-if="useAppStore().userCache?.isStaff">
-                      <v-divider />
-                      <reden-router :to="localePath('/admin')">
-                        <v-list-item link>
-                          <template #prepend>
-                            <v-icon>mdi-cog</v-icon>
-                          </template>
-                          <v-list-item-title>Admin</v-list-item-title>
-                        </v-list-item>
-                      </reden-router>
-                    </template>
-                  </v-list>
-                </v-menu>
-              </v-btn>
-            </template>
-            <template v-else>
-              <v-btn
-                :active="false"
-                :to="localePath('/')"
-                stacked
-                title="Homepage"
+                  <reden-router :to="localePath('/register')">
+                    <v-list-item link>
+                      <template #prepend>
+                        <v-icon>mdi-account-plus</v-icon>
+                      </template>
+                      <v-list-item-title> Register</v-list-item-title>
+                    </v-list-item>
+                  </reden-router>
+                </template>
+                <template v-if="useAppStore().userCache?.isStaff">
+                  <v-divider />
+                  <reden-router :to="localePath('/admin')">
+                    <v-list-item link>
+                      <template #prepend>
+                        <v-icon>mdi-cog</v-icon>
+                      </template>
+                      <v-list-item-title>Admin</v-list-item-title>
+                    </v-list-item>
+                  </reden-router>
+                </template>
+              </v-list>
+            </v-menu>
+          </v-btn>
+        </template>
+        <template v-else>
+          <v-btn :active="false" :to="localePath('/')" stacked title="Homepage">
+            <v-img src="/reden_256.png" width="36" />
+          </v-btn>
+          <v-btn
+            v-if="useAppStore().userCache?.isStaff"
+            :to="localePath('/admin')"
+            prepend-icon="mdi-cog"
+            stacked
+            title="Admin"
+          >
+            Admin
+          </v-btn>
+        </template>
+      </template>
+      <p class="text-h5"></p>
+      <template #append>
+        <v-btn
+          v-show="!mobile"
+          :href="githubLink"
+          icon="mdi-github"
+          title="Github"
+        />
+
+        <v-btn
+          v-show="!mobile"
+          :href="discordInvite"
+          icon="custom:DiscordIcon"
+          title="Discord"
+        />
+
+        <v-btn
+          :icon="
+            appStore.theme === 'light'
+              ? 'mdi-weather-night'
+              : 'mdi-weather-sunny'
+          "
+          title="Toggle Theme"
+          @click="toggleTheme"
+        />
+        <v-btn icon="mdi-translate" title="Language">
+          <v-icon icon="mdi-translate" />
+          <v-menu :close-on-content-click="true" activator="parent">
+            <v-list>
+              <v-list-item
+                v-for="locale in $i18n.availableLocales"
+                :key="`locale-${locale}`"
+                :to="switchLocalePath(locale)"
               >
-                <v-img src="/reden_256.png" width="36" />
-              </v-btn>
-              <v-btn
-                v-if="useAppStore().userCache?.isStaff"
-                :to="localePath('/admin')"
-                prepend-icon="mdi-cog"
-                stacked
-                title="Admin"
-              >
-                Admin
-              </v-btn>
-            </template>
-          </template>
-          <p class="text-h5"></p>
-          <template #append>
-            <v-btn
-              v-show="!mobile"
-              :href="githubLink"
-              icon="mdi-github"
-              title="Github"
-            />
+                <v-list-item-title>{{ $t(locale) }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-btn>
+        <v-btn
+          :to="localePath(useAppStore().logined ? '/home' : '/login')"
+          icon="mdi-account"
+          title="Account"
+        />
+      </template>
+    </v-app-bar>
 
-            <v-btn
-              v-show="!mobile"
-              :href="discordInvite"
-              icon="custom:DiscordIcon"
-              title="Discord"
-            />
+    <VSonner :expand="true" :position="'top-right'" />
+    <v-main class="router">
+      <slot />
+    </v-main>
 
-            <v-btn
-              :icon="
-                appStore.theme === 'light'
-                  ? 'mdi-weather-night'
-                  : 'mdi-weather-sunny'
-              "
-              title="Toggle Theme"
-              @click="toggleTheme"
-            />
-            <v-btn icon="mdi-translate" title="Language">
-              <v-icon icon="mdi-translate" />
-              <v-menu :close-on-content-click="true" activator="parent">
-                <v-list>
-                  <v-list-item
-                    v-for="locale in $i18n.availableLocales"
-                    :key="`locale-${locale}`"
-                    :to="switchLocalePath(locale)"
-                  >
-                    <v-list-item-title>{{ $t(locale) }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-btn>
-            <v-btn
-              :to="localePath(useAppStore().logined ? '/home' : '/login')"
-              icon="mdi-account"
-              title="Account"
-            />
-          </template>
-        </v-app-bar>
-
-        <VSonner :expand="true" :position="'top-right'" />
-        <v-main class="router">
-          <slot />
-        </v-main>
-
-        <v-footer border class="flex-column router">
-          <v-row class="text-center">
-            <v-col>
-              <div class="footer-list-title">
-                <b>
-                  {{ $t('reden.footer.reden_mod.title') }}
-                </b>
-              </div>
-              <div class="footer-list-item">
-                <reden-router :to="localePath('/')">
-                  {{ $t('reden.title.home') }}
-                </reden-router>
-              </div>
-              <div class="footer-list-item">
-                <reden-router :to="localePath('/download')">
-                  {{ $t('reden.download') }}
-                </reden-router>
-              </div>
-              <div class="footer-list-item">
-                <reden-router :to="localePath('/feature/undo')">
-                  {{ $t('reden.footer.reden_mod.undo_redo') }}
-                </reden-router>
-              </div>
-              <div class="footer-list-item">
-                <reden-router :to="localePath('/feature/rvc')">
-                  {{ $t('reden.footer.reden_mod.rvc') }}
-                </reden-router>
-              </div>
-              <div class="footer-list-item">
-                <reden-router :to="localePath('/feature/debugger')">
-                  {{ $t('reden.footer.reden_mod.debugger') }}
-                </reden-router>
-              </div>
-            </v-col>
-            <v-col>
-              <div class="footer-list-title">
-                <b>
-                  {{ $t('reden.footer.reden_ecosystem.title') }}
-                </b>
-              </div>
-              <div class="footer-list-item">
-                <reden-router :to="githubLink"> Reden on Github</reden-router>
-              </div>
-              <div class="footer-list-item">
-                <a href="https://wiki.redenmc.com">
-                  {{ $t('reden.footer.reden_ecosystem.wiki') }}
-                </a>
-              </div>
-              <div class="footer-list-item">
-                <reden-router :to="localePath('/sponsors')">
-                  {{ $t('reden.footer.reden_ecosystem.sponsors') }}
-                </reden-router>
-              </div>
-              <div class="footer-list-item">
-                <reden-router to="https://github.com/RedenMC">
-                  {{ $t('reden.footer.reden_ecosystem.github_organization') }}
-                </reden-router>
-              </div>
-              <div class="footer-list-item">
-                <reden-router
-                  no-external-icon
-                  to="https://api.redenmc.com/openapi/"
-                >
-                  OpenAPI
-                </reden-router>
-              </div>
-            </v-col>
-            <v-col>
-              <div class="footer-list-title">
-                <b>
-                  {{ $t('reden.footer.reden_community.title') }}
-                </b>
-              </div>
-              <div class="footer-list-item">
-                <reden-router :to="localePath('/litematica')">
-                  {{ $t('litematica_generator.title') }}
-                </reden-router>
-              </div>
-              <div class="footer-list-item">
-                <reden-router :to="localePath('/community-guidelines')">
-                  {{ $t('reden.footer.reden_community.community_guidelines') }}
-                </reden-router>
-              </div>
-              <div class="footer-list-item">
-                <reden-router :to="localePath('/community-events')">
-                  {{ $t('reden.footer.reden_community.community_events') }}
-                </reden-router>
-              </div>
-            </v-col>
-            <v-col>
-              <div class="footer-list-title">
-                <b>
-                  {{ $t('reden.footer.social.title') }}
-                </b>
-              </div>
-              <div class="footer-list-item">
-                <reden-router :to="discordInvite">
-                  {{ $t('reden.footer.reden_community.discord') }}
-                </reden-router>
-              </div>
-              <div class="footer-list-item">
-                <reden-router external-icon to="https://youtube.com/@zly2006">
-                  <v-icon icon="mdi-youtube" />
-                  {{ $t('reden.footer.follow_us.youtube') }}
-                </reden-router>
-              </div>
-              <div class="footer-list-item">
-                <reden-router
-                  external-icon
-                  to="https://space.bilibili.com/1545239761"
-                >
-                  <v-icon icon="custom:Bilibili" />
-                  {{ $t('reden.footer.follow_us.bilibili') }}
-                </reden-router>
-              </div>
-            </v-col>
-          </v-row>
-          <v-row class="">
-            <v-col :cols="12" class="text-center">
-              <reden-router :to="githubLink">Reden</reden-router>
-              and
-              <reden-router to="https://github.com/RedenMC/reden-website"
-                >this website
-              </reden-router>
-              are both free software.
-              <br />
-              {{ new Date().getFullYear() }} — <b>RedenMC</b>
-            </v-col>
-          </v-row>
-          <div class="text-right last-line">
-            <a
-              v-if="locale == zh_cn"
-              class="bottom-right"
-              href="https://beian.miit.gov.cn/"
-            >
-              备案号： 京ICP备2021010288号-6
-            </a>
-            <span class="bottom-right"> Privacy </span>
-            <span class="router bottom-right">
-              <a href="javascript:void(0)">
-                <v-dialog activator="parent" max-width="500">
-                  <v-card>
-                    <v-card-title>Manage Cookies</v-card-title>
-                    <v-card-text>
-                      This website uses cookies only for basic functions, such
-                      as login and language settings. We do not use cookies for
-                      advertising or tracking. By using this website, you agree
-                      to our
-                      <reden-router class="router" to="/privacy">
-                        Privacy Policy
-                      </reden-router>
-                    </v-card-text>
-                  </v-card>
-                </v-dialog>
-                Cookies
-              </a>
-            </span>
-            <span class="bottom-right">
-              <a href="https://status.redenmc.com">Status</a>
-            </span>
-            <a class="bottom-right">
-              <v-icon>mdi-earth</v-icon>
-              {{ $t(locale) }}
-
-              <v-menu :close-on-content-click="true" activator="parent">
-                <v-list>
-                  <v-list-item
-                    v-for="locale in $i18n.availableLocales"
-                    :key="`locale-${locale}`"
-                    :to="switchLocalePath(locale)"
-                  >
-                    <v-list-item-title>{{ $t(locale) }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
+    <v-footer border class="flex-column router">
+      <v-row class="text-center">
+        <v-col>
+          <div class="footer-list-title">
+            <b>
+              {{ $t('reden.footer.reden_mod.title') }}
+            </b>
+          </div>
+          <div class="footer-list-item">
+            <reden-router :to="localePath('/')">
+              {{ $t('reden.title.home') }}
+            </reden-router>
+          </div>
+          <div class="footer-list-item">
+            <reden-router :to="localePath('/download')">
+              {{ $t('reden.download') }}
+            </reden-router>
+          </div>
+          <div class="footer-list-item">
+            <reden-router :to="localePath('/feature/undo')">
+              {{ $t('reden.footer.reden_mod.undo_redo') }}
+            </reden-router>
+          </div>
+          <div class="footer-list-item">
+            <reden-router :to="localePath('/feature/rvc')">
+              {{ $t('reden.footer.reden_mod.rvc') }}
+            </reden-router>
+          </div>
+          <div class="footer-list-item">
+            <reden-router :to="localePath('/feature/debugger')">
+              {{ $t('reden.footer.reden_mod.debugger') }}
+            </reden-router>
+          </div>
+        </v-col>
+        <v-col>
+          <div class="footer-list-title">
+            <b>
+              {{ $t('reden.footer.reden_ecosystem.title') }}
+            </b>
+          </div>
+          <div class="footer-list-item">
+            <reden-router :to="githubLink"> Reden on Github</reden-router>
+          </div>
+          <div class="footer-list-item">
+            <a href="https://wiki.redenmc.com">
+              {{ $t('reden.footer.reden_ecosystem.wiki') }}
             </a>
           </div>
-        </v-footer>
-      </v-app>
-    </Body>
-  </Html>
+          <div class="footer-list-item">
+            <reden-router :to="localePath('/sponsors')">
+              {{ $t('reden.footer.reden_ecosystem.sponsors') }}
+            </reden-router>
+          </div>
+          <div class="footer-list-item">
+            <reden-router to="https://github.com/RedenMC">
+              {{ $t('reden.footer.reden_ecosystem.github_organization') }}
+            </reden-router>
+          </div>
+          <div class="footer-list-item">
+            <reden-router
+              no-external-icon
+              to="https://api.redenmc.com/openapi/"
+            >
+              OpenAPI
+            </reden-router>
+          </div>
+        </v-col>
+        <v-col>
+          <div class="footer-list-title">
+            <b>
+              {{ $t('reden.footer.reden_community.title') }}
+            </b>
+          </div>
+          <div class="footer-list-item">
+            <reden-router :to="localePath('/litematica')">
+              {{ $t('litematica_generator.title') }}
+            </reden-router>
+          </div>
+          <div class="footer-list-item">
+            <reden-router :to="localePath('/community-guidelines')">
+              {{ $t('reden.footer.reden_community.community_guidelines') }}
+            </reden-router>
+          </div>
+          <div class="footer-list-item">
+            <reden-router :to="localePath('/community-events')">
+              {{ $t('reden.footer.reden_community.community_events') }}
+            </reden-router>
+          </div>
+        </v-col>
+        <v-col>
+          <div class="footer-list-title">
+            <b>
+              {{ $t('reden.footer.social.title') }}
+            </b>
+          </div>
+          <div class="footer-list-item">
+            <reden-router :to="discordInvite">
+              {{ $t('reden.footer.reden_community.discord') }}
+            </reden-router>
+          </div>
+          <div class="footer-list-item">
+            <reden-router external-icon to="https://youtube.com/@zly2006">
+              <v-icon icon="mdi-youtube" />
+              {{ $t('reden.footer.follow_us.youtube') }}
+            </reden-router>
+          </div>
+          <div class="footer-list-item">
+            <reden-router
+              external-icon
+              to="https://space.bilibili.com/1545239761"
+            >
+              <v-icon icon="custom:Bilibili" />
+              {{ $t('reden.footer.follow_us.bilibili') }}
+            </reden-router>
+          </div>
+        </v-col>
+      </v-row>
+      <v-row class="">
+        <v-col :cols="12" class="text-center">
+          <reden-router :to="githubLink">Reden</reden-router>
+          and
+          <reden-router to="https://github.com/RedenMC/reden-website"
+            >this website
+          </reden-router>
+          are both free software.
+          <br />
+          {{ new Date().getFullYear() }} — <b>RedenMC</b>
+        </v-col>
+      </v-row>
+      <div class="text-right last-line">
+        <a
+          v-if="locale == zh_cn"
+          class="bottom-right"
+          href="https://beian.miit.gov.cn/"
+        >
+          备案号： 京ICP备2021010288号-6
+        </a>
+        <span class="bottom-right"> Privacy </span>
+        <span class="router bottom-right">
+          <a href="javascript:void(0)">
+            <v-dialog activator="parent" max-width="500">
+              <v-card>
+                <v-card-title>Manage Cookies</v-card-title>
+                <v-card-text>
+                  This website uses cookies only for basic functions, such as
+                  login and language settings. We do not use cookies for
+                  advertising or tracking. By using this website, you agree to
+                  our
+                  <reden-router class="router" to="/privacy">
+                    Privacy Policy
+                  </reden-router>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
+            Cookies
+          </a>
+        </span>
+        <span class="bottom-right">
+          <a href="https://status.redenmc.com">Status</a>
+        </span>
+        <a class="bottom-right">
+          <v-icon>mdi-earth</v-icon>
+          {{ $t(locale) }}
+
+          <v-menu :close-on-content-click="true" activator="parent">
+            <v-list>
+              <v-list-item
+                v-for="locale in $i18n.availableLocales"
+                :key="`locale-${locale}`"
+                :to="switchLocalePath(locale)"
+              >
+                <v-list-item-title>{{ $t(locale) }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </a>
+      </div>
+    </v-footer>
+  </v-app>
 </template>
 
 <style scoped>
