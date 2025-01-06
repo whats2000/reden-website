@@ -17,170 +17,292 @@
       "pageText": "{0}-{1} из {2}",
       "prevPage": "Предыдущая страница",
       "rowsPerPageAll": "Все",
-      "rowsPerPageText": "Результатов на странице: "
+      "rowsPerPageText": "Элементов на странице: "
     },
     "noDataText": "Нет доступных данных",
     "open": "Открыть",
     "pagination": {
       "ariaLabel": {
-        "root": "Pagination"
+        "root": "Навигация"
       }
     }
   },
   "admin": {
     "title": {
-      "users": "All Users"
+      "admin": "Панель администратора",
+      "users": "Все пользователи"
     }
+  },
+  "also_try_our_other_online_services:": "Также попробуйте другие наши онлайн-сервисы:",
+  "common": {
+    "back": "Назад",
+    "description": "Описание",
+    "name": "Имя",
+    "next": "Далее",
+    "save": "Сохранить",
+    "summary": "Краткое содержание"
   },
   "en": "English",
   "litematica_generator": {
-    "description": "Generate Litematica files online from Reden projects, e.g. World Eaters",
-    "download": "Download",
-    "download_count": "{count} downloads",
-    "not_logged_in": "Guest users can only generate 5 times per minute, please log in to unlock this limit",
-    "select": "What do you want to generate today?",
-    "size_description": "The size of the machine in x, y, z. for world eaters, the z size is the distance between the starting side and the returning side.",
-    "size_max": "The maximum size of the machine is {size}",
-    "size_min": "The minimum size of the machine is {size}",
-    "size_mod": "The size divided by {mod} must leave {rem}",
-    "size_x": "Size in x",
-    "size_y": "Size in y",
-    "size_z": "Size in z",
-    "title": "Litematica Online Generator"
+    "chunks": "чанки",
+    "contribute": "Хотите, чтобы ваши собственные машины, такие как пожиратели мира, были собраны здесь? Присоединяйтесь к Reden сейчас! Для получения дополнительной информации, пожалуйста, напишите мне по адресу",
+    "description": "Создавайте файлы Litematica онлайн для механизмов из слизи и технических механизмов Minecraft, например, пожиратели мира, туннельные буры и т.д. Эта услуга совершенно бесплатна.",
+    "download": "Скачать",
+    "download_count": "{count} загрузок",
+    "not_found": "Litematica {name} не найдена!",
+    "not_logged_in": "Гостевые пользователи могут генерировать только 5 раз в минуту, пожалуйста, войдите, чтобы снять это ограничение",
+    "og_description": "Создавайте удивительные редстоун / слизевые механизмы онлайн, такие как пожиратели мира или туннельные буры, любого размера чанков!",
+    "select": "Что вы хотите сгенерировать сегодня?",
+    "size_description": "Размер машины в x, y, z. Для пожирателей мира размер z - это расстояние между начальной и обратной стороной.",
+    "size_max": "Максимальный размер машины {size}",
+    "size_min": "Минимальный размер машины {size}",
+    "size_mod": "Размер, деленный на {mod}, должен давать остаток {rem}",
+    "size_x": "Размер по x",
+    "size_y": "Размер по y",
+    "size_z": "Размер по z",
+    "suggested_values": "Предлагаемые значения: ",
+    "suggestion_notice": "Эти предлагаемые значения приведены только для справки",
+    "title": "Онлайн генератор Litematica",
+    "total_downloads": "Всего мы предоставили {0} загрузок.",
+    "upload": {
+      "button_msg": "Загрузить новый дизайн",
+      "edit_or_improve_translation": "Редактировать или улучшить перевод"
+    },
+    "view_all_designs": "Посмотреть все дизайны",
+    "web_title": "Сгенерировать {name} онлайн - Reden Litematica Generator"
   },
   "login": {
     "button": {
-      "captcha": "Please complete the captcha first",
-      "login": "Login"
+      "captcha": "Пожалуйста, сначала пройдите капчу",
+      "login": "Войти"
     },
-    "forgot_password": "Forgot Password?",
-    "oauth": "Or login with",
-    "or": "Or",
-    "register": "Register",
-    "title": "Login to Reden"
+    "forgot_password": "Забыли пароль?",
+    "oauth": "Или войти с помощью",
+    "or": "Или",
+    "register": "Зарегистрироваться",
+    "title": "Вход в Reden"
+  },
+  "page404": {
+    "back": "Вернуться назад",
+    "evolving": "Страница, которую вы искали, не существует, сайт все еще развивается.",
+    "help": "Помогите построить наш сайт!",
+    "title": "Страница не найдена"
+  },
+  "profile": {
+    "edit": {
+      "back": "Вернуться в свой профиль",
+      "basic_information": "Основная информация",
+      "bio": "Биография",
+      "bio_desc": "Представление о себе.",
+      "changeEmail": "Изменить Email",
+      "email_desc": "Это адрес электронной почты, который вы использовали для регистрации и получения наших уведомлений о безопасности, например, для сброса пароля.",
+      "failed_to_save_information": "Не удалось сохранить информацию",
+      "information_saved": "Информация сохранена",
+      "password": {
+        "changePassword": "Изменить пароль",
+        "confirm": "Подтвердить новый пароль",
+        "desc": "Вы можете изменить свой пароль здесь.",
+        "first": "Это ваш первый вход, пожалуйста, измените свой пароль как можно скорее.",
+        "mew": "Новый пароль",
+        "old": "Старый пароль",
+        "passwordsDoNotMatch": "Пароли не совпадают",
+        "requirements": "Пароль должен содержать не менее 8 символов, включая буквы и цифры",
+        "title": "Пароль"
+      },
+      "preference": {
+        "pronouns": "Местоимения",
+        "pronouns_desc": "Ваши местоимения.",
+        "showEmail": "Показывать Email",
+        "show_email_desc": "Показывать ли ваш адрес электронной почты другим пользователям.",
+        "show_github": "Показывать Github",
+        "show_github_desc": "Показывать ли ваш GitHub другим пользователям.",
+        "show_minecraft_uuid": "Показывать аккаунт Minecraft",
+        "show_minecraft_uuid_desc": "Показывать ли ваш UUID Minecraft другим пользователям.",
+        "show_timezone": "Показывать часовой пояс",
+        "show_timezone_desc": "Показывать ли ваш часовой пояс другим пользователям.",
+        "timezone": "Часовой пояс",
+        "timezone_desc": "Ваш часовой пояс."
+      },
+      "preferences": "Настройки",
+      "preferencesSaved": "Настройки сохранены",
+      "save": "Сохранить",
+      "save_preferences": "Сохранить настройки",
+      "success": "Успех",
+      "third_party_accounts": "Сторонние аккаунты",
+      "username": "Имя пользователя",
+      "username_desc": "Это имя пользователя, которое вы используете для входа. Вы можете изменить его один раз в 48 часов.",
+      "username_timer": "Вы можете снова изменить свое имя пользователя через {0} часов"
+    },
+    "editProfile": "Редактировать профиль",
+    "my_backup": "Мои облачные резервные копии",
+    "oauth": {
+      "link_account": "Привязать аккаунт",
+      "unlink_account": "Отвязать аккаунт"
+    },
+    "password": "Пароль",
+    "username": "Имя пользователя"
   },
   "reden": {
-    "description": "Provide a one-stop working environment for redstone developers and become the best redstone debugging and teaching tool.",
-    "download": "Download",
+    "description": "Предоставьте универсальную рабочую среду для разработчиков редстоуна и станьте лучшим инструментом для отладки и обучения редстоуну.",
+    "download": "Скачать",
     "download_page": {
-      "sorry_constructing": "Sorry, our download page is under construction, we suggest you to download at"
+      "sorry_constructing": "Извините, наша страница загрузки находится в разработке, мы предлагаем вам скачать по адресу"
     },
     "footer": {
       "follow_us": {
         "bilibili": "Bilibili",
-        "blog": "Blog",
-        "title": "Follow Us",
+        "blog": "Блог",
+        "title": "Следите за нами",
         "youtube": "Youtube"
       },
       "reden_community": {
-        "community_events": "Community Events",
-        "community_guidelines": "Community Guidelines",
+        "community_events": "События сообщества",
+        "community_guidelines": "Руководство сообщества",
         "discord": "Discord",
-        "title": "Reden Community"
+        "title": "Сообщество Reden"
       },
       "reden_ecosystem": {
         "github_organization": "Github Organization",
-        "sponsors": "Sponsors",
-        "title": "Reden Ecosystem",
+        "sponsors": "Спонсоры",
+        "title": "Экосистема Reden",
         "wiki": "Reden Wiki"
       },
       "reden_mod": {
-        "debugger": "Reden Debugger",
-        "rvc": "Reden Version Control",
-        "title": "Reden Mod",
-        "undo_redo": "Undo & Redo"
+        "debugger": "Отладчик Reden",
+        "rvc": "Система контроля версий Reden",
+        "title": "Мод Reden",
+        "undo_redo": "Отмена и повтор"
+      },
+      "social": {
+        "title": "Социальные сети"
       }
     },
     "home": {
       "community_intro": {
-        "discord": "Join our Discord server to chat with other redstone developers and get help from the community.",
-        "open_source": "Reden is an open-source project and free for everyone. We welcome everyone to contribute to Reden including code, documentation, wiki, and more.",
-        "sponsor": "Reden is sponsored by the community. We appreciate every sponsor who supports us.",
-        "title": "Community",
-        "wiki": "Reden Wiki contains almost everything you need to know about redstone ans Reden. It is also a great place to share your knowledge with the community."
+        "discord": "Присоединяйтесь к нашему Discord-серверу, чтобы общаться с другими разработчиками редстоуна и получать помощь от сообщества.",
+        "open_source": "Reden - это проект с открытым исходным кодом и бесплатный для всех. Мы приветствуем всех, кто хочет внести свой вклад в Reden, включая код, документацию, вики и многое другое.",
+        "sponsor": "Reden спонсируется сообществом. Мы ценим каждого спонсора, который нас поддерживает.",
+        "title": "Сообщество",
+        "wiki": "Reden Wiki содержит почти все, что вам нужно знать о редстоуне и Reden. Это также отличное место, чтобы поделиться своими знаниями с сообществом."
       },
       "feature_intro": {
-        "debugger": "Can't figure out why your redstone contraption isn't working? Reden Debugger can help you see how the game exactly processes your redstone contraption.",
-        "rvc": "RVC (Reden Version Control) is a version control system designed for redstone. It allows you to manage your redstone projects in all versions with ease.",
-        "title": "Features",
-        "undo": "Made a mistake? Reden can quickly undo your actions by just pressing Ctrl+Z. All chain reactions will be undone."
+        "debugger": "Не можете понять, почему ваш редстоун-механизм не работает? Отладчик Reden может помочь вам увидеть, как игра обрабатывает ваш редстоун-механизм.",
+        "rvc": "RVC (Система контроля версий Reden) - это система контроля версий, разработанная для редстоуна. Она позволяет вам с легкостью управлять своими редстоун-проектами во всех версиях.",
+        "title": "Функции",
+        "undo": "Совершили ошибку? Reden может быстро отменить ваши действия, просто нажав Ctrl+Z. Все цепные реакции будут отменены."
       }
     },
-    "learn_more": "Learn More",
-    "my_account": "My Account",
+    "learn_more": "Узнать больше",
+    "my_account": "Мой аккаунт",
     "title": {
-      "debugger": "Reden Debugger",
-      "download": "Download",
-      "edit_profile": "Edit Profile",
-      "home": "Home",
-      "my_account": "My Account",
+      "404": "404 Не найдено",
+      "debugger": "Отладчик Reden",
+      "download": "Скачать",
+      "edit_profile": "Редактировать профиль",
+      "features": "Функции",
+      "home": "Главная страница",
+      "home_full": "Главная страница - Лучший технический мод для Minecraft",
+      "my_account": "Мой аккаунт",
       "rvc": "RVC",
-      "undo": "Undo"
+      "undo": "Отменить"
     },
+    "user_not_found": "Пользователь не найден",
     "wiki": "Wiki"
   },
   "register": {
     "button": {
-      "captcha": "Please complete the captcha first",
-      "done": "Done",
-      "register": "Register"
+      "captcha": "Пожалуйста, сначала пройдите капчу",
+      "done": "Готово",
+      "register": "Зарегистрироваться"
     },
     "email_verification": {
-      "message": "We have sent an email to {email} with a link to complete your registration. If you don't see the email, please check other places it might be, like your junk, spam, social, or other folders.",
-      "title": "One more step"
+      "message": "Мы отправили письмо на адрес {email} со ссылкой для завершения регистрации. Если вы не видите письмо, пожалуйста, проверьте другие места, где оно может быть, например, спам, социальные сети или другие папки.",
+      "title": "Еще один шаг"
     },
-    "existing": "Already have an account?",
+    "existing": "Уже есть аккаунт?",
     "invalid": {
-      "email": "Invalid email address.",
+      "email": "Неверный адрес электронной почты.",
       "password": {
-        "mismatching": "Passwords do not match",
-        "strength": "Password is not strong enough, please use at least 8 characters, including uppercase, lowercase and numbers."
+        "mismatching": "Пароли не совпадают",
+        "strength": "Пароль недостаточно надежный, пожалуйста, используйте не менее 8 символов, включая заглавные и строчные буквы и цифры."
       },
-      "username": "Invalid Username."
+      "username": "Неверное имя пользователя."
     },
-    "login": "Login",
-    "oauth": "Or register with: ",
+    "login": "Войти",
+    "oauth": "Или зарегистрироваться с помощью: ",
     "placeholder": {
-      "confirm": "Confirm Password",
+      "confirm": "Подтвердить пароль",
       "email": "Email",
-      "invitation_code": "Invitation Code (optional)",
-      "password": "Password",
-      "username": "Username"
+      "invitation_code": "Код приглашения (необязательно)",
+      "password": "Пароль",
+      "username": "Имя пользователя"
     },
-    "title": "Register to Reden",
+    "title": "Регистрация в Reden",
     "toast": {
       "error": {
-        "unknown": "Unknown error"
+        "unknown": "Неизвестная ошибка"
       },
-      "failed": "Failed to register",
+      "failed": "Не удалось зарегистрироваться",
       "successful": {
-        "message": "Please check your email to complete the registration",
-        "title": "Register Successful"
+        "message": "Пожалуйста, проверьте свою электронную почту, чтобы завершить регистрацию",
+        "title": "Регистрация прошла успешно"
       },
-      "try": "Please try again later"
+      "try": "Пожалуйста, попробуйте позже"
     }
   },
   "search": {
-    "hover": "Search Reden Features"
+    "hover": "Поиск функций Reden"
   },
   "sponsors": {
-    "alipay": "Support us with Alipay",
-    "badge": "You can get this Sponsor badge by supporting us, and it will be displayed on your profile.",
-    "description": "Reden is supported by you, and we are sincerely grateful to every sponsor.",
-    "notice": "Reden is an open-source project and always free for everyone. We receive no funding from any company or organization. We rely on your support to keep the project running. When you support us, you will be listed here as a sponsor so please make sure you provide your name and email address when you donate. Thank you for your support!",
-    "paypal": "Support us with PayPal",
-    "title": "Sponsors"
+    "alipay": "Поддержите нас через Alipay",
+    "badge": "Вы можете получить этот значок спонсора, поддержав нас, и он будет отображаться в вашем профиле.",
+    "description": "Reden поддерживается вами, и мы искренне благодарны каждому спонсору.",
+    "notice": "Reden - это проект с открытым исходным кодом и всегда бесплатный для всех. Мы не получаем финансирования ни от какой компании или организации. Мы полагаемся на вашу поддержку, чтобы поддерживать проект в рабочем состоянии. Когда вы поддерживаете нас, вы будете указаны здесь в качестве спонсора, поэтому, пожалуйста, убедитесь, что вы указали свое имя и адрес электронной почты при пожертвовании. Спасибо за вашу поддержку!",
+    "paypal": "Поддержите нас через PayPal",
+    "title": "Спонсоры"
+  },
+  "upload": {
+    "btn": {
+      "finish_editing": "Завершить редактирование",
+      "select_files": "Выбрать файлы",
+      "start_uploading": "Завершить и загрузить",
+      "upload_design": "Загрузить дизайн"
+    },
+    "desc": {
+      "design_maximal_file_size": "Максимальный размер файла: 100 МБ",
+      "design_supports_file_formats": "Поддерживаемые форматы файлов: .litematica .schem .zip и т. д.",
+      "existing_machine_design": "Вы редактируете существующий дизайн машины.\n Загрузка нового файла перезапишет существующий.",
+      "id_can_only_contain": "ID может содержать только a-z, 0-9, - и _",
+      "id_is_taken": "ID занят, пожалуйста, выберите другой",
+      "litematica_generator_only_support_uploading_1_litematica_file": "Режим генератора Litematica поддерживает загрузку только 1 файла litematica",
+      "maximum_size_per_image": "Максимум 2 МБ на изображение",
+      "name_cannot_contain_special_characters": "Имя не может содержать специальные символы",
+      "please_contact_us_if_you_have_any_questions": "Пожалуйста, свяжитесь с нами, если у вас есть какие-либо вопросы:",
+      "please_select_which_language_to_edit": "Пожалуйста, выберите, какой язык редактировать",
+      "review_usually_takes_one_to_two_days": "Проверка обычно занимает один-два дня.",
+      "selected_count_files": "Выбрано {count} файлов",
+      "upload_images": "Загрузить изображения (до 3)",
+      "upload_schematic_or_world_save": "Загрузить схему или сохранение мира.",
+      "you_will_receive_an_email_notification_when_approved": "Вы получите уведомление по электронной почте, когда дизайн будет одобрен.",
+      "your_machine_design_is_under_review_please_wait_with_patience": "Ваш дизайн машины находится на рассмотрении, пожалуйста, подождите с терпением."
+    },
+    "step": {
+      "image": "Изображения",
+      "translation": "Информация",
+      "under-review": "На рассмотрении",
+      "upload": "Загрузить"
+    }
   },
   "user": {
-    "contributor": "Contributor",
-    "contributor_hover": "This user has contributed to this project",
-    "developer": "Developer",
-    "developer_hover": "This user is an active developer of this project",
-    "sponsor": "Sponsor",
-    "sponsor_hover": "This user has sponsored this project",
-    "staff": "Staff",
-    "staff_hover": "This user is a staff member of this project"
+    "contributor": "Участник",
+    "contributor_hover": "Этот пользователь внес вклад в этот проект",
+    "developer": "Разработчик",
+    "developer_hover": "Этот пользователь является активным разработчиком этого проекта",
+    "sponsor": "Спонсор",
+    "sponsor_hover": "Этот пользователь спонсировал этот проект",
+    "staff": "Сотрудник",
+    "staff_hover": "Этот пользователь является сотрудником этого проекта"
   },
-  "zh_cn": "简体中文(中国大陆)",
-  "zh_tw": "繁體中文(中國台灣)"
+  "zh_cn": "简体中文",
+  "zh_tw": "繁體中文"
 }

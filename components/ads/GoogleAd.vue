@@ -25,7 +25,6 @@ onMounted(() => {
   let ok = false;
   console.log('onMounted', ins.value);
   interval = setInterval(() => {
-    console.log('interval', ins.value);
     if (window.adsbygoogle && ins.value) {
       ok = true;
       clearInterval(interval);
