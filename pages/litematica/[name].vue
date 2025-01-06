@@ -4,7 +4,7 @@ import { useAppStore } from '~/store/app';
 import { type SubmitEventPromise, useDisplay } from 'vuetify';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
-import SizeInput from '~/components/yisibite/SizeInput.vue';
+import SizeInput from '~/components/litematica/SizeInput.vue';
 import 'assets/main.css';
 import type {
   ListLitematicaResponse,
@@ -31,14 +31,14 @@ const { data: localizedData } = useNuxtData<Record<string, MachineDef>>(
 );
 
 const { data: serverResponse } = useNuxtData<ListLitematicaResponse>(
-  `generators${locale.value}`,
+  `generators-${machineId}-${locale.value}`,
 );
 
 if (!serverResponse.value) {
   const { data, status, error } = await useFetch<ListLitematicaResponse>(
-    `/api/mc-services/yisibite/?lang=${locale.value}`,
+    `/api/mc-services/yisibite/${machineId}/info/${locale.value}`,
     {
-      key: `generators${locale.value}`,
+      key: `generators-${machineId}-${locale.value}`,
     },
   );
   serverResponse.value = data.value;

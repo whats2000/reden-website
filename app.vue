@@ -19,7 +19,11 @@
 import { getGlobalThis } from '@vue/shared';
 
 onMounted(() => {
-  if (document.referrer && !document.referrer.includes('redenmc.com')) {
+  if (
+    import.meta.env.PROD &&
+    document.referrer &&
+    !document.referrer.includes('redenmc.com')
+  ) {
     console.log('Referrer:', document.referrer);
     doFetchPost('/api/log/referrer', document.referrer || '');
   }

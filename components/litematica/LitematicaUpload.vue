@@ -238,7 +238,7 @@ function delay(ms: number) {
 
 async function uploadLocalizedData() {
   uploadingLocalizedData.value = true;
-  await delay(2000);
+  await delay(500);
   uploadingLocalizedData.value = false;
   state.value = 'image';
 }
@@ -288,7 +288,11 @@ watch(props, refreshProps);
               type="file"
               @change="handleFileChange"
             />
-            <v-btn class="mt-4" color="primary" @click="fileInput?.click()">
+            <v-btn
+              class="mt-4 text-capitalize"
+              color="primary"
+              @click="fileInput?.click()"
+            >
               {{ $t('upload.btn.select_files') }}
             </v-btn>
             <p v-if="selectedFiles.length > 0" class="line-h-24">
@@ -474,7 +478,7 @@ watch(props, refreshProps);
               @change="handlePictureChange"
             />
             <v-btn
-              class="mt-4 mx-4"
+              class="mt-4 mx-4 text-capitalize"
               color="primary"
               @click="triggerPictureInput"
             >

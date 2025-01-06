@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import MinecraftFarmCard from '~/components/yisibite/MinecraftFarmCard.vue';
+import MinecraftFarmCard from '~/components/litematica/MinecraftFarmCard.vue';
 import { useDisplay } from 'vuetify';
 import SidebarAd from '~/components/ads/SidebarAd.vue';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
@@ -153,16 +153,6 @@ const { mdAndUp } = useDisplay({
       <div v-if="mdAndUp" style="width: 150px" />
       <div class="content-common" style="max-width: 970px">
         <template v-if="locale === 'zh_cn'">
-          <v-btn
-            :to="localePath('/litematica/old')"
-            class="mb-4 mr-4"
-            color="primary"
-            prepend-icon="mdi-arrow-left"
-            rounded="lg"
-            variant="outlined"
-          >
-            回到旧版生成器
-          </v-btn>
           <v-btn
             class="mb-4 mr-4"
             color="primary"

@@ -32,13 +32,11 @@ onPrehydrate(() => {
   };
   const themeCookie =
     document.cookie
-      .split(';')
-      .find((cookie) => {
-        return cookie.includes('theme=');
-      })
+      ?.split(';')
+      ?.find((cookie) => cookie.includes('theme='))
       ?.replace('theme=', '')
       ?.replace(' ', '') || 'light';
-  console.log('onPrehydrate', document.cookie, themeCookie);
+  console.log('onPreHydrate', document.cookie, themeCookie);
   // set body background color
   document.body.style.backgroundColor = background[themeCookie];
 });
