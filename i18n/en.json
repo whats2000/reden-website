@@ -35,6 +35,7 @@
   },
   "also_try_our_other_online_services:": "Also try our other online services:",
   "common": {
+    "and": "and",
     "back": "Back",
     "description": "Description",
     "name": "Name",
@@ -149,6 +150,7 @@
       "sorry_constructing": "Sorry, our download page is under construction, we suggest you to download at"
     },
     "footer": {
+      "are_both_free_software": "are both free software.",
       "follow_us": {
         "bilibili": "Bilibili",
         "blog": "Blog",
@@ -175,7 +177,8 @@
       },
       "social": {
         "title": "Social"
-      }
+      },
+      "this_website": "this website"
     },
     "home": {
       "community_intro": {
@@ -250,6 +253,7 @@
       "try": "Please try again later"
     }
   },
+  "ru": "Русский",
   "search": {
     "hover": "Search Reden Features"
   },

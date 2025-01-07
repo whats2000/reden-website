@@ -35,6 +35,7 @@
   },
   "also_try_our_other_online_services:": "快来试试我们的其他在线服务：",
   "common": {
+    "and": "和",
     "back": "返回",
     "description": "介绍",
     "name": "名称",
@@ -149,6 +150,7 @@
       "sorry_constructing": "抱歉，我们的下载页面正在建设中，我们建议您前往此处下载："
     },
     "footer": {
+      "are_both_free_software": "都是自由开源软件。",
       "follow_us": {
         "bilibili": "哔哩哔哩",
         "blog": "博客",
@@ -175,7 +177,8 @@
       },
       "social": {
         "title": "社群媒体"
-      }
+      },
+      "this_website": "这个网站"
     },
     "home": {
       "community_intro": {
@@ -250,6 +253,7 @@
       "try": "请稍后再试"
     }
   },
+  "ru": "Русский",
   "search": {
     "hover": "搜索 Reden 功能"
   },

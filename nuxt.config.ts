@@ -39,6 +39,7 @@ export default defineNuxtConfig({
       { code: 'en', language: 'en' },
       { code: 'zh_cn', language: 'zh-CN' },
       { code: 'zh_tw', language: 'zh-TW' },
+      { code: 'ru', language: 'ru' },
     ],
     detectBrowserLanguage: {
       useCookie: true,

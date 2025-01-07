@@ -125,11 +125,11 @@ const { t, locale } = useI18n();
     <v-row class="">
       <v-col :cols="12" class="text-center">
         <reden-router :to="githubLink">Reden</reden-router>
-        and
+        {{ $t('common.and') }}
         <reden-router to="https://github.com/RedenMC/reden-website"
-          >this website
+          >{{ $t('reden.footer.this_website') }}
         </reden-router>
-        are both free software.
+        {{ $t('reden.footer.are_both_free_software') }}
         <br />
         {{ new Date().getFullYear() }} — <b>RedenMC</b>
       </v-col>
