@@ -1,18 +1,18 @@
-import { h } from 'vue';
+import { type DefineComponent, h } from 'vue';
 import type { IconSet, IconProps } from 'vuetify';
-import DiscordIcon from '@/plugins/icons/DiscordIcon.vue';
-import ModrinthFull from '@/plugins/icons/ModrinthFull.vue';
-import Bilibili from '@/plugins/icons/Bilibili.vue';
+import DiscordIcon from './DiscordIcon.vue';
+import ModrinthFull from './ModrinthFull.vue';
+import Bilibili from './Bilibili.vue';
+import QuarkCloud from './QuarkCloud.vue';
 
-const customSvgNameToComponent: Record<string, any> = {
+const customSvgNameToComponent: Record<string, DefineComponent<{}, {}, any>> = {
   DiscordIcon,
   ModrinthFull,
   Bilibili,
+  QuarkCloud,
 };
 
-const customSVGs: IconSet = {
+export const customSVGs: IconSet = {
   component: (props: IconProps) =>
     h(customSvgNameToComponent[props.icon as string]),
 };
-
-export { customSVGs /* aliases */ };

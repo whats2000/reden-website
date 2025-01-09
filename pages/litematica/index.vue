@@ -3,7 +3,6 @@ import MinecraftFarmCard from '~/components/litematica/MinecraftFarmCard.vue';
 import { useDisplay } from 'vuetify';
 import SidebarAd from '~/components/ads/SidebarAd.vue';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
-import BlockAd from '~/components/ads/BlockAd.vue';
 
 export type MachineDef = {
   name: string;
@@ -65,26 +64,38 @@ const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
   },
 );
 
-const items: (MachineDef | null)[] = [];
+const items: MachineDef[] = [];
 for (const [, def] of Object.entries(serverResponse.value?.d ?? {}).sort(
   ([, a], [, b]) => (b.downloads ?? 0) - (a.downloads ?? 0),
 )) {
   items.push(def);
 }
-// Add some null items to make the layout more interesting
-for (let i = 0; i < Math.ceil(items.length / 10); i++) {
-  items.splice(Math.floor(Math.random() * items.length), 0, null);
-}
 
 const isClient = import.meta.client;
 const notification = ref(true);
 const maintaining = false;
-const { mdAndUp } = useDisplay({
+const { mdAndUp, xs, sm, md } = useDisplay({
   mobileBreakpoint: 600,
+});
+const itemsPerRow = computed(() =>
+  xs.value ? 1 : sm.value || md.value ? 2 : 3,
+);
+const itemDisplay = computed(() => {
+  const rows: { def?: MachineDef[]; ad?: 'ad' }[] = [];
+  const rowCount = Math.ceil(items.length / itemsPerRow.value);
+  for (let i = 0; i < rowCount; i++) {
+    rows.push({
+      def: items.slice(i * itemsPerRow.value, (i + 1) * itemsPerRow.value),
+    });
+    if (i % 3 === 2) {
+      rows.push({ ad: 'ad' });
+    }
+  }
+  return rows;
 });
 </script>
 <template>
-  <v-container class="pa-4">
+  <v-container class="pa-4" style="max-width: max-content">
     <v-alert
       v-if="maintaining && isClient && notification"
       class="mb-3"
@@ -150,8 +161,11 @@ const { mdAndUp } = useDisplay({
       </template>
     </v-alert>
     <div class="w-100 d-flex flex-row justify-center">
-      <div v-if="mdAndUp" style="width: 150px" />
-      <div class="content-common" style="max-width: 970px">
+      <div v-if="mdAndUp" style="width: 150px">
+        <div data-some-item="aaa" />
+        <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
+      </div>
+      <div>
         <template v-if="locale === 'zh_cn'">
           <v-btn
             class="mb-4 mr-4"
@@ -201,20 +215,15 @@ const { mdAndUp } = useDisplay({
             </v-card>
           </v-dialog>
         </v-btn>
-        <v-row align="start" justify="center">
+        <v-row v-for="row in itemDisplay" align="start" justify="center">
+          <bottom-bar-ad v-if="row.ad" :height="300" />
           <v-col
-            v-for="item in items"
-            :key="item?.key || Math.random().toString()"
-            :class="{
-              'max-height-300': !item,
-            }"
-            lg="4"
-            md="6"
-            sm="6"
-            xs="12"
+            v-for="item in row.def"
+            v-else
+            :key="item.key"
+            :cols="12 / itemsPerRow"
           >
-            <MinecraftFarmCard v-if="item" :item="item" />
-            <BlockAd v-if="!item" />
+            <MinecraftFarmCard :item="item" />
           </v-col>
         </v-row>
         <div class="text-center v-card-subtitle w-100">
@@ -230,13 +239,6 @@ const { mdAndUp } = useDisplay({
         <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
       </div>
     </div>
-    <BottomBarAd />
+    <BottomBarAd :height="300" />
   </v-container>
 </template>
-
-<style scoped>
-.max-height-300 {
-  max-height: 300px !important;
-  height: 300px !important;
-}
-</style>

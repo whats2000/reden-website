@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useElementHover } from '@vueuse/core';
-import { number2text, type Profile, timeSince } from '@/utils/constants';
+import { number2text, timeSince } from '@/utils/constants';
 import { useDisplay } from 'vuetify';
 import type { MachineDef } from '~/pages/litematica/index.vue';
 defineProps<{
@@ -125,5 +125,19 @@ const localePath = useLocalePath();
   top: 0;
   height: 100%;
   width: 100%;
+}
+
+.v-card {
+  background-image: linear-gradient(
+    160deg,
+    white 0%,
+    rgba(201, 224, 237, 0.42) 80%
+  );
+  /*background-image: radial-gradient(
+    circle,
+    #66ccff 0%,
+    #79d2f2 47%,
+    #8cd8e5 100%
+  );*/
 }
 </style>

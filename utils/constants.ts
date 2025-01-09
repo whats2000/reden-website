@@ -432,4 +432,10 @@ export const badgeDefs: { [keys: string]: BadgeDef } = {
     icon: 'mdi-account-heart',
     url: '/sponsors',
   },
+  'no-quark': {
+    color: 'cyan',
+    translate: '',
+    hover_translate: '已禁用夸克网盘',
+    icon: 'custom:QuarkCloud',
+  },
 };
