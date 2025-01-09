@@ -130,14 +130,9 @@ const localePath = useLocalePath();
 .v-card {
   background-image: linear-gradient(
     160deg,
-    white 0%,
-    rgba(201, 224, 237, 0.42) 80%
+    rgb(var(--v-theme-background)) 0%,
+    rgba(0, 130, 193, 0.07) 30%,
+    rgba(0, 130, 193, 0.17) 90%
   );
-  /*background-image: radial-gradient(
-    circle,
-    #66ccff 0%,
-    #79d2f2 47%,
-    #8cd8e5 100%
-  );*/
 }
 </style>
