@@ -2,8 +2,9 @@
 import { useElementHover } from '@vueuse/core';
 import { number2text, timeSince } from '@/utils/constants';
 import { useDisplay } from 'vuetify';
-import type { MachineDef } from '~/pages/litematica/index.vue';
-defineProps<{
+import type { MachineDef, Tag } from '~/pages/litematica/index.vue';
+
+const props = defineProps<{
   item: Partial<MachineDef>;
 }>();
 const { mobile: _mobile } = useDisplay({
@@ -14,6 +15,12 @@ const mobile = computed(() => (import.meta.server ? false : _mobile.value));
 const card = useTemplateRef<Element>('card');
 const isHovering = useElementHover(card);
 const localePath = useLocalePath();
+const tags = computed(
+  () =>
+    [props.item.categoryTag, ...(props.item.featureTags || [])].filter(
+      (tag) => tag,
+    ) as Tag[],
+);
 </script>
 <template>
   <v-card
@@ -45,12 +52,35 @@ const localePath = useLocalePath();
         </v-avatar>
         {{ item.author?.username }}
         <v-spacer />
-        <span v-if="mobile" class="stat-line">
-          <v-icon size="18">mdi-download-outline</v-icon>
-          {{ item.downloads }}
-        </span>
+        <template v-if="mobile">
+          <v-chip
+            v-for="tag in tags"
+            :key="tag.tag"
+            :to="localePath(`/litematica?tag=${tag?.tag}`)"
+            class="tag-chip rounded-lg px-1"
+            color="primary"
+            :size="18"
+            :text="tag.name"
+          />
+          <span class="stat-line">
+            <v-icon :size="22" style="top: 2px">mdi-download-outline</v-icon>
+            {{ item.downloads }}
+          </span>
+        </template>
       </div>
     </v-card-subtitle>
+    <div class="mx-3" v-if="!mobile">
+      <v-chip-group>
+        <v-chip
+          v-for="tag in tags"
+          :key="tag.tag"
+          :to="localePath(`/litematica?tag=${tag?.tag}`)"
+          class="tag-chip"
+          color="primary"
+          :text="tag.name"
+        />
+      </v-chip-group>
+    </div>
 
     <v-card-text
       :class="{
@@ -103,6 +133,9 @@ const localePath = useLocalePath();
   min-height: 10px !important;
   font-size: 0.75rem;
   line-height: 24px;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
 }
 
 .card-title {

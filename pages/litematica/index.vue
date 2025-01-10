@@ -4,6 +4,12 @@ import { useDisplay } from 'vuetify';
 import SidebarAd from '~/components/ads/SidebarAd.vue';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
 
+export type Tag = {
+  tag: string;
+  name: string;
+  description: string;
+};
+
 export type MachineDef = {
   name: string;
   key: string;
@@ -18,6 +24,8 @@ export type MachineDef = {
   imageUrl?: string;
   updatedAt?: number;
   author?: Partial<Profile>;
+  categoryTag?: Tag;
+  featureTags?: Tag[];
 };
 
 const { t } = useI18n();
@@ -72,7 +80,7 @@ for (const [, def] of Object.entries(serverResponse.value?.d ?? {}).sort(
 }
 
 const isClient = import.meta.client;
-const notification = ref(true);
+const notification = ref(false);
 const maintaining = false;
 const { mdAndUp, xs, sm, md } = useDisplay({
   mobileBreakpoint: 600,
@@ -87,7 +95,7 @@ const itemDisplay = computed(() => {
     rows.push({
       def: items.slice(i * itemsPerRow.value, (i + 1) * itemsPerRow.value),
     });
-    if (i % 3 === 2) {
+    if (i % (6 / itemsPerRow.value) === 1) {
       rows.push({ ad: 'ad' });
     }
   }
