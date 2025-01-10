@@ -45,31 +45,17 @@ const selectedPictures = ref<File[]>([]);
 const imageUris = ref<string[]>([]);
 const pictureStepError = ref<string>();
 const machineId = ref<string>();
-const disallowedFilename = [
-  '\r',
-  '\n',
-  '/',
-  '\\',
-  '\u0000',
-  '\u000c',
-  '`',
-  '?',
-  '*',
-  '<',
-  '>',
-  '|',
-  ':',
-  "'",
-  '"',
-];
+const disallowedFilename = '\r\n/\\\u0000\u000c`?*<>|:\'"'.split('');
 const uploading = ref(false);
+const isLitematicaGenerator = ref(true);
 
 async function doUploadAll() {
   uploading.value = true;
   if (!props.editMode || selectedFiles.value.length > 0) {
     if (
-      selectedFiles.value.length != 1 ||
-      !selectedFiles.value[0].name.endsWith('.litematic')
+      isLitematicaGenerator.value &&
+      (selectedFiles.value.length != 1 ||
+        !selectedFiles.value[0].name.endsWith('.litematic'))
     ) {
       toast.error(
         t(
@@ -80,20 +66,19 @@ async function doUploadAll() {
         },
       );
       return;
+    }
+    const file = selectedFiles.value[0];
+    const response = await doFetchPut(
+      `/api/mc-services/yisibite/${machineId.value}`,
+      file,
+    );
+    if (response.ok) {
+      toast.success('File uploaded successfully');
+      await delay(1e3);
     } else {
-      const file = selectedFiles.value[0];
-      const response = await doFetchPut(
-        `/api/mc-services/yisibite/${machineId.value}`,
-        file,
-      );
-      if (response.ok) {
-        toast.success('File uploaded successfully');
-        await delay(1e3);
-      } else {
-        await toastError(response, 'Failed to upload file');
-        uploading.value = false;
-        return;
-      }
+      await toastError(response, 'Failed to upload file');
+      uploading.value = false;
+      return;
     }
   }
   for (const lang of availableLocales) {
@@ -117,6 +102,23 @@ async function doUploadAll() {
         uploading.value = false;
         return;
       }
+    }
+  }
+  if (selectedPictures.value.length > 0) {
+    const formData = new FormData();
+    for (const file of selectedPictures.value) {
+      formData.append('image', file);
+    }
+    const response = await doFetchPut(
+      `/api/mc-services/yisibite/${machineId.value}/thumbnails`,
+      formData,
+    );
+    if (response.ok) {
+      toast.success('Images uploaded successfully');
+    } else {
+      await toastError(response, 'Failed to upload images');
+      uploading.value = false;
+      return;
     }
   }
   emit('update:machine', localizedData.value);
