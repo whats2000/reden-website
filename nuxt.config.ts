@@ -13,6 +13,10 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@nuxtjs/sitemap',
     '@nuxt/content',
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/color-mode',
+    'nuxt-icon',
+    '@nuxthq/studio',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error
@@ -20,10 +24,20 @@ export default defineNuxtConfig({
       });
     },
   ],
+  colorMode: {
+    classSuffix: '',
+  },
   content: {
     experimental: {
       search: {
         indexed: true,
+      },
+    },
+    highlight: {
+      // See the available themes on https://github.com/shikijs/shiki/blob/main/docs/themes.md#all-theme
+      theme: {
+        dark: 'github-dark',
+        default: 'github-light',
       },
     },
     api: {

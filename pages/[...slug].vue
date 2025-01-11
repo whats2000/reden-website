@@ -1,5 +1,7 @@
 <script lang="ts" setup></script>
 
 <template>
-  <ContentDoc> </ContentDoc>
+  <NuxtLayout name="doc">
+    <ContentDoc> </ContentDoc>
+  </NuxtLayout>
 </template>

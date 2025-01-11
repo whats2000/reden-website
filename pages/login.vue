@@ -130,9 +130,9 @@ function login() {
         }}</reden-router>
       </span>
 
-      <h1>
+      <h2>
         {{ $t('login.oauth') }}
-      </h1>
+      </h2>
 
       <v-row>
         <v-col>

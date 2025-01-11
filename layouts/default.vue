@@ -4,7 +4,7 @@ import { onMounted } from 'vue';
 import { useTheme } from 'vuetify';
 import { useAppStore } from '~/store/app';
 import '@/assets/main.css';
-import type { I18nHeadMetaInfo } from '@nuxtjs/i18n';
+import { localeToIso } from '~/i18n.config';
 
 const themeCookie = useCookie<'light' | 'dark'>('theme', {
   default: () => 'light',
@@ -12,6 +12,7 @@ const themeCookie = useCookie<'light' | 'dark'>('theme', {
 
 const theme = useTheme();
 const appStore = useAppStore();
+const switchLocalePath = useSwitchLocalePath();
 appStore.theme = themeCookie.value;
 onMounted(() => {
   const colors: Record<string, string> =
@@ -51,34 +52,24 @@ function toggleTheme() {
   appStore.save();
 }
 
-const i18nHead: Ref<I18nHeadMetaInfo> = useLocaleHead({
-  seo: { canonicalQueries: [''] },
-});
-watch(i18nHead, (value) => {
-  console.log('i18nHead', value);
-});
+const { locale } = useI18n();
 </script>
 
 <template>
-  <Html :lang="i18nHead.htmlAttrs?.lang">
+  <Html :lang="localeToIso[locale]">
     <Head>
-      <template v-for="link in i18nHead.link" :key="link.hid">
+      <template
+        v-for="[targetLocale, isoCode] in Object.entries(localeToIso)"
+        :key="isoCode"
+      >
         <Link
-          :id="link.hid"
-          :href="link.href"
-          :hreflang="link.hreflang"
-          :rel="link.rel"
-        />
-      </template>
-      <template v-for="meta in i18nHead.meta" :key="meta.hid">
-        <Meta
-          :id="meta.hid"
-          :content="meta.content"
-          :property="meta.property"
+          v-if="locale !== targetLocale"
+          :href="switchLocalePath(targetLocale)"
+          :hreflang="isoCode"
+          rel="alternate"
         />
       </template>
     </Head>
-    <!--    <Body :style="`background-color: ${currentTheme.colors.background}`" />-->
   </Html>
   <v-app :theme="appStore.theme">
     <layout-header>

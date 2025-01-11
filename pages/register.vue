@@ -154,9 +154,9 @@ function register(e: SubmitEventPromise) {
         }}
       </v-btn>
 
-      <h1>
+      <h2>
         {{ $t('register.oauth') }}
-      </h1>
+      </h2>
       <v-btn
         color="blue"
         href="/api/oauth/microsoft"
