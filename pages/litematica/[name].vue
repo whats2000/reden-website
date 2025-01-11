@@ -97,9 +97,16 @@ const generators = computed<Record<string, Machine>>(() => {
 async function submit(e: SubmitEventPromise) {
   if ((await e).valid) {
     // open a new window to download
-    window.open(
-      `/api/mc-services/yisibite/${machineId}?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
-    );
+    if (selected.value.type == 'LitematicaGen') {
+      window.open(
+        `/api/mc-services/yisibite/${machineId}?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
+      );
+    } else if (
+      selected.value.type == 'LitematicaShare' &&
+      selected.value.attachments?.length
+    ) {
+      window.open(`/api/mc-services/yisibite/${machineId}/download/1`);
+    }
     setTimeout(() => {
       refreshNuxtData();
     }, 1000);
@@ -265,7 +272,7 @@ const tab = ref(
       </v-col>
       <v-col
         v-if="selected?.description"
-        class="overflow-hidden"
+        class="overflow-hidden description"
         cols="12"
         v-html="selected.description"
       />
@@ -377,5 +384,9 @@ p {
   width: 100%;
   height: 100%;
   border-width: 0;
+}
+
+.description {
+  white-space: pre-wrap;
 }
 </style>

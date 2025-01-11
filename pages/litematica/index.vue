@@ -11,6 +11,7 @@ export type Tag = {
 };
 
 export type MachineDef = {
+  type: 'LitematicaGen' | 'LitematicaShare';
   name: string;
   key: string;
   downloads?: number;
@@ -26,6 +27,7 @@ export type MachineDef = {
   author?: Partial<Profile>;
   categoryTag?: Tag;
   featureTags?: Tag[];
+  attachments?: string[];
 };
 
 const { t } = useI18n();
@@ -99,7 +101,7 @@ const items = computed<MachineDef[]>(() => {
 const isClient = import.meta.client;
 const notification = ref(false);
 const maintaining = false;
-const { mdAndUp, xs, sm, md } = useDisplay({
+const { mdAndUp, xs, sm, md, width } = useDisplay({
   mobileBreakpoint: 600,
 });
 const itemsPerRow = computed(() =>
@@ -252,7 +254,7 @@ const itemDisplay = computed(() => {
           <v-pagination
             v-model="page"
             :length="(serverResponse?.count ?? 1000000) / 20"
-            :total-visible="7"
+            :total-visible="Math.min(8, width / 80 - 2)"
           />
         </v-row>
         <v-row v-for="row in itemDisplay" align="start" justify="center">
@@ -270,7 +272,7 @@ const itemDisplay = computed(() => {
           <v-pagination
             v-model="page"
             :length="(serverResponse?.count ?? 1000000) / 20"
-            :total-visible="7"
+            :total-visible="Math.min(8, width / 80 - 2)"
           />
         </v-row>
         <div class="text-center v-card-subtitle w-100 pt-2">
