@@ -3,6 +3,7 @@ import MinecraftFarmCard from '~/components/litematica/MinecraftFarmCard.vue';
 import { useDisplay, useGoTo } from 'vuetify';
 import SidebarAd from '~/components/ads/SidebarAd.vue';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
+import { useElementHover } from '@vueuse/core';
 
 export type Tag = {
   tag: string;
@@ -123,13 +124,18 @@ const itemDisplay = computed(() => {
   }
   return rows;
 });
+const ad = useTemplateRef<HTMLParagraphElement>('ad');
+const isHovering = useElementHover(ad);
 </script>
 <template>
-  <div class="w-100 text-center opacity-60">
-    广告位招租！
-    如果您想借助本站的流量推广您的服务器、VPS出租或任何其他服务，请在微信
-    Scanmenge 或 QQ 1284588550 联系我，注明来意。
-  </div>
+  <p ref="ad" class="w-100 text-center opacity-60">
+    <template v-if="isHovering">
+      广告位招租！<br />
+      如果您想借助本站的流量推广您的服务器、VPS出租或任何其他服务，请在微信
+      Scanmenge 或 QQ 1284588550 联系我，注明来意。
+    </template>
+    <template v-else>广告位招租！</template>
+  </p>
   <v-container class="pa-4" style="max-width: max-content">
     <v-alert
       v-if="maintaining && isClient && notification"
@@ -255,6 +261,8 @@ const itemDisplay = computed(() => {
             v-model="page"
             :length="(serverResponse?.count ?? 1000000) / 20"
             :total-visible="Math.min(8, width / 80 - 2)"
+            rounded="xl"
+            size="32"
           />
         </v-row>
         <v-row v-for="row in itemDisplay" align="start" justify="center">
@@ -273,9 +281,11 @@ const itemDisplay = computed(() => {
             v-model="page"
             :length="(serverResponse?.count ?? 1000000) / 20"
             :total-visible="Math.min(8, width / 80 - 2)"
+            rounded="xl"
+            size="32"
           />
         </v-row>
-        <div class="text-center v-card-subtitle w-100 pt-2">
+        <div class="text-center opacity-60 w-100 pt-2">
           {{
             $t('litematica_generator.total_downloads', [
               serverResponse?.downloads,

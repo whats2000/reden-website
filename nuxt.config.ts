@@ -88,6 +88,17 @@ export default defineNuxtConfig({
   },
   sitemap: {
     exclude: ['/secret/**', '/admin/**', '/api/**'],
+    urls: async () => {
+      const backendData: string[] = await (
+        await fetch(
+          'https://api.redenmc.com/api/mc-services/yisibite/all-internal',
+        )
+      ).json();
+      return backendData.map((id) => ({
+        loc: `/litematica/${id}`,
+        _i18nTransform: true,
+      }));
+    },
   },
   devServer: {
     host: '0.0.0.0',
