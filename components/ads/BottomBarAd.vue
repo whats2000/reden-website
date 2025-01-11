@@ -17,7 +17,7 @@ const props = defineProps({
       data-ad-format="fluid"
       data-ad-layout-key="-6t+ed+2i-1n-4w"
       data-ad-slot="5306364279"
-      :style="`width: 100%; height: ${height}px; max-height: ${height}px`"
+      :style="`width: 100%; height: ${height}px;`"
     />
   </google-ad>
 </template>
