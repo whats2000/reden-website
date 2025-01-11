@@ -52,6 +52,10 @@ const isLitematicaGenerator = ref(true);
 async function doUploadAll() {
   uploading.value = true;
   if (!props.editMode || selectedFiles.value.length > 0) {
+    if (selectedFiles.value.length > 3) {
+      toast.error('你最多只能上传3个文件');
+      return;
+    }
     if (
       isLitematicaGenerator.value &&
       (selectedFiles.value.length != 1 ||

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import MinecraftFarmCard from '~/components/litematica/MinecraftFarmCard.vue';
-import { useDisplay } from 'vuetify';
+import { useDisplay, useGoTo } from 'vuetify';
 import SidebarAd from '~/components/ads/SidebarAd.vue';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
 
@@ -36,11 +36,24 @@ useSeoMeta({
   ogDescription: t('litematica_generator.og_description'),
   ogImage: 'https://redenmc.com/reden_256.png',
 });
+const goto = useGoTo({});
 const localePath = useLocalePath();
 const router = useRouter();
 if (router.currentRoute.value.query.m) {
   router.push(localePath(`/litematica/${router.currentRoute.value.query.m}`));
 }
+const page = ref(1);
+if (router.currentRoute.value.query.page) {
+  page.value = Number(router.currentRoute.value.query.page);
+}
+watch(page, () => {
+  goto(0);
+  router.replace({
+    query: {
+      page: String(page.value),
+    },
+  });
+});
 
 export type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
@@ -62,7 +75,8 @@ export type ListLitematicaResponse = {
 const { locale } = useI18n();
 
 const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
-  `/api/mc-services/yisibite/?lang=${locale.value}`,
+  () =>
+    `/api/mc-services/yisibite/?lang=${locale.value}&page=${Math.round(page.value)}`,
   {
     dedupe: 'defer',
     key: `generators${locale.value}`,
@@ -72,12 +86,15 @@ const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
   },
 );
 
-const items: MachineDef[] = [];
-for (const [, def] of Object.entries(serverResponse.value?.d ?? {}).sort(
-  ([, a], [, b]) => (b.downloads ?? 0) - (a.downloads ?? 0),
-)) {
-  items.push(def);
-}
+const items = computed<MachineDef[]>(() => {
+  const items = [];
+  for (const [, def] of Object.entries(serverResponse.value?.d ?? {}).sort(
+    ([, a], [, b]) => (b.downloads ?? 0) - (a.downloads ?? 0),
+  )) {
+    items.push(def);
+  }
+  return items;
+});
 
 const isClient = import.meta.client;
 const notification = ref(false);
@@ -90,10 +107,13 @@ const itemsPerRow = computed(() =>
 );
 const itemDisplay = computed(() => {
   const rows: { def?: MachineDef[]; ad?: 'ad' }[] = [];
-  const rowCount = Math.ceil(items.length / itemsPerRow.value);
+  const rowCount = Math.ceil(items.value.length / itemsPerRow.value);
   for (let i = 0; i < rowCount; i++) {
     rows.push({
-      def: items.slice(i * itemsPerRow.value, (i + 1) * itemsPerRow.value),
+      def: items.value.slice(
+        i * itemsPerRow.value,
+        (i + 1) * itemsPerRow.value,
+      ),
     });
     if (i % (6 / itemsPerRow.value) === 1) {
       rows.push({ ad: 'ad' });
@@ -103,6 +123,11 @@ const itemDisplay = computed(() => {
 });
 </script>
 <template>
+  <div class="w-100 text-center opacity-60">
+    广告位招租！
+    如果您想借助本站的流量推广您的服务器、VPS出租或任何其他服务，请在微信
+    Scanmenge 或 QQ 1284588550 联系我，注明来意。
+  </div>
   <v-container class="pa-4" style="max-width: max-content">
     <v-alert
       v-if="maintaining && isClient && notification"
@@ -223,6 +248,13 @@ const itemDisplay = computed(() => {
             </v-card>
           </v-dialog>
         </v-btn>
+        <v-row justify="center">
+          <v-pagination
+            v-model="page"
+            :length="(serverResponse?.count ?? 1000000) / 20"
+            :total-visible="7"
+          />
+        </v-row>
         <v-row v-for="row in itemDisplay" align="start" justify="center">
           <bottom-bar-ad v-if="row.ad" :height="300" />
           <v-col
@@ -234,7 +266,14 @@ const itemDisplay = computed(() => {
             <MinecraftFarmCard :item="item" />
           </v-col>
         </v-row>
-        <div class="text-center v-card-subtitle w-100">
+        <v-row justify="center">
+          <v-pagination
+            v-model="page"
+            :length="(serverResponse?.count ?? 1000000) / 20"
+            :total-visible="7"
+          />
+        </v-row>
+        <div class="text-center v-card-subtitle w-100 pt-2">
           {{
             $t('litematica_generator.total_downloads', [
               serverResponse?.downloads,

@@ -14,7 +14,7 @@ import type {
 import { parseBVID } from '~/utils/constants';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
 import SidebarAd from '~/components/ads/SidebarAd.vue';
-import { parseCondition, type Condition } from '~/utils/conditionParser';
+import { type Condition, parseCondition } from '~/utils/conditionParser';
 
 const route = useRoute();
 const xSize = ref(0);
@@ -299,30 +299,25 @@ const tab = ref(
               :def="selected"
               xyz="z"
             />
-            <v-row>
-              <v-spacer />
-              <v-btn
-                :loading="loading"
-                class="ma-3"
-                color="primary"
-                type="button"
-                variant="outlined"
-                @click="openMaterials"
-              >
-                材料列表
-              </v-btn>
-              <v-btn
-                :loading="loading"
-                class="ma-3"
-                color="primary"
-                type="submit"
-              >
-                {{ $t('litematica_generator.download') }}
-              </v-btn>
-            </v-row>
           </v-card-text>
         </v-card>
       </v-col>
+    </v-row>
+    <v-row>
+      <v-spacer />
+      <v-btn
+        :loading="loading"
+        class="ma-3"
+        color="primary"
+        type="button"
+        variant="outlined"
+        @click="openMaterials"
+      >
+        材料列表
+      </v-btn>
+      <v-btn :loading="loading" class="ma-3" color="primary" type="submit">
+        {{ $t('litematica_generator.download') }}
+      </v-btn>
     </v-row>
     <v-row v-if="!useAppStore().logined" class="text-sm-body-1">
       <v-col>
