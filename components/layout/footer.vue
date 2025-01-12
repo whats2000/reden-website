@@ -90,8 +90,8 @@ const { t, locale } = useI18n();
           </reden-router>
         </div>
         <div class="footer-list-item">
-          <reden-router :to="localePath('/community-events')">
-            {{ $t('reden.footer.reden_community.community_events') }}
+          <reden-router :to="localePath('/dmca')">
+            {{ $t('reden.footer.reden_community.copyright_complaint') }}
           </reden-router>
         </div>
       </v-col>

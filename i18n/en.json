@@ -160,6 +160,7 @@
       "reden_community": {
         "community_events": "Community Events",
         "community_guidelines": "Community Guidelines",
+        "copyright_complaint": "Copyright Complaint",
         "discord": "Discord",
         "title": "Reden Community"
       },
@@ -200,6 +201,7 @@
     "my_account": "My Account",
     "title": {
       "404": "404 Not Found",
+      "copyright_complaint": "Copyright Complaint",
       "debugger": "Reden Debugger",
       "download": "Download",
       "edit_profile": "Edit Profile",
