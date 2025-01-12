@@ -45,7 +45,7 @@ const selectedPictures = ref<File[]>([]);
 const imageUris = ref<string[]>([]);
 const pictureStepError = ref<string>();
 const machineId = ref<string>();
-const disallowedFilename = '\r\n/\\\u0000\u000c`?*<>|:\'"'.split('');
+const disallowedFilename = '\r\n\\\u0000\u000c`?*<>|:\'"'.split(''); // allow '/'
 const uploading = ref(false);
 const isLitematicaGenerator = ref(true);
 

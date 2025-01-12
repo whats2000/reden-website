@@ -51,7 +51,11 @@ const tags = computed(
     <v-card-title class="card-title">{{ item.name }}</v-card-title>
     <v-card-subtitle class="opacity-100">
       <div class="d-flex flex-row author-line" style="line-height: 24px">
-        by
+        {{
+          item.original
+            ? $t('litematica_generator.by.author')
+            : $t('litematica_generator.by.uploader')
+        }}
         <v-avatar v-if="item.author?.avatarUrl" size="24">
           <v-img :src="item.author?.avatarUrl" />
         </v-avatar>
@@ -165,6 +169,7 @@ const tags = computed(
   width: 100%;
 }
 
+/*noinspection CssUnresolvedCustomProperty*/
 .v-card {
   background-image: linear-gradient(
     160deg,

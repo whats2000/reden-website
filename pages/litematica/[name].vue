@@ -217,7 +217,11 @@ const tab = ref(
       </h1>
     </v-row>
     <v-row justify="center" style="line-height: 32px">
-      by&nbsp;
+      {{
+        selected.original
+          ? $t('litematica_generator.by.author')
+          : $t('litematica_generator.by.uploader')
+      }}
       <!--suppress HtmlUnknownTarget -->
       <router-link
         v-if="selected.author"
@@ -238,6 +242,17 @@ const tab = ref(
         }}
       </v-chip>
     </v-row>
+    <div v-if="!selected.original" class="opacity-60 text-body-2 mx-auto mt-3">
+      <span class="text-amber-darken-1">
+        The uploader of this design is not the original author.
+      </span>
+      This design is uploaded<br />
+      a) because it has been published in public domain or<br />
+      b) imported from an archive discord or<br />
+      c) permitted by the original author.<br />
+      If you are the original author and want to claim this design, please
+      <a class="router" href="mailto:info@redenmc.com">contact us.</a>
+    </div>
     <v-row>
       <v-col v-if="tabs.length !== 0">
         <v-card>

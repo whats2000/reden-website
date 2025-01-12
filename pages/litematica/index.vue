@@ -29,6 +29,7 @@ export type MachineDef = {
   categoryTag?: Tag;
   featureTags?: Tag[];
   attachments?: string[];
+  original?: boolean;
 };
 
 const { t } = useI18n();
@@ -47,10 +48,14 @@ if (router.currentRoute.value.query.m) {
   router.push(localePath(`/litematica/${router.currentRoute.value.query.m}`));
 }
 const page = ref(1);
+const pageSize = ref(18);
+const totalPages = computed(() =>
+  Math.ceil((serverResponse.value?.count ?? 2006) / pageSize.value),
+);
 if (router.currentRoute.value.query.page) {
   page.value = Number(router.currentRoute.value.query.page);
 }
-watch(page, () => {
+watch([page, pageSize], () => {
   goto(0);
   router.replace({
     query: {
@@ -80,7 +85,7 @@ const { locale } = useI18n();
 
 const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
   () =>
-    `/api/mc-services/yisibite/?lang=${locale.value}&page=${Math.round(page.value)}`,
+    `/api/mc-services/yisibite/?lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}`,
   {
     dedupe: 'defer',
     key: `generators${locale.value}`,
@@ -127,9 +132,6 @@ const itemDisplay = computed(() => {
 });
 const ad = useTemplateRef<HTMLParagraphElement>('ad');
 const isHovering = useElementHover(ad);
-const totalPages = computed(
-  () => (serverResponse.value?.count ?? 24 * 2006) / 24,
-);
 </script>
 <template>
   <p ref="ad" class="w-100 text-center opacity-60">
