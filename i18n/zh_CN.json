@@ -47,7 +47,13 @@
   "litematica_generator": {
     "by": {
       "author": "作者",
-      "uploader": "上传者"
+      "complaint": "如果你是原作者，并希望获得此上传的所有权，请",
+      "reason_uploaded": "此机器上传是因为：",
+      "reason_uploaded_a": "a) 此作品已在公开领域发表；",
+      "reason_uploaded_b": "b) 从档案馆频道导入；",
+      "reason_uploaded_c": "c) 获得了原作者许可。",
+      "uploader": "上传者",
+      "uploader_not_original_author": "此设计的上传者并不是其作者。"
     },
     "chunks": "区块",
     "contribute": "想要你的机器（例如世界吞噬者）被收录在这里？现在就为 Reden 做出贡献！联系我请发送邮件至",

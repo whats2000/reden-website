@@ -244,13 +244,13 @@ const tab = ref(
     </v-row>
     <div v-if="!selected.original" class="opacity-60 text-body-2 mx-auto mt-3">
       <span class="text-amber-darken-1">
-        The uploader of this design is not the original author.
+        {{ $t('litematica_generator.by.uploader_not_original_author') }}
       </span>
-      This design is uploaded<br />
-      a) because it has been published in public domain or<br />
-      b) imported from an archive discord or<br />
-      c) permitted by the original author.<br />
-      If you are the original author and want to claim this design, please
+      {{ $t('litematica_generator.by.reason_uploaded') }}<br />
+      {{ $t('litematica_generator.by.reason_uploaded_a') }}<br />
+      {{ $t('litematica_generator.by.reason_uploaded_b') }}<br />
+      {{ $t('litematica_generator.by.reason_uploaded_c') }}<br />
+      {{ $t('litematica_generator.by.complaint') }}
       <a class="router" href="mailto:info@redenmc.com">contact us.</a>
     </div>
     <v-row>

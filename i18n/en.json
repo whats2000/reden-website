@@ -47,7 +47,13 @@
   "litematica_generator": {
     "by": {
       "author": "By",
-      "uploader": "Posted by"
+      "complaint": "If you are the original author and want to claim this design, please",
+      "reason_uploaded": "This design is uploaded",
+      "reason_uploaded_a": "a) because it has been published in public domain or",
+      "reason_uploaded_b": "b) imported from an archive discord or",
+      "reason_uploaded_c": "c) permitted by the original author.",
+      "uploader": "Posted by",
+      "uploader_not_original_author": "The uploader of this design is not the original author."
     },
     "chunks": "chunks",
     "contribute": "Want your own machines such as world eaters to be collected here? Contribute to Reden now! For more information please email me at",
