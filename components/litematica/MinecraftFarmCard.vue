@@ -6,6 +6,10 @@ import type { MachineDef, Tag } from '~/pages/litematica/index.vue';
 
 const props = defineProps<{
   item: Partial<MachineDef>;
+  /**
+   * 在有分页、条件时自动返回正确的页面
+   */
+  backUrl?: string;
 }>();
 const { mobile: _mobile } = useDisplay({
   mobileBreakpoint: 500,
@@ -28,7 +32,7 @@ const tags = computed(
     :class="{
       'hover-card': isHovering,
     }"
-    :to="localePath(`/litematica/${item.key}`)"
+    :to="backUrl ?? localePath(`/litematica/${item.key}`)"
     border
     class="mx-auto"
     elevation="4"

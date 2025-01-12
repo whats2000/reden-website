@@ -41,6 +41,7 @@ useSeoMeta({
 });
 const goto = useGoTo({});
 const localePath = useLocalePath();
+const switchLocalePath = useSwitchLocalePath();
 const router = useRouter();
 if (router.currentRoute.value.query.m) {
   router.push(localePath(`/litematica/${router.currentRoute.value.query.m}`));
@@ -100,8 +101,8 @@ const items = computed<MachineDef[]>(() => {
 });
 
 const isClient = import.meta.client;
-const notification = ref(false);
-const maintaining = false;
+const notification = ref(true);
+const maintaining = true;
 const { mdAndUp, xs, sm, md, width } = useDisplay({
   mobileBreakpoint: 600,
 });
@@ -273,7 +274,10 @@ const isHovering = useElementHover(ad);
             :key="item.key"
             :cols="12 / itemsPerRow"
           >
-            <MinecraftFarmCard :item="item" />
+            <MinecraftFarmCard
+              :item="item"
+              :back-url="switchLocalePath(locale)"
+            />
           </v-col>
         </v-row>
         <v-row justify="center">
