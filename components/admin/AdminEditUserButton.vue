@@ -1,12 +1,17 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { doFetchPut, type Profile, toastError } from '~/utils/constants';
+import {
+  badgeDefs,
+  doFetchPut,
+  type Profile,
+  toastError,
+} from '~/utils/constants';
 import UserBadges from '~/components/UserBadges.vue';
 import { toast } from 'vuetify-sonner';
 import RedenRouter from '~/components/RedenRouter.vue';
 
 const saving = ref(false);
-const availableRoles = ['sponsor', 'staff', 'developer', 'contributor'];
+const availableRoles = Object.keys(badgeDefs);
 const props = defineProps<{
   item: Profile;
 }>();

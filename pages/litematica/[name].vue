@@ -27,6 +27,7 @@ const { t, locale } = useI18n();
 const localePath = useLocalePath();
 const appStore = useAppStore();
 const openEditDialog = ref(false);
+const backUrl = route.query.backUrl as string;
 const { data: localizedData } = useNuxtData<Record<string, MachineDef>>(
   `edit-${machineId}`,
 );
@@ -135,6 +136,9 @@ useSeoMeta({
     selected.value.description + t('litematica_generator.og_description'),
   ogImage: 'https://redenmc.com/reden_256.png',
 });
+definePageMeta({
+  name: 'litematica-name',
+});
 const biliPlayer = useTemplateRef<HTMLIFrameElement>('biliPlayer');
 const bvid = computed(() => parseBVID(selected.value?.link));
 const tabs = computed(() => {
@@ -164,7 +168,7 @@ const tab = ref(
 <template>
   <v-form class="content-common" fast-fail @submit.prevent="submit">
     <v-btn
-      :to="localePath('/litematica')"
+      :to="backUrl ?? localePath('/litematica')"
       class="mb-3 text-capitalize mr-3"
       prepend-icon="mdi-arrow-left"
       variant="tonal"

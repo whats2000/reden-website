@@ -4,12 +4,10 @@ import { number2text, timeSince } from '@/utils/constants';
 import { useDisplay } from 'vuetify';
 import type { MachineDef, Tag } from '~/pages/litematica/index.vue';
 
+const currentRoute = useRoute();
+
 const props = defineProps<{
   item: Partial<MachineDef>;
-  /**
-   * 在有分页、条件时自动返回正确的页面
-   */
-  backUrl?: string;
 }>();
 const { mobile: _mobile } = useDisplay({
   mobileBreakpoint: 500,
@@ -32,7 +30,10 @@ const tags = computed(
     :class="{
       'hover-card': isHovering,
     }"
-    :to="backUrl ?? localePath(`/litematica/${item.key}`)"
+    :to="
+      localePath(`/litematica/${item.key}`) +
+      `?backUrl=${encodeURIComponent(currentRoute.fullPath)}`
+    "
     border
     class="mx-auto"
     elevation="4"
@@ -60,11 +61,11 @@ const tags = computed(
           <v-chip
             v-for="tag in tags"
             :key="tag.tag"
+            :size="18"
+            :text="tag.name"
             :to="localePath(`/litematica?tag=${tag?.tag}`)"
             class="tag-chip rounded-lg px-1"
             color="primary"
-            :size="18"
-            :text="tag.name"
           />
           <span class="stat-line">
             <v-icon :size="22" style="top: 2px">mdi-download-outline</v-icon>
@@ -73,15 +74,15 @@ const tags = computed(
         </template>
       </div>
     </v-card-subtitle>
-    <div class="mx-3" v-if="!mobile">
+    <div v-if="!mobile" class="mx-3">
       <v-chip-group>
         <v-chip
           v-for="tag in tags"
           :key="tag.tag"
+          :text="tag.name"
           :to="localePath(`/litematica?tag=${tag?.tag}`)"
           class="tag-chip"
           color="primary"
-          :text="tag.name"
         />
       </v-chip-group>
     </div>
