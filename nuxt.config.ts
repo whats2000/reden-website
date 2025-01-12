@@ -1,6 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify from 'vite-plugin-vuetify';
+import { createResolver } from '@nuxt/kit';
+import appModule from '@nuxt-themes/docus/app/module';
 import transformAssetUrls = vuetify.transformAssetUrls;
+const { resolve } = createResolver(import.meta.url);
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
@@ -8,7 +11,11 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
+  extends: ['@nuxt-themes/typography', '@nuxt-themes/elements'],
   modules: [
+    '@nuxt-themes/tokens',
+    '@vueuse/nuxt',
+    appModule,
     '@pinia/nuxt',
     '@nuxtjs/i18n',
     '@nuxtjs/sitemap',
@@ -16,7 +23,8 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
     'nuxt-icon',
-    '@nuxthq/studio',
+    // cause OOM
+    // '@nuxthq/studio',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error
@@ -24,25 +32,54 @@ export default defineNuxtConfig({
       });
     },
   ],
-  colorMode: {
-    classSuffix: '',
+  css: [resolve('node_modules/@nuxt-themes/docus/assets/css/main.css')],
+  components: [
+    {
+      prefix: '',
+      path: resolve('node_modules/@nuxt-themes/docus/components/app'),
+      global: true,
+    },
+    {
+      prefix: '',
+      path: resolve('node_modules/@nuxt-themes/docus/components/docs'),
+      global: true,
+    },
+  ],
+  pinceau: {
+    studio: true,
   },
   content: {
-    experimental: {
-      search: {
-        indexed: true,
-      },
-    },
+    // documentDriven: true,
     highlight: {
-      // See the available themes on https://github.com/shikijs/shiki/blob/main/docs/themes.md#all-theme
       theme: {
         dark: 'github-dark',
         default: 'github-light',
       },
+      preload: [
+        'json',
+        'js',
+        'ts',
+        'html',
+        'css',
+        'vue',
+        'diff',
+        'shell',
+        'markdown',
+        'yaml',
+        'bash',
+        'ini',
+      ],
+    },
+    navigation: {
+      fields: ['icon', 'titleTemplate', 'header', 'main', 'aside', 'footer'],
     },
     api: {
       baseURL: '/_my_content',
     },
+  },
+  colorMode: {
+    classSuffix: '',
+    dataValue: 'theme',
   },
   i18n: {
     strategy: 'prefix_and_default',
@@ -85,14 +122,29 @@ export default defineNuxtConfig({
   experimental: {
     inlineRouteRules: true,
   },
+  // typescript: {
+  //   includeWorkspace: true,
+  // },
   nitro: {
     prerender: {
       failOnError: false,
-      routes: ['/', '/sitemap.xml'],
-      ignore: ['/api'],
+      routes: [
+        '/',
+        '/sitemap.xml',
+        // '/opensearch.xml'
+      ],
+      ignore: [
+        '/api',
+        '/__pinceau_tokens_config.json',
+        '/__pinceau_tokens_schema.json',
+      ],
     },
   },
   routeRules: {
+    // '/api/search': {
+    //   prerender: true,
+    //   cache: {},
+    // },
     '/api/**': {
       proxy:
         process.env.NODE_ENV === 'development'

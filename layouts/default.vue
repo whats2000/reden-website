@@ -5,6 +5,8 @@ import { useTheme } from 'vuetify';
 import { useAppStore } from '~/store/app';
 import '@/assets/main.css';
 import { localeToIso } from '~/i18n.config';
+import LayoutHeader from '~/components/layout/Header.vue';
+import LayoutFooter from '~/components/layout/footer.vue';
 
 const themeCookie = useCookie<'light' | 'dark'>('theme', {
   default: () => 'light',
