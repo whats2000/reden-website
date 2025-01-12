@@ -4,7 +4,6 @@ import { onMounted } from 'vue';
 import { useTheme } from 'vuetify';
 import { useAppStore } from '~/store/app';
 import '@/assets/main.css';
-import { localeToIso } from '~/i18n.config';
 import LayoutHeader from '~/components/layout/Header.vue';
 import LayoutFooter from '~/components/layout/footer.vue';
 
@@ -54,21 +53,30 @@ function toggleTheme() {
   appStore.save();
 }
 
-const { locale } = useI18n();
+const localeHead = useLocaleHead({
+  addSeoAttributes: {
+    canonicalQueries: ['page'],
+  },
+});
+console.log('localeHead', localeHead.value);
 </script>
 
 <template>
-  <Html :lang="localeToIso[locale]">
+  <Html :lang="localeHead.htmlAttrs.lang">
     <Head>
-      <template
-        v-for="[targetLocale, isoCode] in Object.entries(localeToIso)"
-        :key="isoCode"
-      >
+      <template v-for="link in localeHead.link" :key="link.hid">
         <Link
-          v-if="locale !== targetLocale"
-          :href="switchLocalePath(targetLocale)"
-          :hreflang="isoCode"
-          rel="alternate"
+          :id="link.hid"
+          :href="link.href"
+          :hreflang="link.hreflang"
+          :rel="link.rel"
+        />
+      </template>
+      <template v-for="meta in localeHead.meta" :key="meta.hid">
+        <Meta
+          :id="meta.hid"
+          :content="meta.content"
+          :property="meta.property"
         />
       </template>
     </Head>
