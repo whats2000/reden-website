@@ -117,7 +117,11 @@ function login() {
         @click="login"
       >
         {{
-          captcha?.token ? $t('login.button.login') : $t('login.button.captcha')
+          dev
+            ? 'Login (dev)'
+            : captcha?.token
+              ? $t('login.button.login')
+              : $t('login.button.captcha')
         }}
       </v-btn>
 

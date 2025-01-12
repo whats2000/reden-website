@@ -64,7 +64,7 @@ function register(e: SubmitEventPromise) {
 
 <template>
   <div class="main-page">
-    <v-form v-if="!registerOk" @submit="register" class="register-form">
+    <v-form v-if="!registerOk" class="register-form" @submit="register">
       <h1>
         {{ $t('register.title') }}
       </h1>
@@ -75,8 +75,8 @@ function register(e: SubmitEventPromise) {
         :rules="[
           () => /.+@.+\..+/i.test(email) || $t('register.invalid.email'),
         ]"
-        required
         autocomplete="email"
+        required
       >
         <template #prepend>
           <v-icon>mdi-email</v-icon>
@@ -89,8 +89,8 @@ function register(e: SubmitEventPromise) {
         :rules="[
           () => usernameRegex.test(username) || $t('register.invalid.username'),
         ]"
-        required
         autocomplete="username"
+        required
       >
         <template #prepend>
           <v-icon>mdi-account</v-icon>
@@ -105,8 +105,8 @@ function register(e: SubmitEventPromise) {
             isStrongPassword(password) ||
             $t('register.invalid.password.strength'),
         ]"
-        required
         autocomplete="new-password"
+        required
         type="password"
       >
         <template #prepend>
@@ -122,8 +122,8 @@ function register(e: SubmitEventPromise) {
             confirmPassword == password ||
             $t('register.invalid.password.mismatching'),
         ]"
-        required
         autocomplete="new-password"
+        required
         type="password"
       >
         <template #prepend>
@@ -158,14 +158,29 @@ function register(e: SubmitEventPromise) {
       <h2>
         {{ $t('register.oauth') }}
       </h2>
-      <v-btn
-        color="blue"
-        href="/api/oauth/microsoft"
-        prepend-icon="mdi-microsoft"
-        :block="true"
-      >
-        Microsoft
-      </v-btn>
+
+      <v-row>
+        <v-col>
+          <v-btn
+            :block="true"
+            :href="'/api/oauth/github?redirect_url=' + encodeURI('/login')"
+            color="blue"
+          >
+            <v-icon left>mdi-github</v-icon>
+            Github
+          </v-btn>
+        </v-col>
+        <v-col>
+          <v-btn
+            :block="true"
+            :href="'/api/oauth/microsoft?redirect_url=' + encodeURI('/login')"
+            color="red"
+          >
+            <v-icon left>mdi-microsoft</v-icon>
+            Microsoft
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-form>
 
     <div v-if="registerOk">
@@ -174,7 +189,6 @@ function register(e: SubmitEventPromise) {
         elevation="12"
         max-width="600"
         rounded="lg"
-        width="100%"
       >
         <v-icon
           class="mb-5"
@@ -195,9 +209,9 @@ function register(e: SubmitEventPromise) {
         <v-row>
           <v-spacer />
           <v-btn
+            :to="localePath('/')"
             class="text-none"
             color="success"
-            :to="localePath('/')"
             rounded
             variant="flat"
             width="90"
@@ -214,8 +228,7 @@ function register(e: SubmitEventPromise) {
 .register-form {
   display: flex;
   flex-direction: column;
-
-  width: 400px;
+  width: min(90%, 400px);
   left: 50%;
 
   padding-top: 80px;
