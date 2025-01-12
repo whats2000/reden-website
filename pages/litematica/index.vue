@@ -127,6 +127,9 @@ const itemDisplay = computed(() => {
 });
 const ad = useTemplateRef<HTMLParagraphElement>('ad');
 const isHovering = useElementHover(ad);
+const totalPages = computed(
+  () => (serverResponse.value?.count ?? 24 * 2006) / 24,
+);
 </script>
 <template>
   <p ref="ad" class="w-100 text-center opacity-60">
@@ -260,7 +263,7 @@ const isHovering = useElementHover(ad);
         <v-row justify="center">
           <v-pagination
             v-model="page"
-            :length="(serverResponse?.count ?? 1000000) / 20"
+            :length="totalPages"
             :total-visible="Math.min(8, width / 80 - 2)"
             rounded="xl"
             size="32"
@@ -275,15 +278,15 @@ const isHovering = useElementHover(ad);
             :cols="12 / itemsPerRow"
           >
             <MinecraftFarmCard
-              :item="item"
               :back-url="switchLocalePath(locale)"
+              :item="item"
             />
           </v-col>
         </v-row>
         <v-row justify="center">
           <v-pagination
             v-model="page"
-            :length="(serverResponse?.count ?? 1000000) / 20"
+            :length="totalPages"
             :total-visible="Math.min(8, width / 80 - 2)"
             rounded="xl"
             size="32"
