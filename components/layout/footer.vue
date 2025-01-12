@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { discordInvite, githubLink, zh_cn } from '~/utils/constants';
+import RedenRouter from '~/components/RedenRouter.vue';
 
 const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();

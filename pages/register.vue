@@ -12,6 +12,7 @@ import {
 } from '@/utils/constants';
 import { useI18n } from 'vue-i18n';
 import { type SubmitEventPromise } from 'vuetify';
+import RedenRouter from '~/components/RedenRouter.vue';
 
 const email = ref('');
 const username = ref('');

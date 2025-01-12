@@ -1,8 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify from 'vite-plugin-vuetify';
 import { createResolver } from '@nuxt/kit';
-import appModule from '@nuxt-themes/docus/app/module';
 import transformAssetUrls = vuetify.transformAssetUrls;
+
 const { resolve } = createResolver(import.meta.url);
 
 export default defineNuxtConfig({
@@ -11,18 +11,13 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
-  extends: ['@nuxt-themes/typography', '@nuxt-themes/elements'],
   modules: [
-    '@nuxt-themes/tokens',
     '@vueuse/nuxt',
-    appModule,
     '@pinia/nuxt',
     '@nuxtjs/i18n',
     '@nuxtjs/sitemap',
     '@nuxt/content',
-    '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
-    'nuxt-icon',
     // cause OOM
     // '@nuxthq/studio',
     (_options, nuxt) => {
@@ -32,23 +27,8 @@ export default defineNuxtConfig({
       });
     },
   ],
-  css: [resolve('node_modules/@nuxt-themes/docus/assets/css/main.css')],
-  components: [
-    {
-      prefix: '',
-      path: resolve('node_modules/@nuxt-themes/docus/components/app'),
-      global: true,
-    },
-    {
-      prefix: '',
-      path: resolve('node_modules/@nuxt-themes/docus/components/docs'),
-      global: true,
-    },
-  ],
-  pinceau: {
-    studio: true,
-  },
   content: {
+    // cause OOM
     // documentDriven: true,
     highlight: {
       theme: {

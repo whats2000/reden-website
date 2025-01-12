@@ -13,6 +13,7 @@ import CommonCaptcha from '@/components/CommonCaptcha.vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify';
+import RedenRouter from '~/components/RedenRouter.vue';
 
 const { t } = useI18n();
 const { mobile } = useDisplay({

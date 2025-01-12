@@ -193,7 +193,8 @@
         "rvc": "RVC (Reden Version Control) is a version control system designed for redstone. It allows you to manage your redstone projects in all versions with ease.",
         "title": "Features",
         "undo": "Made a mistake? Reden can quickly undo your actions by just pressing Ctrl+Z. All chain reactions will be undone."
-      }
+      },
+      "go_litematica": "Minecraft Machines"
     },
     "learn_more": "Learn More",
     "my_account": "My Account",

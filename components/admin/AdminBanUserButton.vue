@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { type Profile, toastError } from '~/utils/constants';
 import { useAppStore } from '~/store/app';
 import { type SubmitEventPromise } from 'vuetify';
+import RedenRouter from '~/components/RedenRouter.vue';
 
 const props = defineProps<{
   item: Profile;
@@ -12,6 +13,7 @@ const banReason = ref('Banned by ' + useAppStore().userCache?.username);
 const banDays = ref(0);
 const banHours = ref();
 const banMinutes = ref();
+const localePath = useLocalePath();
 
 async function ban(e: SubmitEventPromise) {
   const result = await e;
@@ -46,16 +48,16 @@ async function ban(e: SubmitEventPromise) {
       <v-card>
         <v-card-title>
           Ban
-          <reden-router :to="localePath(`/user/${item.id}`)">{{
-            item.username
-          }}</reden-router>
+          <reden-router :to="localePath(`/@${item.username}`)"
+            >{{ item.username }}
+          </reden-router>
         </v-card-title>
 
         <v-card-text>
           <template v-if="item.bannedUntil || 0 > Date.now()">
-            <v-btn> Unban </v-btn>
+            <v-btn> Unban</v-btn>
           </template>
-          <v-form v-else fast-fail @submit.prevent @submit="ban">
+          <v-form v-else fast-fail @submit="ban" @submit.prevent>
             <v-row>
               <v-col>
                 <v-text-field
@@ -79,11 +81,11 @@ async function ban(e: SubmitEventPromise) {
               </v-col>
               <v-col>
                 <v-combobox
+                  v-model="banHours"
                   :items="[0, 1, 12, 24]"
                   :rules="[
                     (v: number) => (v >= 0 && v < 30) || 'Invalid hours',
                   ]"
-                  v-model="banHours"
                   dense
                   label="Hours"
                   outlined
@@ -92,6 +94,7 @@ async function ban(e: SubmitEventPromise) {
               </v-col>
               <v-col>
                 <v-combobox
+                  v-model="banMinutes"
                   :items="[0, 15, 30, 45]"
                   :rules="[
                     (v: number) => (v >= 0 && v < 60) || 'Invalid minutes',
@@ -101,7 +104,6 @@ async function ban(e: SubmitEventPromise) {
                       banMinutes ||
                       'Must ban for at least 1 minute',
                   ]"
-                  v-model="banMinutes"
                   dense
                   label="Minutes"
                   outlined

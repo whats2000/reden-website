@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { doFetchPut, type Profile, toastError } from '~/utils/constants';
 import UserBadges from '~/components/UserBadges.vue';
 import { toast } from 'vuetify-sonner';
+import RedenRouter from '~/components/RedenRouter.vue';
 
 const saving = ref(false);
 const availableRoles = ['sponsor', 'staff', 'developer', 'contributor'];

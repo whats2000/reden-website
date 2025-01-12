@@ -131,6 +131,7 @@
 <script lang="ts" setup>
 import { useDisplay } from 'vuetify';
 import { useAppStore } from '~/store/app';
+import RedenRouter from '~/components/RedenRouter.vue';
 
 const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();

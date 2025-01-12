@@ -15,6 +15,7 @@ import { parseBVID } from '~/utils/constants';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
 import SidebarAd from '~/components/ads/SidebarAd.vue';
 import { type Condition, parseCondition } from '~/utils/conditionParser';
+import RedenRouter from '~/components/RedenRouter.vue';
 
 const route = useRoute();
 const xSize = ref(0);

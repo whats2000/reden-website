@@ -63,14 +63,14 @@ const backendInfo = useBackendMeta();
       </v-row>
       <div class="buttons">
         <v-btn
-          :to="localePath('/download')"
+          :to="localePath('/litematica')"
           class="ma-2"
           color="primary"
           prepend-icon="mdi-download"
           rounded="rounded"
           size="x-large"
         >
-          {{ $t('reden.download') }}
+          {{ t('reden.home.go_litematica') }}
         </v-btn>
         <v-btn
           :href="githubLink"
