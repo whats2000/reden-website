@@ -25,6 +25,7 @@ definePageMeta({
       headline="Whoops, 404"
       :title="$t('page404.title')"
       :max-width="1000"
+      class="mx-auto"
     >
       <template #text>
         {{ $t('page404.evolving') }}

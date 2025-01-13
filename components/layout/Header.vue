@@ -87,9 +87,37 @@
         >
           Admin
         </v-btn>
+        <v-btn
+          :to="localePath('/litematica')"
+          class="ma-2"
+          prepend-icon="mdi-download"
+          size="x-large"
+        >
+          {{ $t('reden.home.go_litematica') }}
+        </v-btn>
       </template>
     </template>
     <p class="text-h5"></p>
+    <v-text-field
+      v-model="search"
+      class="mx-auto max-w-520px"
+      density="comfortable"
+      hide-details
+      placeholder="Search"
+      prepend-inner-icon="mdi-magnify"
+      rounded="xl"
+      variant="outlined"
+      @keydown.prevent.enter="
+        router.push(localePath(`/litematica?q=${search}`))
+      "
+    >
+      <template #append-inner>
+        <v-btn
+          icon="mdi-magnify"
+          @click="router.push(localePath(`/litematica?q=${search}`))"
+        />
+      </template>
+    </v-text-field>
     <template #append>
       <v-btn
         v-show="!mobile"
@@ -133,6 +161,7 @@ import { useDisplay } from 'vuetify';
 import { useAppStore } from '~/store/app';
 import RedenRouter from '~/components/RedenRouter.vue';
 
+const router = useRouter();
 const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();
 
@@ -143,9 +172,15 @@ const { mobile } = useDisplay({
 defineSlots<{
   'common-append': void;
 }>();
+
+const search = ref('');
 </script>
 <style scoped>
 .reden-app-bar {
   backdrop-filter: blur(10px);
+}
+
+.max-w-520px {
+  max-width: 520px;
 }
 </style>

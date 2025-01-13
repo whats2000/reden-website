@@ -47,19 +47,18 @@ const router = useRouter();
 if (router.currentRoute.value.query.m) {
   router.push(localePath(`/litematica/${router.currentRoute.value.query.m}`));
 }
-const page = ref(1);
+const page = ref(Number(router.currentRoute.value.query.page) || 1);
 const pageSize = ref(18);
+const search = computed(() => router.currentRoute.value.query.q);
 const totalPages = computed(() =>
   Math.ceil((serverResponse.value?.count ?? 2006) / pageSize.value),
 );
-if (router.currentRoute.value.query.page) {
-  page.value = Number(router.currentRoute.value.query.page);
-}
-watch([page, pageSize], () => {
+watch([page, pageSize, search], () => {
   goto(0);
   router.replace({
     query: {
       page: String(page.value),
+      q: search.value,
     },
   });
 });
@@ -85,12 +84,30 @@ const { locale } = useI18n();
 
 const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
   () =>
-    `/api/mc-services/yisibite/?lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}`,
+    search.value
+      ? `/api/mc-services/litematica/search?q=${search.value}&lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}`
+      : `/api/mc-services/yisibite/?lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}`,
   {
     dedupe: 'defer',
     key: `generators${locale.value}`,
     headers: {
       Authorization: process.env.REDEN_API_TOKEN as string,
+    },
+    transform: (input: any): ListLitematicaResponse => {
+      if (input.d) {
+        return input;
+      } else {
+        input = input as {
+          hits: Record<string, MachineDef>;
+          estimatedTotalHits: number;
+          downloads: number;
+        };
+        return {
+          d: input.hits,
+          count: input.estimatedTotalHits,
+          downloads: input.downloads,
+        };
+      }
     },
   },
 );
