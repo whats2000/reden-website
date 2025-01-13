@@ -16,6 +16,7 @@ import BottomBarAd from '~/components/ads/BottomBarAd.vue';
 import SidebarAd from '~/components/ads/SidebarAd.vue';
 import { type Condition, parseCondition } from '~/utils/conditionParser';
 import RedenRouter from '~/components/RedenRouter.vue';
+import type { VForm } from 'vuetify/components';
 
 const route = useRoute();
 const xSize = ref(0);
@@ -115,10 +116,16 @@ async function submit(e: SubmitEventPromise) {
   }
 }
 
+const formRef = useTemplateRef<VForm>('form');
+
 function openMaterials() {
-  window.open(
-    `/api/mc-services/yisibite/${machineId}/materials?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
-  );
+  formRef.value?.validate().then((result) => {
+    if (result.valid) {
+      window.open(
+        `/api/mc-services/yisibite/${machineId}/materials?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
+      );
+    }
+  });
 }
 
 const selected = computed(() => generators.value[machineId]);
@@ -166,7 +173,7 @@ const tab = ref(
 </script>
 
 <template>
-  <v-form class="content-common" fast-fail @submit.prevent="submit">
+  <v-form ref="form" class="content-common" fast-fail @submit.prevent="submit">
     <v-btn
       :to="backUrl ?? localePath('/litematica')"
       class="mb-3 text-capitalize mr-3"

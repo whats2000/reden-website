@@ -104,7 +104,6 @@
       density="comfortable"
       hide-details
       placeholder="Search"
-      prepend-inner-icon="mdi-magnify"
       rounded="xl"
       variant="outlined"
       @keydown.prevent.enter="

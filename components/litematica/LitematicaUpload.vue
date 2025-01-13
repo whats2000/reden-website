@@ -34,6 +34,7 @@ const refreshProps = () => {
     ...props.machine,
   };
   machineId.value = Object.entries(props.machine ?? {})?.[0]?.[1]?.key;
+  isOriginal.value = props.machine?.original;
 };
 const availableSteps = ref<State[]>(
   props.editMode ? ['upload', 'translation', 'image'] : ['upload'],
@@ -47,6 +48,7 @@ const pictureStepError = ref<string>();
 const machineId = ref<string>();
 const disallowedFilename = '\r\n\\\u0000\u000c`?*<>|:\'"'.split(''); // allow '/'
 const uploading = ref(false);
+const isOriginal = ref();
 const isLitematicaGenerator = ref(true);
 
 async function doUploadAll() {
@@ -96,7 +98,8 @@ async function doUploadAll() {
           name: data.name,
           summary: data.summary,
           description: data.description,
-          link: null,
+          link: data.link,
+          isOriginal: isOriginal.value,
         },
       );
       if (response.ok) {
@@ -436,6 +439,29 @@ watch(props, refreshProps);
                 outlined
                 variant="underlined"
               />
+              <v-text-field
+                v-model="getLocalizedData(language).link"
+                :label="$t('common.link')"
+                color="primary"
+                hide-details
+                outlined
+                variant="underlined"
+              />
+              <v-radio-group
+                v-model="isOriginal"
+                color="primary"
+                hide-details
+                row
+              >
+                <v-radio
+                  :label="$t('upload.desc.i_am_the_author')"
+                  :value="true"
+                />
+                <v-radio
+                  :label="$t('upload.desc.i_am_not_the_author')"
+                  :value="false"
+                />
+              </v-radio-group>
             </v-card-text>
             <v-card-actions>
               <v-btn
