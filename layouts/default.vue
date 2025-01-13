@@ -13,7 +13,6 @@ const themeCookie = useCookie<'light' | 'dark'>('theme', {
 
 const theme = useTheme();
 const appStore = useAppStore();
-const switchLocalePath = useSwitchLocalePath();
 appStore.theme = themeCookie.value;
 onMounted(() => {
   const colors: Record<string, string> =
@@ -58,7 +57,6 @@ const localeHead = useLocaleHead({
     canonicalQueries: ['page'],
   },
 });
-console.log('localeHead', localeHead.value);
 </script>
 
 <template>
@@ -97,7 +95,7 @@ console.log('localeHead', localeHead.value);
     </layout-header>
 
     <VSonner :expand="true" :position="'top-right'" />
-    <v-main class="router">
+    <v-main class="router" style="--v-layout-top: 64px">
       <slot />
     </v-main>
 

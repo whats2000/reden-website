@@ -106,8 +106,8 @@ const items = computed<MachineDef[]>(() => {
 });
 
 const isClient = import.meta.client;
-const notification = ref(true);
-const maintaining = true;
+const notification = ref(false);
+const maintaining = false;
 const { mdAndUp, xs, sm, md, width } = useDisplay({
   mobileBreakpoint: 600,
 });
