@@ -69,6 +69,7 @@ const tags = computed(
             :text="tag.name"
             :to="localePath(`/litematica?tag=${tag?.tag}`)"
             class="tag-chip rounded-lg px-1"
+            style="max-width: 100px"
             color="primary"
           />
           <span class="stat-line">

@@ -170,7 +170,7 @@ const { t, locale } = useI18n();
         {{ t(locale) }}
 
         <v-menu :close-on-content-click="true" activator="parent">
-          <v-list>
+          <v-list active-color="primary">
             <v-list-item
               v-for="locale in $i18n.availableLocales"
               :key="`locale-${locale}`"

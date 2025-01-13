@@ -5,7 +5,7 @@
         <v-btn v-show="mobile" icon="mdi-menu" title="Menu">
           <v-icon>mdi-menu</v-icon>
           <v-menu :close-on-content-click="true" activator="parent">
-            <v-list class="w-100 router">
+            <v-list class="w-100">
               <v-list-item :to="localePath('/')">
                 <template #prepend>
                   <v-icon>mdi-home</v-icon>
@@ -20,19 +20,17 @@
               </v-list-item>
               <v-divider />
               <template v-if="useAppStore().logined">
-                <reden-router :to="localePath('/home')">
-                  <v-list-item link>
-                    <template #prepend>
-                      <v-avatar
-                        v-if="useAppStore().userCache?.avatarUrl"
-                        :image="useAppStore().userCache?.avatarUrl"
-                        :size="40"
-                      />
-                      <v-icon v-else> mdi-account</v-icon>
-                    </template>
-                    <v-list-item-title> My Profile</v-list-item-title>
-                  </v-list-item>
-                </reden-router>
+                <v-list-item :to="localePath('/home')">
+                  <template #prepend>
+                    <v-avatar
+                      v-if="useAppStore().userCache?.avatarUrl"
+                      :image="useAppStore().userCache?.avatarUrl"
+                      :size="40"
+                    />
+                    <v-icon v-else> mdi-account</v-icon>
+                  </template>
+                  <v-list-item-title> My Profile</v-list-item-title>
+                </v-list-item>
                 <v-list-item>
                   <v-list-item-title> My Machines</v-list-item-title>
                 </v-list-item>
@@ -41,34 +39,27 @@
                 </v-list-item>
               </template>
               <template v-else>
-                <reden-router :to="localePath('/login')">
-                  <v-list-item link>
-                    <template #prepend>
-                      <v-icon>mdi-account</v-icon>
-                    </template>
-                    <v-list-item-title> Login</v-list-item-title>
-                  </v-list-item>
-                </reden-router>
-
-                <reden-router :to="localePath('/register')">
-                  <v-list-item link>
-                    <template #prepend>
-                      <v-icon>mdi-account-plus</v-icon>
-                    </template>
-                    <v-list-item-title> Register</v-list-item-title>
-                  </v-list-item>
-                </reden-router>
+                <v-list-item :to="localePath('/login')">
+                  <template #prepend>
+                    <v-icon>mdi-account</v-icon>
+                  </template>
+                  <v-list-item-title> Login</v-list-item-title>
+                </v-list-item>
+                <v-list-item :to="localePath('/register')">
+                  <template #prepend>
+                    <v-icon>mdi-account-plus</v-icon>
+                  </template>
+                  <v-list-item-title> Register</v-list-item-title>
+                </v-list-item>
               </template>
               <template v-if="useAppStore().userCache?.isStaff">
                 <v-divider />
-                <reden-router :to="localePath('/admin')">
-                  <v-list-item link>
-                    <template #prepend>
-                      <v-icon>mdi-cog</v-icon>
-                    </template>
-                    <v-list-item-title>Admin</v-list-item-title>
-                  </v-list-item>
-                </reden-router>
+                <v-list-item :to="localePath('/admin')">
+                  <template #prepend>
+                    <v-icon>mdi-cog</v-icon>
+                  </template>
+                  <v-list-item-title>Admin</v-list-item-title>
+                </v-list-item>
               </template>
             </v-list>
           </v-menu>
@@ -136,7 +127,7 @@
       <v-btn icon="mdi-translate" title="Language">
         <v-icon icon="mdi-translate" />
         <v-menu :close-on-content-click="true" activator="parent">
-          <v-list>
+          <v-list active-color="primary">
             <v-list-item
               v-for="locale in $i18n.availableLocales"
               :key="`locale-${locale}`"
@@ -158,7 +149,6 @@
 <script lang="ts" setup>
 import { useDisplay } from 'vuetify';
 import { useAppStore } from '~/store/app';
-import RedenRouter from '~/components/RedenRouter.vue';
 
 const router = useRouter();
 const localePath = useLocalePath();
