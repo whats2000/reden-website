@@ -53,13 +53,19 @@ const search = computed(() => router.currentRoute.value.query.q);
 const totalPages = computed(() =>
   Math.ceil((serverResponse.value?.count ?? 2006) / pageSize.value),
 );
-watch([page, pageSize, search], () => {
+const uploadDialog = ref(router.currentRoute.value.hash === '#upload');
+watch(router.currentRoute, () => {
+  page.value = Number(router.currentRoute.value.query.page) || 1;
+  uploadDialog.value = router.currentRoute.value.hash === '#upload';
+});
+watch([page, pageSize, search, uploadDialog], () => {
   goto(0);
   router.replace({
     query: {
       page: String(page.value),
       q: search.value,
     },
+    hash: uploadDialog.value ? '#upload' : undefined,
   });
 });
 
@@ -131,6 +137,10 @@ const { mdAndUp, xs, sm, md, width } = useDisplay({
 const itemsPerRow = computed(() =>
   xs.value ? 1 : sm.value || md.value ? 2 : 3,
 );
+const cardMaxWidth = computed(() => {
+  const referenceWidth = mdAndUp.value ? width.value - 340 : width.value;
+  return referenceWidth / itemsPerRow.value - 30;
+});
 const itemDisplay = computed(() => {
   const rows: { def?: MachineDef[]; ad?: 'ad' }[] = [];
   const rowCount = Math.ceil(items.value.length / itemsPerRow.value);
@@ -160,6 +170,23 @@ const isHovering = useElementHover(ad);
     <template v-else>广告位招租！</template>
   </p>
   <v-container class="pa-4" style="max-width: max-content">
+    <v-btn
+      class="position-fixed z-10 right-0"
+      color="primary"
+      icon="mdi-arrow-up"
+      style="top: 150px"
+      variant="elevated"
+      @click="goto(0)"
+    >
+      <v-icon> mdi-arrow-up</v-icon>
+      <v-tooltip
+        activator="parent"
+        location="start"
+        location-strategy="connected"
+        text="Back to Top"
+      >
+      </v-tooltip>
+    </v-btn>
     <v-alert
       v-if="maintaining && isClient && notification"
       class="mb-3"
@@ -230,28 +257,17 @@ const isHovering = useElementHover(ad);
         <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
       </div>
       <div>
-        <template v-if="locale === 'zh_cn'">
-          <v-btn
-            class="mb-4 mr-4"
-            color="primary"
-            href="https://docs.qq.com/form/page/DVHdSUXJLQUpDVktQ"
-            prepend-icon="mdi-comment-quote"
-            rounded="lg"
-            variant="outlined"
-          >
-            新版意见反馈
-          </v-btn>
-          <v-btn
-            class="mb-4 mr-4"
-            color="primary"
-            href="https://space.bilibili.com/1545239761"
-            prepend-icon="custom:Bilibili"
-            rounded="lg"
-            variant="outlined"
-          >
-            请在B站关注我，有故障请私信
-          </v-btn>
-        </template>
+        <v-btn
+          v-if="locale === 'zh_cn'"
+          class="mb-4 mr-4"
+          color="primary"
+          href="https://space.bilibili.com/1545239761"
+          prepend-icon="custom:Bilibili"
+          rounded="lg"
+          variant="outlined"
+        >
+          请在B站关注我，有故障请私信
+        </v-btn>
         <v-btn
           class="mb-4 mr-4"
           color="primary"
@@ -261,7 +277,7 @@ const isHovering = useElementHover(ad);
         >
           {{ $t('litematica_generator.upload.button_msg') }}
           <v-dialog
-            #default="{ isActive }"
+            v-model="uploadDialog"
             activator="parent"
             close-on-back
             max-width="900"
@@ -273,7 +289,7 @@ const isHovering = useElementHover(ad);
                 <v-btn
                   icon="mdi-close"
                   variant="plain"
-                  @click="isActive.value = false"
+                  @click="uploadDialog = false"
                 />
               </div>
             </v-card>
@@ -299,6 +315,7 @@ const isHovering = useElementHover(ad);
             <MinecraftFarmCard
               :back-url="switchLocalePath(locale)"
               :item="item"
+              :max-width="cardMaxWidth"
             />
           </v-col>
         </v-row>

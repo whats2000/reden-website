@@ -18,6 +18,26 @@ export default defineNuxtPlugin((app) => {
         custom: customSVGs,
       },
     },
+    theme: {
+      themes: {
+        /**
+         * theme: light app: dark cookie: dark
+         *  background #121212 surface #212121 surface-bright #ccbfd6 surface-light #424242 surface-variant #a3a3a3 on-surface-variant #424242 primary #2196F3 primary-darken-1 #277CC1 secondary #54B6B2 secondary-darken-1 #48A9A6 error #CF6679 info #2196F3 success #4CAF50 warning #FB8C00
+         */
+        dark: {
+          dark: true,
+          colors: {
+            secondary: '#fb7299',
+          },
+        },
+        light: {
+          dark: false,
+          colors: {
+            secondary: '#fb7299',
+          },
+        },
+      },
+    },
   });
   app.vueApp.use(vuetify);
 });

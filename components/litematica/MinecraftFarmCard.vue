@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { useElementHover } from '@vueuse/core';
 import { number2text, timeSince } from '@/utils/constants';
 import { useDisplay } from 'vuetify';
 import type { MachineDef, Tag } from '~/pages/litematica/index.vue';
@@ -8,6 +7,7 @@ const currentRoute = useRoute();
 
 const props = defineProps<{
   item: Partial<MachineDef>;
+  maxWidth?: number;
 }>();
 const { mobile: _mobile } = useDisplay({
   mobileBreakpoint: 500,
@@ -30,6 +30,8 @@ const tags = computed(
     :class="{
       'hover-card': isHovering,
     }"
+    :max-width="maxWidth"
+    :min-width="maxWidth"
     :to="
       localePath(`/litematica/${item.key}`) +
       `?backUrl=${encodeURIComponent(currentRoute.fullPath)}`
@@ -37,8 +39,6 @@ const tags = computed(
     border
     class="mx-auto"
     elevation="4"
-    max-width="460"
-    min-width="260"
     rounded="xl"
   >
     <v-img
@@ -48,7 +48,7 @@ const tags = computed(
       cover
       height="200px"
     />
-    <v-card-title class="card-title">{{ item.name }}</v-card-title>
+    <v-card-title class="card-title text-3lines">{{ item.name }}</v-card-title>
     <v-card-subtitle class="opacity-100">
       <div class="d-flex flex-row author-line" style="line-height: 24px">
         {{
@@ -69,8 +69,8 @@ const tags = computed(
             :text="tag.name"
             :to="localePath(`/litematica?tag=${tag?.tag}`)"
             class="tag-chip rounded-lg px-1"
-            style="max-width: 100px"
             color="primary"
+            style="max-width: 100px"
           />
           <span class="stat-line">
             <v-icon :size="22" style="top: 2px">mdi-download-outline</v-icon>
@@ -99,8 +99,7 @@ const tags = computed(
       }"
     >
       <div
-        v-if="item.description"
-        v-show="isHovering"
+        v-if="item.description && isHovering"
         class="description-overlay"
         v-html="item.description"
       />
@@ -118,6 +117,7 @@ const tags = computed(
 </template>
 <style scoped>
 .backdrop-blur {
+  overflow-y: auto;
   z-index: 100;
   backdrop-filter: blur(10px);
 }
@@ -175,8 +175,13 @@ const tags = computed(
   background-image: linear-gradient(
     160deg,
     rgb(var(--v-theme-background)) 0%,
-    rgba(0, 130, 193, 0.07) 30%,
+    rgba(0, 130, 193, 0.07) 60%,
     rgba(0, 130, 193, 0.17) 90%
   );
+}
+
+.text-3lines {
+  -webkit-line-clamp: 3; /* number of lines to show */
+  line-clamp: 3;
 }
 </style>

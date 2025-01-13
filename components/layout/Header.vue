@@ -71,6 +71,7 @@
         </v-btn>
         <v-btn
           v-if="useAppStore().userCache?.isStaff"
+          :active="false"
           :to="localePath('/admin')"
           prepend-icon="mdi-cog"
           stacked
@@ -79,6 +80,7 @@
           Admin
         </v-btn>
         <v-btn
+          :active="false"
           :to="localePath('/litematica')"
           class="ma-2"
           prepend-icon="mdi-download"
@@ -109,20 +111,14 @@
       </template>
     </v-text-field>
     <template #append>
-      <v-btn
-        v-show="!mobile"
-        :href="githubLink"
-        icon="mdi-github"
-        title="Github"
-      />
-
-      <v-btn
-        v-show="!mobile"
-        :href="discordInvite"
-        icon="custom:DiscordIcon"
-        title="Discord"
-      />
-
+      <template v-if="!mobile">
+        <v-btn :href="githubLink" icon="mdi-github" title="Github" />
+        <v-btn
+          :href="discordInvite"
+          icon="custom:DiscordIcon"
+          title="Discord"
+        />
+      </template>
       <slot name="common-append" />
       <v-btn icon="mdi-translate" title="Language">
         <v-icon icon="mdi-translate" />
@@ -143,6 +139,18 @@
         icon="mdi-account"
         title="Account"
       />
+      <v-btn
+        v-if="!mobile"
+        :active="false"
+        :to="localePath('/litematica#upload')"
+        class="ma-2"
+        color="secondary"
+        prepend-icon="mdi-upload"
+        size="x-large"
+        variant="text"
+      >
+        投稿
+      </v-btn>
     </template>
   </v-app-bar>
 </template>
