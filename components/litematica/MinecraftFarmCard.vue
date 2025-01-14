@@ -57,7 +57,7 @@ const tags = computed(
             : $t('litematica_generator.by.uploader')
         }}
         <v-avatar v-if="item.author?.avatarUrl" size="24">
-          <v-img :src="item.author?.avatarUrl" />
+          <v-img :aspect-ratio="16 / 9" :src="item.author?.avatarUrl" />
         </v-avatar>
         {{ item.author?.username }}
         <v-spacer />

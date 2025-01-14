@@ -194,6 +194,11 @@
     },
     "header": {
       "explore": "下载投影",
+      "home": "首页",
+      "mod": "模组",
+      "my_machines": "我的机器",
+      "my_profile": "我的账号",
+      "my_stars": "我的收藏",
       "search": "搜索",
       "upload": "投稿"
     },

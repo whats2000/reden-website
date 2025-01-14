@@ -10,13 +10,17 @@
                 <template #prepend>
                   <v-icon>mdi-home</v-icon>
                 </template>
-                <v-list-item-title> Home</v-list-item-title>
+                <v-list-item-title>
+                  {{ $t('reden.header.home') }}
+                </v-list-item-title>
               </v-list-item>
               <v-list-item :to="localePath('/feature')">
                 <template #prepend>
                   <v-icon>mdi-view-dashboard</v-icon>
                 </template>
-                <v-list-item-title> Features</v-list-item-title>
+                <v-list-item-title>
+                  {{ $t('reden.header.mod') }}
+                </v-list-item-title>
               </v-list-item>
               <v-divider />
               <template v-if="useAppStore().logined">
@@ -29,13 +33,19 @@
                     />
                     <v-icon v-else> mdi-account</v-icon>
                   </template>
-                  <v-list-item-title> My Profile</v-list-item-title>
+                  <v-list-item-title>
+                    {{ $t('reden.header.my_profile') }}
+                  </v-list-item-title>
                 </v-list-item>
                 <v-list-item>
-                  <v-list-item-title> My Machines</v-list-item-title>
+                  <v-list-item-title>
+                    {{ $t('reden.header.my_machines') }}
+                  </v-list-item-title>
                 </v-list-item>
                 <v-list-item>
-                  <v-list-item-title> My Stars</v-list-item-title>
+                  <v-list-item-title>
+                    {{ $t('reden.header.my_stars') }}
+                  </v-list-item-title>
                 </v-list-item>
               </template>
               <template v-else>
@@ -43,13 +53,17 @@
                   <template #prepend>
                     <v-icon>mdi-account</v-icon>
                   </template>
-                  <v-list-item-title> Login</v-list-item-title>
+                  <v-list-item-title>
+                    {{ $t('login.button.login') }}
+                  </v-list-item-title>
                 </v-list-item>
                 <v-list-item :to="localePath('/register')">
                   <template #prepend>
                     <v-icon>mdi-account-plus</v-icon>
                   </template>
-                  <v-list-item-title> Register</v-list-item-title>
+                  <v-list-item-title>
+                    {{ $t('register.button.register') }}
+                  </v-list-item-title>
                 </v-list-item>
               </template>
               <template v-if="useAppStore().userCache?.isStaff">
@@ -58,7 +72,9 @@
                   <template #prepend>
                     <v-icon>mdi-cog</v-icon>
                   </template>
-                  <v-list-item-title>Admin</v-list-item-title>
+                  <v-list-item-title>
+                    {{ $t('admin.title.admin') }}
+                  </v-list-item-title>
                 </v-list-item>
               </template>
             </v-list>
