@@ -124,11 +124,16 @@ function getPayloadType(data: any): {
   throw new Error('Unknown type.');
 }
 
-export function doFetchPut(url: string, data: any) {
+export function doFetchPut(
+  url: string,
+  data: any,
+  _headers: Record<string, string> = {},
+) {
   const { fetchBody, isJson } = getPayloadType(data);
   const headers: { [key: string]: string } = {
     'X-Requested-With': 'Reden',
     'X-CSRF-Token': useAppStore().csrfToken || '[Reden] no csrf token',
+    ..._headers,
   };
   if (isJson) {
     headers['Content-Type'] = 'application/json';

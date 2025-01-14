@@ -64,7 +64,7 @@ const backendInfo = useBackendMeta();
       <div class="buttons">
         <v-btn
           :to="localePath('/litematica')"
-          class="ma-2"
+          class="ma-2 text-none"
           color="primary"
           prepend-icon="mdi-download"
           rounded="rounded"

@@ -192,6 +192,11 @@
       },
       "this_website": "这个网站"
     },
+    "header": {
+      "explore": "下载投影",
+      "search": "搜索",
+      "upload": "投稿"
+    },
     "home": {
       "community_intro": {
         "discord": "加入我们的 Discord 服务器，与其他红石开发者聊天并从社区获得帮助。",
@@ -294,7 +299,9 @@
       "i_am_the_author": "我是作者",
       "id_can_only_contain": "ID 只能包含 a-z, 0-9, - and _",
       "id_is_taken": "此 ID 已被占用",
+      "litematica_generator": "投影生成器",
       "litematica_generator_only_support_uploading_1_litematica_file": "投影生成器模式只支持上传单个投影文件",
+      "manual_upload": "普通机器投稿",
       "maximum_size_per_image": "单张图片最大 2MB",
       "name_cannot_contain_special_characters": "名称不能包含特殊字符",
       "please_contact_us_if_you_have_any_questions": "如有任何疑问，请联系我们：",

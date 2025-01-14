@@ -192,6 +192,11 @@
       },
       "this_website": "this website"
     },
+    "header": {
+      "explore": "Explore",
+      "search": "Search",
+      "upload": "upload"
+    },
     "home": {
       "community_intro": {
         "discord": "Join our Discord server to chat with other redstone developers and get help from the community.",
@@ -206,7 +211,7 @@
         "title": "Features",
         "undo": "Made a mistake? Reden can quickly undo your actions by just pressing Ctrl+Z. All chain reactions will be undone."
       },
-      "go_litematica": "Minecraft Machines"
+      "go_litematica": "MC Builds"
     },
     "learn_more": "Learn More",
     "my_account": "My Account",
@@ -294,6 +299,7 @@
       "i_am_the_author": "I am the author",
       "id_can_only_contain": "ID can only contain a-z, 0-9, - and _",
       "id_is_taken": "ID is taken, please choose another one",
+      "litematica_generator": "Litematica Generator",
       "litematica_generator_only_support_uploading_1_litematica_file": "Litematica generator mode only support uploading 1 litematica file",
       "maximum_size_per_image": "Maximum 2MB per image",
       "name_cannot_contain_special_characters": "Name cannot contain special characters",

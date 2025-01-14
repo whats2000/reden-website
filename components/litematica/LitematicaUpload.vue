@@ -49,7 +49,6 @@ const machineId = ref<string>();
 const disallowedFilename = '\r\n\\\u0000\u000c`?*<>|:\'"'.split(''); // allow '/'
 const uploading = ref(false);
 const isOriginal = ref();
-const isLitematicaGenerator = ref(true);
 
 async function doUploadAll() {
   uploading.value = true;
@@ -59,7 +58,7 @@ async function doUploadAll() {
       return;
     }
     if (
-      isLitematicaGenerator.value &&
+      litematicaGenerator.value &&
       (selectedFiles.value.length != 1 ||
         !selectedFiles.value[0].name.endsWith('.litematic'))
     ) {
@@ -77,6 +76,9 @@ async function doUploadAll() {
     const response = await doFetchPut(
       `/api/mc-services/yisibite/${machineId.value}`,
       file,
+      {
+        'Content-Type': 'reden/litematica',
+      },
     );
     if (response.ok) {
       toast.success('File uploaded successfully');
@@ -183,6 +185,7 @@ onMounted(() => {
   }
 });
 
+const litematicaGenerator = ref<boolean>();
 const localizedData = ref<Record<string, Partial<MachineDef>>>({});
 
 const handleFileChange = (event: Event) => {
@@ -198,8 +201,10 @@ const handleFileChange = (event: Event) => {
       machineId.value = obj.name!.toLowerCase().replace(/[^a-z0-9]/g, '');
       toast.success('Auto-filled id from name');
     }
-
-    state.value = 'translation';
+    if (selectedFiles.value.length > 1) {
+      state.value = 'translation';
+      litematicaGenerator.value = false;
+    }
   }
 };
 
@@ -275,10 +280,11 @@ watch(props, refreshProps);
     <v-tabs-window v-model="state">
       <v-tabs-window-item value="upload">
         <v-card
+          :elevation="0"
           :max-height="maxHeight"
           :min-height="minHeight"
           border
-          class="rounded-xl"
+          class="rounded-xl overflow-y-auto"
         >
           <v-card-title> {{ $t('upload.btn.upload_design') }}</v-card-title>
           <v-card-text class="text-center">
@@ -332,6 +338,25 @@ watch(props, refreshProps);
               <v-icon>mdi-alert-circle</v-icon>
               {{ $t('upload.desc.existing_machine_design') }}
             </div>
+            <v-radio-group
+              v-if="selectedFiles.length === 1"
+              v-model="litematicaGenerator"
+              color="primary"
+              density="compact"
+              label="Please select the type of this post"
+              @update:model-value="() => (state = 'translation')"
+            >
+              <v-radio
+                :label="$t('upload.desc.litematica_generator')"
+                :value="true"
+                density="compact"
+              />
+              <v-radio
+                :label="$t('upload.desc.manual_upload')"
+                :value="false"
+                density="compact"
+              />
+            </v-radio-group>
           </v-card-text>
           <v-card-actions></v-card-actions>
         </v-card>
@@ -450,6 +475,7 @@ watch(props, refreshProps);
               <v-radio-group
                 v-model="isOriginal"
                 color="primary"
+                density="compact"
                 hide-details
                 row
               >

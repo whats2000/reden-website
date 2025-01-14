@@ -82,21 +82,19 @@
         <v-btn
           :active="false"
           :to="localePath('/litematica')"
-          class="ma-2"
-          prepend-icon="mdi-download"
-          size="x-large"
+          class="ma-2 text-capitalize"
         >
-          {{ $t('reden.home.go_litematica') }}
+          {{ $t('reden.header.explore') }}
         </v-btn>
       </template>
     </template>
     <p class="text-h5"></p>
     <v-text-field
       v-model="search"
+      :placeholder="$t('reden.header.search')"
       class="mx-auto max-w-520px"
       density="comfortable"
       hide-details
-      placeholder="Search"
       rounded="xl"
       variant="outlined"
       @keydown.prevent.enter="
@@ -143,13 +141,13 @@
         v-if="!mobile"
         :active="false"
         :to="localePath('/litematica#upload')"
-        class="ma-2"
+        class="ma-2 text-capitalize"
         color="secondary"
         prepend-icon="mdi-upload"
         size="x-large"
         variant="text"
       >
-        投稿
+        {{ $t('reden.header.upload') }}
       </v-btn>
     </template>
   </v-app-bar>

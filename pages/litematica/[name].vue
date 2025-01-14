@@ -183,13 +183,13 @@ const tab = ref(
       {{ $t('litematica_generator.view_all_designs') }}
     </v-btn>
     <v-btn
-      v-if="appStore.logined"
+      :to="appStore.logined ? undefined : localePath('/login')"
       class="mb-3 text-capitalize"
       color="primary"
       variant="outlined"
       @click="
         () => {
-          if (!localizedData) {
+          if (!localizedData && appStore.logined) {
             useFetch(`/api/mc-services/yisibite/${machineId}/info`, {
               key: `edit-${machineId}`,
             });
