@@ -41,13 +41,7 @@ const tags = computed(
     elevation="4"
     rounded="xl"
   >
-    <v-img
-      v-if="!mobile"
-      :src="item.thumbnailUrl"
-      class="thumbnail-img"
-      cover
-      height="200px"
-    />
+    <v-img v-if="!mobile" :src="item.thumbnailUrl" class="thumbnail-img" />
     <v-card-title class="card-title text-3lines">{{ item.name }}</v-card-title>
     <v-card-subtitle class="opacity-100">
       <div class="d-flex flex-row author-line" style="line-height: 24px">

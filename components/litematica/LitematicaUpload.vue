@@ -104,21 +104,28 @@ async function doUploadAll() {
       }
     }
     const file = selectedFiles.value[0];
-    const response = litematicaGenerator.value
-      ? await doFetchPut(`/api/mc-services/yisibite/${machineId.value}`, file, {
+    let response: Response | undefined = undefined;
+    if (litematicaGenerator.value && file.fileType === 'uploading') {
+      response = await doFetchPut(
+        `/api/mc-services/yisibite/${machineId.value}`,
+        file.file,
+        {
           'Content-Type': 'reden/litematica',
-        })
-      : await doFetchPut(
-          `/api/mc-services/yisibite/${machineId.value}`,
-          formData,
-        );
-    if (response.ok) {
-      toast.success('File uploaded successfully');
-      await delay(1e3);
+        },
+      );
     } else {
+      response = await doFetchPut(
+        `/api/mc-services/yisibite/${machineId.value}`,
+        formData,
+      );
+    }
+    if (response && !response.ok) {
       await toastError(response, 'Failed to upload file');
       uploading.value = false;
       return;
+    } else {
+      toast.success('File uploaded successfully');
+      await delay(1e3);
     }
   }
   for (const lang of availableLocales) {

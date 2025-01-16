@@ -157,6 +157,18 @@ const itemDisplay = computed(() => {
   }
   return rows;
 });
+const itemDisplayCols = computed(() => {
+  const cols: { def?: MachineDef[]; ad?: 'ad' }[] = [];
+  for (let i = 0; i < itemsPerRow.value; i++) {
+    cols[i] = { def: [] };
+  }
+  let i = 0;
+  for (const [, def] of Object.entries(serverResponse.value?.d ?? {})) {
+    cols[i % itemsPerRow.value].def?.push(def);
+    i++;
+  }
+  return cols;
+});
 const ad = useTemplateRef<HTMLParagraphElement>('ad');
 const isHovering = useElementHover(ad);
 </script>
@@ -303,18 +315,21 @@ const isHovering = useElementHover(ad);
           size="32"
         />
       </v-row>
-      <v-row v-for="row in itemDisplay" align="start" justify="center">
-        <bottom-bar-ad v-if="row.ad" :height="300" />
+      <v-row>
         <v-col
-          v-for="item in row.def"
-          v-else
-          :key="item.key"
+          v-for="col in itemDisplayCols"
           :cols="12 / itemsPerRow"
+          align="start"
+          justify="center"
         >
           <MinecraftFarmCard
+            v-for="item in col.def"
+            class="mt-4"
+            :key="item.key"
             :back-url="switchLocalePath(locale)"
             :item="item"
-          />
+          >
+          </MinecraftFarmCard>
         </v-col>
       </v-row>
       <v-row justify="center">

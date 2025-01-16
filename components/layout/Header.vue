@@ -185,6 +185,9 @@ defineSlots<{
 }>();
 
 const search = ref('');
+router.afterEach((to) => {
+  search.value = to.query.search as string;
+});
 </script>
 <style scoped>
 .reden-app-bar {
