@@ -33,17 +33,38 @@ const refreshProps = () => {
     ...localizedData.value,
     ...props.machine,
   };
-  machineId.value = Object.entries(props.machine ?? {})?.[0]?.[1]?.key;
-  isOriginal.value = props.machine?.original;
+  const machine = Object.entries(props.machine ?? {})?.[0]?.[1];
+  machineId.value = machine?.key;
+  isOriginal.value = machine?.original;
+  selectedFiles.value =
+    machine?.attachments?.map((url) => ({
+      name: url,
+      url,
+      fileType: 'uploaded',
+    })) ?? [];
+  selectedPictures.value = machine?.imageUrl
+    ? [
+        {
+          name: machine.imageUrl,
+          url: machine.imageUrl,
+          fileType: 'uploaded',
+        },
+      ]
+    : [];
 };
 const availableSteps = ref<State[]>(
   props.editMode ? ['upload', 'translation', 'image'] : ['upload'],
 );
-const selectedFiles = ref<File[]>([]);
+type MyFile = {
+  file?: File;
+  name: string;
+  url: string;
+  fileType: 'uploading' | 'uploaded';
+};
+const selectedFiles = ref<MyFile[]>([]);
 const fileInput = useTemplateRef<HTMLInputElement>('fileInput');
 const pictureInput = useTemplateRef<HTMLInputElement>('pictureInput');
-const selectedPictures = ref<File[]>([]);
-const imageUris = ref<string[]>([]);
+const selectedPictures = ref<MyFile[]>([]);
 const pictureStepError = ref<string>();
 const machineId = ref<string>();
 const disallowedFilename = '\r\n\\\u0000\u000c`?*<>|:\'"'.split(''); // allow '/'
@@ -57,29 +78,40 @@ async function doUploadAll() {
       toast.error('你最多只能上传3个文件');
       return;
     }
-    if (
-      litematicaGenerator.value &&
-      (selectedFiles.value.length != 1 ||
-        !selectedFiles.value[0].name.endsWith('.litematic'))
-    ) {
-      toast.error(
-        t(
-          'upload.desc.litematica_generator_only_support_uploading_1_litematica_file',
-        ),
-        {
-          duration: 1e4,
-        },
-      );
-      return;
+    if (litematicaGenerator.value) {
+      if (
+        selectedFiles.value.length != 1 ||
+        (selectedFiles.value[0].fileType !== 'uploaded' &&
+          !selectedFiles.value[0]?.file?.name.endsWith('.litematic'))
+      ) {
+        toast.error(
+          t(
+            'upload.desc.litematica_generator_only_support_uploading_1_litematica_file',
+          ),
+          {
+            duration: 1e4,
+          },
+        );
+        return;
+      }
+    }
+    const formData = new FormData();
+    for (const file of selectedFiles.value) {
+      if (file.fileType === 'uploading') {
+        formData.append('upload', file.file!, file.name);
+      } else {
+        formData.append('external', file.url);
+      }
     }
     const file = selectedFiles.value[0];
-    const response = await doFetchPut(
-      `/api/mc-services/yisibite/${machineId.value}`,
-      file,
-      {
-        'Content-Type': 'reden/litematica',
-      },
-    );
+    const response = litematicaGenerator.value
+      ? await doFetchPut(`/api/mc-services/yisibite/${machineId.value}`, file, {
+          'Content-Type': 'reden/litematica',
+        })
+      : await doFetchPut(
+          `/api/mc-services/yisibite/${machineId.value}`,
+          formData,
+        );
     if (response.ok) {
       toast.success('File uploaded successfully');
       await delay(1e3);
@@ -116,7 +148,11 @@ async function doUploadAll() {
   if (selectedPictures.value.length > 0) {
     const formData = new FormData();
     for (const file of selectedPictures.value) {
-      formData.append('image', file);
+      if (file.fileType === 'uploading') {
+        formData.append('upload', file.file!, file.name);
+      } else {
+        formData.append('external', file.url);
+      }
     }
     const response = await doFetchPut(
       `/api/mc-services/yisibite/${machineId.value}/thumbnails`,
@@ -160,19 +196,22 @@ const handlePictureChange = (event: Event) => {
     if (file.size > 2 * 1024 * 1024) {
       pictureStepError.value = '图片大小不能超过2MB';
       selectedPictures.value = [];
-      imageUris.value = [];
       return;
     }
   }
-  selectedPictures.value.push(...Array.from(files));
-  imageUris.value.push(
-    ...Array.from(files).map((file) => URL.createObjectURL(file)),
+  Array.from(files).forEach((file) =>
+    selectedPictures.value.push({
+      name: file.name,
+      file,
+      url: URL.createObjectURL(file),
+      fileType: 'uploading',
+    }),
   );
 };
 
 const removePicture = (index: number) => {
-  selectedPictures.value.splice(index, 1);
-  imageUris.value.splice(index, 1);
+  const splice = selectedPictures.value.splice(index, 1);
+  URL.revokeObjectURL(splice[0].url);
 };
 
 onMounted(() => {
@@ -191,14 +230,19 @@ const localizedData = ref<Record<string, Partial<MachineDef>>>({});
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
   if (target.files?.length ?? 0 >= 1) {
-    selectedFiles.value = Array.from(target.files!);
+    selectedFiles.value = Array.from(target.files!).map((file) => ({
+      name: file.name,
+      file,
+      url: URL.createObjectURL(file),
+      fileType: 'uploading',
+    }));
     const obj = getLocalizedData(language.value);
-    if (!obj.name) {
-      obj.name = selectedFiles.value[0].name.replace('.litematic', '');
+    if (!obj.name && selectedFiles.value[0].file) {
+      obj.name = selectedFiles.value[0].file.name.replace('.litematic', '');
       toast.success('Auto-filled name from file name');
     }
-    if (!machineId.value) {
-      machineId.value = obj.name!.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (!machineId.value && obj.name) {
+      machineId.value = obj.name.toLowerCase().replace(/[^a-z0-9]/g, '');
       toast.success('Auto-filled id from name');
     }
     if (selectedFiles.value.length > 1) {
@@ -215,12 +259,6 @@ const {
 } = useFetch(() => `/api/mc-services/yisibite/${machineId.value}/info`, {
   dedupe: 'defer',
 });
-
-const triggerFileInput = () => {
-  if (fileInput.value) {
-    fileInput.value.click();
-  }
-};
 
 const formatFileSize = (bytes: number): string => {
   if (bytes < 1024) {
@@ -313,7 +351,7 @@ watch(props, refreshProps);
             <p v-if="selectedFiles.length > 0" class="line-h-24">
               <span v-if="selectedFiles.length == 1">
                 {{ selectedFiles[0].name }}
-                ({{ formatFileSize(selectedFiles[0].size) }})
+                ({{ formatFileSize(selectedFiles[0]?.file?.size ?? 0) }})
               </span>
               <span v-else-if="selectedFiles.length > 1">
                 {{
@@ -327,7 +365,7 @@ watch(props, refreshProps);
                 icon="mdi-close"
                 size="xs"
                 variant="outlined"
-                @click="(selectedFiles = []), (availableSteps = ['upload'])"
+                @click="(selectedFiles = []) && (availableSteps = ['upload'])"
               />
             </p>
             <div
@@ -563,7 +601,7 @@ watch(props, refreshProps);
                 class="d-inline-block mr-4"
               >
                 <v-img
-                  :src="imageUris[index]"
+                  :src="picture.url"
                   class="border rounded-lg"
                   contain
                   max-height="150"
@@ -664,10 +702,6 @@ watch(props, refreshProps);
 <style scoped>
 .line-h-24 {
   line-height: 24px;
-}
-
-:deep(.v-slide-group__content) {
-  justify-content: center;
 }
 
 .language-sel-tr {

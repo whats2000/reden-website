@@ -305,54 +305,57 @@ const tab = ref(
       />
     </v-row>
 
-    <v-row>
-      <v-col>
-        <v-card
-          v-if="selected?.hasX || selected?.hasY || selected?.hasZ"
-          border
+    <template v-if="selected.type === 'LitematicaGen'">
+      <v-row>
+        <v-col>
+          <v-card
+            v-if="selected?.hasX || selected?.hasY || selected?.hasZ"
+            border
+          >
+            <v-card-subtitle class="text-wrap pa-3">
+              {{ $t('litematica_generator.size_description') }}
+            </v-card-subtitle>
+            <v-card-text>
+              <SizeInput
+                v-if="selected.hasX"
+                v-model="xSize"
+                :def="selected"
+                xyz="x"
+              />
+              <SizeInput
+                v-if="selected.hasY"
+                v-model="ySize"
+                :def="selected"
+                xyz="y"
+              />
+              <SizeInput
+                v-if="selected.hasZ"
+                v-model="zSize"
+                :def="selected"
+                xyz="z"
+              />
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-spacer />
+        <v-btn
+          :loading="loading"
+          class="ma-3"
+          color="primary"
+          type="button"
+          variant="outlined"
+          @click="openMaterials"
         >
-          <v-card-subtitle class="text-wrap pa-3">
-            {{ $t('litematica_generator.size_description') }}
-          </v-card-subtitle>
-          <v-card-text>
-            <SizeInput
-              v-if="selected.hasX"
-              v-model="xSize"
-              :def="selected"
-              xyz="x"
-            />
-            <SizeInput
-              v-if="selected.hasY"
-              v-model="ySize"
-              :def="selected"
-              xyz="y"
-            />
-            <SizeInput
-              v-if="selected.hasZ"
-              v-model="zSize"
-              :def="selected"
-              xyz="z"
-            />
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-spacer />
-      <v-btn
-        :loading="loading"
-        class="ma-3"
-        color="primary"
-        type="button"
-        variant="outlined"
-        @click="openMaterials"
-      >
-        材料列表
-      </v-btn>
-      <v-btn :loading="loading" class="ma-3" color="primary" type="submit">
-        {{ $t('litematica_generator.download') }}
-      </v-btn>
-    </v-row>
+          材料列表
+        </v-btn>
+        <v-btn :loading="loading" class="ma-3" color="primary" type="submit">
+          {{ $t('litematica_generator.download') }}
+        </v-btn>
+      </v-row>
+    </template>
+    <template v-if="selected.type === 'LitematicaShare'"> </template>
     <v-row v-if="!useAppStore().logined" class="text-sm-body-1">
       <v-col>
         <reden-router :to="localePath('/login')">

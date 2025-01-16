@@ -135,7 +135,7 @@ const { mdAndUp, xs, sm, md, width } = useDisplay({
   mobileBreakpoint: 600,
 });
 const itemsPerRow = computed(() =>
-  xs.value ? 1 : sm.value || md.value ? 2 : 3,
+  xs.value ? 2 : sm.value || md.value ? 2 : 3,
 );
 const cardMaxWidth = computed(() => {
   const referenceWidth = mdAndUp.value ? width.value - 340 : width.value;
@@ -169,178 +169,183 @@ const isHovering = useElementHover(ad);
     </template>
     <template v-else>广告位招租！</template>
   </p>
-  <v-container class="pa-4" style="max-width: max-content">
-    <v-btn
-      class="position-fixed z-10 right-0"
-      color="primary"
-      icon="mdi-arrow-up"
-      style="top: 150px"
-      variant="elevated"
-      @click="goto(0)"
+  <v-btn
+    class="position-fixed z-10 right-0"
+    color="primary"
+    icon="mdi-arrow-up"
+    style="top: 150px"
+    variant="elevated"
+    @click="goto(0)"
+  >
+    <v-icon> mdi-arrow-up</v-icon>
+    <v-tooltip
+      activator="parent"
+      location="start"
+      location-strategy="connected"
+      text="Back to Top"
     >
-      <v-icon> mdi-arrow-up</v-icon>
-      <v-tooltip
-        activator="parent"
-        location="start"
-        location-strategy="connected"
-        text="Back to Top"
-      >
-      </v-tooltip>
-    </v-btn>
-    <v-alert
-      v-if="maintaining && isClient && notification"
-      class="mb-3"
-      type="warning"
-    >
-      <template #title>
-        <v-alert-title> 本生成器正在维护！</v-alert-title>
-      </template>
-      <template #text>
-        投影生成器服务正在进行维护，进行数据和服务器迁移，以及代码重构。
-        期间可能会有不稳定的情况，如果你遇到问题，请稍后重试。
-        <br />
-        如果你觉得这个服务对你有帮助，请在B站关注我，以及
-        <router-link class="router" style="color: red" to="/sponsors">
-          给我打钱！
-        </router-link>
-        <br />
-        若您不想被强制使用夸克下载，可以打钱之后加群708842363联系我，我会给你的账户开通权限。多少随意，大于5元即可。
-        <v-row justify="center">
-          <v-col style="max-width: 400px">
-            <v-btn
-              :icon="undefined"
-              block
-              variant="outlined"
-              @click="notification = false"
-            >
-              我知道了
-            </v-btn>
-          </v-col>
-        </v-row>
-      </template>
-    </v-alert>
-    <v-alert
-      v-if="!maintaining && isClient && notification"
-      class="mb-3"
-      type="info"
-    >
-      <template #title>
-        <v-alert-title> 暂停服务通知</v-alert-title>
-      </template>
-      <template #text>
-        投影生成器服务将在2025年1月8日起暂停服务，进行数据和服务器迁移，以及代码重构。
-        本次维护预计持续2-3天，敬请谅解。
-        <br />
-        如果你觉得这个服务对你有帮助，请在B站关注我，以及
-        <router-link class="router" style="color: red" to="/sponsors">
-          给我打钱！
-        </router-link>
-        <br />
-        若您不想被强制使用夸克下载，可以打钱之后加群708842363联系我，我会给你的账户开通权限。多少随意，大于5元即可。
-        <v-row justify="center">
-          <v-col style="max-width: 400px">
-            <v-btn
-              :icon="undefined"
-              block
-              variant="outlined"
-              @click="notification = false"
-            >
-              我知道了
-            </v-btn>
-          </v-col>
-        </v-row>
-      </template>
-    </v-alert>
-    <div class="w-100 d-flex flex-row justify-center">
-      <div v-if="mdAndUp" style="width: 150px">
-        <div data-some-item="aaa" />
-        <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
-      </div>
-      <div>
-        <v-btn
-          v-if="locale === 'zh_cn'"
-          class="mb-4 mr-4"
-          color="primary"
-          href="https://space.bilibili.com/1545239761"
-          prepend-icon="custom:Bilibili"
-          rounded="lg"
-          variant="outlined"
-        >
-          请在B站关注我，有故障请私信
-        </v-btn>
-        <v-btn
-          class="mb-4 mr-4"
-          color="primary"
-          prepend-icon="mdi-upload"
-          rounded="lg"
-          variant="outlined"
-        >
-          {{ $t('litematica_generator.upload.button_msg') }}
-          <v-dialog
-            v-model="uploadDialog"
-            activator="parent"
-            close-on-back
-            max-width="900"
-            persistent
+    </v-tooltip>
+  </v-btn>
+  <v-alert
+    v-if="maintaining && isClient && notification"
+    class="mb-3"
+    type="warning"
+  >
+    <template #title>
+      <v-alert-title> 本生成器正在维护！</v-alert-title>
+    </template>
+    <template #text>
+      投影生成器服务正在进行维护，进行数据和服务器迁移，以及代码重构。
+      期间可能会有不稳定的情况，如果你遇到问题，请稍后重试。
+      <br />
+      如果你觉得这个服务对你有帮助，请在B站关注我，以及
+      <router-link class="router" style="color: red" to="/sponsors">
+        给我打钱！
+      </router-link>
+      <br />
+      若您不想被强制使用夸克下载，可以打钱之后加群708842363联系我，我会给你的账户开通权限。多少随意，大于5元即可。
+      <v-row justify="center">
+        <v-col style="max-width: 400px">
+          <v-btn
+            :icon="undefined"
+            block
+            variant="outlined"
+            @click="notification = false"
           >
-            <v-card variant="flat">
-              <LitematicaUpload />
-              <div class="position-absolute top-0 right-0">
-                <v-btn
-                  icon="mdi-close"
-                  variant="plain"
-                  @click="uploadDialog = false"
-                />
-              </div>
-            </v-card>
-          </v-dialog>
-        </v-btn>
-        <v-row justify="center">
-          <v-pagination
-            v-model="page"
-            :length="totalPages"
-            :total-visible="Math.min(8, width / 80 - 2)"
-            rounded="xl"
-            size="32"
-          />
-        </v-row>
-        <v-row v-for="row in itemDisplay" align="start" justify="center">
-          <bottom-bar-ad v-if="row.ad" :height="300" />
-          <v-col
-            v-for="item in row.def"
-            v-else
-            :key="item.key"
-            :cols="12 / itemsPerRow"
+            我知道了
+          </v-btn>
+        </v-col>
+      </v-row>
+    </template>
+  </v-alert>
+  <v-alert
+    v-if="!maintaining && isClient && notification"
+    class="mb-3"
+    type="info"
+  >
+    <template #title>
+      <v-alert-title> 暂停服务通知</v-alert-title>
+    </template>
+    <template #text>
+      投影生成器服务将在2025年1月8日起暂停服务，进行数据和服务器迁移，以及代码重构。
+      本次维护预计持续2-3天，敬请谅解。
+      <br />
+      如果你觉得这个服务对你有帮助，请在B站关注我，以及
+      <router-link class="router" style="color: red" to="/sponsors">
+        给我打钱！
+      </router-link>
+      <br />
+      若您不想被强制使用夸克下载，可以打钱之后加群708842363联系我，我会给你的账户开通权限。多少随意，大于5元即可。
+      <v-row justify="center">
+        <v-col style="max-width: 400px">
+          <v-btn
+            :icon="undefined"
+            block
+            variant="outlined"
+            @click="notification = false"
           >
-            <MinecraftFarmCard
-              :back-url="switchLocalePath(locale)"
-              :item="item"
-              :max-width="cardMaxWidth"
-            />
-          </v-col>
-        </v-row>
-        <v-row justify="center">
-          <v-pagination
-            v-model="page"
-            :length="totalPages"
-            :total-visible="Math.min(8, width / 80 - 2)"
-            rounded="xl"
-            size="32"
-          />
-        </v-row>
-        <div class="text-center opacity-60 w-100 pt-2">
-          {{
-            $t('litematica_generator.total_downloads', [
-              serverResponse?.downloads,
-            ])
-          }}
-        </div>
-      </div>
-      <div v-if="mdAndUp" style="width: 150px">
-        <div data-some-item="aaa" />
-        <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
-      </div>
+            我知道了
+          </v-btn>
+        </v-col>
+      </v-row>
+    </template>
+  </v-alert>
+  <div class="w-100 d-flex flex-row justify-center">
+    <div v-if="mdAndUp" style="width: 150px">
+      <div data-some-item="aaa" />
+      <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
     </div>
-    <BottomBarAd :height="300" />
-  </v-container>
+    <v-container>
+      <v-btn
+        v-if="locale === 'zh_cn'"
+        class="mb-4 mr-4"
+        color="primary"
+        href="https://space.bilibili.com/1545239761"
+        prepend-icon="custom:Bilibili"
+        rounded="lg"
+        variant="outlined"
+      >
+        请在B站关注我，有故障请私信
+      </v-btn>
+      <v-btn
+        class="mb-4 mr-4"
+        color="primary"
+        prepend-icon="mdi-upload"
+        rounded="lg"
+        variant="outlined"
+      >
+        {{ $t('litematica_generator.upload.button_msg') }}
+        <v-dialog
+          v-model="uploadDialog"
+          activator="parent"
+          close-on-back
+          max-width="900"
+          persistent
+        >
+          <v-card variant="flat">
+            <LitematicaUpload />
+            <div class="position-absolute top-0 right-0">
+              <v-btn
+                icon="mdi-close"
+                variant="plain"
+                @click="uploadDialog = false"
+              />
+            </div>
+          </v-card>
+        </v-dialog>
+      </v-btn>
+      <v-row justify="center">
+        <v-pagination
+          v-model="page"
+          :length="totalPages"
+          :total-visible="Math.min(8, width / 80 - 2)"
+          rounded="xl"
+          size="32"
+        />
+      </v-row>
+      <v-row v-for="row in itemDisplay" align="start" justify="center">
+        <bottom-bar-ad v-if="row.ad" :height="300" />
+        <v-col
+          v-for="item in row.def"
+          v-else
+          :key="item.key"
+          :cols="12 / itemsPerRow"
+        >
+          <MinecraftFarmCard
+            :back-url="switchLocalePath(locale)"
+            :item="item"
+          />
+        </v-col>
+      </v-row>
+      <v-row justify="center">
+        <v-pagination
+          v-model="page"
+          :length="totalPages"
+          :total-visible="Math.min(8, width / 80 - 2)"
+          rounded="xl"
+          size="32"
+        />
+      </v-row>
+      <div class="text-center opacity-60 w-100 pt-2">
+        {{
+          $t('litematica_generator.total_downloads', [
+            serverResponse?.downloads,
+          ])
+        }}
+      </div>
+    </v-container>
+    <div v-if="mdAndUp" style="width: 150px">
+      <div data-some-item="aaa" />
+      <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
+    </div>
+  </div>
+  <BottomBarAd :height="300" />
 </template>
+
+<style scoped>
+@media (max-width: 400px) {
+  .v-col {
+    padding: 3px !important;
+  }
+}
+</style>

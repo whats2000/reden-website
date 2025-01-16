@@ -10,7 +10,7 @@ const props = defineProps<{
   maxWidth?: number;
 }>();
 const { mobile: _mobile } = useDisplay({
-  mobileBreakpoint: 500,
+  mobileBreakpoint: 1,
 });
 const mobile = computed(() => (import.meta.server ? false : _mobile.value));
 
@@ -156,6 +156,20 @@ const tags = computed(
 @media (min-width: 800px) {
   .card-title {
     font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .card-title {
+    padding: 3px !important;
+  }
+
+  .v-card {
+    margin: 3px !important;
+  }
+
+  .stat-line {
+    display: none;
   }
 }
 

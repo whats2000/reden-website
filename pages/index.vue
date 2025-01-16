@@ -29,8 +29,8 @@ const backendInfo = useBackendMeta();
 
 <template>
   <div v-if="backendInfo.developmentMode">
-    <v-alert closable icon="mdi-alert">
-      <v-alert-title> 开发模式选项 </v-alert-title>
+    <v-alert closable close-label="关闭" icon="mdi-alert">
+      <v-alert-title> 开发模式选项</v-alert-title>
       <v-btn
         color="primary"
         @click="
@@ -52,16 +52,16 @@ const backendInfo = useBackendMeta();
     <div>
       <v-row>
         <v-col>
-          <h1 class="text-h2 font-weight-bold">Reden</h1>
-          <p style="font-size: larger">
+          <h1 class="text-h2 text-md-h1 font-weight-bold">Reden</h1>
+          <p class="opacity-80 text-h5">
             {{ $t('reden.description') }}
           </p>
         </v-col>
         <v-col class="icon" cols="3">
-          <v-img src="/reden_256.png" width="148" />
+          <v-img class="d-none d-sm-block" src="/reden_256.png" width="148" />
         </v-col>
       </v-row>
-      <div class="buttons">
+      <div class="d-flex buttons">
         <v-btn
           :to="localePath('/litematica')"
           class="ma-2 text-none"
@@ -94,6 +94,32 @@ const backendInfo = useBackendMeta();
         </v-btn>
       </div>
     </div>
+  </div>
+  <div class="d-flex flex-wrap">
+    <v-col cols="12" md="6">
+      <v-card
+        style="
+          background: linear-gradient(135deg, #dd8833, #ffbb33);
+          height: 400px;
+        "
+      >
+        <v-card-title class="text-h3 text-sm-h2 font-weight-bold">
+          探索红石机器
+        </v-card-title>
+      </v-card>
+    </v-col>
+    <v-col cols="12" md="6">
+      <v-card
+        style="
+          background: linear-gradient(135deg, #33b5e5, #0099cc);
+          height: 400px;
+        "
+      >
+        <v-card-title class="text-h3 text-sm-h2 font-weight-bold">
+          关注最爱的作者
+        </v-card-title>
+      </v-card>
+    </v-col>
   </div>
 
   <div ref="introContent" class="intro-content">
@@ -219,21 +245,35 @@ body {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 64px;
-  height: calc(100vh - 120px);
+  height: 70vh;
   padding-left: 30px;
   padding-right: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-
-  @media (max-width: 750px) {
+  @media (max-width: 560px) {
     .icon {
       display: none;
     }
   }
 }
 
+.buttons {
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  @media (max-width: 400px) {
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 240px;
+  }
+}
+
 * {
   touch-action: manipulation;
+}
+
+.min-w-380 {
+  min-width: 380px;
 }
 </style>

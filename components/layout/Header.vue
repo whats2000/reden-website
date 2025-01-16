@@ -177,7 +177,7 @@ const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();
 
 const { mobile } = useDisplay({
-  mobileBreakpoint: 500,
+  mobileBreakpoint: 640,
 });
 
 defineSlots<{
