@@ -28,7 +28,10 @@ export type MachineDef = {
   author?: Partial<Profile>;
   categoryTag?: Tag;
   featureTags?: Tag[];
-  attachments?: string[];
+  attachments?: {
+    name: string;
+    size: number;
+  }[];
   original?: boolean;
 };
 
@@ -324,10 +327,10 @@ const isHovering = useElementHover(ad);
         >
           <MinecraftFarmCard
             v-for="item in col.def"
-            class="mt-4"
             :key="item.key"
             :back-url="switchLocalePath(locale)"
             :item="item"
+            class="mt-4"
           >
           </MinecraftFarmCard>
         </v-col>

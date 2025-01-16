@@ -359,15 +359,18 @@ const tab = ref(
       <h3>下载链接（临时版，每个链接都对应一个不同的文件）</h3>
       <v-list
         v-for="(attachment, index) in selected.attachments"
-        :key="attachment"
+        :key="attachment.name"
         class="overflow-hidden"
       >
-        <v-list-item>
+        <v-list-item border>
           <v-list-item-title>
-            <p>下载链接{{ index + 1 }}</p>
-            <a :href="attachment" class="router nowrap">
-              <v-icon>mdi-link</v-icon>
-              {{ attachment }}
+            <p class="text-orange">下载链接{{ index + 1 }}</p>
+            <a
+              :href="`/api/mc-services/yisibite/${machineId}/download/${index + 1}`"
+              class="router nowrap"
+            >
+              <v-icon>mdi-download</v-icon>
+              {{ attachment.name }}
             </a>
           </v-list-item-title>
         </v-list-item>
