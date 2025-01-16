@@ -45,15 +45,19 @@ const tags = computed(
     <v-card-title class="card-title text-3lines">{{ item.name }}</v-card-title>
     <v-card-subtitle class="opacity-100">
       <div class="d-flex flex-row author-line" style="line-height: 24px">
-        {{
-          item.original
-            ? $t('litematica_generator.by.author')
-            : $t('litematica_generator.by.uploader')
-        }}
+        <span class="mr-1">
+          {{
+            item.original
+              ? $t('litematica_generator.by.author')
+              : $t('litematica_generator.by.uploader')
+          }}
+        </span>
         <v-avatar v-if="item.author?.avatarUrl" size="24">
           <v-img :aspect-ratio="16 / 9" :src="item.author?.avatarUrl" />
         </v-avatar>
-        {{ item.author?.username }}
+        <span class="ml-1">
+          {{ item.author?.username }}
+        </span>
         <v-spacer />
         <template v-if="mobile">
           <v-chip
