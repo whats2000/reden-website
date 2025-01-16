@@ -355,7 +355,24 @@ const tab = ref(
         </v-btn>
       </v-row>
     </template>
-    <template v-if="selected.type === 'LitematicaShare'"> </template>
+    <template v-if="selected.type === 'LitematicaShare'">
+      <h3>下载链接（临时版，每个链接都对应一个不同的文件）</h3>
+      <v-list
+        v-for="(attachment, index) in selected.attachments"
+        :key="attachment"
+        class="overflow-hidden"
+      >
+        <v-list-item>
+          <v-list-item-title>
+            <p>下载链接{{ index + 1 }}</p>
+            <a :href="attachment" class="router nowrap">
+              <v-icon>mdi-link</v-icon>
+              {{ attachment }}
+            </a>
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </template>
     <v-row v-if="!useAppStore().logined" class="text-sm-body-1">
       <v-col>
         <reden-router :to="localePath('/login')">
