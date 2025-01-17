@@ -443,4 +443,10 @@ export const badgeDefs: { [keys: string]: BadgeDef } = {
     hover_translate: '已禁用夸克网盘',
     icon: 'custom:QuarkCloud',
   },
+  archiver: {
+    color: 'blue-grey',
+    translate: 'user.archiver',
+    hover_translate: 'user.archiver_hover',
+    icon: 'mdi-archive',
+  },
 };

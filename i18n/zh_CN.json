@@ -326,6 +326,8 @@
     }
   },
   "user": {
+    "archiver": "归档员",
+    "archiver_hover": "此用户是归档员，可以免审核上传稿件",
     "contributor": "贡献者",
     "contributor_hover": "此用户参与过本项目的开发",
     "developer": "开发者",

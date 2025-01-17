@@ -325,6 +325,8 @@
     }
   },
   "user": {
+    "archiver": "Archiver",
+    "archiver_hover": "This user is an archiver who have rights to upload posts without review",
     "contributor": "Contributor",
     "contributor_hover": "This user has contributed to this project",
     "developer": "Developer",

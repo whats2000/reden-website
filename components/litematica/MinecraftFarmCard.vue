@@ -159,7 +159,7 @@ const tags = computed(
 
 @media (max-width: 400px) {
   .card-title {
-    font-size: 12px;
+    font-size: 14px;
     padding: 3px !important;
   }
 
