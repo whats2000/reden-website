@@ -37,20 +37,17 @@ const refreshProps = () => {
   machineId.value = machine?.key;
   isOriginal.value = machine?.original;
   selectedFiles.value =
-    machine?.attachments?.map((url) => ({
+    machine?.attachments?.map((item) => ({
+      name: item.name,
+      url: item.name,
+      fileType: 'uploaded',
+    })) ?? [];
+  selectedPictures.value =
+    machine?.images?.map((url) => ({
       name: url,
       url,
       fileType: 'uploaded',
     })) ?? [];
-  selectedPictures.value = machine?.imageUrl
-    ? [
-        {
-          name: machine.imageUrl,
-          url: machine.imageUrl,
-          fileType: 'uploaded',
-        },
-      ]
-    : [];
 };
 const availableSteps = ref<State[]>(
   props.editMode ? ['upload', 'translation', 'image'] : ['upload'],
@@ -104,7 +101,7 @@ async function doUploadAll() {
       }
     }
     const file = selectedFiles.value[0];
-    let response: Response | undefined = undefined;
+    let response: Response | undefined;
     if (litematicaGenerator.value && file.fileType === 'uploading') {
       response = await doFetchPut(
         `/api/mc-services/yisibite/${machineId.value}`,

@@ -24,6 +24,7 @@ export type MachineDef = {
   link?: string;
   thumbnailUrl?: string;
   imageUrl?: string;
+  images?: string[];
   updatedAt?: number;
   author?: Partial<Profile>;
   categoryTag?: Tag;
