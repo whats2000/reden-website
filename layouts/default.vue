@@ -9,6 +9,8 @@ import LayoutFooter from '~/components/layout/footer.vue';
 
 const themeCookie = useCookie<'light' | 'dark'>('theme', {
   default: () => 'light',
+  maxAge: 60 * 60 * 24 * 90,
+  sameSite: 'strict',
 });
 
 const theme = useTheme();

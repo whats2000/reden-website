@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import UserProfileCard from '@/components/UserProfileCard.vue';
 import { useRoute } from 'vue-router';
+import type { MachineDef } from '~/pages/litematica/index.vue';
 
 const route = useRoute();
 const { t } = useI18n();
@@ -16,6 +17,16 @@ watch(user, () => {
     title: `${user?.value?.username ?? t('reden.user_not_found')} - Reden`,
   });
 });
+
+const { data: machines } = await useFetch<MachineDef[]>(
+  `/api/mc-services/litematica/by-author`,
+  {
+    query: {
+      author: user.value?.username ?? '',
+      pageSize: 10,
+    },
+  },
+);
 </script>
 
 <template>

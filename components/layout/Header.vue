@@ -184,9 +184,9 @@ defineSlots<{
   'common-append': void;
 }>();
 
-const search = ref('');
-router.afterEach((to) => {
-  search.value = to.query.search as string;
+const search = ref((router.currentRoute.value.query.search as string) ?? '');
+watch(router.currentRoute, (value) => {
+  search.value = (value.query.search as string) ?? '';
 });
 </script>
 <style scoped>

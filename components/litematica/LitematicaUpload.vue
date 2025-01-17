@@ -37,17 +37,23 @@ const refreshProps = () => {
   machineId.value = machine?.key;
   isOriginal.value = machine?.original;
   selectedFiles.value =
-    machine?.attachments?.map((item) => ({
-      name: item.name,
-      url: item.name,
-      fileType: 'uploaded',
-    })) ?? [];
+    machine?.attachments?.map(
+      (item) =>
+        ({
+          name: item.name,
+          url: item.name,
+          fileType: 'uploaded',
+        }) as MyFile,
+    ) ?? [];
   selectedPictures.value =
-    machine?.images?.map((url) => ({
-      name: url,
-      url,
-      fileType: 'uploaded',
-    })) ?? [];
+    machine?.images?.map(
+      (url) =>
+        ({
+          name: url,
+          url,
+          fileType: 'uploaded',
+        }) as MyFile,
+    ) ?? [];
 };
 const availableSteps = ref<State[]>(
   props.editMode ? ['upload', 'translation', 'image'] : ['upload'],

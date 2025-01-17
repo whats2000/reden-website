@@ -165,6 +165,7 @@ const tags = computed(
 
   .v-card {
     margin: 3px !important;
+    border-radius: 8px !important;
   }
 
   .stat-line {
