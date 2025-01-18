@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import UserProfileCard from '@/components/UserProfileCard.vue';
 import { useRoute } from 'vue-router';
-import type { MachineDef } from '~/pages/litematica/index.vue';
+import type { ListLitematicaResponse } from '~/pages/litematica/index.vue';
 
 const route = useRoute();
 const { t } = useI18n();
@@ -18,7 +18,7 @@ watch(user, () => {
   });
 });
 
-const { data: machines } = await useFetch<MachineDef[]>(
+const { data: machines } = await useFetch<ListLitematicaResponse>(
   `/api/mc-services/litematica/by-author`,
   {
     query: {

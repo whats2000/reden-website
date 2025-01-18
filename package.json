@@ -34,6 +34,7 @@
     "vuetify-sonner": "^0.3.2"
   },
   "devDependencies": {
+    "@nuxt/kit": "^3.1.50",
     "@mdi/font": "^7.4.47",
     "@nuxtjs/sitemap": "^6.0.0",
     "@types/randomcolor": "^0.5.9",
