@@ -16,6 +16,7 @@
     "@nuxtjs/mdc": "^0.12.1",
     "@pinia/nuxt": "^0.5.4",
     "@vueuse/core": "^10.9.0",
+    "ant-design-vue": "4.x",
     "core-js": "^3.29.0",
     "countries-and-timezones": "^3.6.0",
     "deepslate": "^0.23.4",
@@ -34,8 +35,8 @@
     "vuetify-sonner": "^0.3.2"
   },
   "devDependencies": {
-    "@nuxt/kit": "^3.1.50",
     "@mdi/font": "^7.4.47",
+    "@nuxt/kit": "^3.1.50",
     "@nuxtjs/sitemap": "^6.0.0",
     "@types/randomcolor": "^0.5.9",
     "prettier": "3.2.5",

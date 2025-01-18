@@ -188,6 +188,10 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
     vec3.set(offset_vector, xOffset, -yOffset, 0);
     vec3.rotateX(offset_vector, offset_vector, [0, 0, 0], -xRotation);
     vec3.rotateY(offset_vector, offset_vector, [0, 0, 0], -yRotation);
+    console.log('viewDist', viewDist);
+    offset_vector[0] *= viewDist / 1.5;
+    offset_vector[1] *= viewDist / 1.5;
+    offset_vector[1] *= viewDist / 1.5;
     vec3.add(cameraPos, cameraPos, offset_vector);
   }
 
@@ -487,16 +491,18 @@ onMounted(async () => {
 </script>
 
 <template>
-  <!-- Texture atlas -->
-  <img
-    id="atlas"
-    alt="Texture atlas"
-    crossorigin="anonymous"
-    hidden
-    src="/litematica/atlas.png"
-  />
+  <div>
+    <!-- Texture atlas -->
+    <img
+      id="atlas"
+      alt="Texture atlas"
+      crossorigin="anonymous"
+      hidden
+      src="/litematica/atlas.png"
+    />
 
-  <canvas ref="canvas"></canvas>
+    <canvas ref="canvas" class="w-100 h-100"></canvas>
+  </div>
 </template>
 
 <style scoped></style>
