@@ -394,6 +394,7 @@ async function loadBlob(index: number) {
             <p class="text-orange">
               下载链接{{ index + 1 }}
               <a class="router" @click="loadBlob(index)">
+                <v-icon size="sm">mdi-eye</v-icon>
                 预览
                 <v-dialog :max-width="800" activator="parent" close-on-back>
                   <v-card :loading="!blob[index]">
@@ -402,6 +403,11 @@ async function loadBlob(index: number) {
                         v-if="blob[index]"
                         :blob="blob[index]"
                       />
+                      <div v-else>
+                        <v-progress-circular indeterminate color="primary">
+                        </v-progress-circular>
+                        <span style="font-size: 1.25rem"> 加载中... </span>
+                      </div>
                     </v-card-text>
                   </v-card>
                 </v-dialog>
