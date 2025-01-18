@@ -17,6 +17,7 @@ import SidebarAd from '~/components/ads/SidebarAd.vue';
 import { type Condition, parseCondition } from '~/utils/conditionParser';
 import RedenRouter from '~/components/RedenRouter.vue';
 import type { VForm } from 'vuetify/components';
+import { toast } from 'vuetify-sonner';
 
 const route = useRoute();
 const xSize = ref(0);
@@ -170,6 +171,32 @@ const tabs = computed(() => {
 const tab = ref(
   import.meta.server ? 'picture' : tabs.value[tabs.value.length - 1]?.key,
 );
+let blob = ref<Blob[]>([]);
+
+async function loadBlob(index: number) {
+  if (blob.value[index]) {
+    return;
+  }
+  const url = selected.value.attachments?.[index]?.url;
+  if (!url) {
+    toast.error(`No url for index #${index}.`);
+    return;
+  }
+  blob.value[index] = await (
+    await fetch(
+      'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
+      {
+        referrerPolicy: 'same-origin',
+      },
+    )
+  ).blob();
+  if (blob.value[index].size === 0) {
+    toast.error(`Blob size is 0 for index #${index}.`);
+    debugger;
+    return;
+  }
+  console.log('blob.value[index]', blob.value[index]);
+}
 </script>
 
 <template>
@@ -364,7 +391,22 @@ const tab = ref(
       >
         <v-list-item border>
           <v-list-item-title>
-            <p class="text-orange">下载链接{{ index + 1 }}</p>
+            <p class="text-orange">
+              下载链接{{ index + 1 }}
+              <a class="router" @click="loadBlob(index)">
+                预览
+                <v-dialog :max-width="800" activator="parent" close-on-back>
+                  <v-card :loading="!blob[index]">
+                    <v-card-text>
+                      <LitematicaPreview
+                        v-if="blob[index]"
+                        :blob="blob[index]"
+                      />
+                    </v-card-text>
+                  </v-card>
+                </v-dialog>
+              </a>
+            </p>
             <a
               :href="`/api/mc-services/yisibite/${machineId}/download/${index + 1}`"
               class="router nowrap"

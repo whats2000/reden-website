@@ -13,7 +13,12 @@ import {
 } from 'deepslate';
 import { mat4, vec3 } from 'gl-matrix';
 import { Litematic, readLitematicFromNBTData } from '~/utils/litematic-utils';
+import { toast } from 'vuetify-sonner';
 
+const { t } = useI18n();
+const props = defineProps<{
+  blob: Blob;
+}>();
 const canvas = useTemplateRef<HTMLCanvasElement>('canvas');
 let deepslateResources: Resources;
 
@@ -182,16 +187,12 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
   }
 
   function move(offset: [number, number], sensitivity: number) {
-    xOffset = ((offset[0] * viewDist) / 500) * sensitivity;
-    yOffset = ((offset[1] * viewDist) / 500) * sensitivity;
+    xOffset = ((offset[0] * viewDist) / 300) * sensitivity;
+    yOffset = ((offset[1] * viewDist) / 300) * sensitivity;
     let offset_vector = vec3.create();
     vec3.set(offset_vector, xOffset, -yOffset, 0);
     vec3.rotateX(offset_vector, offset_vector, [0, 0, 0], -xRotation);
     vec3.rotateY(offset_vector, offset_vector, [0, 0, 0], -yRotation);
-    console.log('viewDist', viewDist);
-    offset_vector[0] *= viewDist / 1.5;
-    offset_vector[1] *= viewDist / 1.5;
-    offset_vector[1] *= viewDist / 1.5;
     vec3.add(cameraPos, cameraPos, offset_vector);
   }
 
@@ -452,46 +453,68 @@ function readFile(file: Blob) {
   reader.readAsArrayBuffer(file);
   console.log(reader.result);
 
-  reader.onload = function (evt) {
-    var buff = new Uint8Array(reader.result as ArrayBuffer);
-    console.log(buff);
+  reader.onload = (evt) => {
+    try {
+      const buff = new Uint8Array(reader.result as ArrayBuffer);
+      console.log('buffer[before un-gzip]', buff);
 
-    const nbtdata = NbtFile.read(buff, {
-      compression: 'gzip',
-    }).toJson(); //.result; // Don't care about .compressed
-    console.log('Loaded litematic with NBT data:');
-    console.log(nbtdata);
-    var litematic = readLitematicFromNBTData(nbtdata);
+      const nbtdata = NbtFile.read(buff, {
+        compression: 'gzip',
+      }).toJson(); //.result; // Don't care about .compressed
+      console.log('Loaded litematic with NBT data:', nbtdata);
+      const litematic = readLitematicFromNBTData(nbtdata);
 
-    createRenderer(structureFromLitematic(litematic), canvas.value!);
+      createRenderer(structureFromLitematic(litematic), canvas.value!);
+    } catch (e) {
+      console.error(e);
+      toast.error(t('litematica_generator.failed_preview_load'), {
+        duration: 5000,
+      });
+    }
   };
 
   reader.onerror = function () {
+    toast.error(t('litematica_generator.failed_preview_load'), {
+      duration: 5000,
+    });
     console.log(reader.error);
   };
 }
 
 onMounted(async () => {
-  const response = await fetch('/9宽沟世吞 普通版 (2).litematic');
-  const blob = await response.blob();
-
   const image = document.getElementById('atlas') as HTMLImageElement;
-  if (image.complete) {
-    loadResources(image);
-    readFile(blob);
-  } else {
-    console.log('Image not loaded', image);
-    image.addEventListener('load', () => {
-      console.log('Image loaded', image);
-      loadResources(image);
-      readFile(blob);
+  if (!props.blob) {
+    console.error('[LitematicaPreview] No blob provided');
+    return;
+  }
+  if (props.blob.size === 0) {
+    toast.error('失败：文件为空', {
+      duration: 5000,
     });
+  }
+  try {
+    if (image.complete) {
+      loadResources(image);
+      readFile(props.blob);
+    } else {
+      console.log('Image not loaded', image);
+      image.addEventListener('load', () => {
+        console.log('Image loaded', image);
+        loadResources(image);
+        readFile(props.blob);
+      });
+    }
+  } catch (e) {
+    toast.error(t('litematica_generator.failed_preview_load'), {
+      duration: 5000,
+    });
+    console.error(e);
   }
 });
 </script>
 
 <template>
-  <div>
+  <div style="background: #333">
     <!-- Texture atlas -->
     <img
       id="atlas"

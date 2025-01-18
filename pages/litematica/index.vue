@@ -32,6 +32,7 @@ export type MachineDef = {
   attachments?: {
     name: string;
     size: number;
+    url: string;
   }[];
   original?: boolean;
 };

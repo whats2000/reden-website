@@ -26,9 +26,6 @@ const options = Object.entries(versionGrouped)
     size="large"
   />
   {{ items.join(' ') }}
-  <VersionInput v-model="items" />
-
-  <LitematicaPreview />
 </template>
 
 <style scoped></style>
