@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import '@mdi/font/css/materialdesignicons.css';
 import { VSonner } from 'vuetify-sonner';
 import { onMounted } from 'vue';
 import { useTheme } from 'vuetify';
