@@ -404,10 +404,20 @@ async function loadBlob(index: number) {
                         :blob="blob[index]"
                       />
                       <div v-else>
-                        <v-progress-circular indeterminate color="primary">
-                        </v-progress-circular>
-                        <span style="font-size: 1.25rem"> 加载中... </span>
+                        <v-progress-circular color="primary" indeterminate />
+                        <span style="font-size: 1.25rem">
+                          {{ $t('common.loading___') }}
+                        </span>
                       </div>
+
+                      <p
+                        class="top-0 right-0 position-absolute mr-6 mt-4 text-white text-caption text-right opacity-60"
+                        style="user-select: none; line-height: 0.75rem"
+                      >
+                        Credit to misode, Ending Credits & Undecentions <br />
+                        This Vue component is made by zly2006 and licensed under
+                        AGPL v3
+                      </p>
                     </v-card-text>
                   </v-card>
                 </v-dialog>
