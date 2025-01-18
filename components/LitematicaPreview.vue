@@ -247,7 +247,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
         evt.clientX - middleClickPos[0],
         evt.clientY - middleClickPos[1],
       ];
-      runMovementFunction('middle-click-drag', args, { move, pan }, 'pan');
+      runMovementFunction('middle-click-drag', args, { move, pan }, 'move');
       middleClickPos = [evt.clientX, evt.clientY];
       requestAnimationFrame(render);
     } else if (leftPos) {
@@ -255,7 +255,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
         evt.clientX - leftPos[0],
         evt.clientY - leftPos[1],
       ];
-      runMovementFunction('click-drag', args, { move, pan }, 'move');
+      runMovementFunction('click-drag', args, { move, pan }, 'pan');
       leftPos = [evt.clientX, evt.clientY];
       requestAnimationFrame(render);
     }
