@@ -1,5 +1,10 @@
 <script lang="ts" setup>
 import { assets } from '~/utils/litematica/assets';
+import {
+  NON_SELF_CULLING,
+  OPAQUE_BLOCKS,
+  TRANSPARENT_BLOCKS,
+} from '~/utils/litematica/opaque';
 
 import {
   BlockDefinition,
@@ -96,7 +101,11 @@ function loadResources(textureImage: HTMLImageElement) {
       return textureAtlas.getTextureAtlas();
     },
     getBlockFlags(id) {
-      return { opaque: false };
+      return {
+        opaque: OPAQUE_BLOCKS.has(id.toString()),
+        self_culling: !NON_SELF_CULLING.has(id.toString()),
+        semi_transparent: TRANSPARENT_BLOCKS.has(id.toString()),
+      };
     },
     getBlockProperties(id) {
       return null;
