@@ -268,7 +268,7 @@ const isHovering = useElementHover(ad);
     </template>
   </v-alert>
   <div class="w-100 d-flex flex-row justify-center">
-    <div v-if="mdAndUp" style="width: 150px">
+    <div v-if="mdAndUp" class="my-ads">
       <div data-some-item="aaa" />
       <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
     </div>
@@ -354,7 +354,7 @@ const isHovering = useElementHover(ad);
         }}
       </div>
     </v-container>
-    <div v-if="mdAndUp" style="width: 150px">
+    <div v-if="mdAndUp" class="my-ads">
       <div data-some-item="aaa" />
       <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
     </div>
@@ -367,5 +367,10 @@ const isHovering = useElementHover(ad);
   .v-col {
     padding: 3px !important;
   }
+}
+
+.my-ads {
+  width: 150px;
+  max-width: 8% !important;
 }
 </style>
