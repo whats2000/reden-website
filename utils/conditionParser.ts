@@ -7,17 +7,21 @@ export function parseCondition(
   const minMatch = conditionString.match(/min\((\d+)\)/);
   if (minMatch) {
     const minValue = parseInt(minMatch[1], 10);
-    return (value: number) =>
+    const func = (value: number) =>
       value >= minValue ||
       t('litematica_generator.size_min', { size: minValue });
+    func.min = minValue;
+    return func;
   }
 
   const maxMatch = conditionString.match(/max\((\d+)\)/);
   if (maxMatch) {
     const maxValue = parseInt(maxMatch[1], 10);
-    return (value: number) =>
+    const func = (value: number) =>
       value <= maxValue ||
       t('litematica_generator.size_max', { size: maxValue });
+    func.max = maxValue;
+    return func;
   }
 
   const modMatch = conditionString.match(/mod\((\d+),(\d+)\)/);
@@ -33,5 +37,5 @@ export function parseCondition(
   }
 
   // Default checker
-  return () => true; // Always return true if condition not matched.
+  return (value: number) => true; // Always return true if condition not matched.
 }

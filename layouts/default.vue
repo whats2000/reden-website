@@ -18,6 +18,7 @@ const theme = useTheme();
 const appStore = useAppStore();
 appStore.theme = themeCookie.value;
 onMounted(() => {
+  appStore.theme = themeCookie.value;
   const colors: Record<string, string> =
     theme.themes.value[appStore.theme]!.colors;
   const css: string[] = [];
