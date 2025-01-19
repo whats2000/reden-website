@@ -191,8 +191,8 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
 
   function pan(direction: [number, number], sensitivity = 1) {
     // seems backwards but is correct
-    yRotation += (direction[0] / 200) * sensitivity;
-    xRotation += (direction[1] / 200) * sensitivity;
+    yRotation += (-direction[0] / 200) * sensitivity;
+    xRotation += (-direction[1] / 200) * sensitivity;
   }
 
   function move(offset: [number, number], sensitivity: number) {
