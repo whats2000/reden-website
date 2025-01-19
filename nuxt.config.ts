@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
     '@nuxt/content',
     '@nuxtjs/color-mode',
+    '@vite-pwa/nuxt',
     // cause OOM
     // '@nuxthq/studio',
     (_options, nuxt) => {
@@ -151,5 +152,22 @@ export default defineNuxtConfig({
   },
   site: {
     url: 'redenmc.com',
+  },
+  pwa: {
+    registerType: 'autoUpdate',
+    devOptions: {
+      enabled: true,
+    },
+    manifest: {
+      name: 'Reden',
+      short_name: 'Reden',
+      icons: [
+        {
+          src: '/reden_256.png',
+          purpose: 'any maskable',
+          sizes: '256x256',
+        },
+      ],
+    },
   },
 });
