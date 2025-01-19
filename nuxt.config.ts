@@ -156,7 +156,8 @@ export default defineNuxtConfig({
   pwa: {
     registerType: 'autoUpdate',
     devOptions: {
-      enabled: true,
+      // https://github.com/vite-pwa/nuxt/issues/77
+      enabled: false,
     },
     manifest: {
       name: 'Reden',
