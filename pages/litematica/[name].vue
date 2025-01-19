@@ -278,7 +278,7 @@ async function cancelApproval() {
       <!--suppress HtmlUnknownTarget -->
       <router-link
         v-if="selected.author"
-        :to="`/@${selected.author.username}`"
+        :to="localePath(`/@${selected.author.username}`)"
         class="d-flex flex-row router"
       >
         <v-avatar v-if="selected.author.avatarUrl" size="32">
