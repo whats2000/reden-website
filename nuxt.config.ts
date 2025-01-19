@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@nuxtjs/sitemap',
     '@nuxt/content',
+    '@nuxtjs/mdc',
     '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
     // cause OOM

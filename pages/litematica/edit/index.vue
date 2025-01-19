@@ -21,9 +21,9 @@ const currentLoadedData = ref<string>();
   <v-data-table-server
     v-model:page="page"
     :headers="[
-      { title: 'ID', key: 'key' },
-      { title: '类型', key: 'type' },
+      // { title: 'ID', key: 'key' },
       { title: '名称', key: 'name' },
+      { title: '类型', key: 'type' },
       { title: '描述', key: 'description' },
       { title: '更新时间', key: 'updatedAt' },
       { title: '编辑', key: 'edit' },
@@ -45,7 +45,7 @@ const currentLoadedData = ref<string>();
       </div>
     </template>
     <template #[`item.name`]="{ item, value }">
-      <reden-router :to="`/litematica/edit/${item.key}`">
+      <reden-router :to="`/litematica/${item.key}`">
         <div
           style="
             max-width: 200px;
