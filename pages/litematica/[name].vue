@@ -347,8 +347,9 @@ async function cancelApproval() {
         v-if="selected?.description"
         class="overflow-hidden description"
         cols="12"
-        v-html="selected.description"
-      />
+      >
+        <MDCRenderer :value="selected.description" />
+      </v-col>
     </v-row>
 
     <template v-if="selected.type === 'LitematicaGen'">
