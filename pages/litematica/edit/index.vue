@@ -23,7 +23,7 @@ const { data } = useFetch<ListLitematicaResponse>(
     ]"
     :items="Object.values(data?.d ?? {})"
     :items-length="data?.count ?? 100"
-    :page="page"
+    v-model:page="page"
   ></v-data-table-server>
 </template>
 
