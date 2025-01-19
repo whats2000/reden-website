@@ -30,6 +30,7 @@ const currentLoadedData = ref<string>();
     ]"
     :items="Object.values(data?.d ?? {})"
     :items-length="data?.count ?? 100"
+    :items-per-page-options="[10]"
     :loading="status === 'pending'"
   >
     <template #[`item.description`]="{ value }">

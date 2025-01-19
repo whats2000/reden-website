@@ -275,7 +275,6 @@ async function cancelApproval() {
           ? $t('litematica_generator.by.author')
           : $t('litematica_generator.by.uploader')
       }}
-      <!--suppress HtmlUnknownTarget -->
       <router-link
         v-if="selected.author"
         :to="localePath(`/@${selected.author.username}`)"
