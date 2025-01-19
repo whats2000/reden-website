@@ -184,10 +184,9 @@ async function loadBlob(index: number) {
   }
   blob.value[index] = await (
     await fetch(
-      'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
-      {
-        referrerPolicy: 'same-origin',
-      },
+      url.startsWith('https://reden.oss-cn-shanghai.aliyuncs.com/')
+        ? url
+        : `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
     )
   ).blob();
   if (blob.value[index].size === 0) {
@@ -196,6 +195,19 @@ async function loadBlob(index: number) {
     return;
   }
   console.log('blob.value[index]', blob.value[index]);
+}
+
+async function cancelApproval() {
+  if (window.confirm('确定下架？')) {
+    const response = await doFetchDelete(
+      `/api/mc-services/yisibite/${machineId}/approval`,
+    );
+    if (response.ok) {
+      toast.success('下架成功');
+    } else {
+      toast.error('出现错误');
+    }
+  }
 }
 </script>
 
@@ -243,6 +255,13 @@ async function loadBlob(index: number) {
           </div>
         </v-card>
       </v-dialog>
+    </v-btn>
+    <v-btn
+      v-if="appStore.userCache?.roles?.includes('archiver')"
+      color="red"
+      @click="cancelApproval"
+    >
+      下架
     </v-btn>
 
     <v-row justify="center">
