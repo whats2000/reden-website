@@ -395,13 +395,13 @@ watch(props, refreshProps);
               @update:model-value="() => (state = 'translation')"
             >
               <v-radio
-                :label="$t('upload.desc.litematica_generator')"
-                :value="true"
+                :label="$t('upload.desc.manual_upload')"
+                :value="false"
                 density="compact"
               />
               <v-radio
-                :label="$t('upload.desc.manual_upload')"
-                :value="false"
+                :label="$t('upload.desc.litematica_generator')"
+                :value="true"
                 density="compact"
               />
             </v-radio-group>

@@ -184,10 +184,9 @@ async function loadBlob(index: number) {
   }
   blob.value[index] = await (
     await fetch(
-      'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
-      {
-        referrerPolicy: 'same-origin',
-      },
+      url.startsWith('https://reden.oss-cn-shanghai.aliyuncs.com/')
+        ? url
+        : `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
     )
   ).blob();
   if (blob.value[index].size === 0) {
@@ -196,6 +195,19 @@ async function loadBlob(index: number) {
     return;
   }
   console.log('blob.value[index]', blob.value[index]);
+}
+
+async function cancelApproval() {
+  if (window.confirm('确定下架？')) {
+    const response = await doFetchDelete(
+      `/api/mc-services/yisibite/${machineId}/approval`,
+    );
+    if (response.ok) {
+      toast.success('下架成功');
+    } else {
+      toast.error('出现错误');
+    }
+  }
 }
 </script>
 
@@ -244,6 +256,13 @@ async function loadBlob(index: number) {
         </v-card>
       </v-dialog>
     </v-btn>
+    <v-btn
+      v-if="appStore.userCache?.roles?.includes('archiver')"
+      color="red"
+      @click="cancelApproval"
+    >
+      下架
+    </v-btn>
 
     <v-row justify="center">
       <h1>
@@ -256,10 +275,9 @@ async function loadBlob(index: number) {
           ? $t('litematica_generator.by.author')
           : $t('litematica_generator.by.uploader')
       }}
-      <!--suppress HtmlUnknownTarget -->
       <router-link
         v-if="selected.author"
-        :to="`/@${selected.author.username}`"
+        :to="localePath(`/@${selected.author.username}`)"
         class="d-flex flex-row router"
       >
         <v-avatar v-if="selected.author.avatarUrl" size="32">
@@ -319,17 +337,18 @@ async function loadBlob(index: number) {
         </v-card>
       </v-col>
       <v-col v-if="selected?.link" class="overflow-hidden" cols="12">
-        <a v-if="!bvid" :href="selected.link" class="router nowrap">
+        <a v-if="!bvid" :href="selected.link" class="router text-no-wrap">
           <v-icon>mdi-link</v-icon>
           {{ selected.link }}
         </a>
       </v-col>
       <v-col
         v-if="selected?.description"
-        class="overflow-hidden description"
+        class="overflow-hidden text-pre-wrap pa-5"
         cols="12"
-        v-html="selected.description"
-      />
+      >
+        <MDC class="description" :value="selected.description" />
+      </v-col>
     </v-row>
 
     <template v-if="selected.type === 'LitematicaGen'">
@@ -394,6 +413,7 @@ async function loadBlob(index: number) {
             <p class="text-orange">
               下载链接{{ index + 1 }}
               <a class="router" @click="loadBlob(index)">
+                <v-icon size="sm">mdi-eye</v-icon>
                 预览
                 <v-dialog :max-width="800" activator="parent" close-on-back>
                   <v-card :loading="!blob[index]">
@@ -402,6 +422,21 @@ async function loadBlob(index: number) {
                         v-if="blob[index]"
                         :blob="blob[index]"
                       />
+                      <div v-else>
+                        <v-progress-circular color="primary" indeterminate />
+                        <span style="font-size: 1.25rem">
+                          {{ $t('common.loading___') }}
+                        </span>
+                      </div>
+
+                      <p
+                        class="top-0 right-0 position-absolute mr-6 mt-4 text-white text-caption text-right opacity-60"
+                        style="user-select: none; line-height: 0.75rem"
+                      >
+                        Credit to misode, Ending Credits & Undecentions <br />
+                        This Vue component is made by zly2006 and licensed under
+                        AGPL v3
+                      </p>
                     </v-card-text>
                   </v-card>
                 </v-dialog>
@@ -409,7 +444,7 @@ async function loadBlob(index: number) {
             </p>
             <a
               :href="`/api/mc-services/yisibite/${machineId}/download/${index + 1}`"
-              class="router nowrap"
+              class="router text-no-wrap"
             >
               <v-icon>mdi-download</v-icon>
               {{ attachment.name }}
@@ -459,10 +494,6 @@ p {
   font-size: 1em;
 }
 
-.nowrap {
-  white-space: nowrap;
-}
-
 .bili-player-wrapper {
   position: relative;
   padding-bottom: 56.25%; /* 16:9 aspect ratio */
@@ -479,6 +510,9 @@ p {
 }
 
 .description {
-  white-space: pre-wrap;
+}
+
+.description :deep(li) {
+  margin-left: 1em;
 }
 </style>

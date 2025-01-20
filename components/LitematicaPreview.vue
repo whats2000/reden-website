@@ -1,5 +1,10 @@
 <script lang="ts" setup>
 import { assets } from '~/utils/litematica/assets';
+import {
+  NON_SELF_CULLING,
+  OPAQUE_BLOCKS,
+  TRANSPARENT_BLOCKS,
+} from '~/utils/litematica/opaque';
 
 import {
   BlockDefinition,
@@ -96,7 +101,11 @@ function loadResources(textureImage: HTMLImageElement) {
       return textureAtlas.getTextureAtlas();
     },
     getBlockFlags(id) {
-      return { opaque: false };
+      return {
+        opaque: OPAQUE_BLOCKS.has(id.toString()),
+        self_culling: !NON_SELF_CULLING.has(id.toString()),
+        semi_transparent: TRANSPARENT_BLOCKS.has(id.toString()),
+      };
     },
     getBlockProperties(id) {
       return null;
@@ -182,8 +191,8 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
 
   function pan(direction: [number, number], sensitivity = 1) {
     // seems backwards but is correct
-    yRotation += (direction[0] / 200) * sensitivity;
-    xRotation += (direction[1] / 200) * sensitivity;
+    yRotation += (-direction[0] / 200) * sensitivity;
+    xRotation += (-direction[1] / 200) * sensitivity;
   }
 
   function move(offset: [number, number], sensitivity: number) {
@@ -238,7 +247,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
         evt.clientX - middleClickPos[0],
         evt.clientY - middleClickPos[1],
       ];
-      runMovementFunction('middle-click-drag', args, { move, pan }, 'pan');
+      runMovementFunction('middle-click-drag', args, { move, pan }, 'move');
       middleClickPos = [evt.clientX, evt.clientY];
       requestAnimationFrame(render);
     } else if (leftPos) {
@@ -246,7 +255,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
         evt.clientX - leftPos[0],
         evt.clientY - leftPos[1],
       ];
-      runMovementFunction('click-drag', args, { move, pan }, 'move');
+      runMovementFunction('click-drag', args, { move, pan }, 'pan');
       leftPos = [evt.clientX, evt.clientY];
       requestAnimationFrame(render);
     }

@@ -183,6 +183,10 @@ const isHovering = useElementHover(ad);
       广告位招租！<br />
       如果您想借助本站的流量推广您的服务器、VPS出租或任何其他服务，请在微信
       Scanmenge 或 QQ 1284588550 联系我，注明来意。
+      <p style="font-weight: bold">为什么我要在这里放广告？</p>
+      所有广告收入将用于支付服务器费用，剩余利润将会对半分给网站协作开发者，以及机器设计者。<br />
+      投影生成器和夸克网盘下载是因为我和机器作者有另外的合作和分成关系(这是我个人从此网站获利的主要方式)。<br />
+      所以希望你禁用自己的广告屏蔽器！
     </template>
     <template v-else>广告位招租！</template>
   </p>
@@ -268,7 +272,7 @@ const isHovering = useElementHover(ad);
     </template>
   </v-alert>
   <div class="w-100 d-flex flex-row justify-center">
-    <div v-if="mdAndUp" style="width: 150px">
+    <div v-if="mdAndUp" class="my-ads">
       <div data-some-item="aaa" />
       <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
     </div>
@@ -354,7 +358,7 @@ const isHovering = useElementHover(ad);
         }}
       </div>
     </v-container>
-    <div v-if="mdAndUp" style="width: 150px">
+    <div v-if="mdAndUp" class="my-ads">
       <div data-some-item="aaa" />
       <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
     </div>
@@ -367,5 +371,10 @@ const isHovering = useElementHover(ad);
   .v-col {
     padding: 3px !important;
   }
+}
+
+.my-ads {
+  width: 150px;
+  max-width: 8% !important;
 }
 </style>
