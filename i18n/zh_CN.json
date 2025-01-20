@@ -38,6 +38,9 @@
     "and": "和",
     "back": "返回",
     "description": "介绍",
+    "followers": "粉丝",
+    "following": "关注中",
+    "following_projects": "关注中项目",
     "link": "链接",
     "loading___": "加载中...",
     "name": "名称",
@@ -103,6 +106,7 @@
     "title": "页面没有找到"
   },
   "profile": {
+    "account_not_linked": "未链接账号",
     "edit": {
       "back": "返回个人资料页",
       "basic_information": "基本信息",
@@ -148,14 +152,19 @@
       "username_timer": "你可以在{0}小时后修改用户名"
     },
     "editProfile": "编辑个人资料",
+    "link_now": "点击链接",
     "microsoft_checked_verifying_minecraft": "微软账号已绑定，正在检查 Minecraft 所有权...",
     "my_backup": "我的云备份",
+    "no_minecraft": "没有链接 Minecraft 账号",
     "oauth": {
       "link_account": "连接账户",
       "unlink_account": "取消连接"
     },
     "password": "密码",
-    "username": "用户名"
+    "posts": "投稿列表",
+    "username": "用户名",
+    "verified_minecraft": "已认证的 Minecraft 账号",
+    "your_timezone": "（相同时区）"
   },
   "reden": {
     "description": "为红石机器开发者提供一站式工作环境，探索各种创意设计和前沿红石科技。",

@@ -8,7 +8,7 @@ import {
 } from '@/utils/constants';
 import { toast } from 'vuetify-sonner';
 import { useAppStore } from '@/store/app';
-import UserProfileCard from '@/components/UserProfileCard.vue';
+import UserProfileCard from '~/components/profile/UserProfileCard.vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 

@@ -52,7 +52,7 @@ const itemDisplayCols = computed<Column[]>(() => {
   <v-card :elevation="10" class="">
     <div class="profile-card-content">
       <v-card-title>
-        <h2>{{ t('用户内容') }}</h2>
+        <h2>{{ t('profile.posts') }}</h2>
       </v-card-title>
       <v-card-text>
         <v-row justify="center">

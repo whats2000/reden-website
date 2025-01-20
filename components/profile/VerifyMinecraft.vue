@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { doFetchGet, type Profile, toastError } from '@/utils/constants';
+import { doFetchGet, type Profile, toastError } from '~/utils/constants';
 import { toast } from 'vuetify-sonner';
 
 const { user, showActions } = defineProps<{
@@ -65,13 +65,13 @@ function verifyMinecraft() {
       <template #activator="{ props }">
         <span v-bind="props">
           <v-icon style="color: green">mdi-check-decagram</v-icon>
-          Verified minecraft account
+          {{ $t('profile.verified_minecraft') }}
         </span>
       </template>
     </v-tooltip>
   </span>
   <span v-else
-    >No verified minecraft account linked
+    >{{ $t('profile.no_minecraft') }}
     <a
       v-if="showActions"
       class="router"
@@ -90,7 +90,7 @@ function verifyMinecraft() {
               color="primary"
               href="/api/oauth/microsoft"
             >
-              Link Now
+              {{ $t('profile.link_now') }}
             </v-btn>
           </v-card-actions>
         </v-card>

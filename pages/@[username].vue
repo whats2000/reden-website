@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import UserProfileCard from '@/components/UserProfileCard.vue';
+import UserProfileCard from '~/components/profile/UserProfileCard.vue';
 import UserContentPanel from '@/components/profile/UserContentPanel.vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';

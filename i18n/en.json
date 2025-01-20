@@ -38,6 +38,9 @@
     "and": "and",
     "back": "Back",
     "description": "Description",
+    "followers": "followers",
+    "following": "following",
+    "following_projects": "following projects",
     "link": "Link",
     "loading___": "Loading...",
     "name": "Name",
@@ -103,6 +106,7 @@
     "title": "Page not found"
   },
   "profile": {
+    "account_not_linked": "Account not linked",
     "edit": {
       "back": "Back to Your Profile",
       "basic_information": "Basic Information",
@@ -148,14 +152,19 @@
       "username_timer": "You can change your username again in {0} hours"
     },
     "editProfile": "Edit Profile",
+    "link_now": "Link Now!",
     "microsoft_checked_verifying_minecraft": "Microsoft account checked, verifying Minecraft ownership...",
     "my_backup": "My Cloud Backups",
+    "no_minecraft": "No verified minecraft account linked",
     "oauth": {
       "link_account": "Link Account",
       "unlink_account": "Unlink Account"
     },
     "password": "Password",
-    "username": "Username"
+    "posts": "Posts",
+    "username": "Username",
+    "verified_minecraft": "Verified minecraft account",
+    "your_timezone": "(Your timezone)"
   },
   "reden": {
     "description": "Your one-stop destination for sharing Minecraft builds, exploring creative designs, and enhancing gameplay with cutting-edge redstone mods.",
