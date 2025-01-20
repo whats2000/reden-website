@@ -22,13 +22,11 @@ useHead({
 //   });
 // });
 
-const { data: machines } = useFetch(
-  () => `/api/mc-services/litematica/by-author?author=${user.value?.username}`,
-  {
-    transform: (data: ListLitematicaResponse) => {
-      return Object.values(data.d);
-    },
-  },
+const page = ref(1);
+
+const { data: machines } = useFetch<ListLitematicaResponse>(
+  () =>
+    `/api/mc-services/litematica/by-author?author=${user.value?.username}&pageSize=12&page=${page.value}`,
 );
 </script>
 
@@ -53,12 +51,17 @@ const { data: machines } = useFetch(
     </v-alert>
     <div class="user-profile-container">
       <UserProfileCard
-        class="user-profile-card"
         v-show="user"
         :can-edit="false"
         :user="user"
+        class="user-profile-card"
       />
-      <UserContentPanel v-if="machines" :machines="machines" />
+      <UserContentPanel
+        v-if="machines"
+        v-model:page="page"
+        :machines="Object.values(machines.d)"
+        :totalPages="machines.count / 12"
+      />
     </div>
   </v-card>
 </template>

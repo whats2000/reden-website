@@ -8,6 +8,16 @@ const { t } = useI18n();
 
 const props = defineProps<{
   machines?: any[];
+  page?: number;
+  totalPages: number;
+}>();
+
+const { width } = useDisplay();
+
+const page = ref(props.page || 1);
+
+const emits = defineEmits<{
+  'update:page': [number];
 }>();
 
 const displayedMachines = computed(() => {
@@ -45,6 +55,16 @@ const itemDisplayCols = computed<Column[]>(() => {
         <h2>{{ t('用户内容') }}</h2>
       </v-card-title>
       <v-card-text>
+        <v-row justify="center">
+          <v-pagination
+            v-model="page"
+            :length="totalPages"
+            :total-visible="Math.min(8, width / 80 - 2)"
+            rounded="xl"
+            size="32"
+            @update:modelValue="(value) => emits('update:page', value)"
+          />
+        </v-row>
         <v-row v-if="displayedMachines.length" class="ma-n2">
           <v-col
             v-for="col in itemDisplayCols"
@@ -62,8 +82,17 @@ const itemDisplayCols = computed<Column[]>(() => {
             />
           </v-col>
         </v-row>
-
-        <v-alert v-else type="info">
+        <v-row justify="center">
+          <v-pagination
+            v-model="page"
+            :length="totalPages"
+            :total-visible="Math.min(8, width / 80 - 2)"
+            @update:modelValue="(value) => emits('update:page', value)"
+            rounded="xl"
+            size="32"
+          />
+        </v-row>
+        <v-alert v-if="!displayedMachines.length" type="info">
           {{ t('profile.no_machines') }}
         </v-alert>
       </v-card-text>
