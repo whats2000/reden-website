@@ -166,6 +166,9 @@
     "verified_minecraft": "已认证的 Minecraft 账号",
     "your_timezone": "（相同时区）"
   },
+  "profle": {
+    "logout": "退出登录"
+  },
   "reden": {
     "description": "为红石机器开发者提供一站式工作环境，探索各种创意设计和前沿红石科技。",
     "download": "下载",

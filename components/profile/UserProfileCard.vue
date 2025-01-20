@@ -85,7 +85,7 @@ function deleteAvatar() {
 }
 </script>
 <template>
-  <v-card :elevation="10" class="profile-card">
+  <v-card :elevation="4" border class="profile-card">
     <div class="profile-card-content">
       <v-hover>
         <template #default="{ isHovering, props }">

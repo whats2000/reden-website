@@ -5,8 +5,11 @@ import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import type { ListLitematicaResponse } from '~/pages/litematica/index.vue';
 
+import { useAppStore } from '~/store/app';
+
 const route = useRoute();
 const { t } = useI18n();
+const appStore = useAppStore();
 
 const { data: user, error } = await useFetchUserGet(
   route.params.username as string,
@@ -52,7 +55,7 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
     <div class="user-profile-container">
       <UserProfileCard
         v-show="user"
-        :can-edit="false"
+        :can-edit="user.id === appStore.uid"
         :user="user"
         class="user-profile-card"
       />

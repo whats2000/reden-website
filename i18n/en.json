@@ -166,6 +166,9 @@
     "verified_minecraft": "Verified minecraft account",
     "your_timezone": "(Your timezone)"
   },
+  "profle": {
+    "logout": "Logout"
+  },
   "reden": {
     "description": "Your one-stop destination for sharing Minecraft builds, exploring creative designs, and enhancing gameplay with cutting-edge redstone mods.",
     "download": "Download",
