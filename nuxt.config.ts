@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
     '@nuxt/content',
     '@nuxtjs/color-mode',
+    '@ant-design-vue/nuxt',
     // cause OOM
     // '@nuxthq/studio',
     (_options, nuxt) => {
