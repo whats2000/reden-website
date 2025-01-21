@@ -3,9 +3,12 @@ import { useRoute } from '#vue-router';
 import { ref } from 'vue';
 import { doFetchDelete, doFetchGet, type Profile } from '~/utils/constants';
 import { toast } from 'vuetify-sonner';
+import { useI18n } from 'vue-i18n';
 
-definePageMeta({
-  title: 'profile.my_backup',
+const { t } = useI18n();
+useHead({
+  title: t('profile.my_backup'),
+  titleTemplate: '%s - Reden',
 });
 type Parameter = {
   search: string;

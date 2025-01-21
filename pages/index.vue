@@ -19,8 +19,11 @@ const introContent = ref<HTMLElement | null>(null);
 const localePath = useLocalePath();
 
 const { t } = useI18n();
+useHead({
+  title: t('reden.title.home_full'),
+  titleTemplate: '%s - Reden',
+});
 useSeoMeta({
-  title: t('reden.title.home_full') + ' - Reden',
   description: t('reden.description'),
 });
 

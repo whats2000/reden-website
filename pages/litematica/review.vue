@@ -8,10 +8,15 @@ import type {
   MachineDef,
 } from '~/pages/litematica/index.vue';
 import { toast } from 'vuetify-sonner';
+import { useI18n } from 'vue-i18n';
 
 definePageMeta({
-  title: 'Review Litematica',
   needLogin: true,
+});
+const { t } = useI18n();
+useHead({
+  title: 'Review Litematica',
+  titleTemplate: '%s - Reden',
 });
 
 const page = ref(1);

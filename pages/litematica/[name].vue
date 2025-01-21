@@ -82,12 +82,6 @@ const generators = computed<Record<string, Machine>>(() => {
         message: t('litematica_generator.not_found', { name: machineId }),
       });
     }
-    useHead({
-      title:
-        machines[machineId]?.name +
-        ' - Reden' +
-        t('litematica_generator.title'),
-    });
     return Object.keys(machines)
       .sort()
       .reduce((obj: Record<string, Machine>, key) => {
@@ -143,9 +137,6 @@ useSeoMeta({
   ogDescription:
     selected.value.description + t('litematica_generator.og_description'),
   ogImage: 'https://redenmc.com/reden_256.png',
-});
-definePageMeta({
-  name: 'litematica-name',
 });
 const biliPlayer = useTemplateRef<HTMLIFrameElement>('biliPlayer');
 const bvid = computed(() => parseBVID(selected.value?.link));
@@ -347,7 +338,7 @@ async function cancelApproval() {
         class="overflow-hidden text-pre-wrap pa-5"
         cols="12"
       >
-        <MDC class="description" :value="selected.description" />
+        <MDC :value="selected.description" class="description" />
       </v-col>
     </v-row>
 

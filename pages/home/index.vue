@@ -14,11 +14,16 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import UserContentPanel from '~/components/profile/UserContentPanel.vue';
 import type { ListLitematicaResponse } from '~/pages/litematica/index.vue';
+import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
 const localePath = useLocalePath();
+const { t } = useI18n();
+useHead({
+  title: t('reden.my_account'),
+  titleTemplate: '%s - Reden',
+});
 definePageMeta({
-  title: 'reden.title.my_account',
   needLogin: true,
 });
 

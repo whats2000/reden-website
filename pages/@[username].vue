@@ -7,6 +7,7 @@ import type { ListLitematicaResponse } from '~/pages/litematica/index.vue';
 import '~/components/profile/user-card-wrap.css';
 
 import { useAppStore } from '~/store/app';
+import { useGoTo } from 'vuetify';
 
 const route = useRoute();
 const { t } = useI18n();
@@ -17,17 +18,15 @@ const { data: user, error } = await useFetchUserGet(
 );
 
 useHead({
-  title: `${user?.value?.username ?? t('reden.user_not_found')} - Reden`,
+  title: user?.value
+    ? t('reden.title.user_profile_seo', [user?.value.username])
+    : t('reden.user_not_found'),
+  titleTemplate: '%s - Reden User',
 });
 
-// watch(user, () => {
-//   useHead({
-//     title: `${user?.value?.username ?? t('reden.user_not_found')} - Reden`,
-//   });
-// });
-
+const goto = useGoTo();
 const page = ref(1);
-
+watch(page, () => goto(0));
 const { data: machines } = useFetch<ListLitematicaResponse>(
   () =>
     `/api/mc-services/litematica/by-author?author=${user.value?.username}&pageSize=12&page=${page.value}`,
