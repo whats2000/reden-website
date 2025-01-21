@@ -89,9 +89,9 @@ const localeHead = useLocaleHead({
       </template>
     </Head>
   </Html>
-  <v-app :theme="appStore.theme">
+  <v-app :theme="appStore.theme || 'dark'">
     <layout-header>
-      <template #common-append>
+      <template #desktop-append>
         <v-btn
           :icon="
             appStore.theme === 'light'
@@ -101,6 +101,20 @@ const localeHead = useLocaleHead({
           title="Toggle Theme"
           @click="toggleTheme"
         />
+      </template>
+      <template #mobile-menu-append>
+        <v-list-item
+          :prepend-icon="
+            appStore.theme === 'light'
+              ? 'mdi-weather-night'
+              : 'mdi-weather-sunny'
+          "
+          @click="toggleTheme"
+        >
+          <v-list-item-title>
+            {{ appStore.theme === 'light' ? 'Light Mode' : 'Dark Mode' }}
+          </v-list-item-title>
+        </v-list-item>
       </template>
     </layout-header>
 
