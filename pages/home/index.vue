@@ -268,7 +268,7 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
           rounded="lg"
           variant="outlined"
         >
-          投稿后台管理页面
+          投稿管理
           <v-tooltip activator="parent" location="bottom">
             此页面用于管理投稿，编辑投稿，可以查看还在审核中的投稿
           </v-tooltip>

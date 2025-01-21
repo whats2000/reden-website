@@ -188,9 +188,10 @@ const slots = defineSlots<{
   'mobile-menu-append': void;
 }>();
 
-const search = ref((router.currentRoute.value.query.search as string) ?? '');
+const search = ref((router.currentRoute.value.query.q as string) ?? '');
 watch(router.currentRoute, (value) => {
-  search.value = (value.query.search as string) ?? '';
+  search.value = (value.query.q as string) ?? '';
+  console.log('[layout/header] Route changes, search:' + value.query.q);
 });
 </script>
 <style scoped>
