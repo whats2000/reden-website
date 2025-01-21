@@ -195,6 +195,10 @@ const tags = computed(
   );
 }
 
+.thumbnail-img {
+  max-height: 240px;
+}
+
 .text-3lines {
   -webkit-line-clamp: 3; /* number of lines to show */
   line-clamp: 3;

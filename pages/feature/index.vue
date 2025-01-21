@@ -6,7 +6,7 @@ import { useI18n } from 'vue-i18n';
 const localePath = useLocalePath();
 const { t } = useI18n();
 useHead({
-  title: t('reden.title.features'),
+  // title: t('reden.title.features'),
   titleTemplate: '%s - Reden',
 });
 </script>

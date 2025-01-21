@@ -23,6 +23,7 @@ useHead({
   title: t('reden.title.home_full'),
   titleTemplate: '%s - Reden',
 });
+console.log(document?.title, t('reden.title.home_full'));
 useSeoMeta({
   description: t('reden.description'),
 });
