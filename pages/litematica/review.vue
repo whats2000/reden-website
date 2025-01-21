@@ -9,6 +9,7 @@ import type {
 } from '~/pages/litematica/index.vue';
 import { toast } from 'vuetify-sonner';
 import { useI18n } from 'vue-i18n';
+import RedenRouter from '~/components/RedenRouter.vue';
 
 definePageMeta({
   needLogin: true,
