@@ -6,6 +6,7 @@ import {
   type Profile,
   toastError,
 } from '@/utils/constants';
+import '~/components/profile/user-card-wrap.css';
 import { toast } from 'vuetify-sonner';
 import { useAppStore } from '@/store/app';
 import UserProfileCard from '~/components/profile/UserProfileCard.vue';
@@ -138,11 +139,7 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
 
   <v-row class="d-flex flex-wrap flex-row ma-1">
     <v-col class="user-card-wrap" cols="12" md="3">
-      <v-skeleton-loader
-        v-show="loading"
-        type="card-avatar"
-        width="300"
-      ></v-skeleton-loader>
+      <v-skeleton-loader v-show="loading" type="card-avatar" width="300" />
       <UserProfileCard
         v-show="!loading"
         :apply-preference="false"
@@ -297,17 +294,5 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
 
 .gap-8 {
   gap: 8px;
-}
-
-.user-card-wrap {
-  min-width: 330px;
-  height: min-content;
-}
-
-@media (min-width: 960px) {
-  .user-card-wrap {
-    position: sticky;
-    top: 64px;
-  }
 }
 </style>

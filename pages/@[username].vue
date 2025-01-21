@@ -4,6 +4,7 @@ import UserContentPanel from '@/components/profile/UserContentPanel.vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import type { ListLitematicaResponse } from '~/pages/litematica/index.vue';
+import '~/components/profile/user-card-wrap.css';
 
 import { useAppStore } from '~/store/app';
 
@@ -48,48 +49,22 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
       </p>
     </v-card-text>
   </v-card>
-  <v-card v-else>
-    <v-alert v-show="!user" dismissible type="error">
-      Cannot find user
-    </v-alert>
-    <div class="user-profile-container">
-      <UserProfileCard
-        v-show="user"
-        :can-edit="user.id === appStore.uid"
-        :user="user"
-        class="user-profile-card"
-      />
-      <UserContentPanel
-        v-if="machines"
-        v-model:page="page"
-        :machines="Object.values(machines.d)"
-        :totalPages="machines.count / 12"
-      />
-    </div>
-  </v-card>
+  <template v-else>
+    <v-row class="d-flex flex-wrap flex-row ma-1">
+      <v-col class="user-card-wrap" cols="12" md="3">
+        <UserProfileCard
+          v-show="user"
+          :can-edit="user.id === appStore.uid"
+          :user="user"
+        />
+      </v-col>
+      <v-col v-if="machines">
+        <UserContentPanel
+          v-model:page="page"
+          :machines="Object.values(machines.d)"
+          :totalPages="machines.count / 12"
+        />
+      </v-col>
+    </v-row>
+  </template>
 </template>
-
-<style scoped>
-.user-profile-container {
-  display: flex;
-  gap: 20px;
-  padding: 20px;
-  overflow: visible;
-}
-
-.user-profile-card {
-  max-width: 360px;
-  flex-grow: 0;
-}
-
-@media (max-width: 968px) {
-  .user-profile-container {
-    flex-direction: column;
-  }
-
-  .user-profile-card {
-    max-width: 100%;
-    flex-grow: 1;
-  }
-}
-</style>
