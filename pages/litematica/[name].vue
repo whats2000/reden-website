@@ -347,7 +347,7 @@ async function cancelApproval() {
         class="overflow-hidden text-pre-wrap pa-5"
         cols="12"
       >
-        <MDC class="description" :value="selected.description" />
+        <MDC :value="selected.description" class="lm-description" />
       </v-col>
     </v-row>
 
@@ -507,12 +507,5 @@ p {
   width: 100%;
   height: 100%;
   border-width: 0;
-}
-
-.description {
-}
-
-.description :deep(li) {
-  margin-left: 1em;
 }
 </style>

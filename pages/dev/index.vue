@@ -1,7 +1,4 @@
 <script lang="ts" setup>
-import { useAppStore } from '~/store/app';
-
-const appStore = useAppStore();
 const previewInfo = ref([
   'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
   'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
@@ -56,9 +53,8 @@ const updateSelectedImage = (image: string) => {
   <!-- 主容器 -->
   <div class="content pa-16">
     <!-- 使用 flex 布局的容器 -->
-    <div class="flex-container d-flex">
-      <!-- 左侧区域 -->
-      <div class="left-column d-flex flex-column ga-6">
+    <v-row>
+      <v-col cols="12" md="8" style="height: min-content">
         <!-- 预览 -->
         <div>
           <div class="text-h5 font-weight-bold">This is Preview Title</div>
@@ -98,22 +94,23 @@ const updateSelectedImage = (image: string) => {
           </v-slide-group>
         </div>
         <!-- 描述 -->
-        <div class="description">
+        <div class="mt-4">
           <div class="text-h5 font-weight-bold">There is Description</div>
           <v-divider style="margin: 12px 0" />
           <div class="my-5 text-pre-wrap">
             {{ descriptionInfo.content }}
           </div>
         </div>
-      </div>
-      <!-- 右侧区域 -->
-      <div class="right-column d-flex flex-column ga-6">
+      </v-col>
+      <v-col cols="12" md="4">
         <!-- 摘要 -->
         <div class="details">
           <!-- 摘要头部 -->
           <div class="details-header">
             <div class="d-flex flex-row align-center justify-space-between">
-              <div class="text-h5 font-weight-bold">{{ detailsInfo.title }}</div>
+              <div class="text-h5 font-weight-bold">
+                {{ detailsInfo.title }}
+              </div>
               <v-btn
                 class="details-title-btn"
                 icon="mdi-dots-horizontal"
@@ -182,9 +179,9 @@ const updateSelectedImage = (image: string) => {
               {{ detailsInfo.praise }}
             </v-btn>
             <v-btn
+              :size="36"
               icon="mdi-thumb-down-outline"
               rounded="xl"
-              size="small"
               style="margin-left: 8px"
               variant="outlined"
             />
@@ -207,7 +204,7 @@ const updateSelectedImage = (image: string) => {
           </div>
         </div>
         <!-- 下载 -->
-        <div>
+        <div class="mt-4">
           <!-- 下载头部 -->
           <div>
             <div class="d-flex flex-row align-center justify-space-between">
@@ -223,32 +220,30 @@ const updateSelectedImage = (image: string) => {
           </div>
           <!-- 下载内容 -->
           <div class="px-2">
-            <v-card
-              class="mx-auto"
-              max-width="400"
-              flat
-              color="transparent"
-            >
+            <v-card class="mx-auto" color="transparent" flat max-width="400">
               <v-card-text class="pa-0">
                 <!-- 整体容器 -->
                 <div class="d-flex">
                   <!-- 左侧图标容器 -->
                   <div class="d-flex align-center mr-3">
-                    <v-icon
-                      color="grey-darken-2"
-                      size="large"
-                    >
+                    <v-icon color="grey-darken-2" size="large">
                       mdi-folder-outline
                     </v-icon>
                   </div>
                   <!-- 右侧内容区域 -->
                   <div class="d-flex flex-column flex-grow-1">
                     <!-- 标题行 -->
-                    <span class="text-subtitle-1 font-weight-medium">76k Simple Dark Oak Farm</span>
+                    <span class="text-subtitle-1 font-weight-medium"
+                      >76k Simple Dark Oak Farm</span
+                    >
                     <!-- 底部信息行 -->
                     <div class="d-flex justify-space-between mt-1">
-                      <span class="text-caption text--secondary">1.7-1.20.2</span>
-                      <span class="text-caption text--secondary">2 months ago</span>
+                      <span class="text-caption text--secondary"
+                        >1.7-1.20.2</span
+                      >
+                      <span class="text-caption text--secondary"
+                        >2 months ago</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -256,45 +251,7 @@ const updateSelectedImage = (image: string) => {
             </v-card>
           </div>
         </div>
-      </div>
-    </div>
+      </v-col>
+    </v-row>
   </div>
 </template>
-
-<style scoped>
-/* 主容器 */
-.content {
-  max-width: 1440px; /* 最大宽度 */
-  margin: 0 auto; /* 居中 */
-}
-
-/* Flex 布局容器 */
-.flex-container {
-  gap: 36px; /* 左右栏间距 */
-}
-
-/* 左侧区域 */
-.left-column {
-  flex: 2; /* 左侧占 2 份 */
-  max-width: 960px;
-}
-
-/* 右侧区域 */
-.right-column {
-  flex: 1; /* 右侧占 1 份 */
-  max-width: 480px;
-}
-
-/* 响应式布局 */
-@media (max-width: 1350px) {
-  .flex-container {
-    flex-direction: column; /* 单列布局 */
-    gap: 16px; /* 缩小间距 */
-  }
-
-  .left-column,
-  .right-column {
-    max-width: 100%; /* 宽度占满 */
-  }
-}
-</style>
