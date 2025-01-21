@@ -51,7 +51,7 @@ const updateSelectedImage = (image: string) => {
 
 <template>
   <!-- 主容器 -->
-  <div class="content pa-16">
+  <div class="pa-16">
     <!-- 使用 flex 布局的容器 -->
     <v-row>
       <v-col cols="12" md="8" style="height: min-content">

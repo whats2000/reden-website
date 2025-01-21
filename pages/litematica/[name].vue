@@ -13,7 +13,6 @@ import type {
 } from '~/pages/litematica/index.vue';
 import { parseBVID } from '~/utils/constants';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
-import SidebarAd from '~/components/ads/SidebarAd.vue';
 import { type Condition, parseCondition } from '~/utils/conditionParser';
 import RedenRouter from '~/components/RedenRouter.vue';
 import type { VForm } from 'vuetify/components';
@@ -209,284 +208,508 @@ async function cancelApproval() {
     }
   }
 }
+
+const selectedImage = ref(selected.value.imageUrl);
 </script>
 
 <template>
-  <v-form ref="form" class="content-common" fast-fail @submit.prevent="submit">
-    <v-btn
-      :to="backUrl ?? localePath('/litematica')"
-      class="mb-3 text-capitalize mr-3"
-      prepend-icon="mdi-arrow-left"
-      variant="tonal"
-    >
-      {{ $t('litematica_generator.view_all_designs') }}
-    </v-btn>
-    <v-btn
-      :to="appStore.logined ? undefined : localePath('/login')"
-      class="mb-3 text-capitalize"
-      color="primary"
-      variant="outlined"
-      @click="
-        () => {
-          if (!localizedData && appStore.logined) {
-            useFetch(`/api/mc-services/yisibite/${machineId}/info`, {
-              key: `edit-${machineId}`,
-            });
-          }
-        }
-      "
-    >
-      {{ $t('litematica_generator.upload.edit_or_improve_translation') }}
-      <v-dialog
-        v-model="openEditDialog"
-        activator="parent"
-        close-on-back
-        max-width="900"
-        persistent
+  <v-form ref="form" fast-fail @submit.prevent="submit">
+    <div class="ma-4">
+      <v-btn
+        :to="backUrl ?? localePath('/litematica')"
+        class="mb-3 text-capitalize mr-3"
+        prepend-icon="mdi-arrow-left"
+        variant="tonal"
       >
-        <v-card variant="flat">
-          <LitematicaUpload v-model:machine="localizedData" edit-mode />
-          <div class="position-absolute top-0 right-0">
-            <v-btn
-              icon="mdi-close"
-              variant="plain"
-              @click="openEditDialog = false"
+        {{ $t('litematica_generator.view_all_designs') }}
+      </v-btn>
+      <v-btn
+        :to="appStore.logined ? undefined : localePath('/login')"
+        class="mb-3 text-capitalize"
+        color="primary"
+        variant="outlined"
+        @click="
+          () => {
+            if (!localizedData && appStore.logined) {
+              useFetch(`/api/mc-services/yisibite/${machineId}/info`, {
+                key: `edit-${machineId}`,
+              });
+            }
+          }
+        "
+      >
+        {{ $t('litematica_generator.upload.edit_or_improve_translation') }}
+        <v-dialog
+          v-model="openEditDialog"
+          activator="parent"
+          close-on-back
+          max-width="900"
+          persistent
+        >
+          <v-card variant="flat">
+            <LitematicaUpload v-model:machine="localizedData" edit-mode />
+            <div class="position-absolute top-0 right-0">
+              <v-btn
+                icon="mdi-close"
+                variant="plain"
+                @click="openEditDialog = false"
+              />
+            </div>
+          </v-card>
+        </v-dialog>
+      </v-btn>
+      <v-btn
+        v-if="appStore.userCache?.roles?.includes('archiver')"
+        color="red"
+        @click="cancelApproval"
+      >
+        下架
+      </v-btn>
+    </div>
+
+    <div class="ma-4">
+      <v-row v-if="selected">
+        <v-col cols="12" md="8" style="height: min-content">
+          <!-- 预览 -->
+          <div>
+            <div class="text-h5 text-md-h4 font-weight-bold">
+              This is Preview Title
+            </div>
+            <v-divider style="margin: 12px 0" />
+            <v-img
+              :src="selectedImage"
+              style="
+                width: 100%;
+                height: 100%;
+                max-height: 400px;
+                object-fit: contain;
+                aspect-ratio: auto;
+              "
+            />
+            <!-- 图片组容器 -->
+            <v-slide-group
+              center-active
+              class="pa-4"
+              mandatory
+              selected-class="bg-primary"
+              show-arrows
+              style="max-height: 100px"
+            >
+              <v-slide-group-item
+                v-for="(image, index) in selected.images"
+                :key="index"
+                v-slot="{ isSelected, toggle, selectedClass }"
+              >
+                <v-img
+                  :src="image"
+                  class="pr-2"
+                  min-width="100px"
+                  @click="
+                    toggle;
+                    selectedImage = image;
+                  "
+                />
+              </v-slide-group-item>
+            </v-slide-group>
+          </div>
+          <!-- 描述 -->
+          <div class="mt-4">
+            <div class="text-h5 font-weight-bold">There is Description</div>
+            <v-divider style="margin: 12px 0" />
+            <MDC
+              :value="selected.description"
+              class="lm-description text-pre-wrap"
             />
           </div>
-        </v-card>
-      </v-dialog>
-    </v-btn>
-    <v-btn
-      v-if="appStore.userCache?.roles?.includes('archiver')"
-      color="red"
-      @click="cancelApproval"
-    >
-      下架
-    </v-btn>
-
-    <v-row justify="center">
-      <h1>
-        {{ selected?.name }}
-      </h1>
-    </v-row>
-    <v-row justify="center" style="line-height: 32px">
-      {{
-        selected.original
-          ? $t('litematica_generator.by.author')
-          : $t('litematica_generator.by.uploader')
-      }}
-      <router-link
-        v-if="selected.author"
-        :to="localePath(`/@${selected.author.username}`)"
-        class="d-flex flex-row router"
-      >
-        <v-avatar v-if="selected.author.avatarUrl" size="32">
-          <v-img :src="selected.author.avatarUrl" />
-        </v-avatar>
-        {{ selected.author.username }}
-      </router-link>
-      <v-spacer style="max-width: 30px" />
-      <v-chip v-if="selected">
-        {{
-          $t('litematica_generator.download_count', {
-            count: selected?.downloads,
-          })
-        }}
-      </v-chip>
-    </v-row>
-    <div v-if="!selected.original" class="opacity-60 text-body-2 mx-auto mt-3">
-      <span class="text-amber-darken-1">
-        {{ $t('litematica_generator.by.uploader_not_original_author') }}
-      </span>
-      {{ $t('litematica_generator.by.reason_uploaded') }}<br />
-      {{ $t('litematica_generator.by.reason_uploaded_a') }}<br />
-      {{ $t('litematica_generator.by.reason_uploaded_b') }}<br />
-      {{ $t('litematica_generator.by.reason_uploaded_c') }}<br />
-      {{ $t('litematica_generator.by.complaint') }}
-      <a class="router" href="mailto:info@redenmc.com">contact us.</a>
-    </div>
-    <v-row>
-      <v-col v-if="tabs.length !== 0">
-        <v-card>
-          <v-tabs v-model="tab" color="primary">
-            <v-tab v-if="selected.imageUrl" value="picture">图片</v-tab>
-            <v-tab v-if="bvid" value="bilibili">
-              <v-icon size="lg">custom:Bilibili</v-icon>
-              Bilibili
-            </v-tab>
-          </v-tabs>
-
-          <v-card-text>
-            <v-tabs-window v-model="tab">
-              <v-tabs-window-item v-if="selected?.imageUrl" value="picture">
-                <v-img :src="selected.imageUrl" width="100%" />
-              </v-tabs-window-item>
-
-              <v-tabs-window-item v-if="bvid" value="bilibili">
-                <div class="bili-player-wrapper">
-                  <iframe
-                    ref="biliPlayer"
-                    :src="`https://player.bilibili.com/player.html?isOutside=true&bvid=${bvid}`"
-                    allowfullscreen
-                    class="bili-player"
-                  />
+        </v-col>
+        <v-col cols="12" md="4">
+          <!-- 摘要 -->
+          <div class="details">
+            <!-- 摘要头部 -->
+            <div class="details-header">
+              <div class="d-flex flex-row align-center justify-space-between">
+                <div class="text-h5 text-md-h4 font-weight-bold">Details</div>
+                <v-btn
+                  class="details-title-btn"
+                  icon="mdi-dots-horizontal"
+                  size="32"
+                  variant="text"
+                />
+              </div>
+              <v-divider style="margin: 12px 0" />
+            </div>
+            <!-- 摘要内容 -->
+            <div class="details-content">
+              <div class="d-flex mt-3">
+                <div class="w-33 align-content-center">发布者：</div>
+                <router-link
+                  v-if="selected.author"
+                  :to="localePath(`/@${selected.author.username}`)"
+                  class="d-flex flex-row router"
+                >
+                  <v-avatar v-if="selected.author.avatarUrl" size="32">
+                    <v-img :src="selected.author.avatarUrl" />
+                  </v-avatar>
+                  {{ selected.author.username }}
+                </router-link>
+              </div>
+              <div class="d-flex mt-3">
+                <div class="w-33 align-content-center">更新时间：</div>
+                <div>{{ 0 }}</div>
+              </div>
+              <div class="d-flex mt-3">
+                <div class="w-33 align-content-center">版本：</div>
+                <v-chip
+                  v-for="(version, index) in []"
+                  :key="index"
+                  size="small"
+                  style="margin-right: 8px"
+                >
+                  {{ version }}
+                </v-chip>
+              </div>
+              <div class="d-flex mt-3">
+                <div class="w-33 align-content-center">设计标签：</div>
+                <v-chip
+                  v-for="(tag, index) in []"
+                  :key="index"
+                  size="small"
+                  style="margin-right: 8px"
+                >
+                  {{ tag }}
+                </v-chip>
+              </div>
+              <div class="d-flex mt-3">
+                <div class="w-33 align-content-center">特性标签：</div>
+                <v-chip
+                  v-for="(tag, index) in []"
+                  :key="index"
+                  size="small"
+                  style="margin-right: 8px"
+                >
+                  {{ tag }}
+                </v-chip>
+              </div>
+              <div
+                v-if="!selected.original"
+                class="opacity-60 text-body-2 mx-auto mt-3"
+              >
+                <span class="text-amber-darken-1">
+                  {{
+                    $t('litematica_generator.by.uploader_not_original_author')
+                  }}
+                </span>
+                {{ $t('litematica_generator.by.reason_uploaded') }}<br />
+                {{ $t('litematica_generator.by.reason_uploaded_a') }}<br />
+                {{ $t('litematica_generator.by.reason_uploaded_b') }}<br />
+                {{ $t('litematica_generator.by.reason_uploaded_c') }}<br />
+                {{ $t('litematica_generator.by.complaint') }}
+                <a class="router" href="mailto:info@redenmc.com">contact us.</a>
+              </div>
+            </div>
+            <!-- 摘要底部 -->
+            <v-divider style="margin: 12px 0" />
+            <div class="details-footer">
+              <v-btn
+                prepend-icon="mdi-thumb-up-outline"
+                rounded="xl"
+                variant="outlined"
+              >
+                {{ 14514 }}
+              </v-btn>
+              <v-btn
+                :size="36"
+                icon="mdi-thumb-down-outline"
+                rounded="xl"
+                style="margin-left: 8px"
+                variant="outlined"
+              />
+              <v-btn
+                prepend-icon="mdi-bookmark-outline"
+                rounded="xl"
+                style="margin-left: 8px"
+                variant="outlined"
+              >
+                收藏
+              </v-btn>
+              <v-btn
+                prepend-icon="mdi-share-variant-outline"
+                rounded="xl"
+                style="margin-left: 8px"
+                variant="outlined"
+              >
+                分享
+              </v-btn>
+            </div>
+          </div>
+          <!-- 下载 -->
+          <div class="mt-4">
+            <!-- 下载头部 -->
+            <div>
+              <div class="d-flex flex-row align-center justify-space-between">
+                <div class="text-h5 font-weight-bold">Downloads</div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                  "
+                >
+                  <v-icon icon="mdi-download" />
+                  <div class="text-h5 font-weight-bold">114514K</div>
                 </div>
-              </v-tabs-window-item>
-            </v-tabs-window>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col v-if="selected?.link" class="overflow-hidden" cols="12">
-        <a v-if="!bvid" :href="selected.link" class="router text-no-wrap">
-          <v-icon>mdi-link</v-icon>
-          {{ selected.link }}
-        </a>
-      </v-col>
-      <v-col
-        v-if="selected?.description"
-        class="overflow-hidden text-pre-wrap pa-5"
-        cols="12"
-      >
-        <MDC :value="selected.description" class="lm-description" />
-      </v-col>
-    </v-row>
+              </div>
+              <v-divider style="margin: 12px 0" />
+            </div>
+            <!-- 下载内容 -->
+            <div class="px-2">
+              <v-card class="mx-auto" color="transparent" flat max-width="400">
+                <v-card-text class="pa-0">
+                  <!-- 整体容器 -->
+                  <div class="d-flex">
+                    <!-- 左侧图标容器 -->
+                    <div class="d-flex align-center mr-3">
+                      <v-icon color="grey-darken-2" size="large">
+                        mdi-folder-outline
+                      </v-icon>
+                    </div>
+                    <!-- 右侧内容区域 -->
+                    <div class="d-flex flex-column flex-grow-1">
+                      <!-- 标题行 -->
+                      <span class="text-subtitle-1 font-weight-medium"
+                        >76k Simple Dark Oak Farm</span
+                      >
+                      <!-- 底部信息行 -->
+                      <div class="d-flex justify-space-between mt-1">
+                        <span class="text-caption text--secondary"
+                          >1.7-1.20.2</span
+                        >
+                        <span class="text-caption text--secondary"
+                          >2 months ago</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </div>
+          </div>
+        </v-col>
+      </v-row>
+    </div>
 
-    <template v-if="selected.type === 'LitematicaGen'">
+    <template v-if="selected">
+      <v-row justify="center">
+        <h1>
+          {{ selected?.name }}
+        </h1>
+      </v-row>
+      <v-row justify="center" style="line-height: 32px">
+        {{
+          selected.original
+            ? $t('litematica_generator.by.author')
+            : $t('litematica_generator.by.uploader')
+        }}
+        <router-link
+          v-if="selected.author"
+          :to="localePath(`/@${selected.author.username}`)"
+          class="d-flex flex-row router"
+        >
+          <v-avatar v-if="selected.author.avatarUrl" size="32">
+            <v-img :src="selected.author.avatarUrl" />
+          </v-avatar>
+          {{ selected.author.username }}
+        </router-link>
+        <v-spacer style="max-width: 30px" />
+        <v-chip v-if="selected">
+          {{
+            $t('litematica_generator.download_count', {
+              count: selected?.downloads,
+            })
+          }}
+        </v-chip>
+      </v-row>
+
       <v-row>
-        <v-col>
-          <v-card
-            v-if="selected?.hasX || selected?.hasY || selected?.hasZ"
-            border
-          >
-            <v-card-subtitle class="text-wrap pa-3">
-              {{ $t('litematica_generator.size_description') }}
-            </v-card-subtitle>
+        <v-col v-if="tabs.length !== 0">
+          <v-card>
+            <v-tabs v-model="tab" color="primary">
+              <v-tab v-if="selected.imageUrl" value="picture">图片</v-tab>
+              <v-tab v-if="bvid" value="bilibili">
+                <v-icon size="lg">custom:Bilibili</v-icon>
+                Bilibili
+              </v-tab>
+            </v-tabs>
+
             <v-card-text>
-              <SizeInput
-                v-if="selected.hasX"
-                v-model="xSize"
-                :def="selected"
-                xyz="x"
-              />
-              <SizeInput
-                v-if="selected.hasY"
-                v-model="ySize"
-                :def="selected"
-                xyz="y"
-              />
-              <SizeInput
-                v-if="selected.hasZ"
-                v-model="zSize"
-                :def="selected"
-                xyz="z"
-              />
+              <v-tabs-window v-model="tab">
+                <v-tabs-window-item v-if="selected?.imageUrl" value="picture">
+                  <v-img :src="selected.imageUrl" width="100%" />
+                </v-tabs-window-item>
+
+                <v-tabs-window-item v-if="bvid" value="bilibili">
+                  <div class="bili-player-wrapper">
+                    <iframe
+                      ref="biliPlayer"
+                      :src="`https://player.bilibili.com/player.html?isOutside=true&bvid=${bvid}`"
+                      allowfullscreen
+                      class="bili-player"
+                    />
+                  </div>
+                </v-tabs-window-item>
+              </v-tabs-window>
             </v-card-text>
           </v-card>
         </v-col>
+        <v-col v-if="selected?.link" class="overflow-hidden" cols="12">
+          <a v-if="!bvid" :href="selected.link" class="router text-no-wrap">
+            <v-icon>mdi-link</v-icon>
+            {{ selected.link }}
+          </a>
+        </v-col>
+        <v-col
+          v-if="selected?.description"
+          class="overflow-hidden text-pre-wrap pa-5"
+          cols="12"
+        >
+          <MDC :value="selected.description" class="lm-description" />
+        </v-col>
+      </v-row>
+
+      <template v-if="selected.type === 'LitematicaGen'">
+        <v-row>
+          <v-col>
+            <v-card
+              v-if="selected?.hasX || selected?.hasY || selected?.hasZ"
+              border
+            >
+              <v-card-subtitle class="text-wrap pa-3">
+                {{ $t('litematica_generator.size_description') }}
+              </v-card-subtitle>
+              <v-card-text>
+                <SizeInput
+                  v-if="selected.hasX"
+                  v-model="xSize"
+                  :def="selected"
+                  xyz="x"
+                />
+                <SizeInput
+                  v-if="selected.hasY"
+                  v-model="ySize"
+                  :def="selected"
+                  xyz="y"
+                />
+                <SizeInput
+                  v-if="selected.hasZ"
+                  v-model="zSize"
+                  :def="selected"
+                  xyz="z"
+                />
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-spacer />
+          <v-btn
+            :loading="loading"
+            class="ma-3"
+            color="primary"
+            type="button"
+            variant="outlined"
+            @click="openMaterials"
+          >
+            材料列表
+          </v-btn>
+          <v-btn :loading="loading" class="ma-3" color="primary" type="submit">
+            {{ $t('litematica_generator.download') }}
+          </v-btn>
+        </v-row>
+      </template>
+      <template v-if="selected.type === 'LitematicaShare'">
+        <h3>下载链接（临时版，每个链接都对应一个不同的文件）</h3>
+        <v-list
+          v-for="(attachment, index) in selected.attachments"
+          :key="attachment.name"
+          class="overflow-hidden"
+        >
+          <v-list-item border>
+            <v-list-item-title>
+              <p class="text-orange">
+                下载链接{{ index + 1 }}
+                <a class="router" @click="loadBlob(index)">
+                  <v-icon size="sm">mdi-eye</v-icon>
+                  预览
+                  <v-dialog :max-width="800" activator="parent" close-on-back>
+                    <v-card :loading="!blob[index]">
+                      <v-card-text>
+                        <LitematicaPreview
+                          v-if="blob[index]"
+                          :blob="blob[index]"
+                        />
+                        <div v-else>
+                          <v-progress-circular color="primary" indeterminate />
+                          <span style="font-size: 1.25rem">
+                            {{ $t('common.loading___') }}
+                          </span>
+                        </div>
+
+                        <p
+                          class="top-0 right-0 position-absolute mr-6 mt-4 text-white text-caption text-right opacity-60"
+                          style="user-select: none; line-height: 0.75rem"
+                        >
+                          Credit to misode, Ending Credits & Undecentions <br />
+                          This Vue component is made by zly2006 and licensed
+                          under AGPL v3
+                        </p>
+                      </v-card-text>
+                    </v-card>
+                  </v-dialog>
+                </a>
+              </p>
+              <a
+                :href="`/api/mc-services/yisibite/${machineId}/download/${index + 1}`"
+                class="router text-no-wrap"
+              >
+                <v-icon>mdi-download</v-icon>
+                {{ attachment.name }}
+              </a>
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </template>
+      <v-row v-if="!useAppStore().logined" class="text-sm-body-1">
+        <v-col>
+          <reden-router :to="localePath('/login')">
+            {{ $t('litematica_generator.not_logged_in') }}
+          </reden-router>
+        </v-col>
       </v-row>
       <v-row>
-        <v-spacer />
-        <v-btn
-          :loading="loading"
-          class="ma-3"
-          color="primary"
-          type="button"
-          variant="outlined"
-          @click="openMaterials"
-        >
-          材料列表
-        </v-btn>
-        <v-btn :loading="loading" class="ma-3" color="primary" type="submit">
-          {{ $t('litematica_generator.download') }}
-        </v-btn>
+        <v-col>
+          <h3>FAQ</h3>
+          <h4>17x17的空置域应该输入多少？</h4>
+          <p>17x16=272，272的大小包含了两边各一格的铁砧墙宽度。</p>
+          <h4>没有找到你想要的机器？</h4>
+          <p>
+            {{ $t('litematica_generator.contribute') }}
+            <a class="router" href="mailto:me@redenmc.com">me@redenmc.com</a>
+          </p>
+          <br />
+          <div class="text-center v-card-subtitle w-100">
+            {{
+              $t('litematica_generator.total_downloads', [
+                serverResponse?.downloads,
+              ])
+            }}
+          </div>
+        </v-col>
       </v-row>
     </template>
-    <template v-if="selected.type === 'LitematicaShare'">
-      <h3>下载链接（临时版，每个链接都对应一个不同的文件）</h3>
-      <v-list
-        v-for="(attachment, index) in selected.attachments"
-        :key="attachment.name"
-        class="overflow-hidden"
-      >
-        <v-list-item border>
-          <v-list-item-title>
-            <p class="text-orange">
-              下载链接{{ index + 1 }}
-              <a class="router" @click="loadBlob(index)">
-                <v-icon size="sm">mdi-eye</v-icon>
-                预览
-                <v-dialog :max-width="800" activator="parent" close-on-back>
-                  <v-card :loading="!blob[index]">
-                    <v-card-text>
-                      <LitematicaPreview
-                        v-if="blob[index]"
-                        :blob="blob[index]"
-                      />
-                      <div v-else>
-                        <v-progress-circular color="primary" indeterminate />
-                        <span style="font-size: 1.25rem">
-                          {{ $t('common.loading___') }}
-                        </span>
-                      </div>
 
-                      <p
-                        class="top-0 right-0 position-absolute mr-6 mt-4 text-white text-caption text-right opacity-60"
-                        style="user-select: none; line-height: 0.75rem"
-                      >
-                        Credit to misode, Ending Credits & Undecentions <br />
-                        This Vue component is made by zly2006 and licensed under
-                        AGPL v3
-                      </p>
-                    </v-card-text>
-                  </v-card>
-                </v-dialog>
-              </a>
-            </p>
-            <a
-              :href="`/api/mc-services/yisibite/${machineId}/download/${index + 1}`"
-              class="router text-no-wrap"
-            >
-              <v-icon>mdi-download</v-icon>
-              {{ attachment.name }}
-            </a>
-          </v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </template>
-    <v-row v-if="!useAppStore().logined" class="text-sm-body-1">
-      <v-col>
-        <reden-router :to="localePath('/login')">
-          {{ $t('litematica_generator.not_logged_in') }}
-        </reden-router>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <h3>FAQ</h3>
-        <h4>17x17的空置域应该输入多少？</h4>
-        <p>17x16=272，272的大小包含了两边各一格的铁砧墙宽度。</p>
-        <h4>没有找到你想要的机器？</h4>
-        <p>
-          {{ $t('litematica_generator.contribute') }}
-          <a class="router" href="mailto:me@redenmc.com">me@redenmc.com</a>
-        </p>
-        <br />
-        <div class="text-center v-card-subtitle w-100">
-          {{
-            $t('litematica_generator.total_downloads', [
-              serverResponse?.downloads,
-            ])
-          }}
-        </div>
-      </v-col>
-    </v-row>
     <bottom-bar-ad />
     <bottom-bar-ad v-if="mobile" />
   </v-form>
-
-  <div v-if="!mobile" style="position: absolute; right: 10px; top: 90px">
-    <sidebar-ad />
-  </div>
 </template>
 
 <style scoped>
