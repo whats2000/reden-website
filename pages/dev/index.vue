@@ -54,14 +54,14 @@ const updateSelectedImage = (image: string) => {
 
 <template>
   <!-- 主容器 -->
-  <div class="content">
+  <div class="content pa-16">
     <!-- 使用 flex 布局的容器 -->
-    <div class="flex-container">
+    <div class="flex-container d-flex">
       <!-- 左侧区域 -->
-      <div class="left-column">
+      <div class="left-column d-flex flex-column ga-6">
         <!-- 预览 -->
-        <div class="preview">
-          <div class="preview-title">This is Preview Title</div>
+        <div>
+          <div class="text-h5 font-weight-bold">This is Preview Title</div>
           <v-divider style="margin: 12px 0" />
           <v-img
             :src="selectedImage"
@@ -99,25 +99,21 @@ const updateSelectedImage = (image: string) => {
         </div>
         <!-- 描述 -->
         <div class="description">
-          <div class="description-title">There is Description</div>
+          <div class="text-h5 font-weight-bold">There is Description</div>
           <v-divider style="margin: 12px 0" />
-          <div class="description-content-text">
+          <div class="my-5 text-pre-wrap">
             {{ descriptionInfo.content }}
           </div>
         </div>
-        <!-- 评论 -->
-        <div class="comment">
-          <!-- 评论区 -->
-        </div>
       </div>
       <!-- 右侧区域 -->
-      <div class="right-column">
+      <div class="right-column d-flex flex-column ga-6">
         <!-- 摘要 -->
         <div class="details">
           <!-- 摘要头部 -->
           <div class="details-header">
-            <div class="details-title">
-              <div class="details-title-text">{{ detailsInfo.title }}</div>
+            <div class="d-flex flex-row align-center justify-space-between">
+              <div class="text-h5 font-weight-bold">{{ detailsInfo.title }}</div>
               <v-btn
                 class="details-title-btn"
                 icon="mdi-dots-horizontal"
@@ -129,20 +125,20 @@ const updateSelectedImage = (image: string) => {
           </div>
           <!-- 摘要内容 -->
           <div class="details-content">
-            <div class="poster flex mt-3">
-              <div class="details-content-head">发布者：</div>
+            <div class="d-flex mt-3">
+              <div class="w-33 align-content-center">发布者：</div>
               <div>{{ detailsInfo.poster }}</div>
             </div>
-            <div class="designer flex">
-              <div class="details-content-head">设计者：</div>
+            <div class="d-flex mt-3">
+              <div class="w-33 align-content-center">设计者：</div>
               <div>{{ detailsInfo.designer }}</div>
             </div>
-            <div class="published-date flex">
-              <div class="details-content-head">发布时间：</div>
+            <div class="d-flex mt-3">
+              <div class="w-33 align-content-center">发布时间：</div>
               <div>{{ detailsInfo.publishedDate }}</div>
             </div>
-            <div class="version flex">
-              <div class="details-content-head">版本：</div>
+            <div class="d-flex mt-3">
+              <div class="w-33 align-content-center">版本：</div>
               <v-chip
                 v-for="(version, index) in detailsInfo.version"
                 :key="index"
@@ -152,8 +148,8 @@ const updateSelectedImage = (image: string) => {
                 {{ version }}
               </v-chip>
             </div>
-            <div class="design-tags flex">
-              <div class="details-content-head">设计标签：</div>
+            <div class="d-flex mt-3">
+              <div class="w-33 align-content-center">设计标签：</div>
               <v-chip
                 v-for="(tag, index) in detailsInfo.designTags"
                 :key="index"
@@ -163,8 +159,8 @@ const updateSelectedImage = (image: string) => {
                 {{ tag }}
               </v-chip>
             </div>
-            <div class="feature-tags flex">
-              <div class="details-content-head">特性标签：</div>
+            <div class="d-flex mt-3">
+              <div class="w-33 align-content-center">特性标签：</div>
               <v-chip
                 v-for="(tag, index) in detailsInfo.featureTags"
                 :key="index"
@@ -211,22 +207,22 @@ const updateSelectedImage = (image: string) => {
           </div>
         </div>
         <!-- 下载 -->
-        <div class="download">
+        <div>
           <!-- 下载头部 -->
           <div>
-            <div class="download-title">
-              <div class="download-title-text">Downloads</div>
+            <div class="d-flex flex-row align-center justify-space-between">
+              <div class="text-h5 font-weight-bold">Downloads</div>
               <div
                 style="display: flex; flex-direction: row; align-items: center"
               >
                 <v-icon icon="mdi-download" />
-                <div class="download-title-text">114514K</div>
+                <div class="text-h5 font-weight-bold">114514K</div>
               </div>
             </div>
             <v-divider style="margin: 12px 0" />
           </div>
           <!-- 下载内容 -->
-          <div style="padding:5px 20px">
+          <div class="px-5">
             <div
               :style="appStore.theme === 'dark' ? 'color: #DDD' : 'color: #686868'"
               style="font-weight: 100; font-size: medium"
@@ -236,7 +232,7 @@ const updateSelectedImage = (image: string) => {
           </div>
         </div>
         <!-- 推荐 -->
-        <div class="recommend">
+        <div>
           <!-- 推荐内容 -->
         </div>
       </div>
@@ -247,33 +243,25 @@ const updateSelectedImage = (image: string) => {
 <style scoped>
 /* 主容器 */
 .content {
-  padding: 16px;
   max-width: 1440px; /* 最大宽度 */
   margin: 0 auto; /* 居中 */
 }
 
-/* 使用 flex 布局的容器 */
+/* Flex 布局容器 */
 .flex-container {
-  display: flex;
-  gap: 24px; /* 左右栏间距 */
+  gap: 36px; /* 左右栏间距 */
 }
 
 /* 左侧区域 */
 .left-column {
   flex: 2; /* 左侧占 2 份 */
   max-width: 960px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px; /* 内部元素间距 */
 }
 
 /* 右侧区域 */
 .right-column {
   flex: 1; /* 右侧占 1 份 */
   max-width: 480px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px; /* 内部元素间距 */
 }
 
 /* 响应式布局 */
@@ -287,39 +275,5 @@ const updateSelectedImage = (image: string) => {
   .right-column {
     max-width: 100%; /* 宽度占满 */
   }
-}
-
-.preview-title,
-.details-title-text,
-.download-title-text,
-.description-title {
-  font-size: x-large;
-  font-weight: bolder;
-}
-
-.details-title,
-.download-title {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.flex {
-  display: flex;
-}
-
-.details-content-head {
-  width: 100px;
-  align-content: center;
-}
-
-.details-content > div {
-  margin-top: 15px;
-}
-
-.description-content-text {
-  white-space: pre-wrap;
-  margin: 12px 0;
 }
 </style>
