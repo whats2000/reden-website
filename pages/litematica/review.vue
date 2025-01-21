@@ -42,12 +42,13 @@ const rejectReason = ref<string>();
   <v-data-table-server
     v-model:page="page"
     :headers="[
-      // { title: 'ID', key: 'key' },
-      { title: '名称', key: 'name' },
-      { title: '类型', key: 'type' },
-      { title: '描述', key: 'description' },
-      { title: '更新时间', key: 'updatedAt' },
-      { title: '编辑', key: 'edit' },
+      { title: 'Name', key: 'name' },
+      { title: 'Author', key: 'author' },
+      { title: 'Type', key: 'type' },
+      { title: 'Description', key: 'description' },
+      { title: 'Updated', key: 'updatedAt' },
+      { title: 'Actions', key: 'edit' },
+      { title: 'Status', key: 'status' },
     ]"
     :items="Object.values(data?.d ?? {})"
     :items-length="data?.count ?? 100"
@@ -77,6 +78,20 @@ const rejectReason = ref<string>();
           "
         >
           {{ value }}
+        </div>
+      </reden-router>
+    </template>
+    <template #[`item.author`]="{ value }">
+      <reden-router :to="`/@${value.username}`">
+        <div
+          style="
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          "
+        >
+          {{ value.username }}
         </div>
       </reden-router>
     </template>

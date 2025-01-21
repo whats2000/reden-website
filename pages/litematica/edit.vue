@@ -27,6 +27,7 @@ const currentLoadedData = ref<string>();
       { title: '描述', key: 'description' },
       { title: '更新时间', key: 'updatedAt' },
       { title: '编辑', key: 'edit' },
+      { title: '状态', key: 'status' },
     ]"
     :items="Object.values(data?.d ?? {})"
     :items-length="data?.count ?? 100"

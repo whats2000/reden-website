@@ -35,6 +35,22 @@ export type MachineDef = {
     url: string;
   }[];
   original?: boolean;
+  status?: 'Pending' | 'Approved' | 'Rejected' | 'Deleted' | 'TakenDown';
+  /**
+   * User-oriented data
+   */
+  ud?: {
+    owner: boolean;
+    /**
+     * upvote | down-vote | not voted yet
+     */
+    vote?: boolean;
+    /**
+     * @deprecated
+     */
+    bookmark: boolean;
+    favorite: boolean;
+  };
 };
 
 const { t } = useI18n();
@@ -146,7 +162,7 @@ const cardMaxWidth = computed(() => {
   const referenceWidth = mdAndUp.value ? width.value - 340 : width.value;
   return referenceWidth / itemsPerRow.value - 30;
 });
-const itemDisplay = computed(() => {
+computed(() => {
   const rows: { def?: MachineDef[]; ad?: 'ad' }[] = [];
   const rowCount = Math.ceil(items.value.length / itemsPerRow.value);
   for (let i = 0; i < rowCount; i++) {
