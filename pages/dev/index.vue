@@ -222,18 +222,39 @@ const updateSelectedImage = (image: string) => {
             <v-divider style="margin: 12px 0" />
           </div>
           <!-- 下载内容 -->
-          <div class="px-5">
-            <div
-              :style="appStore.theme === 'dark' ? 'color: #DDD' : 'color: #686868'"
-              style="font-weight: 100; font-size: medium"
+          <div class="px-2">
+            <v-card
+              class="mx-auto"
+              max-width="400"
+              flat
+              color="transparent"
             >
-              Download All
-            </div>
+              <v-card-text class="pa-0">
+                <!-- 整体容器 -->
+                <div class="d-flex">
+                  <!-- 左侧图标容器 -->
+                  <div class="d-flex align-center mr-3">
+                    <v-icon
+                      color="grey-darken-2"
+                      size="large"
+                    >
+                      mdi-folder-outline
+                    </v-icon>
+                  </div>
+                  <!-- 右侧内容区域 -->
+                  <div class="d-flex flex-column flex-grow-1">
+                    <!-- 标题行 -->
+                    <span class="text-subtitle-1 font-weight-medium">76k Simple Dark Oak Farm</span>
+                    <!-- 底部信息行 -->
+                    <div class="d-flex justify-space-between mt-1">
+                      <span class="text-caption text--secondary">1.7-1.20.2</span>
+                      <span class="text-caption text--secondary">2 months ago</span>
+                    </div>
+                  </div>
+                </div>
+              </v-card-text>
+            </v-card>
           </div>
-        </div>
-        <!-- 推荐 -->
-        <div>
-          <!-- 推荐内容 -->
         </div>
       </div>
     </div>
