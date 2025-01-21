@@ -171,7 +171,7 @@ export default defineNuxtConfig({
           sizes: '256x256',
         },
       ],
-      theme_color: '#2196F3',
+      theme_color: '#ffffff',
     },
   },
 });
