@@ -15,10 +15,12 @@ const props = withDefaults(
   defineProps<{
     user?: Profile;
     canEdit?: boolean;
+    minWidth?: number;
     applyPreference?: boolean;
   }>(),
   {
     canEdit: true,
+    minWidth: 300,
   },
 );
 const { user, canEdit, applyPreference } = toRefs(props);
@@ -85,8 +87,8 @@ function deleteAvatar() {
 }
 </script>
 <template>
-  <v-card :elevation="4" border class="profile-card">
-    <div class="profile-card-content">
+  <v-card :elevation="4" :min-width="minWidth" border>
+    <div class="ma-4">
       <v-hover>
         <template #default="{ isHovering, props }">
           <div
@@ -124,7 +126,7 @@ function deleteAvatar() {
             type="file"
             @change="fileSelected"
           />
-          <div class="user-avatar-border" v-bind="props">
+          <div class="user-avatar-wrap" v-bind="props">
             <v-avatar :image="user?.avatarUrl" :size="200" />
           </div>
         </template>
@@ -219,10 +221,6 @@ function deleteAvatar() {
   </v-card>
 </template>
 <style scoped>
-.profile-card {
-  min-width: 300px;
-}
-
 .user-name {
   text-align: center;
   font-size: 2em;
@@ -249,11 +247,7 @@ a:hover {
   transition: all 0.5s;
 }
 
-.profile-card-content {
-  padding: 16px;
-}
-
-.user-avatar-border {
+.user-avatar-wrap {
   display: flex;
   flex-direction: row;
   justify-content: center;

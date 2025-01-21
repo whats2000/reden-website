@@ -136,20 +136,25 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
     </template>
   </v-banner>
 
-  <div class="d-flex flex-wrap flex-row ma-5 gap-20">
-    <div>
+  <v-row class="d-flex flex-wrap flex-row ma-1">
+    <v-col class="user-card-wrap" cols="12" md="3">
       <v-skeleton-loader
         v-show="loading"
         type="card-avatar"
         width="300"
       ></v-skeleton-loader>
-      <UserProfileCard v-show="!loading" :apply-preference="false" :user="user">
+      <UserProfileCard
+        v-show="!loading"
+        :apply-preference="false"
+        :min-width="0"
+        :user="user"
+      >
         <template #actions>
           <v-row>
             <v-col>
               <v-btn
                 :to="localePath('/home/edit')"
-                class="text-none"
+                class="text-none mt-3"
                 color="secondary"
                 href="/"
                 rounded="lg"
@@ -161,13 +166,13 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
           </v-row>
         </template>
       </UserProfileCard>
-    </div>
+    </v-col>
 
-    <div class="flex-1-1-0">
+    <v-col>
       <div class="d-flex flex-row flex-wrap gap-8">
         <v-btn color="primary" @click="logout">
-          {{ $t('profle.logout') }}</v-btn
-        >
+          {{ $t('profle.logout') }}
+        </v-btn>
         <v-btn border>
           生成个人密钥
           <v-dialog activator="parent" max-width="600">
@@ -279,9 +284,10 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
         v-model:page="page"
         :machines="Object.values(machines.d)"
         :totalPages="machines.count / 12"
+        class="mt-4"
       />
-    </div>
-  </div>
+    </v-col>
+  </v-row>
 </template>
 
 <style scoped>
@@ -291,5 +297,17 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
 
 .gap-8 {
   gap: 8px;
+}
+
+.user-card-wrap {
+  min-width: 330px;
+  height: min-content;
+}
+
+@media (min-width: 960px) {
+  .user-card-wrap {
+    position: sticky;
+    top: 64px;
+  }
 }
 </style>

@@ -191,7 +191,6 @@ const slots = defineSlots<{
 const search = ref((router.currentRoute.value.query.q as string) ?? '');
 watch(router.currentRoute, (value) => {
   search.value = (value.query.q as string) ?? '';
-  console.log('[layout/header] Route changes, search:' + value.query.q);
 });
 </script>
 <style scoped>

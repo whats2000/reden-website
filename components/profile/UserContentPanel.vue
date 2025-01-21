@@ -49,7 +49,7 @@ const itemDisplayCols = computed<Column[]>(() => {
 });
 </script>
 <template>
-  <v-card :elevation="10" class="">
+  <v-card :elevation="4" border>
     <div class="profile-card-content">
       <v-card-title>
         <h2>{{ t('profile.posts') }}</h2>
@@ -87,9 +87,9 @@ const itemDisplayCols = computed<Column[]>(() => {
             v-model="page"
             :length="totalPages"
             :total-visible="Math.min(8, width / 80 - 2)"
-            @update:modelValue="(value) => emits('update:page', value)"
             rounded="xl"
             size="32"
+            @update:modelValue="(value) => emits('update:page', value)"
           />
         </v-row>
         <v-alert v-if="!displayedMachines.length" type="info">
