@@ -8,9 +8,11 @@ import {
 } from '@/utils/constants';
 import { toast } from 'vuetify-sonner';
 import { useAppStore } from '@/store/app';
-import UserProfileCard from '@/components/UserProfileCard.vue';
+import UserProfileCard from '~/components/profile/UserProfileCard.vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import UserContentPanel from '~/components/profile/UserContentPanel.vue';
+import type { ListLitematicaResponse } from '~/pages/litematica/index.vue';
 
 const router = useRouter();
 const localePath = useLocalePath();
@@ -76,6 +78,7 @@ function installWebhook() {
 const personalToken = ref('');
 const tokenExpiresAt = ref<Date>();
 const tokenScopes = ref<string[]>(['backup/*', 'me']);
+
 function getPersonalToken() {
   if (!tokenExpiresAt.value) {
     toast('请选择一个有效期', {
@@ -97,6 +100,13 @@ function getPersonalToken() {
     }
   });
 }
+
+const page = ref(1);
+
+const { data: machines } = useFetch<ListLitematicaResponse>(
+  () =>
+    `/api/mc-services/litematica/by-author?author=${user.value?.username}&pageSize=12&page=${page.value}`,
+);
 </script>
 
 <template>
@@ -126,7 +136,7 @@ function getPersonalToken() {
     </template>
   </v-banner>
 
-  <div class="d-flex flex-wrap flex-row w-100">
+  <div class="d-flex flex-wrap flex-row ma-5 gap-20">
     <div>
       <v-skeleton-loader
         v-show="loading"
@@ -138,11 +148,11 @@ function getPersonalToken() {
           <v-row>
             <v-col>
               <v-btn
+                :to="localePath('/home/edit')"
                 class="text-none"
                 color="secondary"
                 href="/"
                 rounded="lg"
-                :to="localePath('/home/edit')"
                 variant="outlined"
               >
                 {{ $t('profile.editProfile') }}
@@ -151,106 +161,135 @@ function getPersonalToken() {
           </v-row>
         </template>
       </UserProfileCard>
-      <v-btn color="primary" @click="logout"> Logout</v-btn>
     </div>
 
-    <div class="flex-column">
-      <v-btn>
-        生成个人密钥
-        <v-dialog activator="parent" max-width="600">
-          <v-form v-if="!personalToken" @submit.prevent="getPersonalToken">
-            <v-card>
-              <v-card-title>生成个人密钥</v-card-title>
+    <div class="flex-1-1-0">
+      <div class="d-flex flex-row flex-wrap gap-8">
+        <v-btn color="primary" @click="logout">
+          {{ $t('profle.logout') }}</v-btn
+        >
+        <v-btn border>
+          生成个人密钥
+          <v-dialog activator="parent" max-width="600">
+            <v-form v-if="!personalToken" @submit.prevent="getPersonalToken">
+              <v-card>
+                <v-card-title>生成个人密钥</v-card-title>
+                <v-card-text>
+                  选择一个有效期，生成一个个人密钥，用于备份和恢复数据
+                  <v-row>
+                    <v-col>
+                      密钥有效期至
+                      {{ tokenExpiresAt?.toLocaleDateString() }}
+                    </v-col>
+                    <v-col>
+                      <v-spacer />
+                      <v-btn color="primary">
+                        选择日期
+                        <v-dialog activator="parent" max-width="330">
+                          <template #default="{ isActive }">
+                            <v-card>
+                              <v-locale-provider locale="zhHans">
+                                <v-date-picker
+                                  v-model="tokenExpiresAt"
+                                  :max="
+                                    new Date(
+                                      Date.now() + 1000 * 60 * 60 * 24 * 60,
+                                    )
+                                  "
+                                  :min="new Date()"
+                                  show-adjacent-months
+                                ></v-date-picker>
+                              </v-locale-provider>
+                              <v-card-actions>
+                                <v-btn
+                                  color="red"
+                                  variant="outlined"
+                                  @click="isActive.value = false"
+                                >
+                                  关闭
+                                </v-btn>
+                              </v-card-actions>
+                            </v-card>
+                          </template>
+                        </v-dialog>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col> 权限范围</v-col>
+                    <v-col>
+                      <v-select
+                        v-model="tokenScopes"
+                        :items="[
+                          'me',
+                          'me/update',
+                          'me/*',
+                          'backup',
+                          'backup/onedrive',
+                          'backup/*',
+                        ]"
+                        multiple
+                      />
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn type="submit"> 生成</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-form>
+            <v-card v-if="personalToken">
+              <v-card-title>个人密钥</v-card-title>
               <v-card-text>
-                选择一个有效期，生成一个个人密钥，用于备份和恢复数据
-                <v-row>
-                  <v-col>
-                    密钥有效期至
-                    {{ tokenExpiresAt?.toLocaleDateString() }}
-                  </v-col>
-                  <v-col>
-                    <v-spacer />
-                    <v-btn color="primary">
-                      选择日期
-                      <v-dialog activator="parent" max-width="330">
-                        <template #default="{ isActive }">
-                          <v-card>
-                            <v-locale-provider locale="zhHans">
-                              <v-date-picker
-                                show-adjacent-months
-                                v-model="tokenExpiresAt"
-                                :max="
-                                  new Date(
-                                    Date.now() + 1000 * 60 * 60 * 24 * 60,
-                                  )
-                                "
-                                :min="new Date()"
-                              ></v-date-picker>
-                            </v-locale-provider>
-                            <v-card-actions>
-                              <v-btn
-                                @click="isActive.value = false"
-                                color="red"
-                                variant="outlined"
-                              >
-                                关闭
-                              </v-btn>
-                            </v-card-actions>
-                          </v-card>
-                        </template>
-                      </v-dialog>
-                    </v-btn>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col> 权限范围 </v-col>
-                  <v-col>
-                    <v-select
-                      v-model="tokenScopes"
-                      :items="[
-                        'me',
-                        'me/update',
-                        'me/*',
-                        'backup',
-                        'backup/onedrive',
-                        'backup/*',
-                      ]"
-                      multiple
-                    />
-                  </v-col>
-                </v-row>
+                <v-alert color="error">
+                  请妥善保管个人密钥，不要泄露给他人
+                </v-alert>
+                {{ personalToken }}
               </v-card-text>
               <v-card-actions>
-                <v-btn type="submit"> 生成</v-btn>
+                <v-btn @click="personalToken = ''"> Close</v-btn>
               </v-card-actions>
             </v-card>
-          </v-form>
-          <v-card v-if="personalToken">
-            <v-card-title>个人密钥</v-card-title>
-            <v-card-text>
-              <v-alert color="error">
-                请妥善保管个人密钥，不要泄露给他人
-              </v-alert>
-              {{ personalToken }}
-            </v-card-text>
-            <v-card-actions>
-              <v-btn @click="personalToken = ''"> Close</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-btn>
-      <v-btn
-        :to="localePath('/x-backup/me')"
-        class="text-none"
-        color="secondary"
-        rounded="lg"
-        variant="outlined"
-      >
-        {{ $t('profile.my_backup') }}
-      </v-btn>
-      <v-timeline></v-timeline>
+          </v-dialog>
+        </v-btn>
+        <v-btn
+          :to="localePath('/x-backup/me')"
+          class="text-none"
+          color="secondary"
+          rounded="lg"
+          variant="outlined"
+        >
+          {{ $t('profile.my_backup') }}
+        </v-btn>
+        <v-btn
+          :to="localePath('/litematica/edit')"
+          class="text-none"
+          color="secondary"
+          rounded="lg"
+          variant="outlined"
+        >
+          投稿后台管理页面
+          <v-tooltip activator="parent" location="bottom">
+            此页面用于管理投稿，编辑投稿，可以查看还在审核中的投稿
+          </v-tooltip>
+        </v-btn>
+      </div>
+      <UserContentPanel
+        v-if="machines"
+        v-model:page="page"
+        :machines="Object.values(machines.d)"
+        :totalPages="machines.count / 12"
+      />
     </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.gap-20 {
+  gap: 20px;
+}
+
+.gap-8 {
+  gap: 8px;
+}
+</style>

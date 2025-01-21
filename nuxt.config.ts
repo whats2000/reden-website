@@ -130,9 +130,10 @@ export default defineNuxtConfig({
     // },
     '/api/**': {
       proxy:
-        process.env.NODE_ENV === 'development'
-          ? 'https://api.redenmc.com/api/**'
-          : 'http://localhost:10005/api/**',
+        // process.env.NODE_ENV === 'development'
+        //   ? 'https://api.redenmc.com/api/**'
+        //   :
+        'http://localhost:10005/api/**',
     },
   },
   sitemap: {
@@ -171,7 +172,7 @@ export default defineNuxtConfig({
           sizes: '256x256',
         },
       ],
-      theme_color: '#2196F3',
+      theme_color: '#ffffff',
     },
   },
 });

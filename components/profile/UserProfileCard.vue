@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { ref, VueElement, toRefs } from 'vue';
+import { ref, toRefs, VueElement } from 'vue';
 import {
   doFetchDelete,
   doFetchPut,
   type Profile,
   toastError,
-} from '@/utils/constants';
-import UserBadges from '@/components/UserBadges.vue';
-import VerifyMinecraft from '@/components/VerifyMinecraft.vue';
+} from '~/utils/constants';
+import UserBadges from '~/components/UserBadges.vue';
+import VerifyMinecraft from '~/components/profile/VerifyMinecraft.vue';
 import { toast } from 'vuetify-sonner';
 import { getTimezone } from 'countries-and-timezones';
 
@@ -85,7 +85,7 @@ function deleteAvatar() {
 }
 </script>
 <template>
-  <v-card :elevation="10" class="profile-card">
+  <v-card :elevation="4" border class="profile-card">
     <div class="profile-card-content">
       <v-hover>
         <template #default="{ isHovering, props }">
@@ -99,9 +99,9 @@ function deleteAvatar() {
               <template #default="{ isHovering, props }">
                 <v-btn
                   :color="isHovering ? 'primary' : undefined"
+                  :loading="avatarUploading"
                   icon="mdi-pencil"
                   v-bind="props"
-                  :loading="avatarUploading"
                   @click="editAvatar"
                 />
               </template>
@@ -169,10 +169,10 @@ function deleteAvatar() {
             </a>
           </span>
           <template v-else>
-            Account not linked
-            <a v-if="canEdit" class="router" href="/api/oauth/github"
-              >Link Now!</a
-            >
+            {{ $t('profile.account_not_linked') }}
+            <a v-if="canEdit" class="router" href="/api/oauth/github">{{
+              $t('profile.link_now')
+            }}</a>
           </template>
         </p>
         <p v-if="user.preference.timezone" class="user-timezone">
@@ -191,7 +191,7 @@ function deleteAvatar() {
               getTimezone(user.preference.timezone)?.utcOffset
             "
           >
-            (Your timezone)
+            {{ $t('profile.your_timezone') }}
           </span>
         </p>
       </div>
@@ -200,15 +200,18 @@ function deleteAvatar() {
       <div>
         <p class="user-followers">
           <v-icon class="profile-item-icon">mdi-account-group</v-icon>
-          <span>{{ user?.followers || 0 }} followers </span>
+          <span>{{ user?.followers || 0 }} {{ $t('common.followers') }} </span>
         </p>
         <p class="user-following">
           <v-icon class="profile-item-icon">mdi-account-group-outline</v-icon>
-          <span>{{ user?.following || 0 }} following </span>
+          <span>{{ user?.following || 0 }} {{ $t('common.following') }} </span>
         </p>
         <p class="user-following-projects">
           <v-icon class="profile-item-icon">mdi-source-branch</v-icon>
-          <span>{{ user?.followingProjects || 0 }} following projects </span>
+          <span
+            >{{ user?.followingProjects || 0 }}
+            {{ $t('common.following_projects') }}
+          </span>
         </p>
       </div>
       <slot name="actions" />
@@ -217,8 +220,7 @@ function deleteAvatar() {
 </template>
 <style scoped>
 .profile-card {
-  margin: 20px;
-  width: 300px;
+  min-width: 300px;
 }
 
 .user-name {
