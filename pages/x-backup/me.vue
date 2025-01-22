@@ -1,7 +1,12 @@
 <script lang="ts" setup>
 import { useRoute } from '#vue-router';
 import { ref } from 'vue';
-import { doFetchDelete, doFetchGet, type Profile } from '~/utils/constants';
+import {
+  doFetchDelete,
+  doFetchGet,
+  type Profile,
+  size2text,
+} from '~/utils/constants';
 import { toast } from 'vuetify-sonner';
 
 definePageMeta({
@@ -192,20 +197,7 @@ function deleteItem(item: Backup, onSuccess: () => void) {
       {{ new Date(item.createdAt).toLocaleString() }}
     </template>
     <template #[`item.zipSize`]="{ item }">
-      {{
-        (() => {
-          const kb = item.zipSize / 1024;
-          const mb = kb / 1024;
-          const gb = mb / 1024;
-          if (gb > 1) {
-            return gb.toFixed(2) + ' GB';
-          } else if (mb > 1) {
-            return mb.toFixed(2) + ' MB';
-          } else {
-            return kb.toFixed(2) + ' KB';
-          }
-        })()
-      }}
+      {{ size2text(item.zipSize) }}
     </template>
   </v-data-table-server>
 </template>

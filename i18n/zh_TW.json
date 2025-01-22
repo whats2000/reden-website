@@ -37,6 +37,7 @@
   "common": {
     "back": "返回",
     "description": "介紹",
+    "details": "",
     "name": "名稱",
     "next": "下一步",
     "save": "儲存",

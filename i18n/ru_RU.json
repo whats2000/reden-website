@@ -37,6 +37,7 @@
   "common": {
     "back": "Назад",
     "description": "Описание",
+    "details": "",
     "name": "Имя",
     "next": "Далее",
     "save": "Сохранить",
