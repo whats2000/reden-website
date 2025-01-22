@@ -328,7 +328,8 @@ export async function isInChina() {
   }
 }
 
-export function number2text(num: number) {
+export function number2text(num?: number) {
+  num = num || 0;
   if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
   if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
   return num.toString();
@@ -555,3 +556,16 @@ export const versionGrouped = (() => {
   }
   return grouped;
 })();
+
+export function size2text(val: number) {
+  const kb = val / 1024;
+  const mb = kb / 1024;
+  const gb = mb / 1024;
+  if (gb > 1) {
+    return gb.toFixed(2) + ' GB';
+  } else if (mb > 1) {
+    return mb.toFixed(2) + ' MB';
+  } else {
+    return kb.toFixed(2) + ' KB';
+  }
+}
