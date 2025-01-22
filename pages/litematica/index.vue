@@ -169,7 +169,9 @@ const itemDisplayCols = computed(() => {
     cols[i] = { def: [] };
   }
   let i = 0;
-  for (const [, def] of Object.entries(serverResponse.value?.d ?? {})) {
+  for (const [, def] of Object.entries(serverResponse.value?.d ?? {}).toSorted(
+    ([_a, a], [_b, b]) => (b.downloads ?? 0) - (a.downloads ?? 0),
+  )) {
     cols[i % itemsPerRow.value].def?.push(def);
     i++;
   }
