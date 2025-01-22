@@ -204,7 +204,7 @@ async function cancelApproval() {
   }
 }
 
-const selectedImage = ref(selected.value.imageUrl);
+const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
 </script>
 
 <template>
@@ -271,51 +271,45 @@ const selectedImage = ref(selected.value.imageUrl);
               {{ selected.name }}
             </div>
             <v-divider style="margin: 12px 0" />
-            <template v-if="selectedImage === 'bilibili:'">
-              <div class="bili-player-wrapper">
-                <iframe
-                  ref="biliPlayer"
-                  :src="`https://player.bilibili.com/player.html?isOutside=true&bvid=${bvid}`"
-                  allowfullscreen
-                  class="bili-player"
-                />
-              </div>
-            </template>
-            <template v-else>
-              <v-img
-                :src="selectedImage"
-                style="
-                  width: 100%;
-                  height: 100%;
-                  max-height: 400px;
-                  object-fit: contain;
-                  aspect-ratio: auto;
-                "
-              />
-            </template>
+            <div style="max-width: 840px; margin: 0 auto">
+              <template v-if="selectedImage === 'bilibili:'">
+                <div class="bili-player-wrapper">
+                  <iframe
+                    ref="biliPlayer"
+                    :src="`https://player.bilibili.com/player.html?isOutside=true&bvid=${bvid}`"
+                    allowfullscreen
+                    class="bili-player"
+                  />
+                </div>
+              </template>
+              <template v-else>
+                <v-img :aspect-ratio="16 / 9" :src="selectedImage" />
+              </template>
+            </div>
             <!-- 图片组容器 -->
             <v-row justify="center">
               <v-slide-group
+                v-model="selectedImage"
                 center-active
                 class="pa-4"
                 mandatory
-                selected-class="bg-primary"
                 show-arrows
                 style="max-height: 100px"
               >
                 <v-slide-group-item
                   v-for="(image, index) in tabs"
                   :key="index"
-                  v-slot="{ isSelected, toggle, selectedClass }"
+                  v-slot="{ isSelected, toggle }"
+                  :value="image"
                 >
                   <div
-                    class="pr-2"
-                    @click="
-                      toggle;
-                      selectedImage = image;
-                    "
+                    :class="{
+                      'slide-selected': isSelected,
+                      'mr-2': true,
+                    }"
+                    @click="toggle"
                   >
-                    <v-icon v-if="image === 'bilibili:'" size="lg">
+                    <v-icon v-if="image === 'bilibili:'" :size="80">
                       custom:Bilibili
                     </v-icon>
                     <v-img v-else :src="image" min-width="100px" />
@@ -566,7 +560,9 @@ const selectedImage = ref(selected.value.imageUrl);
                 <v-list-item
                   v-for="(attachment, index) in selected.attachments"
                   :href="`/api/mc-services/yisibite/${machineId}/download/${index + 1}`"
+                  border
                   class="d-flex"
+                  target="_blank"
                 >
                   <template #prepend>
                     <v-icon color="grey-darken-2" size="large">
@@ -660,5 +656,9 @@ p {
   width: 100%;
   height: 100%;
   border-width: 0;
+}
+
+.slide-selected {
+  border: #66ccff 2px solid;
 }
 </style>
