@@ -16,19 +16,11 @@ const themeCookie = useCookie<'light' | 'dark'>('theme', {
 
 const theme = useTheme();
 const appStore = useAppStore();
-appStore.theme = themeCookie.value;
-onBeforeMount(() => {
-  if (appStore.theme === 'dark') {
-    appStore.theme = null;
-    console.log('hack: reset appStore.theme = null');
-  }
-});
 onMounted(() => {
-  appStore.theme = themeCookie.value;
   const colors: Record<string, string> =
-    theme.themes.value[appStore.theme]!.colors;
+    theme.themes.value[themeCookie.value]!.colors;
   const css: string[] = [];
-  let themeText = `theme: ${theme.name.value} app: ${appStore.theme} cookie: ${themeCookie.value}\n`;
+  let themeText = `theme: ${theme.name.value} cookie: ${themeCookie.value}\n`;
   for (const key in colors) {
     themeText += `%c ${key} %c${colors[key]}`;
     css.push('color:unset;');
@@ -53,11 +45,10 @@ onPrehydrate(() => {
 });
 
 function toggleTheme() {
-  appStore.theme = appStore.theme === 'light' ? 'dark' : 'light';
-  themeCookie.value = appStore.theme;
+  themeCookie.value = themeCookie.value === 'light' ? 'dark' : 'light';
   if (import.meta.client) {
     document.body.style.backgroundColor =
-      theme.themes.value[appStore.theme]!.colors.background;
+      theme.themes.value[themeCookie.value]!.colors.background;
   }
   appStore.save();
 }
@@ -89,14 +80,12 @@ const localeHead = useLocaleHead({
       </template>
     </Head>
   </Html>
-  <v-app :theme="appStore.theme || 'dark'">
+  <v-app :theme="themeCookie">
     <layout-header>
       <template #desktop-append>
         <v-btn
           :icon="
-            appStore.theme === 'light'
-              ? 'mdi-weather-night'
-              : 'mdi-weather-sunny'
+            themeCookie === 'light' ? 'mdi-weather-night' : 'mdi-weather-sunny'
           "
           title="Toggle Theme"
           @click="toggleTheme"
@@ -105,14 +94,12 @@ const localeHead = useLocaleHead({
       <template #mobile-menu-append>
         <v-list-item
           :prepend-icon="
-            appStore.theme === 'light'
-              ? 'mdi-weather-night'
-              : 'mdi-weather-sunny'
+            themeCookie === 'light' ? 'mdi-weather-night' : 'mdi-weather-sunny'
           "
           @click="toggleTheme"
         >
           <v-list-item-title>
-            {{ appStore.theme === 'light' ? 'Light Mode' : 'Dark Mode' }}
+            {{ themeCookie === 'light' ? 'Light Mode' : 'Dark Mode' }}
           </v-list-item-title>
         </v-list-item>
       </template>

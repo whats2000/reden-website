@@ -163,22 +163,6 @@ const cardMaxWidth = computed(() => {
   const referenceWidth = mdAndUp.value ? width.value - 340 : width.value;
   return referenceWidth / itemsPerRow.value - 30;
 });
-computed(() => {
-  const rows: { def?: MachineDef[]; ad?: 'ad' }[] = [];
-  const rowCount = Math.ceil(items.value.length / itemsPerRow.value);
-  for (let i = 0; i < rowCount; i++) {
-    rows.push({
-      def: items.value.slice(
-        i * itemsPerRow.value,
-        (i + 1) * itemsPerRow.value,
-      ),
-    });
-    if (i % (6 / itemsPerRow.value) === 1) {
-      rows.push({ ad: 'ad' });
-    }
-  }
-  return rows;
-});
 const itemDisplayCols = computed(() => {
   const cols: { def?: MachineDef[]; ad?: 'ad' }[] = [];
   for (let i = 0; i < itemsPerRow.value; i++) {
