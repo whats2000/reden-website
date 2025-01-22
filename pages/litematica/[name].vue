@@ -86,12 +86,6 @@ const generators = computed<Record<string, Machine>>(() => {
         message: t('litematica_generator.not_found', { name: machineId }),
       });
     }
-    useHead({
-      title:
-        machines[machineId]?.name +
-        ' - Reden' +
-        t('litematica_generator.title'),
-    });
     return Object.keys(machines)
       .sort()
       .reduce((obj: Record<string, Machine>, key) => {
@@ -113,6 +107,7 @@ async function submit(e: SubmitEventPromise) {
       selected.value.type == 'LitematicaShare' &&
       selected.value.attachments?.length
     ) {
+      // unused
       window.open(`/api/mc-services/yisibite/${machineId}/download/1`);
     }
     setTimeout(() => {
@@ -201,6 +196,23 @@ async function cancelApproval() {
     } else {
       toast.error('出现错误');
     }
+  }
+}
+
+async function vote(vote: 'up' | 'down' | 'cancel') {
+  const response = await doFetchPost(
+    `/api/mc-services/yisibite/${machineId}/vote`,
+    { vote },
+  );
+  if (!response.ok) {
+    return toastError(response);
+  } else {
+    await useFetch<ListLitematicaResponse>(
+      `/api/mc-services/yisibite/${machineId}/info/${locale.value}`,
+      {
+        key: `generators-${machineId}-${locale.value}`,
+      },
+    );
   }
 }
 
@@ -417,18 +429,22 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
             <v-divider style="margin: 12px 0" />
             <div>
               <v-btn
+                :variant="selected.ud?.vote === true ? 'elevated' : 'outlined'"
+                color="primary"
                 prepend-icon="mdi-thumb-up-outline"
                 rounded="xl"
-                variant="outlined"
+                @click="vote(selected.ud?.vote === true ? 'cancel' : 'up')"
               >
-                {{ 14514 }}
+                {{ selected.upVotes ?? 0 }}
               </v-btn>
               <v-btn
                 :size="36"
+                :variant="selected.ud?.vote === false ? 'elevated' : 'outlined'"
+                color="primary"
                 icon="mdi-thumb-down-outline"
                 rounded="xl"
                 style="margin-left: 8px"
-                variant="outlined"
+                @click="vote(selected.ud?.vote === false ? 'cancel' : 'down')"
               />
               <v-btn
                 prepend-icon="mdi-bookmark-outline"
@@ -554,8 +570,8 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                 </v-col>
               </v-row>
             </template>
-            <template v-if="selected.type === 'LitematicaShare'">
-              <v-list class="pa-0" variant="flat">
+            <v-no-ssr v-if="selected.type === 'LitematicaShare'">
+              <v-list class="pa-0">
                 <!-- 整体容器 -->
                 <v-list-item
                   v-for="(attachment, index) in selected.attachments"
@@ -620,7 +636,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                   </v-list-item-subtitle>
                 </v-list-item>
               </v-list>
-            </template>
+            </v-no-ssr>
             <v-row v-if="!useAppStore().logined" class="text-sm-body-1">
               <v-col>
                 <reden-router :to="localePath('/login')">
@@ -660,5 +676,9 @@ p {
 
 .slide-selected {
   border: #66ccff 2px solid;
+}
+
+:deep(.v-list-item__content) {
+  width: 100%;
 }
 </style>

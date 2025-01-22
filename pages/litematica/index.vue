@@ -36,6 +36,7 @@ export type MachineDef = {
   }[];
   original?: boolean;
   status?: 'Pending' | 'Approved' | 'Rejected' | 'Deleted' | 'TakenDown';
+  upVotes?: number;
   /**
    * User-oriented data
    */
