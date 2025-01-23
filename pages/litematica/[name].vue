@@ -586,7 +586,11 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                     </v-icon>
                   </template>
                   <v-list-item-title>
-                    <a class="router" @click.prevent="loadBlob(index)">
+                    <a
+                      v-if="attachment.name.endsWith('.litematic')"
+                      class="router"
+                      @click.prevent="loadBlob(index)"
+                    >
                       <v-icon size="sm">mdi-eye</v-icon>
                       预览
                       <v-dialog activator="parent" close-on-back>
