@@ -27,6 +27,27 @@ onMounted(() => {
     css.push(`background:${colors[key]}`);
   }
   console.log(themeText, ...css);
+  // hack
+  const vApp = document.getElementsByClassName('v-application');
+  for (const ele of vApp) {
+    if (themeCookie.value === 'dark') {
+      if ('v-theme--light' in ele.classList) {
+        console.log('hack: remove light', ele);
+        ele.classList.remove('v-theme--light');
+        ele.classList.add('v-theme--dark');
+      }
+    }
+  }
+  const vFooter = document.getElementsByClassName('v-footer');
+  for (const ele of vFooter) {
+    if (themeCookie.value === 'dark') {
+      if ('v-theme--light' in ele.classList) {
+        console.log('hack: remove light', ele);
+        ele.classList.remove('v-theme--light');
+        ele.classList.add('v-theme--dark');
+      }
+    }
+  }
 });
 onPrehydrate(() => {
   const background: Record<string, string> = {
