@@ -4,6 +4,7 @@ import { useDisplay, useGoTo } from 'vuetify';
 import SidebarAd from '~/components/ads/SidebarAd.vue';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
 import { useElementHover } from '@vueuse/core';
+import { useAppStore } from '~/store/app';
 
 export type Tag = {
   tag: string;
@@ -54,6 +55,7 @@ export type MachineDef = {
   };
 };
 
+const appStore = useAppStore();
 const { t } = useI18n();
 useSeoMeta({
   title: t('litematica_generator.title') + ' - Reden',
@@ -298,7 +300,7 @@ const isHovering = useElementHover(ad);
         rounded="lg"
         variant="outlined"
       >
-        {{ $t('litematica_generator.upload.button_msg') }}
+        {{ t('litematica_generator.upload.button_msg') }}
         <v-dialog
           v-model="uploadDialog"
           activator="parent"
@@ -318,6 +320,13 @@ const isHovering = useElementHover(ad);
           </v-card>
         </v-dialog>
       </v-btn>
+      <v-btn
+        v-if="appStore.userCache?.roles?.includes('archiver')"
+        :to="localePath('/litematica/review')"
+      >
+        Archiver Review Panel
+      </v-btn>
+
       <v-row justify="center">
         <v-pagination
           v-model="page"

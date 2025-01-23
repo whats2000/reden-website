@@ -278,10 +278,10 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
       <v-row v-if="selected">
         <v-col cols="12" md="8" style="height: min-content">
           <!-- 预览 -->
-          <div>
-            <div class="text-h5 text-md-h4 font-weight-bold">
-              {{ selected.name }}
-            </div>
+          <h1 class="text-h5 text-md-h4 font-weight-bold">
+            {{ selected.name }}
+          </h1>
+          <div v-if="tabs.length">
             <v-divider style="margin: 12px 0" />
             <div style="max-width: 840px; margin: 0 auto">
               <template v-if="selectedImage === 'bilibili:'">
