@@ -317,7 +317,7 @@
       "design_maximal_file_size": "最大文件大小：100MB",
       "design_supports_file_formats": "支持的文件格式：.litematica .schem .zip 等",
       "existing_machine_design": "你正在编辑一个已有的机器设计。上传新文件将覆盖现有文件。",
-      "i_am_not_the_author": "此机器属于公共领域，或我有权发布",
+      "i_am_not_the_author": "此机器属于公共领域，或我被授权可以发布",
       "i_am_the_author": "我是作者",
       "id_can_only_contain": "ID 只能包含 a-z, 0-9, - and _",
       "id_is_taken": "此 ID 已被占用",
