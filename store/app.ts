@@ -9,6 +9,7 @@ type AppState = {
   uid: number;
   csrfToken: string | null;
   userCache?: Profile;
+  gads?: boolean;
 };
 
 const storage = useLocalStorage<AppState>('redenCache', {
@@ -17,6 +18,7 @@ const storage = useLocalStorage<AppState>('redenCache', {
   uid: -1,
   csrfToken: null,
   userCache: undefined,
+  gads: false,
 });
 
 export const useAppStore = defineStore('reden', {
@@ -29,6 +31,7 @@ export const useAppStore = defineStore('reden', {
     storeState.uid = storage.value.uid;
     storeState.csrfToken = storage.value.csrfToken;
     storeState.userCache = storage.value.userCache;
+    storeState.gads = storage.value.gads;
   },
   actions: {
     save() {
@@ -38,6 +41,7 @@ export const useAppStore = defineStore('reden', {
         uid: this.uid,
         csrfToken: this.csrfToken,
         userCache: this.userCache,
+        gads: this.gads,
       };
     },
     login(username: string, uid: number) {
