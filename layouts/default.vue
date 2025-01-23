@@ -28,25 +28,26 @@ onMounted(() => {
   }
   console.log(themeText, ...css);
   // hack
-  const vApp = document.getElementsByClassName('v-application');
-  for (const ele of vApp) {
+  const fix = (ele: Element) => {
     if (themeCookie.value === 'dark') {
-      if ('v-theme--light' in ele.classList) {
+      if (ele.classList.contains('v-theme--light')) {
         console.log('hack: remove light', ele);
         ele.classList.remove('v-theme--light');
         ele.classList.add('v-theme--dark');
       }
+    } else if (themeCookie.value === 'light') {
+      if (ele.classList.contains('v-theme--dark')) {
+        console.log('hack: remove dark', ele);
+        ele.classList.remove('v-theme--dark');
+        ele.classList.add('v-theme--light');
+      }
     }
+  };
+  for (const ele of document.getElementsByClassName('v-application')) {
+    fix(ele);
   }
-  const vFooter = document.getElementsByClassName('v-footer');
-  for (const ele of vFooter) {
-    if (themeCookie.value === 'dark') {
-      if ('v-theme--light' in ele.classList) {
-        console.log('hack: remove light', ele);
-        ele.classList.remove('v-theme--light');
-        ele.classList.add('v-theme--dark');
-      }
-    }
+  for (const ele of document.getElementsByClassName('v-footer')) {
+    fix(ele);
   }
 });
 onPrehydrate(() => {
