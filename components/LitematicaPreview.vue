@@ -19,6 +19,7 @@ import {
 import { mat4, vec3 } from 'gl-matrix';
 import { Litematic, readLitematicFromNBTData } from '~/utils/litematic-utils';
 import { toast } from 'vuetify-sonner';
+import { useAppStore } from '~/store/app';
 
 const { t } = useI18n();
 const props = defineProps<{
@@ -26,6 +27,7 @@ const props = defineProps<{
 }>();
 const canvas = useTemplateRef<HTMLCanvasElement>('canvas');
 let deepslateResources: Resources;
+const appStore = useAppStore();
 
 function upperPowerOfTwo(x: number) {
   x -= 1;
@@ -194,8 +196,9 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
 
   function pan(direction: [number, number], sensitivity = 1) {
     // seems backwards but is correct
-    yRotation += (-direction[0] / 200) * sensitivity;
-    xRotation += (-direction[1] / 200) * sensitivity;
+    const multiplier = appStore.invertPreview ? 1 : -1;
+    yRotation += multiplier * (direction[0] / 200) * sensitivity;
+    xRotation += multiplier * (direction[1] / 200) * sensitivity;
   }
 
   function move(offset: [number, number], sensitivity: number) {

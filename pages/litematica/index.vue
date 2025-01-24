@@ -53,6 +53,7 @@ export type MachineDef = {
     bookmark: boolean;
     favorite: boolean;
   };
+  versions?: string[];
 };
 
 const appStore = useAppStore();

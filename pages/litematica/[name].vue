@@ -384,7 +384,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
               <div class="d-flex mt-3">
                 <div class="w-33 align-content-center">版本：</div>
                 <v-chip
-                  v-for="(version, index) in []"
+                  v-for="(version, index) in selected.versions"
                   :key="index"
                   size="small"
                   style="margin-right: 8px"
@@ -595,7 +595,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                       预览
                       <v-dialog activator="parent" close-on-back>
                         <v-card :loading="!blob[index]">
-                          <v-card-text>
+                          <v-card-text class="overflow-hidden">
                             <LitematicaPreview
                               v-if="blob[index]"
                               :blob="blob[index]"
@@ -610,15 +610,25 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                               </span>
                             </div>
 
-                            <p
-                              class="top-0 right-0 position-absolute mr-6 mt-4 text-white text-caption text-right opacity-60"
+                            <div
+                              class="top-0 right-0 position-absolute mr-6 mt-4 text-white text-caption text-right"
                               style="user-select: none; line-height: 0.75rem"
                             >
-                              Credit to misode, Ending Credits & Undecentions
-                              <br />
-                              This Vue component is made by zly2006 and licensed
-                              under AGPL v3
-                            </p>
+                              <p class="opacity-60">
+                                Credit to misode, Ending Credits & Undecentions
+                                <br />
+                                This Vue component is made by zly2006 and
+                                licensed under AGPL v3
+                              </p>
+                              <v-switch
+                                v-model="appStore.invertPreview"
+                                @click="appStore.toggleInvertPreview()"
+                                class="right-0 position-absolute"
+                                color="primary"
+                                hide-details
+                                label="Invert"
+                              />
+                            </div>
                           </v-card-text>
                         </v-card>
                       </v-dialog>

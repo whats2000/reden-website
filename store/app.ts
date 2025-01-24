@@ -10,6 +10,7 @@ type AppState = {
   csrfToken: string | null;
   userCache?: Profile;
   gads?: boolean;
+  invertPreview: boolean;
 };
 
 const storage = useLocalStorage<AppState>('redenCache', {
@@ -19,6 +20,7 @@ const storage = useLocalStorage<AppState>('redenCache', {
   csrfToken: null,
   userCache: undefined,
   gads: false,
+  invertPreview: false,
 });
 
 export const useAppStore = defineStore('reden', {
@@ -42,6 +44,7 @@ export const useAppStore = defineStore('reden', {
         csrfToken: this.csrfToken,
         userCache: this.userCache,
         gads: this.gads,
+        invertPreview: this.invertPreview,
       };
     },
     login(username: string, uid: number) {
@@ -60,6 +63,10 @@ export const useAppStore = defineStore('reden', {
     setCsrfToken(token: string) {
       this.logined = true;
       this.csrfToken = token;
+      this.save();
+    },
+    toggleInvertPreview() {
+      this.invertPreview = !this.invertPreview;
       this.save();
     },
     logout() {

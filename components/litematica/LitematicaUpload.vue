@@ -144,6 +144,7 @@ async function doUploadAll() {
           description: data.description,
           link: data.link,
           isOriginal: isOriginal.value,
+          versions: selectedVersions.value,
         },
       );
       if (response.ok) {
@@ -310,6 +311,29 @@ const maxHeight = Math.max(490, height.value - 300);
 const goingBack = ref(false);
 refreshProps();
 watch(props, refreshProps);
+
+const selectedVersions = ref<string[]>([]);
+const selectableVersions = computed(() => {
+  const ret: (
+    | string
+    | {
+        value: string;
+        title: string;
+      }
+  )[] = [];
+  for (const version of Object.keys(versionGrouped).toReversed()) {
+    ret.push(version + '.x');
+    if (!selectedVersions.value.includes(version + '.x')) {
+      for (const child of versionGrouped[version]) {
+        ret.push({
+          value: child,
+          title: '↳ ' + child,
+        });
+      }
+    }
+  }
+  return ret;
+});
 </script>
 <template>
   <v-tabs v-model="state" color="primary">
@@ -335,8 +359,8 @@ watch(props, refreshProps);
       <v-tabs-window v-model="state">
         <v-tabs-window-item value="upload">
           <v-card-title class="text-h5">
-            {{ t('upload.btn.upload_design') }}</v-card-title
-          >
+            {{ t('upload.btn.upload_design') }}
+          </v-card-title>
           <v-card-text class="text-center">
             <v-icon class="my-15" color="primary" size="100"
               >mdi-cloud-upload
@@ -500,6 +524,22 @@ watch(props, refreshProps);
                 outlined
                 variant="underlined"
               />
+              <v-select
+                v-model="selectedVersions"
+                :items="selectableVersions"
+                chips
+                variant="underlined"
+                color="primary"
+                density="comfortable"
+                label="Supported Versions"
+                multiple
+              >
+                <template #chip="{ item }">
+                  <v-chip color="px-2" size="sm">
+                    {{ item.value }}
+                  </v-chip>
+                </template>
+              </v-select>
               <v-textarea
                 v-model="getLocalizedData(language).description"
                 :label="$t('common.description')"
@@ -548,9 +588,9 @@ watch(props, refreshProps);
         </v-tabs-window-item>
 
         <v-tabs-window-item value="image">
-          <v-card-title class="text-h5">{{
-            $t('upload.step.image')
-          }}</v-card-title>
+          <v-card-title class="text-h5"
+            >{{ $t('upload.step.image') }}
+          </v-card-title>
           <v-card-text class="text-center">
             <v-alert
               v-if="pictureStepError"
