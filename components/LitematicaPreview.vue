@@ -294,18 +294,27 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
   };
   let pressedKeys = new Set<string>();
 
-  document.addEventListener('keydown', (evt) => {
+  const keyDownListener: (evt: KeyboardEvent) => any = (evt) => {
     if (evt.code in keyMoves) {
       evt.preventDefault();
       pressedKeys.add(evt.code);
     }
-  });
-
-  document.addEventListener('keyup', (evt) => {
-    pressedKeys.delete(evt.code);
-  });
+  };
+  const keyUpListener: (evt: KeyboardEvent) => any = (evt) => {
+    if (evt.code in keyMoves) {
+      evt.preventDefault();
+      pressedKeys.delete(evt.code);
+    }
+  };
+  document.addEventListener('keydown', keyDownListener);
+  document.addEventListener('keyup', keyUpListener);
 
   window.addEventListener('blur', () => pressedKeys.clear());
+
+  onUnmounted(() => {
+    document.removeEventListener('keydown', keyDownListener);
+    document.removeEventListener('keyup', keyUpListener);
+  });
 
   setInterval(() => {
     if (pressedKeys.size == 0) return;
