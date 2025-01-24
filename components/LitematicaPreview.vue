@@ -116,6 +116,9 @@ function loadResources(textureImage: HTMLImageElement) {
   };
 }
 
+let keyDownListener: (evt: KeyboardEvent) => any;
+let keyUpListener: (evt: KeyboardEvent) => any;
+
 function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
   // Create canvas and size it appropriately
   // TODO: Make size change on window resize
@@ -294,13 +297,13 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
   };
   let pressedKeys = new Set<string>();
 
-  const keyDownListener: (evt: KeyboardEvent) => any = (evt) => {
+  keyDownListener = (evt) => {
     if (evt.code in keyMoves) {
       evt.preventDefault();
       pressedKeys.add(evt.code);
     }
   };
-  const keyUpListener: (evt: KeyboardEvent) => any = (evt) => {
+  keyUpListener = (evt) => {
     if (evt.code in keyMoves) {
       evt.preventDefault();
       pressedKeys.delete(evt.code);
@@ -310,11 +313,6 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
   document.addEventListener('keyup', keyUpListener);
 
   window.addEventListener('blur', () => pressedKeys.clear());
-
-  onUnmounted(() => {
-    document.removeEventListener('keydown', keyDownListener);
-    document.removeEventListener('keyup', keyUpListener);
-  });
 
   setInterval(() => {
     if (pressedKeys.size == 0) return;
@@ -528,6 +526,14 @@ onMounted(async () => {
     });
     console.error(e);
   }
+});
+onUnmounted(() => {
+  // const oldContent = document.getElementById('main-content');
+  // oldContent.style.display = 'block';
+  console.log('Unmounting');
+
+  document.removeEventListener('keydown', keyDownListener);
+  document.removeEventListener('keyup', keyUpListener);
 });
 </script>
 
