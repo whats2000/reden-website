@@ -54,6 +54,7 @@ const refreshProps = () => {
           fileType: 'uploaded',
         }) as MyFile,
     ) ?? [];
+  selectedVersions.value = machine?.versions ?? [];
 };
 const availableSteps = ref<State[]>(
   props.editMode ? ['upload', 'translation', 'image'] : ['upload'],
@@ -285,6 +286,28 @@ const formatFileSize = (bytes: number): string => {
 
 const { t, availableLocales, locale } = useI18n();
 const language = ref<string>(locale.value);
+const selectedVersions = ref<string[]>([]);
+const selectableVersions = computed(() => {
+  const ret: (
+    | string
+    | {
+        value: string;
+        title: string;
+      }
+  )[] = [];
+  for (const version of Object.keys(versionGrouped).toReversed()) {
+    ret.push(version + '.x');
+    if (!selectedVersions.value.includes(version + '.x')) {
+      for (const child of versionGrouped[version]) {
+        ret.push({
+          value: child,
+          title: '↳ ' + child,
+        });
+      }
+    }
+  }
+  return ret;
+});
 
 function getLocalizedData(language: string) {
   if (!localizedData.value[language]) {
@@ -311,29 +334,6 @@ const maxHeight = Math.max(490, height.value - 300);
 const goingBack = ref(false);
 refreshProps();
 watch(props, refreshProps);
-
-const selectedVersions = ref<string[]>([]);
-const selectableVersions = computed(() => {
-  const ret: (
-    | string
-    | {
-        value: string;
-        title: string;
-      }
-  )[] = [];
-  for (const version of Object.keys(versionGrouped).toReversed()) {
-    ret.push(version + '.x');
-    if (!selectedVersions.value.includes(version + '.x')) {
-      for (const child of versionGrouped[version]) {
-        ret.push({
-          value: child,
-          title: '↳ ' + child,
-        });
-      }
-    }
-  }
-  return ret;
-});
 </script>
 <template>
   <v-tabs v-model="state" color="primary">

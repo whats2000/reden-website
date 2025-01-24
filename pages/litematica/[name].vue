@@ -383,14 +383,16 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
               </div>
               <div class="d-flex mt-3">
                 <div class="w-33 align-content-center">版本：</div>
-                <v-chip
-                  v-for="(version, index) in selected.versions"
-                  :key="index"
-                  size="small"
-                  style="margin-right: 8px"
-                >
-                  {{ version }}
-                </v-chip>
+                <div class="w-66">
+                  <v-chip
+                    v-for="(version, index) in selected.versions"
+                    :key="index"
+                    size="small"
+                    style="margin-right: 8px"
+                  >
+                    {{ version }}
+                  </v-chip>
+                </div>
               </div>
               <div class="d-flex mt-3">
                 <div class="w-33 align-content-center">设计标签：</div>
