@@ -496,7 +496,9 @@ watch(props, refreshProps);
                 variant="underlined"
                 @update:model-value="console.log(localizedData)"
               />
+              <!-- 禁用summary -->
               <v-text-field
+                v-if="false"
                 v-model="getLocalizedData(language).summary"
                 :label="$t('common.summary')"
                 color="primary"
