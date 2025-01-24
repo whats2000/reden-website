@@ -324,16 +324,16 @@ watch(props, refreshProps);
     </v-tab>
   </v-tabs>
 
-  <v-card-text>
-    <v-tabs-window v-model="state">
-      <v-tabs-window-item value="upload">
-        <v-card
-          :elevation="0"
-          :max-height="maxHeight"
-          :min-height="minHeight"
-          border
-          class="rounded-xl overflow-y-auto"
-        >
+  <v-card-text class="pb-0">
+    <v-card
+      :elevation="0"
+      :max-height="maxHeight"
+      :min-height="minHeight"
+      border
+      class="rounded-xl overflow-y-auto"
+    >
+      <v-tabs-window v-model="state">
+        <v-tabs-window-item value="upload">
           <v-card-title> {{ $t('upload.btn.upload_design') }}</v-card-title>
           <v-card-text class="text-center">
             <v-icon class="my-15" color="primary" size="100"
@@ -406,18 +406,10 @@ watch(props, refreshProps);
               />
             </v-radio-group>
           </v-card-text>
-          <v-card-actions></v-card-actions>
-        </v-card>
-      </v-tabs-window-item>
+        </v-tabs-window-item>
 
-      <v-tabs-window-item value="translation">
-        <v-form fast-fail>
-          <v-card
-            :max-height="maxHeight"
-            :min-height="minHeight"
-            border
-            class="rounded-xl overflow-y-scroll"
-          >
+        <v-tabs-window-item value="translation">
+          <v-form fast-fail>
             <v-card-title>
               <v-row class="justify-space-between">
                 <v-col class="mb-1 mb-md-3" cols="12" sm="6">
@@ -550,17 +542,10 @@ watch(props, refreshProps);
                 {{ $t('common.save') }}
               </v-btn>
             </v-card-actions>
-          </v-card>
-        </v-form>
-      </v-tabs-window-item>
+          </v-form>
+        </v-tabs-window-item>
 
-      <v-tabs-window-item value="image">
-        <v-card
-          :max-height="maxHeight"
-          :min-height="minHeight"
-          border
-          class="rounded-xl"
-        >
+        <v-tabs-window-item value="image">
           <v-card-title>{{ $t('upload.step.image') }}</v-card-title>
           <v-card-text class="text-center">
             <v-alert
@@ -592,25 +577,12 @@ watch(props, refreshProps);
             >
               {{ $t('upload.btn.select_files') }}
             </v-btn>
-            <br />
-            <v-btn
-              :loading="uploading"
-              class="mt-4 mx-4 text-none"
-              variant="outlined"
-              @click="doUploadAll"
-            >
-              {{
-                editMode
-                  ? $t('upload.btn.finish_editing')
-                  : $t('upload.btn.start_uploading')
-              }}
-            </v-btn>
 
             <div v-if="selectedPictures.length > 0" class="mt-4">
               <div
                 v-for="(picture, index) in selectedPictures"
                 :key="index"
-                class="d-inline-block mr-4"
+                class="d-inline-block mr-4 position-relative"
               >
                 <v-img
                   :src="picture.url"
@@ -635,28 +607,19 @@ watch(props, refreshProps);
                   </template>
                 </v-img>
                 <v-btn
-                  absolute
+                  class="position-absolute right-0 top-0"
                   color="error"
                   icon="mdi-close"
-                  right
                   size="xs"
-                  top
                   variant="outlined"
                   @click="removePicture(index)"
                 />
               </div>
             </div>
           </v-card-text>
-        </v-card>
-      </v-tabs-window-item>
+        </v-tabs-window-item>
 
-      <v-tabs-window-item value="under-review">
-        <v-card
-          :max-height="maxHeight"
-          :min-height="minHeight"
-          border
-          class="rounded-xl"
-        >
+        <v-tabs-window-item value="under-review">
           <v-card-title>
             {{ $t('upload.step.under-review') }}
           </v-card-title>
@@ -705,10 +668,27 @@ watch(props, refreshProps);
               {{ $t('common.back') }}
             </v-btn>
           </v-card-text>
-        </v-card>
-      </v-tabs-window-item>
-    </v-tabs-window>
+        </v-tabs-window-item>
+      </v-tabs-window>
+    </v-card>
   </v-card-text>
+  <v-card-actions class="px-6">
+    <v-btn
+      :loading="uploading"
+      :disabled="!availableSteps.includes('image')"
+      class="text-none"
+      color="primary"
+      variant="flat"
+      rounded="lg"
+      @click="doUploadAll"
+    >
+      {{
+        editMode
+          ? $t('upload.btn.finish_editing')
+          : $t('upload.btn.start_uploading')
+      }}
+    </v-btn>
+  </v-card-actions>
 </template>
 
 <style scoped>
