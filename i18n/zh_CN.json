@@ -106,6 +106,9 @@
     "help": "帮助建设我们的网站！",
     "title": "页面没有找到"
   },
+  "post": {
+    "preview": "预览"
+  },
   "profile": {
     "account_not_linked": "未链接账号",
     "edit": {

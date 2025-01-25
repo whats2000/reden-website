@@ -106,6 +106,9 @@
     "help": "Help build our site!",
     "title": "Page not found"
   },
+  "post": {
+    "preview": "Preview"
+  },
   "profile": {
     "account_not_linked": "Account not linked",
     "edit": {

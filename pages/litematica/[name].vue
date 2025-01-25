@@ -183,19 +183,19 @@ async function loadBlob(index: number) {
   console.log('blob.value[index]', blob.value[index]);
 }
 
+const removeReason = ref('');
+
 async function cancelApproval() {
-  if (window.confirm('确定下架？')) {
-    const response = await doFetchPost(
-      `/api/mc-services/yisibite/${machineId}/reject`,
-      {
-        reason: `下架 by ${appStore.userCache?.username}`,
-      },
-    );
-    if (response.ok) {
-      toast.success('下架成功');
-    } else {
-      toast.error('出现错误');
-    }
+  const response = await doFetchPost(
+    `/api/mc-services/yisibite/${machineId}/reject`,
+    {
+      reason: `${removeReason.value} by ${appStore.userCache?.username}`,
+    },
+  );
+  if (response.ok) {
+    toast.success('下架成功');
+  } else {
+    toast.error('出现错误');
   }
 }
 
@@ -265,12 +265,24 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
           </v-card>
         </v-dialog>
       </v-btn>
-      <v-btn
-        v-if="appStore.userCache?.roles?.includes('archiver')"
-        color="red"
-        @click="cancelApproval"
-      >
+      <v-btn v-if="appStore.userCache?.roles?.includes('archiver')" color="red">
         下架
+        <v-dialog :max-width="900" activator="parent">
+          <v-card>
+            <v-card-title>下架原因</v-card-title>
+            <v-card-text>
+              <v-text-field
+                v-model="removeReason"
+                color="red"
+                label="下架原因"
+                required
+              />
+            </v-card-text>
+            <v-card-actions>
+              <v-btn color="red" @click="cancelApproval"> 确认</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-btn>
     </div>
 
@@ -484,7 +496,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                   <v-icon icon="mdi-download" size="20" />
                   <div>
                     {{
-                      $t('litematica_generator.download_count', {
+                      t('litematica_generator.download_count', {
                         count: number2text(selected.downloads),
                       })
                     }}
@@ -562,13 +574,6 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                     >
                   </p>
                   <br />
-                  <div class="text-center v-card-subtitle w-100">
-                    {{
-                      $t('litematica_generator.total_downloads', [
-                        serverResponse?.downloads,
-                      ])
-                    }}
-                  </div>
                 </v-col>
               </v-row>
             </template>
@@ -594,7 +599,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                       @click.prevent="loadBlob(index)"
                     >
                       <v-icon size="sm">mdi-eye</v-icon>
-                      预览
+                      {{ t('post.preview') }}
                       <v-dialog activator="parent" close-on-back>
                         <v-card :loading="!blob[index]">
                           <v-card-text class="overflow-hidden">
@@ -624,11 +629,11 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                               </p>
                               <v-switch
                                 v-model="appStore.invertPreview"
-                                @click="appStore.toggleInvertPreview()"
                                 class="right-0 position-absolute"
                                 color="primary"
                                 hide-details
                                 label="Invert"
+                                @click="appStore.toggleInvertPreview()"
                               />
                             </div>
                           </v-card-text>
@@ -653,6 +658,13 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                 </v-list-item>
               </v-list>
             </v-no-ssr>
+            <div class="text-center v-card-subtitle w-100">
+              {{
+                t('litematica_generator.total_downloads', [
+                  serverResponse?.downloads,
+                ])
+              }}
+            </div>
             <v-row v-if="!useAppStore().logined" class="text-sm-body-1">
               <v-col>
                 <reden-router :to="localePath('/login')">
