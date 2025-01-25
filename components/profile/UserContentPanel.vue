@@ -57,6 +57,7 @@ const itemDisplayCols = computed<Column[]>(() => {
       <v-card-text>
         <v-row justify="center">
           <v-pagination
+            v-if="totalPages > 1"
             v-model="page"
             :length="totalPages"
             :total-visible="Math.min(8, width / 80 - 2)"
@@ -84,6 +85,7 @@ const itemDisplayCols = computed<Column[]>(() => {
         </v-row>
         <v-row justify="center">
           <v-pagination
+            v-if="totalPages > 1"
             v-model="page"
             :length="totalPages"
             :total-visible="Math.min(8, width / 80 - 2)"
