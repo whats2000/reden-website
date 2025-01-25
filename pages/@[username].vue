@@ -13,9 +13,15 @@ const route = useRoute();
 const { t } = useI18n();
 const appStore = useAppStore();
 
-const { data: user, error } = await useFetchUserGet(
-  route.params.username as string,
-);
+const {
+  data: user,
+  error,
+  refresh,
+} = await useFetchUserGet(route.params.username as string);
+
+if (import.meta.client) {
+  refresh();
+}
 
 useHead({
   title: user?.value

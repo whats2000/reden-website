@@ -8,6 +8,7 @@ import SizeInput from '~/components/litematica/SizeInput.vue';
 import 'assets/main.css';
 import type {
   ListLitematicaResponse,
+  Machine,
   MachineDef,
 } from '~/pages/litematica/index.vue';
 import {
@@ -17,7 +18,7 @@ import {
   timeSince,
 } from '~/utils/constants';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
-import { type Condition, parseCondition } from '~/utils/conditionParser';
+import { parseCondition } from '~/utils/conditionParser';
 import RedenRouter from '~/components/RedenRouter.vue';
 import type { VForm } from 'vuetify/components';
 import { toast } from 'vuetify-sonner';
@@ -91,7 +92,23 @@ function openMaterials() {
   });
 }
 
-const selected = computed(() => serverResponse.value!.d[0]);
+const selected = computed<Machine>(() => ({
+  ...serverResponse.value!.d[0],
+  conditions: {
+    x:
+      serverResponse.value!.d[0].conditions?.x?.map((it) =>
+        parseCondition(it, t),
+      ) ?? [],
+    y:
+      serverResponse.value!.d[0].conditions?.y?.map((it) =>
+        parseCondition(it, t),
+      ) ?? [],
+    z:
+      serverResponse.value!.d[0].conditions?.z?.map((it) =>
+        parseCondition(it, t),
+      ) ?? [],
+  },
+}));
 
 useSeoMeta({
   title: t('litematica_generator.web_title', {
@@ -183,7 +200,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
 </script>
 
 <template>
-  <v-form class="lm-main-content" ref="form" fast-fail @submit.prevent="submit">
+  <v-form ref="form" class="lm-main-content" fast-fail @submit.prevent="submit">
     <div class="ma-4">
       <v-btn
         :to="backUrl ?? localePath('/litematica')"
@@ -253,7 +270,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
       <v-row v-if="selected">
         <v-col cols="12" md="8" style="height: min-content">
           <!-- 预览 -->
-          <h1 class="text-h5 text-md-h4 font-weight-bold">
+          <h1 class="text-h5 text-sm-h4 font-weight-bold">
             {{ selected.name }}
           </h1>
           <div v-if="tabs.length">
@@ -323,7 +340,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
             <!-- 摘要头部 -->
             <div>
               <div class="d-flex flex-row align-center justify-space-between">
-                <div class="text-h5 text-md-h4 font-weight-bold">
+                <div class="text-h5 text-sm-h4 font-weight-bold">
                   {{ $t('common.details') }}
                 </div>
                 <v-btn
