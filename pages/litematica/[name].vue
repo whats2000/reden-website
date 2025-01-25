@@ -220,7 +220,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
 </script>
 
 <template>
-  <v-form ref="form" fast-fail @submit.prevent="submit">
+  <v-form class="lm-main-content" ref="form" fast-fail @submit.prevent="submit">
     <div class="ma-4">
       <v-btn
         :to="backUrl ?? localePath('/litematica')"
@@ -708,5 +708,10 @@ p {
 
 :deep(.v-list-item__content) {
   width: 100%;
+}
+
+.lm-main-content {
+  max-width: 1280px;
+  margin: 0 auto;
 }
 </style>
