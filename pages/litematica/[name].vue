@@ -8,7 +8,6 @@ import SizeInput from '~/components/litematica/SizeInput.vue';
 import 'assets/main.css';
 import type {
   ListLitematicaResponse,
-  Machine,
   MachineDef,
 } from '~/pages/litematica/index.vue';
 import {
@@ -59,42 +58,6 @@ if (!serverResponse.value) {
   }
 }
 const { mobile } = useDisplay();
-const generators = computed<Record<string, Machine>>(() => {
-  if (serverResponse.value) {
-    let machines: { [key: string]: Machine } = {};
-    for (let key in serverResponse.value.d) {
-      const defaultChecker: Condition[] = [() => true];
-      const dto: ListLitematicaResponse['d'][''] = serverResponse.value.d[key];
-      machines[key] = {
-        ...dto,
-        conditions: {
-          x:
-            dto.conditions?.x?.map((s) => parseCondition(s, t)) ??
-            defaultChecker,
-          y:
-            dto.conditions?.y?.map((s) => parseCondition(s, t)) ??
-            defaultChecker,
-          z:
-            dto.conditions?.z?.map((s) => parseCondition(s, t)) ??
-            defaultChecker,
-        },
-      };
-    }
-    if (!machines[machineId]) {
-      throw createError({
-        status: 404,
-        message: t('litematica_generator.not_found', { name: machineId }),
-      });
-    }
-    return Object.keys(machines)
-      .sort()
-      .reduce((obj: Record<string, Machine>, key) => {
-        obj[key] = machines[key];
-        return obj;
-      }, {});
-  }
-  return {};
-});
 
 async function submit(e: SubmitEventPromise) {
   if ((await e).valid) {
@@ -128,7 +91,7 @@ function openMaterials() {
   });
 }
 
-const selected = computed(() => generators.value[machineId]);
+const selected = computed(() => serverResponse.value!.d[0]);
 
 useSeoMeta({
   title: t('litematica_generator.web_title', {

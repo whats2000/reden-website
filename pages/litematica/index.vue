@@ -98,16 +98,13 @@ export type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
 };
 export type ListLitematicaResponse = {
-  readonly d: Record<
-    string,
-    MachineDef & {
-      conditions?: {
-        x: string[];
-        y: string[];
-        z: string[];
-      };
-    }
-  >;
+  d: (MachineDef & {
+    conditions?: {
+      x: string[];
+      y: string[];
+      z: string[];
+    };
+  })[];
   readonly downloads: number;
   readonly count: number;
 };
@@ -143,16 +140,6 @@ const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
   },
 );
 
-const items = computed<MachineDef[]>(() => {
-  const items = [];
-  for (const [, def] of Object.entries(serverResponse.value?.d ?? {}).sort(
-    ([, a], [, b]) => (b.downloads ?? 0) - (a.downloads ?? 0),
-  )) {
-    items.push(def);
-  }
-  return items;
-});
-
 const isClient = import.meta.client;
 const notification = ref(false);
 const maintaining = false;
@@ -172,9 +159,7 @@ const itemDisplayCols = computed(() => {
     cols[i] = { def: [] };
   }
   let i = 0;
-  for (const [, def] of Object.entries(serverResponse.value?.d ?? {}).toSorted(
-    ([_a, a], [_b, b]) => (b.downloads ?? 0) - (a.downloads ?? 0),
-  )) {
+  for (const def of serverResponse.value?.d ?? []) {
     cols[i % itemsPerRow.value].def?.push(def);
     i++;
   }

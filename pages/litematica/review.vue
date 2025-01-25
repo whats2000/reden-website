@@ -51,7 +51,7 @@ const rejectReason = ref<string>();
       { title: 'Actions', key: 'edit' },
       { title: 'Status', key: 'status' },
     ]"
-    :items="Object.values(data?.d ?? {})"
+    :items="data?.d"
     :items-length="data?.count ?? 100"
     :items-per-page-options="[10]"
     :loading="status === 'pending'"

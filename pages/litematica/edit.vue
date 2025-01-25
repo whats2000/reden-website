@@ -29,7 +29,7 @@ const currentLoadedData = ref<string>();
       { title: '编辑', key: 'edit' },
       { title: '状态', key: 'status' },
     ]"
-    :items="Object.values(data?.d ?? {})"
+    :items="data?.d"
     :items-length="data?.count ?? 100"
     :items-per-page-options="[10]"
     :loading="status === 'pending'"
