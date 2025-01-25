@@ -24,6 +24,7 @@ import type { VForm } from 'vuetify/components';
 import { toast } from 'vuetify-sonner';
 
 const route = useRoute();
+const router = useRouter();
 const xSize = ref(0);
 const ySize = ref(0);
 const zSize = ref(0);
@@ -174,6 +175,7 @@ async function cancelApproval() {
   );
   if (response.ok) {
     toast.success('下架成功');
+    router.back();
   } else {
     toast.error('出现错误');
   }
@@ -208,7 +210,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
         prepend-icon="mdi-arrow-left"
         variant="tonal"
       >
-        {{ $t('litematica_generator.view_all_designs') }}
+        {{ t('litematica_generator.view_all_designs') }}
       </v-btn>
       <v-btn
         :to="appStore.logined ? undefined : localePath('/login')"
@@ -225,7 +227,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
           }
         "
       >
-        {{ $t('litematica_generator.upload.edit_or_improve_translation') }}
+        {{ t('litematica_generator.upload.edit_or_improve_translation') }}
         <v-dialog
           v-model="openEditDialog"
           activator="parent"
@@ -341,7 +343,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
             <div>
               <div class="d-flex flex-row align-center justify-space-between">
                 <div class="text-h5 text-sm-h4 font-weight-bold">
-                  {{ $t('common.details') }}
+                  {{ t('common.details') }}
                 </div>
                 <v-btn
                   class="details-title-btn"
@@ -408,14 +410,14 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
               >
                 <span class="text-amber-darken-1">
                   {{
-                    $t('litematica_generator.by.uploader_not_original_author')
+                    t('litematica_generator.by.uploader_not_original_author')
                   }}
                 </span>
-                {{ $t('litematica_generator.by.reason_uploaded') }}<br />
-                {{ $t('litematica_generator.by.reason_uploaded_a') }}<br />
-                {{ $t('litematica_generator.by.reason_uploaded_b') }}<br />
-                {{ $t('litematica_generator.by.reason_uploaded_c') }}<br />
-                {{ $t('litematica_generator.by.complaint') }}
+                {{ t('litematica_generator.by.reason_uploaded') }}<br />
+                {{ t('litematica_generator.by.reason_uploaded_a') }}<br />
+                {{ t('litematica_generator.by.reason_uploaded_b') }}<br />
+                {{ t('litematica_generator.by.reason_uploaded_c') }}<br />
+                {{ t('litematica_generator.by.complaint') }}
                 <a class="router" href="mailto:info@redenmc.com">contact us.</a>
               </div>
             </div>
@@ -464,7 +466,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
             <div>
               <div class="d-flex flex-row align-center justify-space-between">
                 <div class="text-h5 font-weight-bold">
-                  {{ $t('litematica_generator.download') }}
+                  {{ t('litematica_generator.download') }}
                 </div>
                 <div
                   style="
@@ -494,7 +496,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                     border
                   >
                     <v-card-subtitle class="text-wrap pa-3">
-                      {{ $t('litematica_generator.size_description') }}
+                      {{ t('litematica_generator.size_description') }}
                     </v-card-subtitle>
                     <v-card-text>
                       <SizeInput
@@ -537,7 +539,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                   color="primary"
                   type="submit"
                 >
-                  {{ $t('litematica_generator.download') }}
+                  {{ t('litematica_generator.download') }}
                 </v-btn>
               </v-row>
               <!--FAQ-->
@@ -548,7 +550,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                   <p>17x16=272，272的大小包含了两边各一格的铁砧墙宽度。</p>
                   <h4>没有找到你想要的机器？</h4>
                   <p>
-                    {{ $t('litematica_generator.contribute') }}
+                    {{ t('litematica_generator.contribute') }}
                     <a class="router" href="mailto:me@redenmc.com"
                       >me@redenmc.com</a
                     >
@@ -593,7 +595,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                                 indeterminate
                               />
                               <span style="font-size: 1.25rem">
-                                {{ $t('common.loading___') }}
+                                {{ t('common.loading___') }}
                               </span>
                             </div>
 
@@ -648,7 +650,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
             <v-row v-if="!useAppStore().logined" class="text-sm-body-1">
               <v-col>
                 <reden-router :to="localePath('/login')">
-                  {{ $t('litematica_generator.not_logged_in') }}
+                  {{ t('litematica_generator.not_logged_in') }}
                 </reden-router>
               </v-col>
             </v-row>

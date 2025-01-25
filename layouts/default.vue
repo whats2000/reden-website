@@ -43,10 +43,11 @@ onMounted(() => {
       }
     }
   };
-  for (const ele of document.getElementsByClassName('v-application')) {
+  // fix hydration error
+  for (const ele of document.getElementsByClassName('v-theme--light')) {
     fix(ele);
   }
-  for (const ele of document.getElementsByClassName('v-footer')) {
+  for (const ele of document.getElementsByClassName('v-theme--dark')) {
     fix(ele);
   }
 });

@@ -12,8 +12,21 @@ export type Tag = {
   description: string;
 };
 
+enum PostType {
+  LitematicaGen = 'LitematicaGen',
+  LitematicaShare = 'LitematicaShare',
+}
+
+enum PostStatus {
+  Pending = 'Pending',
+  Approved = 'Approved',
+  Rejected = 'Rejected',
+  Deleted = 'Deleted',
+  TakenDown = 'TakenDown',
+}
+
 export type MachineDef = {
-  type: 'LitematicaGen' | 'LitematicaShare';
+  type: PostType;
   name: string;
   key: string;
   downloads?: number;
@@ -36,7 +49,7 @@ export type MachineDef = {
     url: string;
   }[];
   original?: boolean;
-  status?: 'Pending' | 'Approved' | 'Rejected' | 'Deleted' | 'TakenDown';
+  status?: PostStatus;
   upVotes?: number;
   /**
    * User-oriented data
@@ -141,7 +154,7 @@ const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
 );
 
 const isClient = import.meta.client;
-const notification = ref(false);
+const notification = ref<boolean>(false);
 const maintaining = false;
 const { mdAndUp, xs, sm, md, width } = useDisplay({
   mobileBreakpoint: 600,
