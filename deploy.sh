@@ -1,4 +1,4 @@
-COMMIT_REF=$(git rev-parse --short HEAD)
+echo "\"$(git rev-parse --short HEAD)\"" > assets/hash.json
 
 nuxi build && \
 rsync -va .output/ zly@cagayake.top:/www/website/node/
