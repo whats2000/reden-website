@@ -38,7 +38,11 @@ export const useAppStore = defineStore('reden', {
       theme: 'light',
     }) as AppState,
   hydrate(storeState, initialState) {
-    console.log('[pinia] hydrate', storeState, storage.value);
+    console.log(
+      '[pinia] hydrate',
+      JSON.stringify(storeState),
+      JSON.stringify(storage.value),
+    );
     storeState.logined = storage.value.logined;
     storeState.username = storage.value.username;
     storeState.uid = storage.value.uid;

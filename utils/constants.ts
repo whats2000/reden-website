@@ -31,6 +31,7 @@ export const githubLink = 'https://github.com/zly2006/reden-is-what-we-made';
 export const usernameRegex =
   /^[a-zA-Z\-\u4e00-\u9fa5][\w\-\u4e00-\u9fa5]{3,19}$/;
 export const zh_cn = 'zh_cn';
+export const gitRevision = process.env.COMMIT_REF || 'dev';
 
 export type Profile = {
   id: number;

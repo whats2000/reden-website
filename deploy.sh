@@ -1,3 +1,5 @@
+COMMIT_REF=$(git rev-parse --short HEAD)
+
 nuxi build && \
 rsync -va .output/ zly@cagayake.top:/www/website/node/
 

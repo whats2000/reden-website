@@ -1,5 +1,10 @@
 <script lang="ts" setup>
-import { discordInvite, githubLink, zh_cn } from '~/utils/constants';
+import {
+  discordInvite,
+  githubLink,
+  gitRevision,
+  zh_cn,
+} from '~/utils/constants';
 import RedenRouter from '~/components/RedenRouter.vue';
 import { useAppStore } from '~/store/app';
 
@@ -132,6 +137,7 @@ const appStore = useAppStore();
         <reden-router to="https://github.com/RedenMC/reden-website"
           >{{ $t('reden.footer.this_website') }}
         </reden-router>
+        <span class="text-caption opacity-60"> @{{ gitRevision }} </span>
         {{ $t('reden.footer.are_both_free_software') }}
         <br />
         {{ new Date().getFullYear() }} — <b>RedenMC</b>

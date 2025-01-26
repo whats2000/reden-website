@@ -576,8 +576,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                           ? 'custom:CubeScan'
                           : 'custom:ZipArchive'
                       "
-                      color="grey-darken-2"
-                      size="large"
+                      :size="40"
                     />
                   </template>
                   <v-list-item-title>
