@@ -26,9 +26,17 @@ export const storage = useLocalStorage<AppState>('redenCache', {
 });
 
 export const useAppStore = defineStore('reden', {
-  state() {
-    return storage.value;
-  },
+  state: () =>
+    ({
+      logined: false,
+      username: undefined,
+      uid: -1,
+      csrfToken: null,
+      userCache: undefined,
+      gads: false,
+      invertPreview: false,
+      theme: 'light',
+    }) as AppState,
   hydrate(storeState, initialState) {
     console.log('[pinia] hydrate', storeState, storage.value);
     storeState.logined = storage.value.logined;

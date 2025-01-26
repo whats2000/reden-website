@@ -21,29 +21,6 @@ onMounted(() => {
     css.push(`background:${colors[key]}`);
   }
   console.log(themeText, ...css);
-  // hack
-  const fix = (ele: Element) => {
-    if (appStore.theme === 'dark') {
-      if (ele.classList.contains('v-theme--light')) {
-        console.log('hack: remove light', ele);
-        ele.classList.remove('v-theme--light');
-        ele.classList.add('v-theme--dark');
-      }
-    } else if (appStore.theme === 'light') {
-      if (ele.classList.contains('v-theme--dark')) {
-        console.log('hack: remove dark', ele);
-        ele.classList.remove('v-theme--dark');
-        ele.classList.add('v-theme--light');
-      }
-    }
-  };
-  // fix hydration error
-  for (const ele of document.getElementsByClassName('v-theme--light')) {
-    fix(ele);
-  }
-  for (const ele of document.getElementsByClassName('v-theme--dark')) {
-    fix(ele);
-  }
 });
 onPrehydrate(() => {
   const background: Record<string, string> = {
