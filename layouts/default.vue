@@ -10,11 +10,20 @@ import LayoutFooter from '~/components/layout/footer.vue';
 
 const theme = useTheme();
 const appStore = useAppStore();
+watch(
+  () => appStore.theme,
+  () => {
+    console.log('[layouts/default] theme changed', appStore.theme);
+    document.body.style.backgroundColor =
+      theme.themes.value[appStore.theme]!.colors.background;
+  },
+  { immediate: true },
+);
 onMounted(() => {
   const colors: Record<string, string> =
     theme.themes.value[appStore.theme]!.colors;
   const css: string[] = [];
-  let themeText = `theme: ${theme.name.value} app: ${appStore.theme}\n`;
+  let themeText = `[onMounted layouts/default] theme: ${theme.name.value} app: ${appStore.theme}\n`;
   for (const key in colors) {
     themeText += `%c ${key} %c${colors[key]}`;
     css.push('color:unset;');
@@ -22,21 +31,21 @@ onMounted(() => {
   }
   console.log(themeText, ...css);
 });
-onPrehydrate(() => {
-  const background: Record<string, string> = {
-    dark: '#121212',
-    light: '#ffffff',
-  };
-  const themeCookie =
-    document.cookie
-      ?.split(';')
-      ?.find((cookie) => cookie.includes('theme='))
-      ?.replace('theme=', '')
-      ?.replace(' ', '') || 'light';
-  console.log('onPreHydrate', document.cookie, themeCookie);
-  // set body background color
-  document.body.style.backgroundColor = background[themeCookie];
-});
+// onPrehydrate(() => {
+//   const background: Record<string, string> = {
+//     dark: '#121212',
+//     light: '#ffffff',
+//   };
+//   const themeCookie =
+//     document.cookie
+//       ?.split(';')
+//       ?.find((cookie) => cookie.includes('theme='))
+//       ?.replace('theme=', '')
+//       ?.replace(' ', '') || 'light';
+//   console.log('onPreHydrate', document.cookie, themeCookie);
+//   // set body background color
+//   document.body.style.backgroundColor = background[themeCookie];
+// });
 
 function toggleTheme() {
   appStore.theme = appStore.theme === 'light' ? 'dark' : 'light';
@@ -49,7 +58,7 @@ function toggleTheme() {
 
 const localeHead = useLocaleHead({
   addSeoAttributes: {
-    canonicalQueries: ['page'],
+    canonicalQueries: ['page', 'q'],
   },
 });
 </script>
