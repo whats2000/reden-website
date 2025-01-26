@@ -276,50 +276,51 @@ const isHovering = useElementHover(ad);
       <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
     </div>
     <v-container>
-      <v-btn
-        v-if="locale === 'zh_cn'"
-        class="mb-4 mr-4"
-        color="primary"
-        href="https://space.bilibili.com/1545239761"
-        prepend-icon="custom:Bilibili"
-        rounded="lg"
-        variant="outlined"
-      >
-        请在B站关注我，有故障请私信
-      </v-btn>
-      <v-btn
-        class="mb-4 mr-4"
-        color="primary"
-        prepend-icon="mdi-upload"
-        rounded="lg"
-        variant="outlined"
-      >
-        {{ t('litematica_generator.upload.button_msg') }}
-        <v-dialog
-          v-model="uploadDialog"
-          activator="parent"
-          close-on-back
-          max-width="900"
-          persistent
+      <div class="d-flex flex-wrap flex-row mb-4" style="gap: 16px">
+        <v-btn
+          v-if="locale === 'zh_cn'"
+          color="primary"
+          href="https://space.bilibili.com/1545239761"
+          prepend-icon="custom:Bilibili"
+          rounded="lg"
+          variant="outlined"
         >
-          <v-card variant="flat">
-            <LitematicaUpload />
-            <div class="position-absolute top-0 right-0">
-              <v-btn
-                icon="mdi-close"
-                variant="plain"
-                @click="uploadDialog = false"
-              />
-            </div>
-          </v-card>
-        </v-dialog>
-      </v-btn>
-      <v-btn
-        v-if="appStore.userCache?.roles?.includes('archiver')"
-        :to="localePath('/litematica/review')"
-      >
-        Archiver Review Panel
-      </v-btn>
+          请在B站关注我，有故障请私信
+        </v-btn>
+        <v-btn
+          color="primary"
+          prepend-icon="mdi-upload"
+          rounded="lg"
+          variant="outlined"
+        >
+          {{ t('litematica_generator.upload.button_msg') }}
+          <v-dialog
+            v-model="uploadDialog"
+            activator="parent"
+            close-on-back
+            max-width="900"
+            persistent
+          >
+            <v-card variant="flat">
+              <LitematicaUpload />
+              <div class="position-absolute top-0 right-0">
+                <v-btn
+                  icon="mdi-close"
+                  variant="plain"
+                  @click="uploadDialog = false"
+                />
+              </div>
+            </v-card>
+          </v-dialog>
+        </v-btn>
+        <v-btn
+          v-if="appStore.userCache?.roles?.includes('archiver')"
+          :to="localePath('/litematica/review')"
+          variant="outlined"
+        >
+          Archiver Review Panel
+        </v-btn>
+      </div>
 
       <v-row justify="center">
         <v-pagination
