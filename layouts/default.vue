@@ -8,19 +8,13 @@ import '@/assets/main.css';
 import LayoutHeader from '~/components/layout/Header.vue';
 import LayoutFooter from '~/components/layout/footer.vue';
 
-const themeCookie = useCookie<'light' | 'dark'>('theme', {
-  default: () => 'light',
-  maxAge: 60 * 60 * 24 * 90,
-  sameSite: 'strict',
-});
-
 const theme = useTheme();
 const appStore = useAppStore();
 onMounted(() => {
   const colors: Record<string, string> =
-    theme.themes.value[themeCookie.value]!.colors;
+    theme.themes.value[appStore.theme]!.colors;
   const css: string[] = [];
-  let themeText = `theme: ${theme.name.value} cookie: ${themeCookie.value}\n`;
+  let themeText = `theme: ${theme.name.value} app: ${appStore.theme}\n`;
   for (const key in colors) {
     themeText += `%c ${key} %c${colors[key]}`;
     css.push('color:unset;');
@@ -29,13 +23,13 @@ onMounted(() => {
   console.log(themeText, ...css);
   // hack
   const fix = (ele: Element) => {
-    if (themeCookie.value === 'dark') {
+    if (appStore.theme === 'dark') {
       if (ele.classList.contains('v-theme--light')) {
         console.log('hack: remove light', ele);
         ele.classList.remove('v-theme--light');
         ele.classList.add('v-theme--dark');
       }
-    } else if (themeCookie.value === 'light') {
+    } else if (appStore.theme === 'light') {
       if (ele.classList.contains('v-theme--dark')) {
         console.log('hack: remove dark', ele);
         ele.classList.remove('v-theme--dark');
@@ -68,10 +62,10 @@ onPrehydrate(() => {
 });
 
 function toggleTheme() {
-  themeCookie.value = themeCookie.value === 'light' ? 'dark' : 'light';
+  appStore.theme = appStore.theme === 'light' ? 'dark' : 'light';
   if (import.meta.client) {
     document.body.style.backgroundColor =
-      theme.themes.value[themeCookie.value]!.colors.background;
+      theme.themes.value[appStore.theme]!.colors.background;
   }
   appStore.save();
 }
@@ -103,12 +97,14 @@ const localeHead = useLocaleHead({
       </template>
     </Head>
   </Html>
-  <v-app :theme="themeCookie">
+  <v-app :theme="appStore.theme">
     <layout-header>
       <template #desktop-append>
         <v-btn
           :icon="
-            themeCookie === 'light' ? 'mdi-weather-night' : 'mdi-weather-sunny'
+            appStore.theme === 'light'
+              ? 'mdi-weather-night'
+              : 'mdi-weather-sunny'
           "
           title="Toggle Theme"
           @click="toggleTheme"
@@ -117,12 +113,14 @@ const localeHead = useLocaleHead({
       <template #mobile-menu-append>
         <v-list-item
           :prepend-icon="
-            themeCookie === 'light' ? 'mdi-weather-night' : 'mdi-weather-sunny'
+            appStore.theme === 'light'
+              ? 'mdi-weather-night'
+              : 'mdi-weather-sunny'
           "
           @click="toggleTheme"
         >
           <v-list-item-title>
-            {{ themeCookie === 'light' ? 'Light Mode' : 'Dark Mode' }}
+            {{ appStore.theme === 'light' ? 'Light Mode' : 'Dark Mode' }}
           </v-list-item-title>
         </v-list-item>
       </template>

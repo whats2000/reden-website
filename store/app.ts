@@ -11,9 +11,10 @@ type AppState = {
   userCache?: Profile;
   gads?: boolean;
   invertPreview: boolean;
+  theme: 'light' | 'dark';
 };
 
-const storage = useLocalStorage<AppState>('redenCache', {
+export const storage = useLocalStorage<AppState>('redenCache', {
   logined: false,
   username: undefined,
   uid: -1,
@@ -21,6 +22,7 @@ const storage = useLocalStorage<AppState>('redenCache', {
   userCache: undefined,
   gads: false,
   invertPreview: false,
+  theme: 'light',
 });
 
 export const useAppStore = defineStore('reden', {
@@ -28,12 +30,14 @@ export const useAppStore = defineStore('reden', {
     return storage.value;
   },
   hydrate(storeState, initialState) {
+    console.log('[pinia] hydrate', storeState, storage.value);
     storeState.logined = storage.value.logined;
     storeState.username = storage.value.username;
     storeState.uid = storage.value.uid;
     storeState.csrfToken = storage.value.csrfToken;
     storeState.userCache = storage.value.userCache;
     storeState.gads = storage.value.gads;
+    storeState.theme = storage.value.theme ?? 'light';
   },
   actions: {
     save() {
@@ -45,6 +49,7 @@ export const useAppStore = defineStore('reden', {
         userCache: this.userCache,
         gads: this.gads,
         invertPreview: this.invertPreview,
+        theme: this.theme,
       };
     },
     login(username: string, uid: number) {

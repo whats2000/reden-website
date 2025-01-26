@@ -159,18 +159,13 @@ const maintaining = false;
 const { mdAndUp, xs, sm, md, width } = useDisplay({
   mobileBreakpoint: 600,
 });
-const itemsPerRow = computed(() =>
-  xs.value ? 2 : sm.value || md.value ? 2 : 3,
-);
-const cardMaxWidth = computed(() => {
-  const referenceWidth = mdAndUp.value ? width.value - 340 : width.value;
-  return referenceWidth / itemsPerRow.value - 30;
-});
+const itemsPerRow = computed(() => (mdAndUp.value ? 3 : 2));
 const itemDisplayCols = computed(() => {
-  const cols: { def?: MachineDef[]; ad?: 'ad' }[] = [];
+  const cols: { def?: MachineDef[] }[] = [];
   for (let i = 0; i < itemsPerRow.value; i++) {
     cols[i] = { def: [] };
   }
+  console.log('itemsPerRow', itemsPerRow.value);
   let i = 0;
   for (const def of serverResponse.value?.d ?? []) {
     cols[i % itemsPerRow.value].def?.push(def);
@@ -338,7 +333,8 @@ const isHovering = useElementHover(ad);
       <v-row>
         <v-col
           v-for="col in itemDisplayCols"
-          :cols="12 / itemsPerRow"
+          :cols="6"
+          :md="4"
           align="start"
           justify="center"
         >
