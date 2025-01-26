@@ -156,7 +156,7 @@ const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
 const isClient = import.meta.client;
 const notification = ref<boolean>(false);
 const maintaining = false;
-const { mdAndUp, xs, sm, md, width } = useDisplay({
+const { mdAndUp, width } = useDisplay({
   mobileBreakpoint: 600,
 });
 const itemsPerRow = computed(() => (mdAndUp.value ? 3 : 2));
@@ -302,7 +302,7 @@ const isHovering = useElementHover(ad);
             persistent
           >
             <v-card variant="flat">
-              <LitematicaUpload />
+              <LazyLitematicaUpload />
               <div class="position-absolute top-0 right-0">
                 <v-btn
                   icon="mdi-close"
@@ -336,7 +336,6 @@ const isHovering = useElementHover(ad);
           v-for="col in itemDisplayCols"
           :cols="6"
           :md="4"
-          align="start"
           justify="center"
         >
           <MinecraftFarmCard
@@ -360,9 +359,7 @@ const isHovering = useElementHover(ad);
       </v-row>
       <div class="text-center opacity-60 w-100 pt-2">
         {{
-          $t('litematica_generator.total_downloads', [
-            serverResponse?.downloads,
-          ])
+          t('litematica_generator.total_downloads', [serverResponse?.downloads])
         }}
       </div>
     </v-container>

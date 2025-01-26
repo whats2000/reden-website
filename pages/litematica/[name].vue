@@ -236,7 +236,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
           persistent
         >
           <v-card variant="flat">
-            <LitematicaUpload v-model:machine="localizedData" edit-mode />
+            <LazyLitematicaUpload v-model:machine="localizedData" edit-mode />
             <div class="position-absolute top-0 right-0">
               <v-btn
                 icon="mdi-close"
