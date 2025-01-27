@@ -332,7 +332,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
             <v-divider style="margin: 12px 0" />
             <MDC
               :value="selected.description || ''"
-              class="lm-description text-pre-wrap"
+              class="lm-description text-pre-wrap overflow-hidden"
             />
           </div>
         </v-col>
