@@ -177,7 +177,15 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
     renderer.drawGrid(view);
   }
 
-  requestAnimationFrame(render);
+  let redrawHandle: number | undefined;
+  function redraw() {
+    if (redrawHandle) {
+      cancelAnimationFrame(redrawHandle);
+    }
+    redrawHandle = requestAnimationFrame(render);
+  }
+
+  redraw();
 
   function move3d(direction: vec3, relativeVertical = true, sensitivity = 1) {
     let offset = vec3.create();
@@ -255,7 +263,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
       ];
       runMovementFunction('middle-click-drag', args, { move, pan }, 'move');
       middleClickPos = [evt.clientX, evt.clientY];
-      requestAnimationFrame(render);
+      redraw();
     } else if (leftPos) {
       const args: [number, number] = [
         evt.clientX - leftPos[0],
@@ -263,7 +271,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
       ];
       runMovementFunction('click-drag', args, { move, pan }, 'pan');
       leftPos = [evt.clientX, evt.clientY];
-      requestAnimationFrame(render);
+      redraw();
     }
   });
   canvas.addEventListener('mouseup', (evt) => {
@@ -282,7 +290,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
   canvas.addEventListener('wheel', (evt) => {
     evt.preventDefault();
     move3d([0, 0, -evt.deltaY / 200]);
-    requestAnimationFrame(render);
+    redraw();
   });
 
   const moveDist = 0.2;
@@ -325,7 +333,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
       vec3.add(direction, direction, keyMoves[key]);
     }
     move3d(direction, false);
-    requestAnimationFrame(render);
+    redraw();
   }, 1000 / 60);
 
   canvas.addEventListener('touchstart', touchHandler);
@@ -352,7 +360,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
 
         pan([dx, dy]);
 
-        requestAnimationFrame(render);
+        redraw();
       }
       middleClickPos = [evt.touches[0].pageX, evt.touches[0].pageY];
     } else if (evt.touches.length == 2) {
@@ -371,7 +379,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
       const distY = (prevAvgY - avgY) * dragSpeed;
 
       move3d([distX, distY, (dist - prevDist) * pinchSpeed]);
-      requestAnimationFrame(render);
+      redraw();
       prevDist = dist;
       prevAvgX = avgX;
       prevAvgY = avgY;
