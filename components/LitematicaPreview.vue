@@ -10,7 +10,13 @@ import {
   BlockDefinition,
   BlockModel,
   type BlockPos,
+  Identifier,
+  ItemModel,
+  ItemRenderer,
+  type ItemRendererResources,
+  ItemStack,
   NbtFile,
+  NbtTag,
   type Resources,
   Structure,
   StructureRenderer,
@@ -26,7 +32,7 @@ const props = defineProps<{
   blob: Blob;
 }>();
 const canvas = useTemplateRef<HTMLCanvasElement>('canvas');
-let deepslateResources: Resources;
+let deepslateResources: Resources & ItemRendererResources;
 const appStore = useAppStore();
 
 function upperPowerOfTwo(x: number) {
@@ -56,6 +62,10 @@ function loadResources(textureImage: HTMLImageElement) {
   Object.values(blockModels).forEach((m) =>
     m.flatten({ getBlockModel: (id) => blockModels[id.toString()] }),
   );
+  const itemModels: Record<string, ItemModel> = {};
+  Object.keys(assets.models).forEach((id) => {
+    itemModels['minecraft:' + id] = ItemModel.fromJson(assets.models[id]);
+  });
 
   const atlasCanvas = document.createElement('canvas');
   const atlasSize = upperPowerOfTwo(
@@ -114,6 +124,12 @@ function loadResources(textureImage: HTMLImageElement) {
     },
     getDefaultBlockProperties(id) {
       return null;
+    },
+    getItemModel(id: Identifier): ItemModel | null {
+      return itemModels[id.toString()];
+    },
+    getItemComponents(id: Identifier): Map<string, NbtTag> {
+      return new Map();
     },
   };
 }
@@ -175,6 +191,12 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
 
     renderer.drawStructure(view);
     renderer.drawGrid(view);
+
+    new ItemRenderer(
+      gl!,
+      new ItemStack(Identifier.parse('minecraft:stone'), 1),
+      deepslateResources,
+    );
   }
 
   let redrawHandle: number | undefined;
