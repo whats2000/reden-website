@@ -594,7 +594,12 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                     >
                       <v-icon size="sm">mdi-eye</v-icon>
                       {{ t('post.preview') }}
-                      <v-dialog activator="parent" close-on-back>
+                      <v-dialog
+                        activator="parent"
+                        close-on-back
+                        height="100%"
+                        #default="{ isActive }"
+                      >
                         <v-card :loading="!blob[index]">
                           <v-card-text class="overflow-hidden">
                             <LitematicaPreview
@@ -615,12 +620,22 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                               class="top-0 right-0 position-absolute mr-6 mt-4 text-white text-caption text-right"
                               style="user-select: none; line-height: 0.75rem"
                             >
-                              <p class="opacity-60">
-                                Credit to misode, Ending Credits & Undecentions
-                                <br />
-                                This Vue component is made by zly2006 and
-                                licensed under AGPL v3
-                              </p>
+                              <div class="flex-row d-flex">
+                                <div class="opacity-60">
+                                  Credit to misode, Ending Credits &
+                                  Undecentions
+                                  <br />
+                                  This Vue component is made by zly2006 and
+                                  licensed under AGPL v3
+                                </div>
+
+                                <v-btn
+                                  icon="mdi-close"
+                                  color="red"
+                                  variant="outlined"
+                                  @click="isActive.value = false"
+                                />
+                              </div>
                               <v-switch
                                 v-model="appStore.invertPreview"
                                 class="right-0 position-absolute"
