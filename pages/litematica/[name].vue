@@ -357,11 +357,18 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
             <!-- 摘要内容 -->
             <div>
               <div class="d-flex mt-3">
-                <div class="w-33 align-content-center">发布者：</div>
+                <div class="w-33 align-content-center">
+                  {{
+                    selected.original
+                      ? t('litematica_generator.by.author')
+                      : t('litematica_generator.by.uploader')
+                  }}
+                </div>
                 <router-link
                   v-if="selected.author"
                   :to="localePath(`/@${selected.author.username}`)"
                   class="d-flex flex-row router"
+                  style="line-height: 32px"
                 >
                   <v-avatar v-if="selected.author.avatarUrl" size="32">
                     <v-img :src="selected.author.avatarUrl" />
