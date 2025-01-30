@@ -90,8 +90,8 @@ const productRates = ref<
 async function doUploadAll() {
   uploading.value = true;
   if (!props.editMode || selectedFiles.value.length > 0) {
-    if (selectedFiles.value.length > 3) {
-      toast.error('你最多只能上传3个文件');
+    if (selectedFiles.value.length > 6) {
+      toast.error('你最多只能上传6个文件');
       return;
     }
     if (litematicaGenerator.value) {
@@ -209,8 +209,8 @@ const handlePictureChange = (event: Event) => {
 
   if (!files) return;
 
-  if (selectedPictures.value.length + files.length > 3) {
-    pictureStepError.value = '最多只能上传3张图片';
+  if (selectedPictures.value.length + files.length > 5) {
+    pictureStepError.value = '最多只能上传5张图片';
     return;
   }
   pictureStepError.value = undefined;
