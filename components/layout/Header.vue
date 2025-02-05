@@ -99,8 +99,8 @@
         <v-btn
           :active="false"
           :to="localePath('/litematica')"
-          class="ma-2 text-capitalize"
-          size="lg"
+          class="ma-2 text-capitalize px-1"
+          size="large"
         >
           {{ $t('reden.header.explore') }}
         </v-btn>
@@ -160,7 +160,7 @@
         v-if="!mobile"
         :active="false"
         :to="localePath('/litematica#upload')"
-        class="ma-2 text-capitalize"
+        class="ma-2 text-capitalize px-1 mx-1"
         color="secondary"
         prepend-icon="mdi-upload"
         variant="text"

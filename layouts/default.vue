@@ -52,6 +52,7 @@ const localeHead = useLocaleHead({
 <template>
   <Html :lang="localeHead.htmlAttrs.lang">
     <Head>
+      <Meta name="monetag" content="38f365878eac2da0ab1c69a63a130ade" />
       <template v-for="link in localeHead.link" :key="link.hid">
         <Link
           :id="link.hid"
