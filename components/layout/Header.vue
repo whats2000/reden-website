@@ -100,6 +100,7 @@
           :active="false"
           :to="localePath('/litematica')"
           class="ma-2 text-capitalize"
+          size="lg"
         >
           {{ $t('reden.header.explore') }}
         </v-btn>
@@ -126,7 +127,7 @@
       </template>
     </v-text-field>
     <template #append>
-      <template v-if="!mobile">
+      <template v-if="mdAndUp">
         <v-btn :href="githubLink" icon="mdi-github" title="Github" />
         <v-btn
           :href="discordInvite"
@@ -162,8 +163,8 @@
         class="ma-2 text-capitalize"
         color="secondary"
         prepend-icon="mdi-upload"
-        size="x-large"
         variant="text"
+        stacked
       >
         {{ $t('reden.header.upload') }}
       </v-btn>
@@ -178,7 +179,7 @@ const router = useRouter();
 const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();
 
-const { mobile } = useDisplay({
+const { mobile, mdAndUp } = useDisplay({
   mobileBreakpoint: 640,
 });
 

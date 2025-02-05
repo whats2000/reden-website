@@ -438,7 +438,7 @@ watch(props, refreshProps);
                 density="compact"
               />
               <v-radio :value="true" density="compact">
-                <template #label="{ props }">
+                <template #label>
                   <div>
                     {{ t('upload.desc.litematica_generator') }}
                     勾选之前请确认你的投影符合
@@ -777,9 +777,7 @@ watch(props, refreshProps);
             </div>
             <div class="mt-6">
               <p>
-                {{
-                  $t('upload.desc.please_contact_us_if_you_have_any_questions')
-                }}
+                {{ 'upload.desc.please_contact_us_if_you_have_any_questions' }}
                 <a class="router" href="mailto:info@redenmc.com"
                   >info@redenmc.com</a
                 >
@@ -793,7 +791,7 @@ watch(props, refreshProps);
               variant="outlined"
               @click="goingBack = true"
             >
-              {{ $t('common.back') }}
+              {{ t('common.back') }}
             </v-btn>
           </v-card-text>
         </v-tabs-window-item>
@@ -812,8 +810,8 @@ watch(props, refreshProps);
     >
       {{
         editMode
-          ? $t('upload.btn.finish_editing')
-          : $t('upload.btn.start_uploading')
+          ? t('upload.btn.finish_editing')
+          : t('upload.btn.start_uploading')
       }}
     </v-btn>
   </v-card-actions>
