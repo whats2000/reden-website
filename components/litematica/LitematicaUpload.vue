@@ -437,11 +437,17 @@ watch(props, refreshProps);
                 :value="false"
                 density="compact"
               />
-              <v-radio
-                :label="t('upload.desc.litematica_generator')"
-                :value="true"
-                density="compact"
-              />
+              <v-radio :value="true" density="compact">
+                <template #label="{ props }">
+                  <div>
+                    {{ t('upload.desc.litematica_generator') }}
+                    勾选之前请确认你的投影符合
+                    <reden-router to="/docs/zh_cn/generator-rules">
+                      生成器规则
+                    </reden-router>
+                  </div>
+                </template>
+              </v-radio>
             </v-radio-group>
           </v-card-text>
         </v-tabs-window-item>

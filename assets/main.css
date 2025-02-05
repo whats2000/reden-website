@@ -35,7 +35,7 @@ a.router {
   color: rgb(var(--v-theme-primary-darken-1));
 }
 
-.v-main a.router:hover {
+a.router:hover {
   /*noinspection CssUnresolvedCustomProperty*/
   color: rgb(var(--v-theme-primary));
   opacity: 1;

@@ -11,16 +11,13 @@ import LayoutFooter from '~/components/layout/footer.vue';
 const theme = useTheme();
 const ourTheme = ref<'light' | 'dark'>('light');
 const appStore = useAppStore();
-watch(
-  () => appStore.theme,
-  () => {
-    console.log('[layouts/default] theme changed', appStore.theme);
-    if (import.meta.client) {
-      document.body.style.backgroundColor =
-        theme.themes.value[appStore.theme]!.colors.background;
-    }
-  },
-);
+watch(ourTheme, () => {
+  console.log('[layouts/default] theme changed', appStore.theme);
+  if (import.meta.client) {
+    document.body.style.backgroundColor =
+      theme.themes.value[appStore.theme]!.colors.background;
+  }
+});
 onMounted(() => {
   const colors: Record<string, string> =
     theme.themes.value[appStore.theme]!.colors;
