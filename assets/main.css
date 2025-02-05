@@ -8,6 +8,7 @@
 
 a.router {
   text-decoration: none;
+  display: inline-block;
 
   /*noinspection CssUnresolvedCustomProperty*/
   color: rgb(var(--v-theme-primary-darken-1));
