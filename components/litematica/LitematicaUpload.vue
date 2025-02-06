@@ -92,6 +92,7 @@ async function doUploadAll() {
   if (!props.editMode || selectedFiles.value.length > 0) {
     if (selectedFiles.value.length > 6) {
       toast.error('你最多只能上传6个文件');
+      uploading.value = false;
       return;
     }
     if (litematicaGenerator.value) {
@@ -108,6 +109,7 @@ async function doUploadAll() {
             duration: 1e4,
           },
         );
+        uploading.value = false;
         return;
       }
     }
@@ -442,9 +444,7 @@ watch(props, refreshProps);
                   <div>
                     {{ t('upload.desc.litematica_generator') }}
                     勾选之前请确认你的投影符合
-                    <reden-router to="/docs/zh_cn/generator-rules">
-                      生成器规则
-                    </reden-router>
+                    <a href="/docs/zh_cn/generator-rules"> 生成器规则 </a>
                   </div>
                 </template>
               </v-radio>

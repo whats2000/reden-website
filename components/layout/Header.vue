@@ -110,10 +110,12 @@
     <v-text-field
       v-model="search"
       :placeholder="$t('reden.header.search')"
-      class="mx-auto max-w-520px"
+      class="mx-auto max-w-520px header-search"
+      color="primary"
       density="comfortable"
       hide-details
       rounded="xl"
+      id="search"
       variant="outlined"
       @keydown.prevent.enter="
         router.push(localePath(`/litematica?q=${search}`))
@@ -201,5 +203,9 @@ watch(router.currentRoute, (value) => {
 
 .max-w-520px {
   max-width: 520px;
+}
+
+.header-search :deep(.v-input__control > .v-field--appended) {
+  padding-inline-end: 0 !important;
 }
 </style>
