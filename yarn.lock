@@ -3620,10 +3620,10 @@ deepmerge@^4.2.2:
   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.3.1.tgz#44b5f2147cd3b00d4b56137685966f26fd25dd4a"
   integrity sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==
 
-deepslate@^0.23.4:
-  version "0.23.4"
-  resolved "https://registry.yarnpkg.com/deepslate/-/deepslate-0.23.4.tgz#07e9d1bf4a148b2477286134591fa2a4b7707eb5"
-  integrity sha512-7UcKHgpCFiwsfa7yonDOyE/W3VvpIdJkDIXhH+6WslY//dQk10oDCdkp8QgKWLd2Pyz/h8e+2ulMPwtZOFM85w==
+deepslate@^0.23.5:
+  version "0.23.5"
+  resolved "https://registry.yarnpkg.com/deepslate/-/deepslate-0.23.5.tgz#87814dbaacfccc57644e704c827b7f2f0903645a"
+  integrity sha512-FjBBbuPUI1Y/dXtUc4WiCJSA7s7yRAXepD7qWRF6wX5m/q7AVRauMEShu8lphRvqCtJyxcYFZmISwX5OOH/tWw==
   dependencies:
     gl-matrix "^3.3.0"
     md5 "^2.3.0"
