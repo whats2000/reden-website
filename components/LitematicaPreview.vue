@@ -157,9 +157,14 @@ function createRenderer(
   canvas: HTMLCanvasElement,
 ): () => void {
   // Create canvas and size it appropriately
-  // TODO: Make size change on window resize
-  canvas.width = canvas.clientWidth * window.devicePixelRatio;
-  canvas.height = canvas.clientHeight * window.devicePixelRatio;
+  function resizeCanvas() {
+    // reset canvas size (default 300)
+    canvas.width = -1;
+    canvas.height = -1;
+    canvas.width = canvas.clientWidth * window.devicePixelRatio;
+    canvas.height = canvas.clientHeight * window.devicePixelRatio;
+  }
+  resizeCanvas();
 
   let options = {
     chunkSize: 8,
@@ -353,8 +358,7 @@ function createRenderer(
     }
   };
   const resizeListener: (evt: UIEvent) => any = () => {
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+    resizeCanvas();
     // canvas.width = window.innerWidth;
     // canvas.height = window.innerHeight;
     const gl = canvas.getContext('webgl');
@@ -372,6 +376,7 @@ function createRenderer(
 
     window.addEventListener('blur', () => pressedKeys.clear());
   }
+  window.addEventListener('resize', resizeListener);
 
   setInterval(() => {
     if (pressedKeys.size == 0) return;
@@ -554,10 +559,9 @@ function readFile(file: Blob) {
       const litematic = readLitematicFromNBTData(nbtdata);
 
       destroy();
-      destroy = createRenderer(
-        structureFromLitematic(litematic),
-        canvas.value!,
-      );
+
+      const cvs = canvas.value!;
+      destroy = createRenderer(structureFromLitematic(litematic), cvs);
     } catch (e) {
       console.error(e);
       toast.error(t('litematica_generator.failed_preview_load'), {

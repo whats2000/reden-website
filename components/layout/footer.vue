@@ -139,6 +139,10 @@ const appStore = useAppStore();
         {{ new Date().getFullYear() }} — <b>RedenMC</b>
       </v-col>
     </v-row>
+    <div class="bottom-right text-capitalize">
+      NOT AN OFFICIAL MINECRAFT SERVICE. NOT APPROVED BY OR ASSOCIATED WITH
+      MOJANG, NETEASE OR MICROSOFT.
+    </div>
     <div class="text-right last-line">
       <a
         v-if="locale == zh_cn"

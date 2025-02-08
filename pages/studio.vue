@@ -177,8 +177,11 @@ function downloadBlob(_blob: Blob) {
           :headers="[
             { key: 'item', title: 'Item', sortable: false },
             { key: 'replace', title: 'Replace', sortable: false },
-            { key: 'op', title: '', sortable: false },
+            { key: 'op', title: '', sortable: false, width: '96px' },
           ]"
+          :cell-props="{
+            class: 'px-3',
+          }"
           :items="replacements"
           :items-per-page="100"
           hide-default-footer
