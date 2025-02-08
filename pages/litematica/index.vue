@@ -131,9 +131,7 @@ const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
   {
     dedupe: 'defer',
     key: `generators${locale.value}`,
-    headers: {
-      Authorization: process.env.REDEN_API_TOKEN as string,
-    },
+    headers: {},
     transform: (input: any): ListLitematicaResponse => {
       if (input.d) {
         return input;
