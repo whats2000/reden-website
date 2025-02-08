@@ -30,6 +30,10 @@ import { useAppStore } from '~/store/app';
 const { t } = useI18n();
 const props = defineProps<{
   blob: Blob;
+  noKeyListeners?: boolean;
+}>();
+const emits = defineEmits<{
+  'loaded-resources': [Resources & ItemRendererResources];
 }>();
 const canvas = useTemplateRef<HTMLCanvasElement>('canvas');
 let deepslateResources: Resources & ItemRendererResources;
@@ -126,8 +130,17 @@ function loadResources(textureImage: HTMLImageElement) {
     getBlockProperties(id) {
       return null;
     },
-    getDefaultBlockProperties(id) {
-      return null;
+    getDefaultBlockProperties(id: Identifier) {
+      const props = Object.keys(
+        assets.blockstates[id.path]?.variants ?? {},
+      )?.[0];
+      if (!props) return null;
+      const ret: Record<string, string> = {};
+      props.split(',').forEach((prop) => {
+        const [key, value] = prop.split('=');
+        ret[key] = value;
+      });
+      return ret;
     },
     getItemModel(id: Identifier): ItemModel | null {
       return itemModels[id.toString()];
@@ -136,13 +149,13 @@ function loadResources(textureImage: HTMLImageElement) {
       return new Map();
     },
   };
+  emits('loaded-resources', deepslateResources);
 }
 
-let keyDownListener: (evt: KeyboardEvent) => any;
-let keyUpListener: (evt: KeyboardEvent) => any;
-let resizeListener: (evt: UIEvent) => any;
-
-function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
+function createRenderer(
+  structure: Structure,
+  canvas: HTMLCanvasElement,
+): () => void {
   // Create canvas and size it appropriately
   // TODO: Make size change on window resize
   canvas.width = canvas.clientWidth * window.devicePixelRatio;
@@ -198,10 +211,14 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
   }
 
   let redrawHandle: number | undefined;
+  let destroy = false;
 
   function redraw() {
     if (redrawHandle) {
       cancelAnimationFrame(redrawHandle);
+    }
+    if (destroy) {
+      return;
     }
     redrawHandle = requestAnimationFrame(render);
   }
@@ -323,19 +340,19 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
   };
   let pressedKeys = new Set<string>();
 
-  keyDownListener = (evt) => {
+  const keyDownListener: (evt: KeyboardEvent) => any = (evt) => {
     if (evt.code in keyMoves) {
       evt.preventDefault();
       pressedKeys.add(evt.code);
     }
   };
-  keyUpListener = (evt) => {
+  const keyUpListener: (evt: KeyboardEvent) => any = (evt) => {
     if (evt.code in keyMoves) {
       evt.preventDefault();
       pressedKeys.delete(evt.code);
     }
   };
-  resizeListener = () => {
+  const resizeListener: (evt: UIEvent) => any = () => {
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
     // canvas.width = window.innerWidth;
@@ -349,12 +366,12 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
     );
     redraw();
   };
-  document.addEventListener('keydown', keyDownListener);
-  document.addEventListener('keyup', keyUpListener);
-  //todo
-  // window.addEventListener('resize', resizeListener);
+  if (!props.noKeyListeners) {
+    document.addEventListener('keydown', keyDownListener);
+    document.addEventListener('keyup', keyUpListener);
 
-  window.addEventListener('blur', () => pressedKeys.clear());
+    window.addEventListener('blur', () => pressedKeys.clear());
+  }
 
   setInterval(() => {
     if (pressedKeys.size == 0) return;
@@ -416,6 +433,18 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
       prevAvgY = avgY;
     }
   }
+
+  return () => {
+    destroy = true;
+    console.log('Cleaning up renderer', renderer);
+
+    document.removeEventListener('keydown', keyDownListener);
+    document.removeEventListener('keyup', keyUpListener);
+    window.removeEventListener('resize', resizeListener);
+
+    canvas.removeEventListener('touchstart', touchHandler);
+    canvas.removeEventListener('touchmove', touchHandler);
+  };
 }
 
 function structureFromLitematic(litematic: Litematic) {
@@ -503,6 +532,8 @@ function structureFromLitematic(litematic: Litematic) {
   return structure;
 }
 
+let destroy = () => {};
+
 function readFile(file: Blob) {
   if (!deepslateResources) {
     throw createError('Resources not loaded yet');
@@ -522,7 +553,11 @@ function readFile(file: Blob) {
       console.log('Loaded litematic with NBT data:', nbtdata);
       const litematic = readLitematicFromNBTData(nbtdata);
 
-      createRenderer(structureFromLitematic(litematic), canvas.value!);
+      destroy();
+      destroy = createRenderer(
+        structureFromLitematic(litematic),
+        canvas.value!,
+      );
     } catch (e) {
       console.error(e);
       toast.error(t('litematica_generator.failed_preview_load'), {
@@ -576,13 +611,8 @@ onMounted(async () => {
   }
 });
 onUnmounted(() => {
-  // const oldContent = document.getElementById('main-content');
-  // oldContent.style.display = 'block';
   console.log('Unmounting');
-
-  document.removeEventListener('keydown', keyDownListener);
-  document.removeEventListener('keyup', keyUpListener);
-  window.removeEventListener('resize', resizeListener);
+  destroy();
 });
 watch(
   () => props.blob,
