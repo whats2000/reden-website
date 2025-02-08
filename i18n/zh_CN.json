@@ -81,6 +81,9 @@
     "suggested_values": "建议选择：",
     "suggestion_notice": "建议值仅供参考，可能无法正确生成有效投影",
     "title": "投影蓝图在线生成器",
+    "toast": {
+      "failed_to_load_litematica_preview": "加载投影预览失败"
+    },
     "total_downloads": "我们已累计提供 {0} 次下载服务。",
     "upload": {
       "button_msg": "上传你的机器",

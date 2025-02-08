@@ -164,21 +164,34 @@ async function loadBlob(index: number) {
     toast.error(`No url for index #${index}.`);
     return;
   }
-  blob.value[index] = await (
-    await fetch(
-      url.startsWith('https://reden.oss-cn-shanghai.aliyuncs.com/')
-        ? url
-        : `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-    )
-  ).blob();
-  if (blob.value[index].size === 0) {
-    toast.error(`Blob size is 0 for index #${index}.`);
-    debugger;
-    return;
+  try {
+    blob.value[index] = await (
+      await fetch(
+        url.startsWith('https://reden.oss-cn-shanghai.aliyuncs.com/')
+          ? url
+          : `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+      )
+    ).blob();
+    if (blob.value[index].size === 0) {
+      throw new Error('Blob size is 0.');
+    }
+    blob.value = [...blob.value];
+    console.log('blob.value[index]', blob.value[index]);
+  } catch (e) {
+    toast.error(
+      t('litematica_generator.toast.failed_to_load_litematica_preview') +
+        (e as Error).message,
+    );
+    console.error(`Failed to load blob for index #${index}`, e);
+    previewing.value = -1;
   }
-  console.log('blob.value[index]', blob.value[index]);
 }
 
+watch(blob, () => {
+  console.log('blob changed', blob.value);
+});
+
+const previewing = ref(-1);
 const removeReason = ref('');
 
 async function cancelApproval() {
@@ -635,6 +648,7 @@ const selectedImage = ref(
                       <v-icon size="sm">mdi-eye</v-icon>
                       {{ t('post.preview') }}
                       <v-dialog
+                        :model-value="previewing === index"
                         #default="{ isActive }"
                         activator="parent"
                         close-on-back
@@ -642,8 +656,9 @@ const selectedImage = ref(
                       >
                         <v-card :loading="!blob[index]">
                           <v-card-text class="overflow-hidden">
-                            <LitematicaPreview
+                            <LazyLitematicaPreview
                               v-if="blob[index]"
+                              id="Preview"
                               :blob="blob[index]"
                             />
                             <div v-else>
@@ -707,6 +722,7 @@ const selectedImage = ref(
                 </v-list-item>
               </v-list>
             </v-no-ssr>
+            <bottom-bar-ad />
             <div class="text-center v-card-subtitle w-100">
               {{
                 t('litematica_generator.total_downloads', [
@@ -727,7 +743,6 @@ const selectedImage = ref(
     </div>
 
     <bottom-bar-ad />
-    <bottom-bar-ad v-if="mobile" />
   </v-form>
 </template>
 

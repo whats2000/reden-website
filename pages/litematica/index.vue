@@ -123,7 +123,7 @@ export type ListLitematicaResponse = {
 };
 const { locale } = useI18n();
 
-const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
+const { data: serverResponse, error } = await useFetch<ListLitematicaResponse>(
   () =>
     search.value
       ? `/api/mc-services/litematica/search?q=${search.value}&lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}`
@@ -150,6 +150,10 @@ const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
     },
   },
 );
+
+if (error.value?.statusCode) {
+  throw error.value;
+}
 
 const isClient = import.meta.client;
 const notification = ref<boolean>(false);
