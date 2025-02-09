@@ -39,6 +39,14 @@ const canvas = useTemplateRef<HTMLCanvasElement>('canvas');
 let deepslateResources: Resources & ItemRendererResources;
 const appStore = useAppStore();
 
+// Position and rotation
+let viewDist = 4;
+let xOffset = 0;
+let yOffset = 0;
+let xRotation = 0.8;
+let yRotation = 0.5;
+let cameraPos: vec3 | null = null;
+
 function upperPowerOfTwo(x: number) {
   x -= 1;
   x |= x >> 1;
@@ -181,14 +189,12 @@ function createRenderer(
   );
 
   // Crappy controls
-  let viewDist = 4;
-  let xRotation = 0.8;
-  let yRotation = 0.5;
-  let xOffset = 0;
-  let yOffset = 0;
   const size = structure.getSize();
-  let cameraPos = vec3.create();
-  vec3.set(cameraPos, -size[0] / 2, -size[1] / 2, -size[2] / 2);
+  if (!cameraPos) {
+    // init
+    cameraPos = vec3.create();
+    vec3.set(cameraPos, -size[0] / 2, -size[1] / 2, -size[2] / 2);
+  }
 
   // refactor this code to use separate functions for each type of control
   function render() {
@@ -199,7 +205,7 @@ function createRenderer(
     const view = mat4.create();
     mat4.rotateX(view, view, xRotation);
     mat4.rotateY(view, view, yRotation);
-    mat4.translate(view, view, cameraPos); //[xOffset, yOffset, -viewDist]);
+    mat4.translate(view, view, cameraPos!); //[xOffset, yOffset, -viewDist]);
     //mat4.translate(view, view, );
 
     renderer.drawStructure(view);
@@ -242,7 +248,7 @@ function createRenderer(
       vec3.rotateX(offset, offset, [0, 0, 0], -xRotation * sensitivity);
     }
     vec3.rotateY(offset, offset, [0, 0, 0], -yRotation * sensitivity);
-    vec3.add(cameraPos, cameraPos, offset);
+    vec3.add(cameraPos!, cameraPos!, offset);
   }
 
   function pan(direction: [number, number], sensitivity = 1) {
@@ -259,7 +265,7 @@ function createRenderer(
     vec3.set(offset_vector, xOffset, -yOffset, 0);
     vec3.rotateX(offset_vector, offset_vector, [0, 0, 0], -xRotation);
     vec3.rotateY(offset_vector, offset_vector, [0, 0, 0], -yRotation);
-    vec3.add(cameraPos, cameraPos, offset_vector);
+    vec3.add(cameraPos!, cameraPos!, offset_vector);
   }
 
   function runMovementFunction(

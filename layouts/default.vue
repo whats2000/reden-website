@@ -5,13 +5,13 @@ import { onMounted } from 'vue';
 import { useTheme } from 'vuetify';
 import { useAppStore } from '~/store/app';
 import '@/assets/main.css';
+import { globalTheme } from '@/utils/constants';
 import LayoutHeader from '~/components/layout/Header.vue';
 import LayoutFooter from '~/components/layout/footer.vue';
 
 const theme = useTheme();
-const ourTheme = ref<'light' | 'dark'>('light');
 const appStore = useAppStore();
-watch(ourTheme, () => {
+watch(globalTheme, () => {
   console.log('[layouts/default] theme changed', appStore.theme);
   if (import.meta.client) {
     document.body.style.backgroundColor =
@@ -23,7 +23,7 @@ onMounted(() => {
     theme.themes.value[appStore.theme]!.colors;
   const css: string[] = [];
   let themeText = `[onMounted layouts/default] theme: ${theme.name.value} app: ${appStore.theme}\n`;
-  ourTheme.value = appStore.theme;
+  globalTheme.value = appStore.theme;
   for (const key in colors) {
     themeText += `%c ${key} %c${colors[key]}`;
     css.push('color:unset;');
@@ -34,7 +34,7 @@ onMounted(() => {
 
 function toggleTheme() {
   appStore.theme = appStore.theme === 'light' ? 'dark' : 'light';
-  ourTheme.value = appStore.theme;
+  globalTheme.value = appStore.theme;
   if (import.meta.client) {
     document.body.style.backgroundColor =
       theme.themes.value[appStore.theme]!.colors.background;
@@ -52,7 +52,7 @@ const localeHead = useLocaleHead({
 <template>
   <Html :lang="localeHead.htmlAttrs.lang">
     <Head>
-      <Meta name="monetag" content="38f365878eac2da0ab1c69a63a130ade" />
+      <Meta content="38f365878eac2da0ab1c69a63a130ade" name="monetag" />
       <template v-for="link in localeHead.link" :key="link.hid">
         <Link
           :id="link.hid"
@@ -60,6 +60,7 @@ const localeHead = useLocaleHead({
           :hreflang="link.hreflang"
           :rel="link.rel"
         />
+        \
       </template>
       <template v-for="meta in localeHead.meta" :key="meta.hid">
         <Meta
@@ -70,7 +71,7 @@ const localeHead = useLocaleHead({
       </template>
     </Head>
   </Html>
-  <v-app :theme="ourTheme">
+  <v-app :theme="globalTheme">
     <layout-header>
       <template #desktop-append>
         <v-btn

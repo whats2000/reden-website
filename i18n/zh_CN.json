@@ -191,6 +191,7 @@
         "title": "关注我们",
         "youtube": "Youtube"
       },
+      "mojang_disclaimer": "不是《我的世界》官方服务。与Mojang、网易或微软无关。",
       "reden_community": {
         "community_events": "社区活动",
         "community_guidelines": "社区指南",
@@ -312,6 +313,13 @@
     "notice": "Reden 是一个开源项目，永远对所有人免费。我们没有从任何公司或组织获得资金。我们依靠您的支持来维持项目运行。当您支持我们时，您会在此页面被列出，因此请确保您在捐款时提供您的姓名和电子邮件地址。感谢您的支持！",
     "paypal": "使用 PayPal 支持我们",
     "title": "赞助者"
+  },
+  "studIo": {
+    "replacement": "替换为"
+  },
+  "studio": {
+    "block_to_replace": "方块",
+    "title": "投影工作室 - 在线投影文件编辑器 批量替婚方块 版本转换 格式转换 导入 下载"
   },
   "upload": {
     "btn": {

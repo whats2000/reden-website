@@ -191,6 +191,7 @@
         "title": "Follow Us",
         "youtube": "Youtube"
       },
+      "mojang_disclaimer": "NOT AN OFFICIAL MINECRAFT SERVICE. NOT APPROVED BY OR ASSOCIATED WITH MOJANG, NETEASE OR MICROSOFT.",
       "reden_community": {
         "community_events": "Community Events",
         "community_guidelines": "Community Guidelines",
@@ -312,6 +313,13 @@
     "notice": "Reden is an open-source project and always free for everyone. We receive no funding from any company or organization. We rely on your support to keep the project running. When you support us, you will be listed here as a sponsor so please make sure you provide your name and email address when you donate. Thank you for your support!",
     "paypal": "Support us with PayPal",
     "title": "Sponsors"
+  },
+  "studIo": {
+    "replacement": "Replacement"
+  },
+  "studio": {
+    "block_to_replace": "Block",
+    "title": "Litematica Studio - Online Litematica Editor, Replace Blocks, Convert Version, Import, Download"
   },
   "upload": {
     "btn": {

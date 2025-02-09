@@ -9,25 +9,43 @@ import {
   type Resources,
 } from 'deepslate';
 import selectableModels from '~/utils/litematica/models_selectable.json';
+import LitematicaPreview from '~/components/minecraft/LitematicaPreview.vue';
 
 type Tool = 'replace_blocks' | 'convert_version';
 const tools: Tool[] = ['replace_blocks', 'convert_version'];
 const currentTool = ref<Tool>('replace_blocks');
+const { t } = useI18n();
+
+function translateMinecraft(id: string) {
+  const key = 'minecraft.' + id;
+  const translated = t(key, '', {
+    default: '',
+  });
+  if (translated === key) {
+    return id;
+  }
+  return translated;
+}
+
+useServerSeoMeta({
+  title: t('studio.title'),
+  titleTemplate: '%s - Reden',
+});
+
 const replacements = ref<{ block: string; replacement: string }[]>([
   { replacement: '', block: '' },
 ]);
-const blob = ref<File>();
+const uploadedFile = ref<File>();
 const previewBlob = ref<Blob>();
-watch(blob, (file) => {
-  if (!file) return;
+watch(uploadedFile, (file) => {
   previewBlob.value = file;
 });
 const resources = ref<Resources & ItemRendererResources>();
 const nbt = computedAsync(async () => {
-  if (!blob.value) return;
+  if (!uploadedFile.value) return;
   const promise = new Promise<NbtCompound>((resolve, reject) => {
     const reader = new FileReader();
-    reader.readAsArrayBuffer(blob.value!);
+    reader.readAsArrayBuffer(uploadedFile.value!);
     reader.onload = () => {
       const buff = new Uint8Array(reader.result as ArrayBuffer);
       console.log('buffer[before un-gzip]', buff);
@@ -90,14 +108,12 @@ function applyTool() {
               index,
             );
             blockNbt.set('Name', new NbtString(replacement));
-            debugger;
             if (resources.value) {
               const defaultBlockProperties =
                 resources.value.getDefaultBlockProperties(
                   Identifier.parse(replacement),
                 );
               if (defaultBlockProperties) {
-                debugger;
                 const propertiesNbt = blockNbt.get('Properties') as
                   | NbtCompound
                   | undefined;
@@ -140,7 +156,7 @@ function downloadBlob(_blob: Blob) {
   const url = URL.createObjectURL(_blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `${blob.value?.name}.来自redenmc.com在线编辑.litematic`;
+  a.download = `${uploadedFile.value?.name}.来自redenmc.com在线编辑.litematic`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -152,9 +168,13 @@ function downloadBlob(_blob: Blob) {
     Edit your Litematica file here. Replace blocks, translate versions, and
     more.
   </p>
-  <v-file-input v-model="blob" accept=".litematic" label="Upload Litematic" />
+  <v-file-input
+    v-model="uploadedFile"
+    accept=".litematic"
+    label="Upload Litematic"
+  />
   <v-row class="flex-row-reverse">
-    <v-col cols="12" md="4">
+    <v-col cols="12" lg="4" md="6">
       <v-sheet>
         <h3 class="text-h4 pa-4">工具箱</h3>
         <div class="flex-wrap">
@@ -174,14 +194,22 @@ function downloadBlob(_blob: Blob) {
         </div>
 
         <v-data-table
-          :headers="[
-            { key: 'item', title: 'Item', sortable: false },
-            { key: 'replace', title: 'Replace', sortable: false },
-            { key: 'op', title: '', sortable: false, width: '96px' },
-          ]"
           :cell-props="{
             class: 'px-3',
           }"
+          :headers="[
+            {
+              key: 'item',
+              title: t('studio.block_to_replace'),
+              sortable: false,
+            },
+            {
+              key: 'replace',
+              title: t('studIo.replacement'),
+              sortable: false,
+            },
+            { key: 'op', title: '', sortable: false, width: '96px' },
+          ]"
           :items="replacements"
           :items-per-page="100"
           hide-default-footer
@@ -189,6 +217,8 @@ function downloadBlob(_blob: Blob) {
           <template #[`item.item`]="{ index }" class="px-2">
             <v-combobox
               v-model="replacements[index].block"
+              :item-title="(id) => translateMinecraft(id)"
+              :item-value="(id) => id"
               :items="existingBlocks"
               color="secondary"
               density="compact"
@@ -212,6 +242,8 @@ function downloadBlob(_blob: Blob) {
           <template #[`item.replace`]="{ index }" class="px-2">
             <v-combobox
               v-model="replacements[index].replacement"
+              :item-title="(id) => translateMinecraft(id)"
+              :item-value="(id) => id"
               :items="selectableModels"
               color="secondary"
               density="compact"
@@ -271,13 +303,17 @@ function downloadBlob(_blob: Blob) {
         />
       </v-sheet>
     </v-col>
-    <v-col class="" cols="12" md="8" style="min-height: 700px">
+    <v-col class="position-relative" cols="12" lg="8" md="6">
       <LitematicaPreview
         v-if="previewBlob"
         :blob="previewBlob"
         no-key-listeners
+        style="min-height: 700px"
         @loaded-resources="(it) => (resources = it)"
       />
+      <div v-else>
+        点击上方按钮上传 .litematic 文件，然后在左侧工具箱中选择工具进行编辑。
+      </div>
     </v-col>
   </v-row>
   <!-- Introduction -->

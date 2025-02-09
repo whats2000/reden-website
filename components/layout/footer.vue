@@ -140,8 +140,7 @@ const appStore = useAppStore();
       </v-col>
     </v-row>
     <div class="bottom-right text-capitalize">
-      NOT AN OFFICIAL MINECRAFT SERVICE. NOT APPROVED BY OR ASSOCIATED WITH
-      MOJANG, NETEASE OR MICROSOFT.
+      {{ $t('reden.footer.mojang_disclaimer') }}
     </div>
     <div class="text-right last-line">
       <a
