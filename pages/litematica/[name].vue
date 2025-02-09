@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useAppStore } from '~/store/app';
-import { type SubmitEventPromise, useDisplay } from 'vuetify';
+import { type SubmitEventPromise } from 'vuetify';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import SizeInput from '~/components/litematica/SizeInput.vue';
@@ -59,7 +59,6 @@ if (!serverResponse.value) {
     });
   }
 }
-const { mobile } = useDisplay();
 
 async function submit(e: SubmitEventPromise) {
   if ((await e).valid) {
@@ -656,7 +655,7 @@ const selectedImage = ref(
                       >
                         <v-card :loading="!blob[index]">
                           <v-card-text class="overflow-hidden">
-                            <LazyLitematicaPreview
+                            <LazyMinecraftLitematicaPreview
                               v-if="blob[index]"
                               id="Preview"
                               :blob="blob[index]"

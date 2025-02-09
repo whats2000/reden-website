@@ -9,7 +9,6 @@ import {
   type Resources,
 } from 'deepslate';
 import selectableModels from '~/utils/litematica/models_selectable.json';
-import LitematicaPreview from '~/components/minecraft/LitematicaPreview.vue';
 
 type Tool = 'replace_blocks' | 'convert_version';
 const tools: Tool[] = ['replace_blocks', 'convert_version'];
@@ -304,7 +303,7 @@ function downloadBlob(_blob: Blob) {
       </v-sheet>
     </v-col>
     <v-col class="position-relative" cols="12" lg="8" md="6">
-      <LitematicaPreview
+      <MinecraftLitematicaPreview
         v-if="previewBlob"
         :blob="previewBlob"
         no-key-listeners
