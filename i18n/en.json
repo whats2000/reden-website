@@ -46,6 +46,7 @@
     "loading___": "Loading...",
     "name": "Name",
     "next": "Next",
+    "or": "or",
     "save": "Save",
     "summary": "Summary"
   },
@@ -318,8 +319,17 @@
     "replacement": "Replacement"
   },
   "studio": {
+    "apply": "Apply Preview",
     "block_to_replace": "Block",
-    "title": "Litematica Studio - Online Litematica Editor, Replace Blocks, Convert Version, Import, Download"
+    "browse_files": "Browse Local Files",
+    "convert_version": "Convert Version",
+    "drop_schematic_file_here": "Drop schematic file here",
+    "edit_your_litematica_file_here": "Edit your Litematica file here. Replace blocks, translate versions, and more.",
+    "litematica_studio": "Litematica Studio",
+    "please_upload_a_litematica_file_to_edit_online": "Please upload a litematica file to edit online.",
+    "replace_blocks": "Replace Blocks",
+    "title": "Litematica Studio - Online Litematica Editor, Replace Blocks, Convert Version, Import, Download",
+    "toolbox": "Toolbox"
   },
   "upload": {
     "btn": {

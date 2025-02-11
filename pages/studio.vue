@@ -4,6 +4,7 @@ import {
   type ItemRendererResources,
   NbtCompound,
   NbtFile,
+  NbtInt,
   NbtList,
   NbtString,
   type Resources,
@@ -14,6 +15,17 @@ type Tool = 'replace_blocks' | 'convert_version';
 const tools: Tool[] = ['replace_blocks', 'convert_version'];
 const currentTool = ref<Tool>('replace_blocks');
 const { t } = useI18n();
+const versionToDataVersion = {
+  '1.12': 1343,
+  '1.13': 1631,
+  '1.14': 1952,
+  '1.15': 2230,
+  '1.16': 2586,
+  '1.17': 2724,
+  '1.18': 2860,
+  '1.19': 3105,
+  '1.20': 3463,
+};
 
 function translateMinecraft(id: string) {
   const key = 'minecraft.' + id;
@@ -34,12 +46,14 @@ useServerSeoMeta({
 const replacements = ref<{ block: string; replacement: string }[]>([
   { replacement: '', block: '' },
 ]);
+const targetVersion = ref('');
 const uploadedFile = ref<File>();
 const previewBlob = ref<Blob>();
 watch(uploadedFile, (file) => {
   previewBlob.value = file;
 });
 const resources = ref<Resources & ItemRendererResources>();
+const fileUpload = useTemplateRef('fileUpload');
 const nbt = computedAsync(async () => {
   if (!uploadedFile.value) return;
   const promise = new Promise<NbtCompound>((resolve, reject) => {
@@ -151,6 +165,24 @@ function applyTool() {
   }
 }
 
+function convertTo(from: number, to: number): Blob {
+  const nbtCompound = NbtCompound.fromJson(nbt.value!.toJson());
+  if (to < 3953 && from >= 3953) {
+    nbtCompound.set('Version', new NbtInt(6));
+  }
+  nbtCompound.set('MinecraftDataVersion', new NbtInt(to));
+  const newFile = new NbtFile(
+    '1.litematic',
+    nbtCompound,
+    'gzip',
+    false,
+    undefined,
+  );
+  return new Blob([newFile.write()], {
+    type: 'application/octet-stream',
+  });
+}
+
 function downloadBlob(_blob: Blob) {
   const url = URL.createObjectURL(_blob);
   const a = document.createElement('a');
@@ -162,26 +194,29 @@ function downloadBlob(_blob: Blob) {
 </script>
 
 <template>
-  <h1>Litematica Studio</h1>
-  <p>
-    Edit your Litematica file here. Replace blocks, translate versions, and
-    more.
-  </p>
+  <h1
+    class="text-h4 text-sm-h3 text-md-h2 text-center"
+    style="font-weight: bold"
+  >
+    {{ t('studio.litematica_studio') }}
+  </h1>
+  <p class="mx-5 mt-3">{{ t('studio.edit_your_litematica_file_here') }}</p>
   <v-file-input
+    ref="fileUpload"
     v-model="uploadedFile"
     accept=".litematic"
     label="Upload Litematic"
   />
-  <v-row class="flex-row-reverse">
+  <v-row v-if="previewBlob" class="flex-row-reverse">
     <v-col cols="12" lg="4" md="6">
       <v-sheet>
-        <h3 class="text-h4 pa-4">工具箱</h3>
+        <h3 class="text-h4 pa-4">{{ t('studio.toolbox') }}</h3>
         <div class="flex-wrap">
           <v-btn
             v-for="tool in tools"
             :key="tool"
             :active="currentTool === tool"
-            :text="tool"
+            :text="t('studio.' + tool)"
             :value="tool"
             active-color="primary"
             class="ma-2"
@@ -192,127 +227,161 @@ function downloadBlob(_blob: Blob) {
           />
         </div>
 
-        <v-data-table
-          :cell-props="{
-            class: 'px-3',
-          }"
-          :headers="[
-            {
-              key: 'item',
-              title: t('studio.block_to_replace'),
-              sortable: false,
-            },
-            {
-              key: 'replace',
-              title: t('studIo.replacement'),
-              sortable: false,
-            },
-            { key: 'op', title: '', sortable: false, width: '96px' },
-          ]"
-          :items="replacements"
-          :items-per-page="100"
-          hide-default-footer
-        >
-          <template #[`item.item`]="{ index }" class="px-2">
-            <v-combobox
-              v-model="replacements[index].block"
-              :item-title="(id) => translateMinecraft(id)"
-              :item-value="(id) => id"
-              :items="existingBlocks"
-              color="secondary"
-              density="compact"
-              hide-details
+        <v-tabs-window v-model="currentTool" class="pt-5">
+          <v-tabs-window-item :value="'replace_blocks'">
+            <v-data-table
+              :cell-props="{
+                class: 'px-3',
+              }"
+              :header-props="{
+                style: 'height: 24px',
+              }"
+              :headers="[
+                {
+                  key: 'item',
+                  title: t('studio.block_to_replace'),
+                  sortable: false,
+                },
+                {
+                  key: 'replace',
+                  title: t('studIo.replacement'),
+                  sortable: false,
+                },
+                { key: 'op', title: '', sortable: false, width: '96px' },
+              ]"
+              :items="replacements"
+              :items-per-page="100"
+              hide-default-footer
             >
-              <template #prepend-inner>
-                <minecraft-item-display
-                  :id="replacements[index].block"
-                  :scale="2"
-                />
-              </template>
-              <template #item="{ item, props }">
-                <v-list-item density="compact" v-bind="props">
-                  <template #prepend>
-                    <minecraft-item-display :id="item.value" :scale="2" />
+              <template #[`item.item`]="{ index }" class="px-2">
+                <v-combobox
+                  v-model="replacements[index].block"
+                  :item-title="(id) => translateMinecraft(id)"
+                  :item-value="(id) => id"
+                  :items="existingBlocks"
+                  color="secondary"
+                  density="compact"
+                  hide-details
+                >
+                  <template #prepend-inner>
+                    <minecraft-item-display
+                      :id="replacements[index].block"
+                      :scale="2"
+                    />
                   </template>
-                </v-list-item>
-              </template>
-            </v-combobox>
-          </template>
-          <template #[`item.replace`]="{ index }" class="px-2">
-            <v-combobox
-              v-model="replacements[index].replacement"
-              :item-title="(id) => translateMinecraft(id)"
-              :item-value="(id) => id"
-              :items="selectableModels"
-              color="secondary"
-              density="compact"
-              hide-details
-            >
-              <template #prepend-inner>
-                <minecraft-item-display
-                  :id="replacements[index].replacement"
-                  :scale="2"
-                />
-              </template>
-              <template #item="{ item, props }">
-                <v-list-item density="compact" v-bind="props">
-                  <template #prepend>
-                    <minecraft-item-display :id="item.value" :scale="2" />
+                  <template #item="{ item, props }">
+                    <v-list-item density="compact" v-bind="props">
+                      <template #prepend>
+                        <minecraft-item-display :id="item.value" :scale="2" />
+                      </template>
+                    </v-list-item>
                   </template>
-                </v-list-item>
+                </v-combobox>
               </template>
-            </v-combobox>
-          </template>
-          <template #[`item.op`]="{ index }">
+              <template #[`item.replace`]="{ index }" class="px-2">
+                <v-combobox
+                  v-model="replacements[index].replacement"
+                  :item-title="(id) => translateMinecraft(id)"
+                  :item-value="(id) => id"
+                  :items="selectableModels"
+                  color="secondary"
+                  density="compact"
+                  hide-details
+                >
+                  <template #prepend-inner>
+                    <minecraft-item-display
+                      :id="replacements[index].replacement"
+                      :scale="2"
+                    />
+                  </template>
+                  <template #item="{ item, props }">
+                    <v-list-item density="compact" v-bind="props">
+                      <template #prepend>
+                        <minecraft-item-display :id="item.value" :scale="2" />
+                      </template>
+                    </v-list-item>
+                  </template>
+                </v-combobox>
+              </template>
+              <template #[`item.op`]="{ index }">
+                <v-btn
+                  :disabled="replacements.length <= 1"
+                  color="error"
+                  icon
+                  size="36"
+                  @click="replacements.splice(index, 1)"
+                >
+                  <v-tooltip activator="parent" text="删除替换规则" />
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+                <v-btn
+                  color="primary"
+                  icon
+                  size="36"
+                  @click="replacements.push({ replacement: '', block: '' })"
+                >
+                  <v-tooltip activator="parent" text="新增替换规则" />
+                  <v-icon>mdi-plus</v-icon>
+                </v-btn>
+              </template>
+            </v-data-table>
+
             <v-btn
-              :disabled="replacements.length <= 1"
-              color="error"
-              icon
-              size="36"
-              @click="replacements.splice(index, 1)"
-            >
-              <v-icon>mdi-delete</v-icon>
-            </v-btn>
-            <v-btn
+              :text="t('studio.apply')"
+              class="ma-4"
               color="primary"
-              icon
-              size="36"
-              @click="replacements.push({ replacement: '', block: '' })"
-            >
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </template>
-        </v-data-table>
-
-        <v-btn
-          class="ma-4"
-          color="primary"
-          text="Apply"
-          variant="elevated"
-          @click="applyTool"
-        />
-
-        <v-btn
-          :disabled="!previewBlob"
-          class="ma-4"
-          color="primary"
-          text="Download"
-          variant="elevated"
-          @click="downloadBlob(previewBlob!)"
-        />
+              variant="elevated"
+              @click="applyTool"
+            />
+            <v-btn
+              :disabled="!previewBlob"
+              :text="t('litematica_generator.download')"
+              class="ma-4"
+              color="primary"
+              variant="elevated"
+              @click="downloadBlob(previewBlob!)"
+            />
+          </v-tabs-window-item>
+          <v-tabs-window-item :value="'convert_version'" class="px-3">
+            Please select the version you want to convert to:
+            <v-select
+              v-model="targetVersion"
+              :items="Object.keys(versionToDataVersion)"
+            />
+          </v-tabs-window-item>
+        </v-tabs-window>
       </v-sheet>
     </v-col>
     <v-col class="position-relative" cols="12" lg="8" md="6">
       <MinecraftLitematicaPreview
-        v-if="previewBlob"
-        :blob="previewBlob"
+        :blob="previewBlob!"
         no-key-listeners
         style="min-height: 700px"
         @loaded-resources="(it) => (resources = it)"
       />
-      <div v-else>
-        点击上方按钮上传 .litematic 文件，然后在左侧工具箱中选择工具进行编辑。
-      </div>
+    </v-col>
+  </v-row>
+  <v-row v-else>
+    <v-col>
+      <v-card
+        :height="500"
+        border
+        class="mx-5 d-flex flex-column justify-space-around flex-0-0"
+        rounded="xl"
+      >
+        <v-card-text class="text-center text-h6 text-md-h5">
+          {{ t('studio.please_upload_a_litematica_file_to_edit_online') }}
+          <br />
+          <v-btn
+            :text="t('studio.browse_files')"
+            color="primary"
+            size="xlarge"
+            style="height: 48px; padding: 0 10px"
+            variant="elevated"
+            @click="fileUpload?.click()"
+          />
+        </v-card-text>
+      </v-card>
     </v-col>
   </v-row>
   <!-- Introduction -->

@@ -46,6 +46,7 @@
     "loading___": "加载中...",
     "name": "名称",
     "next": "下一步",
+    "or": "或",
     "save": "保存",
     "summary": "简介"
   },
@@ -318,8 +319,17 @@
     "replacement": "替换为"
   },
   "studio": {
+    "apply": "应用并预览",
     "block_to_replace": "方块",
-    "title": "投影工作室 - 在线投影文件编辑器 批量替婚方块 版本转换 格式转换 导入 下载"
+    "browse_files": "浏览本地文件",
+    "convert_version": "转换版本",
+    "drop_schematic_file_here": "拖拽投影文件到这里",
+    "edit_your_litematica_file_here": "在这个页面可以编辑你的投影文件，批量替换方块，转换版本，等等。",
+    "litematica_studio": "投影工作室",
+    "please_upload_a_litematica_file_to_edit_online": "请先上传文件以开始在线编辑。",
+    "replace_blocks": "批量替换方块",
+    "title": "投影工作室 - 在线投影文件编辑器 批量替婚方块 版本转换 格式转换 导入 下载",
+    "toolbox": "工具箱"
   },
   "upload": {
     "btn": {
