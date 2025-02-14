@@ -197,7 +197,7 @@ for (const id of idList) {
                       {{ item.author.username }}
                     </span>
 
-                    <span class="align-center" v-if="false">
+                    <span v-if="false" class="align-center">
                       <v-icon
                         color="warning"
                         icon="mdi-file-document"
@@ -234,6 +234,28 @@ for (const id of idList) {
   </div>
 
   <div ref="introContent" class="intro-content">
+    <div class="content-common">
+      <p>
+        Reden 的名字来自于 Redstone Eden，意为红石伊甸园。我们希望 Reden
+        能成为一个 Minecraft
+        红石爱好者的乐园，为玩家提供丰富的红石机器、配置、教程等资源。
+        我们致力于打造一个开放、友好的社区，欢迎各位加入我们！
+      </p>
+      <p>
+        Reden 本是我的模组的名字，同时也是这个社区的名字。
+        不管是我的模组还是这个社区，都是为了让玩家更好地享受游戏，更好地创造。
+        Reden 承载着通过代码与技术方便玩家的初衷，也指引着我们的社区朝着更开放、
+        包容、高技术力量的方向发展。
+      </p>
+      <p>
+        从专门生成世吞等机器的专用网站，到现在的红石爱好者社区，Reden
+        一直在不断发展。到2025年2月，Reden已经拥有数百个红石机器，和数万次下载，成为了
+        Minecraft 红石社区中的一股新力量。 Reden
+        拥有多项独创性技术正在开发或已经上线，包括：更好的投影预览功能，
+        红石机器产物速率标注功能，红石机器的自动化生成，投影在线编辑技术，基于游戏内模组的机器一键下载一键使用等等。
+      </p>
+      <p>下面是对于模组功能和社区组成部分的介绍</p>
+    </div>
     <Feature />
     <div class="content-common">
       <v-row class="community-intro">
