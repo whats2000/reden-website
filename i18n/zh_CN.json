@@ -111,6 +111,8 @@
     "title": "页面没有找到"
   },
   "post": {
+    "litematica_online_edit": "编辑",
+    "litematica_online_edit_desc": "下载之前在线编辑此投影，进行个性化设置，你可以批量替换方块，或者转换其版本。",
     "preview": "预览"
   },
   "profile": {
@@ -322,6 +324,7 @@
     "apply": "应用并预览",
     "block_to_replace": "方块",
     "browse_files": "浏览本地文件",
+    "convert": "转换版本",
     "convert_version": "转换版本",
     "drop_schematic_file_here": "拖拽投影文件到这里",
     "edit_your_litematica_file_here": "在这个页面可以编辑你的投影文件，批量替换方块，转换版本，等等。",

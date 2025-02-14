@@ -111,6 +111,8 @@
     "title": "Page not found"
   },
   "post": {
+    "litematica_online_edit": "Edit",
+    "litematica_online_edit_desc": "Edit this litematica online before you download, including replace blocks, convert version, etc.",
     "preview": "Preview"
   },
   "profile": {
@@ -322,6 +324,7 @@
     "apply": "Apply Preview",
     "block_to_replace": "Block",
     "browse_files": "Browse Local Files",
+    "convert": "Convert Version",
     "convert_version": "Convert Version",
     "drop_schematic_file_here": "Drop schematic file here",
     "edit_your_litematica_file_here": "Edit your Litematica file here. Replace blocks, translate versions, and more.",

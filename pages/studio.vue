@@ -10,6 +10,8 @@ import {
   type Resources,
 } from 'deepslate';
 import selectableModels from '~/utils/litematica/models_selectable.json';
+import * as localforage from 'localforage';
+import { delay } from 'unicorn-magic';
 
 type Tool = 'replace_blocks' | 'convert_version';
 const tools: Tool[] = ['replace_blocks', 'convert_version'];
@@ -52,6 +54,16 @@ const previewBlob = ref<Blob>();
 watch(uploadedFile, (file) => {
   previewBlob.value = file;
 });
+if (import.meta.client) {
+  localforage.getItem<Blob>('litematica-studio').then(async (blob) => {
+    if (blob) {
+      uploadedFile.value = new File(
+        [await blob.arrayBuffer()],
+        'redenmc.com-在线编辑.litematic',
+      );
+    }
+  });
+}
 const resources = ref<Resources & ItemRendererResources>();
 const fileUpload = useTemplateRef('fileUpload');
 const nbt = computedAsync(async () => {
@@ -91,12 +103,16 @@ const existingBlocks = computed(() => {
   return [...blocks];
 });
 
-function applyTool() {
+const applySuccess = ref<'idle' | 'working' | 'done'>('idle');
+
+async function applyTool() {
   if (currentTool.value === 'replace_blocks') {
     console.log('Replacing blocks:', replacements.value);
 
     const nbtCompound = NbtCompound.fromJson(nbt.value!.toJson());
     const regions = nbtCompound.get('Regions') as NbtCompound;
+    applySuccess.value = 'working';
+    await delay({ milliseconds: 100 });
     for (const name of regions.keys()) {
       const region = regions.get(name) as NbtCompound;
       const palette = region.get('BlockStatePalette') as NbtList;
@@ -160,19 +176,39 @@ function applyTool() {
     previewBlob.value = new Blob([newFile.write()], {
       type: 'application/octet-stream',
     });
+    setTimeout(() => {
+      applySuccess.value = 'done';
+      setTimeout(() => {
+        applySuccess.value = 'idle';
+      }, 1000);
+    }, 500);
   } else if (currentTool.value === 'convert_version') {
     console.log('Converting version');
   }
 }
 
-function convertTo(from: number, to: number): Blob {
-  const nbtCompound = NbtCompound.fromJson(nbt.value!.toJson());
-  if (to < 3953 && from >= 3953) {
+async function convertTo(blob: Blob, to: number) {
+  const nbtCompound = await new Promise<NbtCompound>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(blob);
+    reader.onload = () => {
+      const buff = new Uint8Array(reader.result as ArrayBuffer);
+      console.log('buffer[before un-gzip]', buff);
+
+      const nbt = NbtFile.read(buff, {
+        compression: 'gzip',
+      });
+      console.log('Loaded litematic with NBT data:', nbt);
+      resolve(nbt.root);
+    };
+    reader.onerror = reject;
+  });
+  if (to < 3953) {
     nbtCompound.set('Version', new NbtInt(6));
   }
   nbtCompound.set('MinecraftDataVersion', new NbtInt(to));
   const newFile = new NbtFile(
-    '1.litematic',
+    'redenmc.com-版本转换.litematic',
     nbtCompound,
     'gzip',
     false,
@@ -327,11 +363,15 @@ function downloadBlob(_blob: Blob) {
             </v-data-table>
 
             <v-btn
+              :color="applySuccess === 'done' ? 'success' : 'primary'"
+              :loading="applySuccess === 'working'"
+              :prepend-icon="
+                applySuccess === 'done' ? 'mdi-check' : 'mdi-cog-sync'
+              "
               :text="t('studio.apply')"
               class="ma-4"
-              color="primary"
               variant="elevated"
-              @click="applyTool"
+              @click="async () => applyTool()"
             />
             <v-btn
               :disabled="!previewBlob"
@@ -343,11 +383,33 @@ function downloadBlob(_blob: Blob) {
             />
           </v-tabs-window-item>
           <v-tabs-window-item :value="'convert_version'" class="px-3">
-            Please select the version you want to convert to:
+            <!-- Please select the version you want to convert to:-->
+            <div class="text-body-2">
+              注意要先进行方块替换并应用后，如需转换版本再使用本工具。<br />
+              此转换为<span class="text-orange">强制转换</span
+              >，十分有可能可能导致投影/蓝图损坏，千万慎重。<br />
+              一般情况下，可以保证方块是对的，箱子等容器中的物品则不一定。<br />
+              若您充分了解以上风险，请选择您要转换到的版本：
+            </div>
             <v-select
+              label="请选择目标版本"
+              color="primary"
               v-model="targetVersion"
               :items="Object.keys(versionToDataVersion)"
+              hide-details
             />
+            <v-col>
+              <v-spacer />
+              <v-btn
+                :disabled="!previewBlob"
+                @click="
+                  async () => downloadBlob(await convertTo(previewBlob!, 2724))
+                "
+                color="primary"
+              >
+                {{ t('studio.convert') }}
+              </v-btn>
+            </v-col>
           </v-tabs-window-item>
         </v-tabs-window>
       </v-sheet>

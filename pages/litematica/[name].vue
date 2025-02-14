@@ -22,6 +22,7 @@ import { parseCondition } from '~/utils/conditionParser';
 import RedenRouter from '~/components/RedenRouter.vue';
 import type { VForm } from 'vuetify/components';
 import { toast } from 'vuetify-sonner';
+import * as localforage from 'localforage';
 
 const route = useRoute();
 const router = useRouter();
@@ -31,6 +32,7 @@ const zSize = ref(0);
 const loading = ref(false);
 const machineId = route.params.name as string;
 const { t, locale } = useI18n();
+const localeRoute = useLocaleRoute();
 const localePath = useLocalePath();
 const appStore = useAppStore();
 const openEditDialog = ref(false);
@@ -183,6 +185,23 @@ async function loadBlob(index: number) {
     );
     console.error(`Failed to load blob for index #${index}`, e);
     previewing.value = -1;
+  }
+}
+
+try {
+  await localforage.removeItem('litematica-studio');
+} catch (e) {}
+
+async function editLitematica(index: number) {
+  await loadBlob(index);
+
+  if (blob.value[index]) {
+    await localforage.setItem('litematica-studio', blob.value[index]);
+    await router.push(
+      localeRoute({
+        name: 'studio',
+      })!,
+    );
   }
 }
 
@@ -623,10 +642,8 @@ const selectedImage = ref(
                 <!-- 整体容器 -->
                 <v-list-item
                   v-for="(attachment, index) in selected.attachments"
-                  :href="`/api/mc-services/yisibite/${machineId}/download/${index + 1}`"
                   border
                   class="d-flex"
-                  target="_blank"
                 >
                   <template #prepend>
                     <v-icon
@@ -639,73 +656,7 @@ const selectedImage = ref(
                     />
                   </template>
                   <v-list-item-title>
-                    <a
-                      v-if="attachment.name.endsWith('.litematic')"
-                      class="router"
-                      @click.prevent="loadBlob(index)"
-                    >
-                      <v-icon size="sm">mdi-eye</v-icon>
-                      {{ t('post.preview') }}
-                      <v-dialog
-                        :model-value="previewing === index"
-                        #default="{ isActive }"
-                        activator="parent"
-                        close-on-back
-                        height="100%"
-                      >
-                        <v-card :loading="!blob[index]">
-                          <v-card-text class="overflow-hidden">
-                            <LazyMinecraftLitematicaPreview
-                              v-if="blob[index]"
-                              id="Preview"
-                              :blob="blob[index]"
-                            />
-                            <div v-else>
-                              <v-progress-circular
-                                color="primary"
-                                indeterminate
-                              />
-                              <span style="font-size: 1.25rem">
-                                {{ t('common.loading___') }}
-                              </span>
-                            </div>
-
-                            <div
-                              class="top-0 right-0 position-absolute mr-6 mt-4 text-white text-caption text-right"
-                              style="user-select: none; line-height: 0.75rem"
-                            >
-                              <div class="flex-row d-flex">
-                                <div class="opacity-60">
-                                  Credit to misode, Ending Credits &
-                                  Undecentions
-                                  <br />
-                                  This Vue component is made by zly2006 and
-                                  licensed under AGPL v3
-                                </div>
-
-                                <v-btn
-                                  color="red"
-                                  icon="mdi-close"
-                                  variant="outlined"
-                                  @click="isActive.value = false"
-                                />
-                              </div>
-                              <v-switch
-                                v-model="appStore.invertPreview"
-                                class="right-0 position-absolute"
-                                color="primary"
-                                hide-details
-                                label="Invert"
-                                @click="appStore.toggleInvertPreview()"
-                              />
-                            </div>
-                          </v-card-text>
-                        </v-card>
-                      </v-dialog>
-                    </a>
-                    <span>
-                      {{ attachment.name }}
-                    </span>
+                    {{ attachment.name }}
                   </v-list-item-title>
                   <!-- 右侧内容区域 -->
                   <v-list-item-subtitle
@@ -718,6 +669,101 @@ const selectedImage = ref(
                       {{ timeSince(selected.updatedAt || 0) }}
                     </span>
                   </v-list-item-subtitle>
+                  <v-list-item-action class="flex-wrap mt-1" style="gap: 4px">
+                    <v-btn
+                      :href="`/api/mc-services/yisibite/${machineId}/download/${index + 1}`"
+                      color="primary"
+                      density="comfortable"
+                      prepend-icon="mdi-download"
+                      rounded
+                      target="_blank"
+                      variant="outlined"
+                    >
+                      {{ t('litematica_generator.download') }}
+                    </v-btn>
+                    <template v-if="attachment.name.endsWith('.litematic')">
+                      <v-btn
+                        color="primary"
+                        density="comfortable"
+                        prepend-icon="mdi-eye"
+                        rounded
+                        variant="outlined"
+                        @click="loadBlob(index)"
+                      >
+                        {{ t('post.preview') }}
+                        <v-dialog
+                          #default="{ isActive }"
+                          :model-value="previewing === index"
+                          activator="parent"
+                          close-on-back
+                          height="100%"
+                        >
+                          <v-card :loading="!blob[index]">
+                            <v-card-text class="overflow-hidden">
+                              <LazyMinecraftLitematicaPreview
+                                v-if="blob[index]"
+                                id="Preview"
+                                :blob="blob[index]"
+                              />
+                              <div v-else>
+                                <v-progress-circular
+                                  color="primary"
+                                  indeterminate
+                                />
+                                <span style="font-size: 1.25rem">
+                                  {{ t('common.loading___') }}
+                                </span>
+                              </div>
+
+                              <div
+                                class="top-0 right-0 position-absolute mr-6 mt-4 text-white text-caption text-right"
+                                style="user-select: none; line-height: 0.75rem"
+                              >
+                                <div class="flex-row d-flex">
+                                  <div class="opacity-60">
+                                    Credit to misode, Ending Credits &
+                                    Undecentions
+                                    <br />
+                                    This Vue component is made by zly2006 and
+                                    licensed under AGPL v3
+                                  </div>
+
+                                  <v-btn
+                                    color="red"
+                                    icon="mdi-close"
+                                    variant="outlined"
+                                    @click="isActive.value = false"
+                                  />
+                                </div>
+                                <v-switch
+                                  v-model="appStore.invertPreview"
+                                  class="right-0 position-absolute"
+                                  color="primary"
+                                  hide-details
+                                  label="Invert"
+                                  @click="appStore.toggleInvertPreview()"
+                                />
+                              </div>
+                            </v-card-text>
+                          </v-card>
+                        </v-dialog>
+                      </v-btn>
+                      <v-btn
+                        color="primary"
+                        density="comfortable"
+                        prepend-icon="mdi-pencil"
+                        rounded
+                        variant="outlined"
+                        @click="editLitematica(index)"
+                      >
+                        <v-tooltip
+                          :text="t('post.litematica_online_edit_desc')"
+                          activator="parent"
+                        />
+                        {{ t('post.litematica_online_edit') }}
+                      </v-btn>
+                    </template>
+                  </v-list-item-action>
                 </v-list-item>
               </v-list>
             </v-no-ssr>
