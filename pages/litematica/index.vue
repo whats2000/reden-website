@@ -121,6 +121,13 @@ export type ListLitematicaResponse = {
   readonly downloads: number;
   readonly count: number;
 };
+export type LitematicaAuthorProfile = {
+  author: Profile;
+  totalDownloads: number;
+  totalVoteUps: number;
+  totalBookmarks: number;
+  top3posts: MachineDef[];
+};
 const { locale } = useI18n();
 
 const { data: serverResponse, error } = await useFetch<ListLitematicaResponse>(

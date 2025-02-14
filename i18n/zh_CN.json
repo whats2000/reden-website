@@ -49,7 +49,7 @@
     "or": "或",
     "save": "保存",
     "summary": "简介",
-    "supported_version" : "支持版本"
+    "supported_version": "支持版本"
   },
   "en": "English",
   "litematica_generator": {
@@ -104,6 +104,13 @@
     "or": "或者",
     "register": "去注册",
     "title": "登录 Reden"
+  },
+  "message": {
+    "all": "全部",
+    "all_read": "全部已读",
+    "list_title": "我的消息",
+    "mark_as_read": "标记为已读",
+    "unread": "未读"
   },
   "page404": {
     "back": "返回上一页",
@@ -182,6 +189,13 @@
     "logout": "退出登录"
   },
   "reden": {
+    "card": {
+      "author": "作者",
+      "downloads": "下载量",
+      "redStoneTitle": "探索红石机器",
+      "subscribeTitle": "关注最爱的作者",
+      "viewProfile": "前往个人空间"
+    },
     "description": "为红石机器开发者提供一站式工作环境，探索各种创意设计和前沿红石科技。",
     "download": "下载",
     "download_page": {
@@ -263,13 +277,7 @@
       "user_profile_seo": "{0} - {0} 的红石机器设计 - 下载我的世界机器设计"
     },
     "user_not_found": "未找到用户",
-    "wiki": "维基",
-    "card" : {
-      "author" : "作者",
-      "downloads" : "下载量",
-      "redStoneTitle" : "探索红石机器",
-      "subscribeTitle" : "关注最爱的作者"
-    }
+    "wiki": "维基"
   },
   "register": {
     "button": {
@@ -361,16 +369,16 @@
       "manual_upload": "普通机器投稿",
       "maximum_size_per_image": "单张图片最大 2MB",
       "name_cannot_contain_special_characters": "名称不能包含特殊字符",
+      "not_upload": "尚未上传任何文件",
       "please_contact_us_if_you_have_any_questions": "如有任何疑问，请联系我们：",
       "please_select_which_language_to_edit": "请选择要编辑哪种语言的信息",
+      "post_type": "请选择此帖子的类型",
       "review_usually_takes_one_to_two_days": "审核通常需要一到二天时间。",
       "selected_count_files": "已选择 {count} 个文件",
       "upload_images": "上传图片 (最多3张)",
       "upload_schematic_or_world_save": "上传蓝图或存档",
       "you_will_receive_an_email_notification_when_approved": "当审核通过后，您将收到邮件通知。",
-      "your_machine_design_is_under_review_please_wait_with_patience": "您的机器设计正在审核中，请耐心等待。",
-      "not_upload" : "尚未上传任何文件",
-      "post_type": "请选择此帖子的类型"
+      "your_machine_design_is_under_review_please_wait_with_patience": "您的机器设计正在审核中，请耐心等待。"
     },
     "step": {
       "image": "上传图像",
@@ -378,10 +386,10 @@
       "under-review": "等待审核",
       "upload": "上传"
     },
-    "toast" : {
-      "max_file_number" : "上传的文件不能超过 {count} 个。",
-      "auto_filled_name" : "从文件名自动填充名称",
-      "auto_filled_id" : "从名称自动填写ID"
+    "toast": {
+      "auto_filled_id": "从名称自动填写ID",
+      "auto_filled_name": "从文件名自动填充名称",
+      "max_file_number": "上传的文件不能超过 {count} 个。"
     }
   },
   "user": {
@@ -395,13 +403,6 @@
     "sponsor_hover": "此用户赞助过本项目",
     "staff": "管理员",
     "staff_hover": "此用户是本项目的管理员"
-  },
-  "message" : {
-    "list_title" : "我的消息",
-    "all" : "全部",
-    "unread" : "未读",
-    "mark_as_read" : "标记为已读",
-    "all_read" : "全部已读"
   },
   "zh_cn": "简体中文",
   "zh_tw": "繁體中文"

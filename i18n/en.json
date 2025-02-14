@@ -49,7 +49,7 @@
     "or": "or",
     "save": "Save",
     "summary": "Summary",
-    "supported_version" : "Supported version"
+    "supported_version": "Supported version"
   },
   "en": "English",
   "litematica_generator": {
@@ -104,6 +104,13 @@
     "or": "Or",
     "register": "Register",
     "title": "Login to Reden"
+  },
+  "message": {
+    "all": "All",
+    "all_read": "All Read",
+    "list_title": "My Messages",
+    "mark_as_read": "Mark as Read",
+    "unread": "Unread"
   },
   "page404": {
     "back": "Go Back",
@@ -182,6 +189,13 @@
     "logout": "Logout"
   },
   "reden": {
+    "card": {
+      "author": "author",
+      "downloads": "downloads",
+      "redStoneTitle": "Explore the Red Stone Machine",
+      "subscribeTitle": "Follow Your Favorite Authors",
+      "viewProfile": "View Profile"
+    },
     "description": "Your one-stop destination for sharing Minecraft builds, exploring creative designs, and enhancing gameplay with cutting-edge redstone mods.",
     "download": "Download",
     "download_page": {
@@ -263,13 +277,7 @@
       "user_profile_seo": "{0} - {0}'s Posts - Download Minecraft Builds"
     },
     "user_not_found": "User Not Found",
-    "wiki": "Wiki",
-    "card" : {
-      "author" : "author",
-      "downloads" : "downloads",
-      "redStoneTitle" : "Explore the Red Stone Machine",
-      "subscribeTitle" : "Follow Your Favorite Authors"
-    }
+    "wiki": "Wiki"
   },
   "register": {
     "button": {
@@ -361,16 +369,16 @@
       "manual_upload": "Normal Designs Upload",
       "maximum_size_per_image": "Maximum 2MB per image",
       "name_cannot_contain_special_characters": "Name cannot contain special characters",
+      "not_upload": "No files have been uploaded yet",
       "please_contact_us_if_you_have_any_questions": "Please contact us if you have any questions:",
       "please_select_which_language_to_edit": "Please select which language to edit",
+      "post_type": "Please select the type of this post",
       "review_usually_takes_one_to_two_days": "Review usually takes one to two days.",
       "selected_count_files": "Selected {count} files",
       "upload_images": "Upload images (up to 3)",
       "upload_schematic_or_world_save": "Upload schematic or world save.",
       "you_will_receive_an_email_notification_when_approved": "You will receive an email notification when the design is approved.",
-      "your_machine_design_is_under_review_please_wait_with_patience": "Your machine design is under review, please wait with patience.",
-      "not_upload" : "No files have been uploaded yet",
-      "post_type" : "Please select the type of this post"
+      "your_machine_design_is_under_review_please_wait_with_patience": "Your machine design is under review, please wait with patience."
     },
     "step": {
       "image": "Images",
@@ -379,9 +387,9 @@
       "upload": "Upload"
     },
     "toast": {
-      "max_file_number": "Cannot upload more than {count} files.",
+      "auto_filled_id": "Auto-filled ID from name",
       "auto_filled_name": "Auto-filled name from file name",
-      "auto_filled_id": "Auto-filled ID from name"
+      "max_file_number": "Cannot upload more than {count} files."
     }
   },
   "user": {
@@ -395,13 +403,6 @@
     "sponsor_hover": "This user has sponsored this project",
     "staff": "Staff",
     "staff_hover": "This user is a staff member of this project"
-  },
-  "message": {
-    "list_title": "My Messages",
-    "all": "All",
-    "unread": "Unread",
-    "mark_as_read": "Mark as Read",
-    "all_read": "All Read"
   },
   "zh_cn": "简体中文",
   "zh_tw": "繁體中文"
