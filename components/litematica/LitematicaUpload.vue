@@ -4,6 +4,9 @@ import { toast } from 'vuetify-sonner';
 import type { MachineDef } from '~/pages/litematica/index.vue';
 import { useDisplay } from 'vuetify';
 import selectableModels from '~/utils/litematica/models_selectable.json';
+import { useAppStore } from '~/store/app';
+
+const appStore = useAppStore();
 
 const props = defineProps<{
   editMode?: boolean;
@@ -205,35 +208,35 @@ const triggerPictureInput = () => {
   }
 };
 
-const handlePictureChange = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  const files = target.files;
-
-  if (!files) return;
-
-  if (selectedPictures.value.length + files.length > 5) {
-    pictureStepError.value = '最多只能上传5张图片';
-    return;
-  }
-  pictureStepError.value = undefined;
-
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    if (file.size > 2 * 1024 * 1024) {
-      pictureStepError.value = '图片大小不能超过2MB';
-      selectedPictures.value = [];
-      return;
-    }
-  }
-  Array.from(files).forEach((file) =>
-    selectedPictures.value.push({
-      name: file.name,
-      file,
-      url: URL.createObjectURL(file),
-      fileType: 'uploading',
-    }),
-  );
-};
+// const handlePictureChange = (event: Event) => {
+//   const target = event.target as HTMLInputElement;
+//   const files = target.files;
+//
+//   if (!files) return;
+//
+//   if (selectedPictures.value.length + files.length > 5) {
+//     pictureStepError.value = '最多只能上传5张图片';
+//     return;
+//   }
+//   pictureStepError.value = undefined;
+//
+//   for (let i = 0; i < files.length; i++) {
+//     const file = files[i];
+//     if (file.size > 2 * 1024 * 1024) {
+//       pictureStepError.value = '图片大小不能超过2MB';
+//       selectedPictures.value = [];
+//       return;
+//     }
+//   }
+//   Array.from(files).forEach((file) =>
+//     selectedPictures.value.push({
+//       name: file.name,
+//       file,
+//       url: URL.createObjectURL(file),
+//       fileType: 'uploading',
+//     }),
+//   );
+// };
 
 const removePicture = (index: number) => {
   const splice = selectedPictures.value.splice(index, 1);
@@ -253,28 +256,52 @@ onMounted(() => {
 const litematicaGenerator = ref<boolean>();
 const localizedData = ref<Record<string, Partial<MachineDef>>>({});
 
+const MAX_FILE_NUMBER = 6;
+const MAX_IMAGE_NUMBER = 5;
+
+const isPossibleLitematicaGenerator = computed(
+  () =>
+    selectedFiles.value.length === 1 &&
+    selectedFiles.value[0].fileType === 'uploading' &&
+    selectedFiles.value[0].file?.name.endsWith('.litematic'),
+);
+
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
-  if (target.files?.length ?? 0 >= 1) {
-    selectedFiles.value = Array.from(target.files!).map((file) => ({
+  if (!target.files) return;
+
+  // 确保不会超过最大文件数量
+  const newFilesArray = Array.from(target.files);
+  if (selectedFiles.value.length + newFilesArray.length > MAX_FILE_NUMBER) {
+    toast.error(t('upload.toast.max_file_number', { count: MAX_FILE_NUMBER }));
+    return;
+  }
+
+  // 追加新上传的文件到已选择的文件列表中
+  selectedFiles.value.push(
+    ...newFilesArray.map((file) => ({
       name: file.name,
       file,
       url: URL.createObjectURL(file),
       fileType: 'uploading',
-    }));
-    const obj = getLocalizedData(language.value);
-    if (!obj.name && selectedFiles.value[0].file) {
-      obj.name = selectedFiles.value[0].file.name.replace('.litematic', '');
-      toast.success('Auto-filled name from file name');
-    }
-    if (!machineId.value && obj.name) {
-      machineId.value = obj.name.toLowerCase().replace(/[^a-z0-9]/g, '');
-      toast.success('Auto-filled id from name');
-    }
-    if (selectedFiles.value.length > 1) {
-      state.value = 'translation';
-      litematicaGenerator.value = false;
-    }
+    })),
+  );
+
+  const obj = getLocalizedData(language.value);
+
+  // 自动填充名称和ID逻辑
+  if (!obj.name && selectedFiles.value[0].file) {
+    obj.name = selectedFiles.value[0].file.name.replace('.litematic', '');
+    toast.success(t('upload.toast.auto_filled_name'));
+  }
+  if (!machineId.value && obj.name) {
+    machineId.value = obj.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+    toast.success(t('upload.toast.auto_filled_id'));
+  }
+
+  if (!isPossibleLitematicaGenerator.value) {
+    state.value = 'translation';
+    litematicaGenerator.value = false;
   }
 };
 
@@ -348,6 +375,80 @@ const maxHeight = Math.max(490, height.value - 300);
 const goingBack = ref(false);
 refreshProps();
 watch(props, refreshProps);
+
+import { message } from 'ant-design-vue';
+import type { UploadChangeParam } from 'ant-design-vue';
+
+const fileList = ref([]);
+const handleChange = (info: UploadChangeParam) => {
+  const status = info.file.status;
+  if (status !== 'uploading') {
+    console.log(info.file, info.fileList);
+  }
+  if (status === 'done') {
+    message.success(`${info.file.name} file uploaded successfully.`);
+  } else if (status === 'error') {
+    message.error(`${info.file.name} file upload failed.`);
+  }
+};
+
+const isActiveDrag = ref(false);
+
+const toggleActiveDrag = (active: Boolean) => {
+  isActiveDrag.value = active;
+};
+
+const handleDrop = (event: DragEvent) => {
+  toggleActiveDrag(false);
+  const files = event.dataTransfer.files;
+  if (files.length) {
+    handleFileChange({ target: { files } });
+  }
+};
+
+const isActiveDragPicture = ref(false);
+const toggleActiveDragPicture = (active: Boolean) => {
+  isActiveDragPicture.value = active;
+};
+
+const handlePictureDrop = (event: Event) => {
+  toggleActiveDragPicture(false);
+  const files = event.dataTransfer.files;
+  if (!files.length) return;
+
+  handlePictureChange({ target: { files } });
+};
+
+const handlePictureChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  const files = target.files;
+
+  if (!files) return;
+
+  if (selectedPictures.value.length + files.length > MAX_IMAGE_NUMBER) {
+    toast.error(t('upload.toast.max_file_number', { count: MAX_IMAGE_NUMBER }));
+    return;
+  }
+  pictureStepError.value = '';
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    if (file.size > 2 * 1024 * 1024) {
+      pictureStepError.value = '图片大小不能超过2MB';
+      selectedPictures.value = [];
+      return;
+    }
+  }
+
+  Array.from(files).forEach((file) =>
+    selectedPictures.value.push({
+      name: file.name,
+      file,
+      url: URL.createObjectURL(file),
+      fileType: 'uploading',
+    }),
+  );
+};
 </script>
 <template>
   <v-tabs v-model="state" color="primary">
@@ -376,48 +477,123 @@ watch(props, refreshProps);
             {{ t('upload.btn.upload_design') }}
           </v-card-title>
           <v-card-text class="text-center">
-            <v-icon class="my-15" color="primary" size="100"
-              >mdi-cloud-upload
-            </v-icon>
-            <div class="mt-4 opacity-60">
-              <p>{{ t('upload.desc.upload_schematic_or_world_save') }}</p>
-              <p>{{ t('upload.desc.design_supports_file_formats') }}</p>
-              <p>{{ t('upload.desc.design_maximal_file_size') }}</p>
-            </div>
-            <input
-              ref="fileInput"
-              multiple
-              style="display: none"
-              type="file"
-              @change="handleFileChange"
-            />
-            <v-btn
-              class="mt-4 text-capitalize"
-              color="primary"
+            <div
+              :class="{ 'active-drag': isActiveDrag }"
+              class="upload-container pa-4 border rounded-lg"
               @click="fileInput?.click()"
+              @dragenter.prevent="toggleActiveDrag(true)"
+              @dragover.prevent="toggleActiveDrag(true)"
+              @dragleave.prevent="toggleActiveDrag(false)"
+              @drop.prevent="handleDrop"
             >
-              {{ t('upload.btn.select_files') }}
-            </v-btn>
-            <p v-if="selectedFiles.length > 0" class="line-h-24">
-              <span v-if="selectedFiles.length == 1">
-                {{ selectedFiles[0].name }}
-                ({{ formatFileSize(selectedFiles[0]?.file?.size ?? 0) }})
-              </span>
-              <span v-else-if="selectedFiles.length > 1">
-                {{
-                  t('upload.desc.selected_count_files', {
-                    count: selectedFiles.length,
-                  })
-                }}
-              </span>
-              <v-btn
-                color="error"
-                icon="mdi-close"
-                size="xs"
-                variant="outlined"
-                @click="(selectedFiles = []) && (availableSteps = ['upload'])"
+              <v-icon color="primary" size="100">mdi-cloud-upload</v-icon>
+              <div class="opacity-60">
+                <p>{{ t('upload.desc.upload_schematic_or_world_save') }}</p>
+                <p>{{ t('upload.desc.design_supports_file_formats') }}</p>
+                <p>{{ t('upload.desc.design_maximal_file_size') }}</p>
+              </div>
+              <input
+                ref="fileInput"
+                multiple
+                style="display: none"
+                type="file"
+                @change="handleFileChange"
               />
-            </p>
+              <v-btn class="mt-4 text-capitalize" color="primary">
+                {{ t('upload.btn.select_files') }}
+              </v-btn>
+            </div>
+
+            <div class="mt-4">
+              <v-empty-state
+                v-if="selectedFiles.length == 0"
+                :title="t('upload.desc.not_upload')"
+              ></v-empty-state>
+              <v-list v-else border class="pa-0 rounded-lg">
+                <!-- 整体容器 -->
+                <v-list-item
+                  v-for="(attachment, index) in selectedFiles"
+                  :style="{
+                    'border-bottom':
+                      index === selectedFiles.length - 1 ? 'none' : undefined,
+                  }"
+                  border
+                  style="
+                    border-top: none;
+                    border-left: none;
+                    border-right: none;
+                  "
+                >
+                  <template #prepend>
+                    <v-icon
+                      :icon="
+                        attachment.name.endsWith('litematic')
+                          ? 'custom:CubeScan'
+                          : 'custom:ZipArchive'
+                      "
+                      :size="40"
+                    />
+                  </template>
+                  <v-list-item-title class="text-left">
+                    <a
+                      v-if="attachment.name.endsWith('.litematic')"
+                      class="router cursor-pointer"
+                    >
+                      <v-icon size="sm">mdi-eye</v-icon>
+                      {{ t('post.preview') }}
+                      <v-dialog activator="parent" close-on-back>
+                        <v-card>
+                          <v-card-text class="overflow-hidden">
+                            <LitematicaPreview :blob="attachment.file!" />
+                            <div
+                              class="top-0 right-0 position-absolute mr-6 mt-4 text-white text-caption text-right"
+                              style="user-select: none; line-height: 0.75rem"
+                            >
+                              <p class="opacity-60">
+                                Credit to misode, Ending Credits & Undecentions
+                                <br />
+                                This Vue component is made by zly2006 and
+                                licensed under AGPL v3
+                              </p>
+                              <v-switch
+                                v-model="appStore.invertPreview"
+                                class="right-0 position-absolute"
+                                color="primary"
+                                hide-details
+                                label="Invert"
+                                @click="appStore.toggleInvertPreview()"
+                              />
+                            </div>
+                          </v-card-text>
+                        </v-card>
+                      </v-dialog>
+                    </a>
+                    <span>
+                      {{ attachment.name }}
+                    </span>
+                  </v-list-item-title>
+                  <!-- 右侧内容区域 -->
+                  <v-list-item-subtitle
+                    class="text-caption opacity-60 justify-space-between d-flex"
+                  >
+                    <span>
+                      {{ formatFileSize(attachment?.file?.size ?? 0) }}
+                    </span>
+                  </v-list-item-subtitle>
+                  <template #append>
+                    <v-icon
+                      icon="mdi-close"
+                      size="xs"
+                      @click.stop="
+                        () => {
+                          selectedFiles.splice(index, 1);
+                        }
+                      "
+                    />
+                  </template>
+                </v-list-item>
+              </v-list>
+            </div>
             <div
               v-if="editMode"
               class="mt-2 mx-auto text-pre-line text-warning"
@@ -427,11 +603,12 @@ watch(props, refreshProps);
               {{ t('upload.desc.existing_machine_design') }}
             </div>
             <v-radio-group
-              v-if="selectedFiles.length === 1"
+              v-if="isPossibleLitematicaGenerator"
               v-model="litematicaGenerator"
+              :label="t('upload.desc.post_type')"
               color="primary"
               density="compact"
-              label="Please select the type of this post"
+              hide-details
               @update:model-value="() => (state = 'translation')"
             >
               <v-radio
@@ -545,15 +722,15 @@ watch(props, refreshProps);
               <v-select
                 v-model="selectedVersions"
                 :items="selectableVersions"
+                :label="$t('common.supported_version')"
                 chips
                 color="primary"
                 density="comfortable"
-                label="Supported Versions"
                 multiple
                 variant="underlined"
               >
                 <template #chip="{ item }">
-                  <v-chip color="px-2" size="sm">
+                  <v-chip class="pa-2" color="px-2" size="sm">
                     {{ item.value }}
                   </v-chip>
                 </template>
@@ -592,8 +769,13 @@ watch(props, refreshProps);
               </v-radio-group>
             </v-card-text>
 
-            Note: This component is still wip, and has no real functionality
-            yet.
+            <v-alert
+              class="ml-4 mr-4"
+              text="This component is still wip, and has no real functionality yet."
+              title="Note"
+              type="info"
+              variant="tonal"
+            ></v-alert>
             <v-data-table
               :headers="[
                 { key: 'item', title: 'Item', sortable: false },
@@ -621,7 +803,11 @@ watch(props, refreshProps);
                   <template #item="{ item, props }">
                     <v-list-item density="compact" v-bind="props">
                       <template #prepend>
-                        <minecraft-item-display :id="item.value" :scale="2" />
+                        <minecraft-item-display
+                          :id="item.value"
+                          :scale="2"
+                          class="mr-2"
+                        />
                       </template>
                     </v-list-item>
                   </template>
@@ -648,6 +834,7 @@ watch(props, refreshProps);
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
                 <v-btn
+                  class="ml-4"
                   color="primary"
                   icon
                   size="36"
@@ -676,50 +863,54 @@ watch(props, refreshProps);
             >{{ $t('upload.step.image') }}
           </v-card-title>
           <v-card-text class="text-center">
-            <v-alert
-              v-if="pictureStepError"
-              :title="pictureStepError"
-              class="mt-2 left-0 right-0 z-10"
-              position="absolute"
-              type="error"
-            />
-            <v-icon class="my-8" color="primary" size="100">
-              mdi-image-plus
-            </v-icon>
-            <div class="mt-4 opacity-60">
-              <p>{{ $t('upload.desc.upload_images') }}</p>
-              <p>{{ $t('upload.desc.maximum_size_per_image') }}</p>
-            </div>
-            <input
-              ref="pictureInput"
-              accept="image/*"
-              multiple
-              style="display: none"
-              type="file"
-              @change="handlePictureChange"
-            />
-            <v-btn
-              class="mt-4 mx-4 text-capitalize"
-              color="primary"
-              @click="triggerPictureInput"
+            <div
+              :class="{ 'active-drag': isActiveDragPicture }"
+              class="upload-container pa-4 border dashed rounded-lg"
+              @dragenter.prevent="toggleActiveDragPicture(true)"
+              @dragover.prevent="toggleActiveDragPicture(true)"
+              @dragleave.prevent="toggleActiveDragPicture(false)"
+              @drop.prevent="handlePictureDrop"
             >
-              {{ $t('upload.btn.select_files') }}
-            </v-btn>
-
-            <div v-if="selectedPictures.length > 0" class="mt-4">
+              <v-icon class="" color="primary" size="100"
+                >mdi-image-plus
+              </v-icon>
+              <div class="opacity-60">
+                <p>{{ $t('upload.desc.upload_images') }}</p>
+                <p>{{ $t('upload.desc.maximum_size_per_image') }}</p>
+              </div>
+              <input
+                ref="pictureInput"
+                accept="image/*"
+                multiple
+                style="display: none"
+                type="file"
+                @change="handlePictureChange"
+              />
+              <v-btn
+                class="mt-4 mx-4 text-capitalize"
+                color="primary"
+                @click="triggerPictureInput"
+              >
+                {{ $t('upload.btn.select_files') }}
+              </v-btn>
+            </div>
+            <div
+              v-if="selectedPictures.length > 0"
+              class="mt-4 image-container"
+            >
               <div
                 v-for="(picture, index) in selectedPictures"
                 :key="index"
-                class="d-inline-block mr-4 position-relative"
+                class="position-relative text-center"
               >
                 <v-img
                   :src="picture.url"
                   class="border rounded-lg"
                   contain
-                  max-height="150"
-                  max-width="150"
-                  min-height="100"
-                  min-width="100"
+                  max-height="240"
+                  max-width="240"
+                  min-height="160"
+                  min-width="160"
                 >
                   <template #placeholder>
                     <v-row
@@ -734,14 +925,16 @@ watch(props, refreshProps);
                     </v-row>
                   </template>
                 </v-img>
-                <v-btn
-                  class="position-absolute right-0 top-0"
-                  color="error"
-                  icon="mdi-close"
-                  size="xs"
-                  variant="outlined"
-                  @click="removePicture(index)"
-                />
+                <div class="delete-button-container">
+                  <v-btn
+                    class="delete-button"
+                    icon
+                    size="x-small"
+                    @click="() => selectedPictures.splice(index, 1)"
+                  >
+                    <v-icon size="x-large">mdi-close</v-icon>
+                  </v-btn>
+                </div>
               </div>
             </div>
           </v-card-text>
@@ -798,6 +991,7 @@ watch(props, refreshProps);
       </v-tabs-window>
     </v-card>
   </v-card-text>
+
   <v-card-actions class="px-6">
     <v-btn
       :disabled="!availableSteps.includes('image')"
@@ -828,5 +1022,56 @@ watch(props, refreshProps);
   padding-right: 7px;
   position: relative;
   top: 10px;
+}
+
+.upload-container {
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.file-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.active-drag {
+  border-color: #2196f3 !important;
+  background-color: rgba(33, 150, 243, 0.1) !important;
+}
+
+.image-container {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  height: auto;
+  width: auto;
+  gap: 12px;
+}
+
+.delete-button-container {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 10;
+}
+
+.delete-button {
+}
+
+.delete-button .v-icon {
+  color: white;
+}
+
+/* 确保在移动设备上有良好的响应性 */
+@media (max-width: 768px) {
+  .image-container {
+    flex-direction: column !important;
+  }
 }
 </style>

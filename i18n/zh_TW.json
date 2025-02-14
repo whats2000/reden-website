@@ -40,7 +40,8 @@
     "name": "名稱",
     "next": "下一步",
     "save": "儲存",
-    "summary": "簡介"
+    "summary": "簡介",
+    "supported_version" : "支持版本"
   },
   "en": "English",
   "litematica_generator": {
@@ -207,7 +208,13 @@
       "undo": "Undo"
     },
     "user_not_found": "未找到用戶",
-    "wiki": "Wiki"
+    "wiki": "Wiki",
+    "card" : {
+      "author" : "作者",
+      "downloads" : "下載次數",
+      "redStoneTitle" : "探索紅石機器",
+      "subscribeTitle" : "關注最愛的作者"
+    }
   },
   "register": {
     "button": {
@@ -284,13 +291,20 @@
       "upload_images": "上傳圖片 (最多3張)",
       "upload_schematic_or_world_save": "上傳藍圖或存檔",
       "you_will_receive_an_email_notification_when_approved": "當審核通過後，您將收到郵件通知。",
-      "your_machine_design_is_under_review_please_wait_with_patience": "您的機器設計正在審核中，請耐心等待。"
+      "your_machine_design_is_under_review_please_wait_with_patience": "您的機器設計正在審核中，請耐心等待。",
+      "not_upload" : "尚未上傳任何文件",
+      "post_type": "請選擇此帖子的類型"
     },
     "step": {
       "image": "上傳圖像",
       "translation": "基本資訊",
       "under-review": "等待審核",
       "upload": "上傳"
+    },
+    "toast": {
+      "max_file_number": "上傳的文件不能超過{count}個。",
+      "auto_filled_name": "從文件名自動填充名稱",
+      "auto_filled_id": "從名稱自動填寫ID"
     }
   },
   "user": {
@@ -302,6 +316,13 @@
     "sponsor_hover": "此用戶贊助過本項目",
     "staff": "管理員",
     "staff_hover": "此用戶是本項目的管理員"
+  },
+  "message": {
+    "list_title": "我的消息",
+    "all": "全部",
+    "unread": "未讀",
+    "mark_as_read": "標記為已讀",
+    "all_read": "全部已讀"
   },
   "zh_cn": "简体中文",
   "zh_tw": "繁體中文"

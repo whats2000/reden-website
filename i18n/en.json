@@ -48,7 +48,8 @@
     "next": "Next",
     "or": "or",
     "save": "Save",
-    "summary": "Summary"
+    "summary": "Summary",
+    "supported_version" : "Supported version"
   },
   "en": "English",
   "litematica_generator": {
@@ -262,7 +263,13 @@
       "user_profile_seo": "{0} - {0}'s Posts - Download Minecraft Builds"
     },
     "user_not_found": "User Not Found",
-    "wiki": "Wiki"
+    "wiki": "Wiki",
+    "card" : {
+      "author" : "author",
+      "downloads" : "downloads",
+      "redStoneTitle" : "Explore the Red Stone Machine",
+      "subscribeTitle" : "Follow Your Favorite Authors"
+    }
   },
   "register": {
     "button": {
@@ -361,13 +368,20 @@
       "upload_images": "Upload images (up to 3)",
       "upload_schematic_or_world_save": "Upload schematic or world save.",
       "you_will_receive_an_email_notification_when_approved": "You will receive an email notification when the design is approved.",
-      "your_machine_design_is_under_review_please_wait_with_patience": "Your machine design is under review, please wait with patience."
+      "your_machine_design_is_under_review_please_wait_with_patience": "Your machine design is under review, please wait with patience.",
+      "not_upload" : "No files have been uploaded yet",
+      "post_type" : "Please select the type of this post"
     },
     "step": {
       "image": "Images",
       "translation": "Information",
       "under-review": "Under Review",
       "upload": "Upload"
+    },
+    "toast": {
+      "max_file_number": "Cannot upload more than {count} files.",
+      "auto_filled_name": "Auto-filled name from file name",
+      "auto_filled_id": "Auto-filled ID from name"
     }
   },
   "user": {
@@ -381,6 +395,13 @@
     "sponsor_hover": "This user has sponsored this project",
     "staff": "Staff",
     "staff_hover": "This user is a staff member of this project"
+  },
+  "message": {
+    "list_title": "My Messages",
+    "all": "All",
+    "unread": "Unread",
+    "mark_as_read": "Mark as Read",
+    "all_read": "All Read"
   },
   "zh_cn": "简体中文",
   "zh_tw": "繁體中文"
