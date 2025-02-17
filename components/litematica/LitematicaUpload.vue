@@ -970,7 +970,9 @@ const handlePictureChange = (event: Event) => {
             </div>
             <div class="mt-6">
               <p>
-                {{ 'upload.desc.please_contact_us_if_you_have_any_questions' }}
+                {{
+                  t('upload.desc.please_contact_us_if_you_have_any_questions')
+                }}
                 <a class="router" href="mailto:info@redenmc.com"
                   >info@redenmc.com</a
                 >

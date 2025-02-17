@@ -116,7 +116,7 @@ for (const id of idList) {
           <v-img class="d-none d-sm-block" src="/reden_256.png" width="148" />
         </v-col>
       </v-row>
-      <div class="d-flex buttons">
+      <div class="d-flex align-center flex-wrap">
         <v-btn
           :to="localePath('/litematica')"
           class="ma-2 text-none"
@@ -124,6 +124,7 @@ for (const id of idList) {
           prepend-icon="mdi-download"
           rounded="rounded"
           size="x-large"
+          style="max-width: 220px"
         >
           {{ t('reden.home.go_litematica') }}
         </v-btn>
@@ -133,16 +134,19 @@ for (const id of idList) {
           prepend-icon="mdi-github"
           rounded="rounded"
           size="x-large"
+          style="max-width: 220px"
           variant="outlined"
         >
           Github
         </v-btn>
         <v-btn
+          v-if="false"
           class="ma-2"
           href="https://wiki.redenmc.com"
           prepend-icon="mdi-book-open"
           rounded="rounded"
           size="x-large"
+          style="max-width: 220px"
           variant="outlined"
         >
           {{ $t('reden.wiki') }}
@@ -258,7 +262,7 @@ for (const id of idList) {
     </div>
     <Feature />
     <div class="content-common">
-      <v-row class="community-intro">
+      <v-row class="community-intro" v-if="false">
         <v-col>
           <v-card color="light-blue">
             <v-card-title>
@@ -284,7 +288,7 @@ for (const id of idList) {
           </v-card>
         </v-col>
       </v-row>
-      <RedstoneSectionTitle :title="$t('reden.home.community_intro.title')">
+      <RedstoneSectionTitle :title="t('reden.home.community_intro.title')">
         <template #default="{ leverOn }">
           <RedStoneSection :lever-on="leverOn" :size="3">
             <template #title> Open Source</template>
