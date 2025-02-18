@@ -17,7 +17,6 @@ import { useAppStore } from '~/store/app';
 import type {
   ListLitematicaResponse,
   LitematicaAuthorProfile,
-  MachineDef,
 } from '~/pages/litematica/index.vue';
 import RedstonePostCard from '~/components/homePage/RedstonePostCard.vue';
 
@@ -35,7 +34,6 @@ useSeoMeta({
 });
 
 const backendInfo = useBackendMeta();
-const topRedstonePosts = ref<MachineDef[]>([]);
 const topAuthorIds = [
   '%E7%81%AB%E5%BC%A6%E6%9C%88',
   'Scorpio',
@@ -60,26 +58,9 @@ const { data: topAuthors } = useAsyncData<LitematicaAuthorProfile[]>(
   },
 );
 
-const idList = [
-  'b76c2b70-90d2-425e-b007-1d2e56f6fae5',
-  'fe80a637-821f-4f7b-ae89-f8b6fc9fffd0',
-  'pdc-stack-raid-farm-v7',
-  '919a63d1-da48-4406-964a-ea354dacfdf8',
-  'MultipleParallelDuplicateLineMachines',
-];
-for (const id of idList) {
-  try {
-    const { data } = await useFetch<ListLitematicaResponse>(
-      `/api/mc-services/yisibite/${id}/info/${locale.value}`,
-      {
-        key: `generators-${id}-${locale.value}`,
-      },
-    );
-    topRedstonePosts.value.push(data.value!.d[0]);
-  } catch (error) {
-    console.error(`Error fetching data for id ${id}:`, error);
-  }
-}
+const { data: topRedstonePosts } = await useFetch<ListLitematicaResponse>(
+  '/api/mc-services/yisibite/?order=random-extra&pageSize=8',
+);
 </script>
 
 <template>
@@ -167,7 +148,7 @@ for (const id of idList) {
             <v-container class="pa-5" fluid>
               <v-carousel cycle hide-delimiters>
                 <v-carousel-item
-                  v-for="(post, index) in topRedstonePosts"
+                  v-for="(post, index) in topRedstonePosts?.d"
                   :key="index"
                   class="h-100"
                 >
@@ -262,7 +243,7 @@ for (const id of idList) {
     </div>
     <Feature />
     <div class="content-common">
-      <v-row class="community-intro" v-if="false">
+      <v-row v-if="false" class="community-intro">
         <v-col>
           <v-card color="light-blue">
             <v-card-title>

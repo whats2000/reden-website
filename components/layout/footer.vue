@@ -126,7 +126,7 @@ const appStore = useAppStore();
         </div>
       </v-col>
     </v-row>
-    <v-row class="">
+    <div class="">
       <v-col :cols="12" class="text-center">
         <reden-router :to="githubLink">Reden</reden-router>
         {{ $t('common.and') }}
@@ -138,7 +138,7 @@ const appStore = useAppStore();
         <br />
         {{ new Date().getFullYear() }} — <b>RedenMC</b>
       </v-col>
-    </v-row>
+    </div>
     <div class="bottom-right text-capitalize">
       {{ $t('reden.footer.mojang_disclaimer') }}
     </div>

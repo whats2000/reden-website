@@ -3,7 +3,7 @@
     <template #prepend>
       <template v-if="mobile">
         <v-btn v-show="mobile" icon="mdi-menu" title="Menu">
-          <v-icon>mdi-menu</v-icon>
+          <v-avatar image="/reden_256.png" :size="48" border />
           <v-menu :close-on-content-click="true" activator="parent">
             <v-list class="w-100">
               <v-list-item :to="localePath('/')">
@@ -22,6 +22,22 @@
                   {{ $t('reden.header.mod') }}
                 </v-list-item-title>
               </v-list-item>
+              <v-list-item :to="localePath('/litematica')">
+                <template #prepend>
+                  <v-icon>mdi-download</v-icon>
+                </template>
+                <v-list-item-title>
+                  {{ $t('reden.header.explore') }}
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item :to="localePath('/studio')">
+                <template #prepend>
+                  <v-icon>mdi-pencil</v-icon>
+                </template>
+                <v-list-item-title>
+                  {{ $t('studio.litematica_studio') }}
+                </v-list-item-title>
+              </v-list-item>
               <v-divider />
               <template v-if="useAppStore().logined">
                 <v-list-item :to="localePath('/home')">
@@ -35,23 +51,6 @@
                   </template>
                   <v-list-item-title>
                     {{ $t('reden.header.my_profile') }}
-                  </v-list-item-title>
-                </v-list-item>
-
-                <v-list-item :to="localePath('/litematica')">
-                  <template #prepend>
-                    <v-icon>mdi-download</v-icon>
-                  </template>
-                  <v-list-item-title>
-                    {{ $t('reden.header.explore') }}
-                  </v-list-item-title>
-                </v-list-item>
-                <v-list-item :to="localePath('/studio')">
-                  <template #prepend>
-                    <v-icon>mdi-pencil</v-icon>
-                  </template>
-                  <v-list-item-title>
-                    {{ $t('studio.litematica_studio') }}
                   </v-list-item-title>
                 </v-list-item>
               </template>
