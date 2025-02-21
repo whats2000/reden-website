@@ -35,16 +35,6 @@ const appStore = useAppStore();
             {{ $t('reden.footer.reden_mod.undo_redo') }}
           </reden-router>
         </div>
-        <div class="footer-list-item">
-          <reden-router :to="localePath('/feature/rvc')">
-            {{ $t('reden.footer.reden_mod.rvc') }}
-          </reden-router>
-        </div>
-        <div class="footer-list-item">
-          <reden-router :to="localePath('/feature/debugger')">
-            {{ $t('reden.footer.reden_mod.debugger') }}
-          </reden-router>
-        </div>
       </v-col>
       <v-col>
         <div class="footer-list-title">
@@ -54,11 +44,6 @@ const appStore = useAppStore();
         </div>
         <div class="footer-list-item">
           <reden-router :to="githubLink"> Reden on Github</reden-router>
-        </div>
-        <div class="footer-list-item">
-          <a href="https://wiki.redenmc.com">
-            {{ $t('reden.footer.reden_ecosystem.wiki') }}
-          </a>
         </div>
         <div class="footer-list-item">
           <reden-router :to="localePath('/sponsors')">
@@ -116,10 +101,7 @@ const appStore = useAppStore();
           </reden-router>
         </div>
         <div class="footer-list-item">
-          <reden-router
-            external-icon
-            to="https://space.bilibili.com/1545239761"
-          >
+          <reden-router to="https://space.bilibili.com/1545239761">
             <v-icon icon="custom:Bilibili" />
             {{ $t('reden.footer.follow_us.bilibili') }}
           </reden-router>
