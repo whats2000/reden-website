@@ -143,7 +143,7 @@ const { data: topRedstonePosts } = await useFetch<ListLitematicaResponse>(
             <v-card-title
               class="text-h5 text-sm-h4 font-weight-semibold text-center text-white pa-4"
             >
-              {{ $t('reden.card.redStoneTitle') }}
+              {{ $t('reden.card.explore_redstone_machines') }}
             </v-card-title>
             <v-container class="pa-5" fluid>
               <v-carousel cycle hide-delimiters>
@@ -176,6 +176,7 @@ const { data: topRedstonePosts } = await useFetch<ListLitematicaResponse>(
                   <v-expansion-panel-title
                     class="d-flex flex-row justify-space-between"
                     style="line-height: 32px"
+                    v-if="item"
                   >
                     <span class="mr-3">
                       <v-avatar :image="item.author.avatarUrl" :size="32" />

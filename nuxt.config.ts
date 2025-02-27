@@ -130,9 +130,10 @@ export default defineNuxtConfig({
     // },
     '/api/**': {
       proxy:
-        process.env.NODE_ENV === 'development'
-          ? 'https://api.redenmc.com/api/**'
-          : 'http://localhost:10005/api/**',
+        // process.env.NODE_ENV === 'development'
+        //   ? 'https://api.redenmc.com/api/**'
+        //   :
+        'http://localhost:10005/api/**',
     },
   },
   sitemap: {

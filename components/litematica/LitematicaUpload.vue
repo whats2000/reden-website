@@ -45,7 +45,7 @@ const refreshProps = () => {
       (item) =>
         ({
           name: item.name,
-          url: item.name,
+          url: item.url,
           fileType: 'uploaded',
         }) as MyFile,
     ) ?? [];
@@ -259,6 +259,7 @@ const localizedData = ref<Record<string, Partial<MachineDef>>>({});
 const MAX_FILE_NUMBER = 6;
 const MAX_IMAGE_NUMBER = 5;
 
+// 是否 **有可能** 是投影生成器，if true, ask the user to confirm
 const isPossibleLitematicaGenerator = computed(
   () =>
     selectedFiles.value.length === 1 &&
@@ -300,7 +301,9 @@ const handleFileChange = (event: Event) => {
   }
 
   if (!isPossibleLitematicaGenerator.value) {
-    state.value = 'translation';
+    if (!props.editMode) {
+      state.value = 'translation';
+    }
     litematicaGenerator.value = false;
   }
 };

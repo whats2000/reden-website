@@ -192,7 +192,7 @@
     "card": {
       "author": "author",
       "downloads": "downloads",
-      "redStoneTitle": "Explore the Red Stone Machine",
+      "explore_redstone_machines": "Explore Redstone Machines",
       "subscribeTitle": "Follow Your Favorite Authors",
       "viewProfile": "View Profile"
     },
