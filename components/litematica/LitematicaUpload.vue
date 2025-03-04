@@ -451,8 +451,8 @@ const handlePictureChange = (event: Event) => {
 
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
-    if (file.size > 2 * 1024 * 1024) {
-      pictureStepError.value = '图片大小不能超过2MB';
+    if (file.size > 10 * 1024 * 1024) {
+      pictureStepError.value = '图片大小不能超过 10 MB';
       selectedPictures.value = [];
       return;
     }
