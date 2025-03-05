@@ -58,9 +58,13 @@ const { data: topAuthors } = useAsyncData<LitematicaAuthorProfile[]>(
   },
 );
 
-const { data: topRedstonePosts } = await useFetch<ListLitematicaResponse>(
-  '/api/mc-services/yisibite/?order=random-extra&pageSize=8',
-);
+const { data: topRedstonePosts, refresh: refreshTopRedstonePosts } =
+  await useFetch<ListLitematicaResponse>(
+    '/api/mc-services/yisibite/?order=random-extra&pageSize=8',
+  );
+if (import.meta.client) {
+  refreshTopRedstonePosts();
+}
 </script>
 
 <template>
@@ -90,7 +94,7 @@ const { data: topRedstonePosts } = await useFetch<ListLitematicaResponse>(
         <v-col>
           <h1 class="text-h2 text-md-h1 font-weight-bold">Reden</h1>
           <p class="opacity-80 text-h5">
-            {{ $t('reden.description') }}
+            {{ t('reden.description') }}
           </p>
         </v-col>
         <v-col class="icon" cols="3">
@@ -130,7 +134,7 @@ const { data: topRedstonePosts } = await useFetch<ListLitematicaResponse>(
           style="max-width: 220px"
           variant="outlined"
         >
-          {{ $t('reden.wiki') }}
+          {{ t('reden.wiki') }}
         </v-btn>
       </div>
     </div>
@@ -143,7 +147,7 @@ const { data: topRedstonePosts } = await useFetch<ListLitematicaResponse>(
             <v-card-title
               class="text-h5 text-sm-h4 font-weight-semibold text-center text-white pa-4"
             >
-              {{ $t('reden.card.explore_redstone_machines') }}
+              {{ t('reden.card.explore_redstone_machines') }}
             </v-card-title>
             <v-container class="pa-5" fluid>
               <v-carousel cycle hide-delimiters>
@@ -164,7 +168,7 @@ const { data: topRedstonePosts } = await useFetch<ListLitematicaResponse>(
             <v-card-title
               class="text-h5 text-sm-h4 text-center text-white pa-4"
             >
-              {{ $t('reden.card.subscribeTitle') }}
+              {{ t('reden.card.subscribeTitle') }}
             </v-card-title>
             <v-container class="pa-5" fluid>
               <v-expansion-panels variant="accordion">
@@ -174,9 +178,9 @@ const { data: topRedstonePosts } = await useFetch<ListLitematicaResponse>(
                   class="rounded-0"
                 >
                   <v-expansion-panel-title
+                    v-if="item"
                     class="d-flex flex-row justify-space-between"
                     style="line-height: 32px"
-                    v-if="item"
                   >
                     <span class="mr-3">
                       <v-avatar :image="item.author.avatarUrl" :size="32" />
@@ -207,7 +211,7 @@ const { data: topRedstonePosts } = await useFetch<ListLitematicaResponse>(
                       color="primary"
                       rounded="rounded"
                     >
-                      {{ $t('reden.card.viewProfile') }}
+                      {{ t('reden.card.viewProfile') }}
                     </v-btn>
                   </v-expansion-panel-text>
                 </v-expansion-panel>
@@ -248,10 +252,10 @@ const { data: topRedstonePosts } = await useFetch<ListLitematicaResponse>(
         <v-col>
           <v-card color="light-blue">
             <v-card-title>
-              {{ $t('litematica_generator.title') }}
+              {{ t('litematica_generator.title') }}
             </v-card-title>
             <v-card-text>
-              {{ $t('litematica_generator.description') }}
+              {{ t('litematica_generator.description') }}
             </v-card-text>
             <v-card-actions>
               <v-btn :to="localePath('/litematica')" color="White">Go</v-btn>
@@ -276,7 +280,7 @@ const { data: topRedstonePosts } = await useFetch<ListLitematicaResponse>(
             <template #title> Open Source</template>
             <template #text>
               <p>
-                {{ $t('reden.home.community_intro.open_source') }}
+                {{ t('reden.home.community_intro.open_source') }}
               </p>
             </template>
             <template #action>
@@ -295,7 +299,7 @@ const { data: topRedstonePosts } = await useFetch<ListLitematicaResponse>(
             <template #title> Sponsors</template>
             <template #text>
               <p>
-                {{ $t('reden.home.community_intro.sponsor') }}
+                {{ t('reden.home.community_intro.sponsor') }}
               </p>
             </template>
             <template #action>
@@ -314,7 +318,7 @@ const { data: topRedstonePosts } = await useFetch<ListLitematicaResponse>(
             <template #title> Wiki</template>
             <template #text>
               <p>
-                {{ $t('reden.home.community_intro.wiki') }}
+                {{ t('reden.home.community_intro.wiki') }}
               </p>
             </template>
             <template #action>
@@ -333,7 +337,7 @@ const { data: topRedstonePosts } = await useFetch<ListLitematicaResponse>(
             <template #title> Discord</template>
             <template #text>
               <p>
-                {{ $t('reden.home.community_intro.discord') }}
+                {{ t('reden.home.community_intro.discord') }}
               </p>
             </template>
             <template #action>
@@ -388,10 +392,5 @@ body {
 .card-hover:hover {
   transform: scale(1.03);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-}
-
-.v-window {
-  height: 100% !important;
-  overflow: hidden;
 }
 </style>
