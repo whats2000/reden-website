@@ -44,17 +44,13 @@ const { data: localizedData } = useNuxtData<Record<string, MachineDef>>(
 const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
   `/api/mc-services/yisibite/${machineId}/info/${locale.value}`,
   {
-    onRequestError: (error) => {
-      debugger;
-      if (error.statusCode === 404) {
-        toast.error(t('litematica_generator.toast.not_found'));
-        router.push(localePath('/litematica'));
-      }
-    },
     onResponseError: (error) => {
-      debugger;
-      if (error.statusCode === 404) {
-        toast.error(t('litematica_generator.toast.not_found'));
+      if (error.response.status === 404) {
+        console.error('error', error);
+        throw createError({
+          status: 404,
+          message: t('litematica_generator.toast.not_found'),
+        });
         router.push(localePath('/litematica'));
       }
     },
