@@ -163,7 +163,7 @@ export function doFetchGet(
     method: 'GET',
     headers: {
       'X-Requested-With': 'Reden',
-      'X-CSRF-Token': useAppStore(/*pinia*/).csrfToken || '<no csrf token>',
+      'X-CSRF-Token': useAppStore().csrfToken || '<no csrf token>',
     },
     credentials: 'include',
   });

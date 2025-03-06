@@ -155,6 +155,12 @@ export default defineNuxtConfig({
   site: {
     url: 'redenmc.com',
   },
+  app: {
+    pageTransition: {
+      name: 'page',
+      mode: 'out-in', // default
+    },
+  },
   pwa: {
     registerType: 'autoUpdate',
     devOptions: {
