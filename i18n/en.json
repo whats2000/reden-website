@@ -80,6 +80,12 @@
     "size_x": "Size in x",
     "size_y": "Size in y",
     "size_z": "Size in z",
+    "sort": {
+      "createdAt": "Latest",
+      "downloads": "Most Popular",
+      "random-extra": "Explore (Random)",
+      "sort_by": "Sort by:"
+    },
     "suggested_values": "Suggested Values: ",
     "suggestion_notice": "These suggested values are for your reference only",
     "title": "Litematica Online Generator",

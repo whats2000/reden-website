@@ -25,6 +25,16 @@ enum PostStatus {
   TakenDown = 'TakenDown',
 }
 
+type SortType = 'downloads' | 'createdAt' | 'random' | 'random-extra';
+const sortTypes: SortType[] = [
+  'downloads',
+  'createdAt',
+  // 'random',
+  'random-extra',
+];
+
+const sortType = ref<SortType>('downloads');
+
 export type MachineDef = {
   type: PostType;
   name: string;
@@ -135,11 +145,11 @@ export type LitematicaAuthorProfile = {
 };
 const { locale } = useI18n();
 
-const { data: serverResponse, error } = await useFetch<ListLitematicaResponse>(
+const { data: serverResponse, error } = useFetch<ListLitematicaResponse>(
   () =>
     search.value
       ? `/api/mc-services/litematica/search?q=${search.value}&lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}`
-      : `/api/mc-services/yisibite/?lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}`,
+      : `/api/mc-services/yisibite/?lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}&order=${sortType.value}`,
   {
     dedupe: 'defer',
     key: `generators${locale.value}`,
@@ -334,6 +344,22 @@ const isHovering = useElementHover(ad);
             variant="outlined"
           >
             Archiver Review Panel
+          </v-btn>
+        </div>
+        <div v-if="!search" class="d-flex flex-wrap flex-row mb-4">
+          <span style="line-height: 36px">
+            {{ t('litematica_generator.sort.sort_by') }}
+          </span>
+          <v-btn
+            v-for="sort in sortTypes"
+            :key="sort"
+            :active="sortType === sort"
+            class="text-none"
+            color="secondary"
+            variant="text"
+            @click="(sortType = sort), (page = 1), goto(0)"
+          >
+            {{ t(`litematica_generator.sort.${sort}`) }}
           </v-btn>
         </div>
 

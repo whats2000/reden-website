@@ -80,6 +80,12 @@
     "size_x": "x 方向尺寸",
     "size_y": "y 方向尺寸",
     "size_z": "z 方向尺寸",
+    "sort": {
+      "createdAt": "最新发布",
+      "downloads": "最多下载",
+      "random-extra": "探索队列（随机）",
+      "sort_by": "排序方式："
+    },
     "suggested_values": "建议选择：",
     "suggestion_notice": "建议值仅供参考，可能无法正确生成有效投影",
     "title": "投影蓝图在线生成器",
