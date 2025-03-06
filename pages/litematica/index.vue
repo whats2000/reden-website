@@ -102,15 +102,11 @@ const totalPages = computed(() =>
   Math.ceil((serverResponse.value?.count ?? 2006) / pageSize.value),
 );
 const uploadDialog = ref(router.currentRoute.value.hash === '#upload');
+const urlSearchParams = useUrlSearchParams('hash', { write: true });
 watch(router.currentRoute, () => {
   page.value = Number(router.currentRoute.value.query.page) || 1;
   uploadDialog.value = router.currentRoute.value.hash === '#upload';
 });
-const params = useUrlSearchParams('history') as Record<
-  'page' | 'zh_cn',
-  string
->;
-params.zh_cn + [params.page];
 watch([page, pageSize, search, uploadDialog], () => {
   goto(0);
   router.replace({
@@ -180,16 +176,30 @@ if (error.value?.statusCode) {
 const isClient = import.meta.client;
 const notification = ref<boolean>(false);
 const maintaining = false;
-const { mdAndUp, width } = useDisplay({
+const { mdAndUp, lgAndUp, width } = useDisplay({
   mobileBreakpoint: 600,
 });
-const itemsPerRow = computed(() => (!(width.value && mdAndUp.value) ? 2 : 3));
+const itemsPerRow = computed(() => {
+  if (!width.value) {
+    return 2;
+  }
+  if (width.value < 750) {
+    return 2;
+  }
+  if (width.value < 1300) {
+    return 3;
+  }
+  if (width.value < 1900) {
+    return 4;
+  }
+  return 6;
+});
 const itemDisplayCols = computed(() => {
   const cols: { def?: MachineDef[] }[] = [];
   for (let i = 0; i < itemsPerRow.value; i++) {
     cols[i] = { def: [] };
   }
-  console.log('itemsPerRow', itemsPerRow.value);
+  console.log('itemsPerRow=', itemsPerRow.value, 'width=', width.value);
   let i = 0;
   for (const def of serverResponse.value?.d ?? []) {
     cols[i % itemsPerRow.value].def?.push(def);
@@ -296,7 +306,7 @@ const isHovering = useElementHover(ad);
       </template>
     </v-alert>
     <div class="w-100 d-flex flex-row justify-center">
-      <div v-if="mdAndUp" class="my-ads">
+      <div v-if="lgAndUp" class="my-ads">
         <div data-some-item="aaa" />
         <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
       </div>
@@ -375,8 +385,7 @@ const isHovering = useElementHover(ad);
         <v-row>
           <v-col
             v-for="col in itemDisplayCols"
-            :cols="6"
-            :md="4"
+            :cols="12 / itemsPerRow"
             justify="center"
           >
             <MinecraftFarmCard

@@ -41,26 +41,25 @@ const { data: localizedData } = useNuxtData<Record<string, MachineDef>>(
   `edit-${machineId}`,
 );
 
-const { data: serverResponse } = useNuxtData<ListLitematicaResponse>(
-  `generators-${machineId}-${locale.value}`,
-);
-
-if (!serverResponse.value) {
-  const { data, status, error } = await useFetch<ListLitematicaResponse>(
-    `/api/mc-services/yisibite/${machineId}/info/${locale.value}`,
-    {
-      key: `generators-${machineId}-${locale.value}`,
+const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
+  `/api/mc-services/yisibite/${machineId}/info/${locale.value}`,
+  {
+    onRequestError: (error) => {
+      debugger;
+      if (error.statusCode === 404) {
+        toast.error(t('litematica_generator.toast.not_found'));
+        router.push(localePath('/litematica'));
+      }
     },
-  );
-  serverResponse.value = data.value;
-  if (status.value === 'error') {
-    console.error(serverResponse.value, status.value, error.value);
-    throw createError({
-      status: error.value?.statusCode ?? 500,
-      message: JSON.stringify(error.value),
-    });
-  }
-}
+    onResponseError: (error) => {
+      debugger;
+      if (error.statusCode === 404) {
+        toast.error(t('litematica_generator.toast.not_found'));
+        router.push(localePath('/litematica'));
+      }
+    },
+  },
+);
 
 async function submit(e: SubmitEventPromise) {
   if ((await e).valid) {
@@ -189,7 +188,7 @@ async function loadBlob(index: number) {
 }
 
 try {
-  await localforage.removeItem('litematica-studio');
+  localforage.removeItem('litematica-studio');
 } catch (e) {}
 
 async function editLitematica(index: number) {
