@@ -33,8 +33,6 @@ const sortTypes: SortType[] = [
   'random-extra',
 ];
 
-const sortType = ref<SortType>('downloads');
-
 export type MachineDef = {
   type: PostType;
   name: string;
@@ -95,28 +93,16 @@ const router = useRouter();
 if (router.currentRoute.value.query.m) {
   router.push(localePath(`/litematica/${router.currentRoute.value.query.m}`));
 }
-const page = ref(Number(router.currentRoute.value.query.page) || 1);
+const page = useRouteQuery('page', 1, { transform: Number });
 const pageSize = ref(18);
-const search = computed(() => router.currentRoute.value.query.q);
+const search = useRouteQuery<string>('q', '');
+const sortType = useRouteQuery<SortType>('sort', 'downloads');
 const totalPages = computed(() =>
   Math.ceil((serverResponse.value?.count ?? 2006) / pageSize.value),
 );
 const uploadDialog = ref(router.currentRoute.value.hash === '#upload');
-const urlSearchParams = useUrlSearchParams('hash', { write: true });
-watch(router.currentRoute, () => {
-  page.value = Number(router.currentRoute.value.query.page) || 1;
-  uploadDialog.value = router.currentRoute.value.hash === '#upload';
-});
-watch([page, pageSize, search, uploadDialog], () => {
-  goto(0);
-  router.replace({
-    query: {
-      page: String(page.value),
-      q: search.value,
-    },
-    hash: uploadDialog.value ? '#upload' : undefined,
-  });
-});
+watch(page, () => goto(0));
+watch(sortType, () => (page.value = 1));
 
 export type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
@@ -367,7 +353,7 @@ const isHovering = useElementHover(ad);
             class="text-none"
             color="secondary"
             variant="text"
-            @click="(sortType = sort), (page = 1), goto(0)"
+            @click="sortType = sort"
           >
             {{ t(`litematica_generator.sort.${sort}`) }}
           </v-btn>
