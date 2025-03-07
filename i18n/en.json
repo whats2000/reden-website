@@ -322,6 +322,7 @@
       "password": "Password",
       "username": "Username"
     },
+    "quick": "Quick registration using a 3rd-party account",
     "title": "Register to Reden",
     "toast": {
       "error": {

@@ -322,6 +322,7 @@
       "password": "密码",
       "username": "用户名"
     },
+    "quick": "使用第三方账号快速注册",
     "title": "注册 Reden",
     "toast": {
       "error": {

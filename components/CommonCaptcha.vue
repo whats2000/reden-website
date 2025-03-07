@@ -79,7 +79,7 @@ if (china.value) {
 
 <template>
   <v-btn v-if="china" @click="china = false" variant="outlined">
-    使用 Cloudflare 验证码
+    切换成 Cloudflare 验证码
   </v-btn>
   <template v-if="china">
     <div ref="vaptcha" />

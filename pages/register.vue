@@ -66,7 +66,33 @@ function register(e: SubmitEventPromise) {
 <template>
   <div class="main-page">
     <v-form v-if="!registerOk" class="register-form" @submit="register">
-      <h1>
+      <h2 class="mt-6">
+        {{ t('register.quick') }}
+      </h2>
+
+      <v-row>
+        <v-col>
+          <v-btn
+            :block="true"
+            :href="'/api/oauth/github?redirect_url=' + encodeURI('/login')"
+            color="blue"
+          >
+            <v-icon left>mdi-github</v-icon>
+            Github
+          </v-btn>
+        </v-col>
+        <v-col>
+          <v-btn
+            :block="true"
+            :href="'/api/oauth/microsoft?redirect_url=' + encodeURI('/login')"
+            color="red"
+          >
+            <v-icon left>mdi-microsoft</v-icon>
+            Microsoft
+          </v-btn>
+        </v-col>
+      </v-row>
+      <h1 class="mt-6">
         {{ $t('register.title') }}
       </h1>
       <v-text-field
@@ -155,33 +181,6 @@ function register(e: SubmitEventPromise) {
             : $t('register.button.captcha')
         }}
       </v-btn>
-
-      <h2>
-        {{ $t('register.oauth') }}
-      </h2>
-
-      <v-row>
-        <v-col>
-          <v-btn
-            :block="true"
-            :href="'/api/oauth/github?redirect_url=' + encodeURI('/login')"
-            color="blue"
-          >
-            <v-icon left>mdi-github</v-icon>
-            Github
-          </v-btn>
-        </v-col>
-        <v-col>
-          <v-btn
-            :block="true"
-            :href="'/api/oauth/microsoft?redirect_url=' + encodeURI('/login')"
-            color="red"
-          >
-            <v-icon left>mdi-microsoft</v-icon>
-            Microsoft
-          </v-btn>
-        </v-col>
-      </v-row>
     </v-form>
 
     <div v-if="registerOk">
@@ -231,9 +230,6 @@ function register(e: SubmitEventPromise) {
   flex-direction: column;
   width: min(90%, 400px);
   left: 50%;
-
-  padding-top: 80px;
-  padding-bottom: 90px;
 }
 
 .main-page {
