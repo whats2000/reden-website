@@ -26,8 +26,15 @@ watch(globalTheme, () => {
       theme.themes.value[appStore.theme]!.colors.background;
   }
 });
+const zhCNLanguageNoti = ref(false);
 onMounted(() => {
-  appStore.isInChina();
+  appStore
+    .isInChina()
+    .then(
+      (result) =>
+        (zhCNLanguageNoti.value =
+          locale.value !== 'zh_cn' && (result ?? false)),
+    );
   const colors: Record<string, string> =
     theme.themes.value[appStore.theme]!.colors;
   const css: string[] = [];
@@ -211,20 +218,26 @@ function showMessageDetailDialog(message: any) {
 
     <VSonner :expand="true" :position="'top-right'" />
     <v-dialog
-      max-width="600"
-      :model-value="locale !== 'zh_cn' && appStore.$state._isInChina"
       #default="{ isActive }"
+      :model-value="zhCNLanguageNoti"
+      max-width="600"
+      @close="zhCNLanguageNoti = false"
     >
       <v-card>
         <v-card-title>切换到您常用的语言</v-card-title>
         <v-card-text>
           您现在的IP地址是中国大陆的地址，我们检测到您的浏览器语言设置为
-          {{ t(locale) }}
+          <b>{{ t(locale) }}</b>
           ，是否切换到简体中文？
         </v-card-text>
         <v-card-actions>
-          <v-btn @click="isActive.value = false">不切换</v-btn>
-          <v-btn color="primary" :to="switchLocalePath('zh_cn')">切换</v-btn>
+          <v-btn @click="zhCNLanguageNoti = false">不切换</v-btn>
+          <v-btn
+            :to="switchLocalePath('zh_cn')"
+            color="primary"
+            @click="zhCNLanguageNoti = false"
+            >切换
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
