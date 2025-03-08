@@ -382,7 +382,7 @@
       "id_is_taken": "此 ID 已被占用",
       "litematica_generator": "投影生成器",
       "litematica_generator_only_support_uploading_1_litematica_file": "投影生成器模式只支持上传单个投影文件",
-      "manual_upload": "普通机器投稿",
+      "manual_upload": "普通机器投稿，大多数稿件应选择此选项",
       "maximum_size_per_image": "单张图片最大 2MB",
       "name_cannot_contain_special_characters": "名称不能包含特殊字符",
       "not_upload": "尚未上传任何文件",

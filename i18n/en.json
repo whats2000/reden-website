@@ -382,7 +382,7 @@
       "id_is_taken": "ID is taken, please choose another one",
       "litematica_generator": "Litematica Generator",
       "litematica_generator_only_support_uploading_1_litematica_file": "Litematica generator mode only support uploading 1 litematica file",
-      "manual_upload": "Normal Designs Upload",
+      "manual_upload": "Normal designs upload, most designs should choose this option",
       "maximum_size_per_image": "Maximum 2MB per image",
       "name_cannot_contain_special_characters": "Name cannot contain special characters",
       "not_upload": "No files have been uploaded yet",
