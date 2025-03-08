@@ -247,6 +247,25 @@ function savePreferences() {
           </v-text-field>
         </v-col>
       </v-row>
+      <v-row v-if="locale === 'zh_cn'">
+        <v-col>
+          <p class="setting-label">实名认证</p>
+          <p class="setting-description">
+            仅针对中国大陆用户，未经实名认证的用户和非中国公民用户的评论、发帖等，对于中国大陆用户隐藏。
+            <reden-router to="/docs/zh_cn/real-person"> 了解更多 </reden-router>
+          </p>
+        </v-col>
+        <v-col>
+          <v-btn
+            class="text-capitalize setting-button"
+            color="primary"
+            variant="outlined"
+            disabled
+          >
+            {{ user.realName ? '已认证' : '未认证' }}
+          </v-btn>
+        </v-col>
+      </v-row>
       <v-row>
         <v-col>
           <p class="setting-label">{{ t('profile.edit.bio') }}</p>
