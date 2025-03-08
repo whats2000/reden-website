@@ -252,7 +252,7 @@ function savePreferences() {
           <p class="setting-label">实名认证</p>
           <p class="setting-description">
             仅针对中国大陆用户，未经实名认证的用户和非中国公民用户的评论、发帖等，对于中国大陆用户隐藏。
-            <reden-router to="/docs/zh_cn/real-person"> 了解更多 </reden-router>
+            <router-link to="/docs/zh_cn/real-person"> 了解更多 </router-link>
           </p>
         </v-col>
         <v-col>
