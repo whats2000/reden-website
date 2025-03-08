@@ -10,10 +10,12 @@ import LayoutHeader from '~/components/layout/Header.vue';
 import LayoutFooter from '~/components/layout/footer.vue';
 
 import { useI18n } from 'vue-i18n';
+import { useMessageStore } from '~/store/message'; // 确保路径正确
 
 const localePath = useLocalePath();
+const switchLocalePath = useSwitchLocalePath();
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const theme = useTheme();
 const appStore = useAppStore();
@@ -54,7 +56,6 @@ const localeHead = useLocaleHead({
   },
 });
 
-import { useMessageStore } from '~/store/message'; // 确保路径正确
 const messageStore = useMessageStore();
 const { drawer } = storeToRefs(messageStore);
 
@@ -208,6 +209,24 @@ function showMessageDetailDialog(message: any) {
     </layout-header>
 
     <VSonner :expand="true" :position="'top-right'" />
+    <v-dialog
+      max-width="600"
+      :model-value="locale !== 'zh_cn' && appStore.$state._isInChina"
+      #default="{ isActive }"
+    >
+      <v-card>
+        <v-card-title>切换到您常用的语言</v-card-title>
+        <v-card-text>
+          您现在的IP地址是中国大陆的地址，我们检测到您的浏览器语言设置为
+          {{ t(locale) }}
+          ，是否切换到简体中文？
+        </v-card-text>
+        <v-card-actions>
+          <v-btn @click="isActive.value = false">不切换</v-btn>
+          <v-btn color="primary" :to="switchLocalePath('zh_cn')">切换</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-main class="router" style="--v-layout-top: 64px">
       <slot />
     </v-main>
@@ -234,15 +253,15 @@ function showMessageDetailDialog(message: any) {
           >
             <v-tabs>
               <v-tab @click="filter = 'all'">{{ t('message.all') }}</v-tab>
-              <v-tab @click="filter = 'unread'">{{
-                t('message.unread')
-              }}</v-tab>
+              <v-tab @click="filter = 'unread'"
+                >{{ t('message.unread') }}
+              </v-tab>
             </v-tabs>
             <v-btn
-              variant="text"
               color="primary"
-              @click="markAllAsRead"
               style="margin-left: 16px"
+              variant="text"
+              @click="markAllAsRead"
             >
               {{ t('message.all_read') }}
             </v-btn>
@@ -253,24 +272,24 @@ function showMessageDetailDialog(message: any) {
             <v-list-item
               v-for="message in filteredMessages"
               :key="message.id"
-              @mouseenter="onMouseEnter(message.id)"
-              @mouseleave="onMouseLeave()"
               class="message-item cursor-pointer"
               @click="showMessageDetailDialog(message)"
+              @mouseenter="onMouseEnter(message.id)"
+              @mouseleave="onMouseLeave()"
             >
               <template v-slot:prepend>
-                <v-icon>{{
-                  message.read ? 'mdi-email-open' : 'mdi-email'
-                }}</v-icon>
+                <v-icon
+                  >{{ message.read ? 'mdi-email-open' : 'mdi-email' }}
+                </v-icon>
               </template>
               <div style="flex: 1">
                 <div class="message-header">
-                  <v-list-item-title class="text-truncate">{{
-                    message.subject
-                  }}</v-list-item-title>
+                  <v-list-item-title class="text-truncate"
+                    >{{ message.subject }}
+                  </v-list-item-title>
                   <span
-                    class="text-blue cursor-pointer"
                     v-if="!message.read && hoveredItemId === message.id"
+                    class="text-blue cursor-pointer"
                     @click.stop="markAsRead(message)"
                     >{{ t('message.mark_as_read') }}</span
                   >
@@ -302,9 +321,9 @@ function showMessageDetailDialog(message: any) {
           <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn variant="text" color="primary" @click="dialog = false">{{
-              t('$vuetify.close')
-            }}</v-btn>
+            <v-btn color="primary" variant="text" @click="dialog = false"
+              >{{ t('$vuetify.close') }}
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
