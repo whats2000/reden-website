@@ -27,6 +27,7 @@ watch(globalTheme, () => {
   }
 });
 onMounted(() => {
+  appStore.isInChina();
   const colors: Record<string, string> =
     theme.themes.value[appStore.theme]!.colors;
   const css: string[] = [];

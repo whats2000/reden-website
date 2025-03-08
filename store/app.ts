@@ -112,10 +112,14 @@ export const useAppStore = defineStore('reden', {
           if (data.mm?.country_code === 'CN') {
             console.log('ip', data.ip, 'is in china.');
             this._isInChina = true;
+            this.save();
             return true;
           } else if (data.mm?.country_code) {
             this._isInChina = false;
+            this.save();
             return false;
+          } else {
+            console.log('ip', data.ip, 'is unknown.');
           }
         }
       }
