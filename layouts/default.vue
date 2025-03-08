@@ -236,7 +236,8 @@ function showMessageDetailDialog(message: any) {
             :to="switchLocalePath('zh_cn')"
             color="primary"
             @click="zhCNLanguageNoti = false"
-            >切换
+          >
+            切换
           </v-btn>
         </v-card-actions>
       </v-card>
