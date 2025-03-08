@@ -302,29 +302,7 @@ export function isStrongPassword(password: string) {
   );
 }
 
-export const debugMessages = () => !useBackendMeta(/*pinia*/).get().production;
-
-let _isInChina: boolean | undefined = undefined;
-
-export async function isInChina() {
-  if (_isInChina) return _isInChina;
-  if (!import.meta.client) return false;
-  else {
-    let res = await doFetchGet('/api/ip');
-    if (res.ok) {
-      let data = await res.json();
-      if (data.mm?.country_code === 'CN') {
-        console.log('ip', data.ip, 'is in china.');
-        _isInChina = true;
-        return true;
-      } else {
-        _isInChina = false;
-        return false;
-      }
-    }
-  }
-}
-
+export const debugMessages = () => !useBackendMeta().get().production;
 export function number2text(num?: number) {
   num = num || 0;
   if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
