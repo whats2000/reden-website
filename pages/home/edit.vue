@@ -46,6 +46,7 @@ watch(user, () => {
   if (!user.value.preference.timezone) {
     console.log(`user updated, auto add timezone ${timeZone}`);
     user.value.preference.timezone = timeZone;
+    doFetchPost('/api/account/update/preference', user.value.preference);
   }
 });
 const dialogChangePassword = ref(
@@ -186,10 +187,10 @@ function savePreferences() {
         prepend-icon="mdi-arrow-left"
         variant="outlined"
       >
-        {{ $t('profile.edit.back') }}
+        {{ t('profile.edit.back') }}
       </v-btn>
       <h1>
-        {{ $t('reden.title.edit_profile') }}
+        {{ t('reden.title.edit_profile') }}
       </h1>
     </div>
     <v-card
@@ -199,7 +200,7 @@ function savePreferences() {
       rounded="lg"
     >
       <h3 class="setting-section-title">
-        {{ $t('profile.edit.basic_information') }}
+        {{ t('profile.edit.basic_information') }}
       </h3>
       <v-row>
         <v-col>
@@ -323,7 +324,7 @@ function savePreferences() {
             {{ t('profile.edit.preference.show_minecraft_uuid') }}
           </p>
           <p class="setting-description">
-            {{ $t('profile.edit.preference.show_minecraft_uuid_desc') }}
+            {{ t('profile.edit.preference.show_minecraft_uuid_desc') }}
           </p>
         </v-col>
         <v-spacer />
@@ -525,7 +526,7 @@ function savePreferences() {
     </v-card>
     <v-card border class="setting-section-card section" rounded="lg">
       <h3 class="setting-section-title">
-        {{ $t('profile.edit.third_party_accounts') }}
+        {{ t('profile.edit.third_party_accounts') }}
       </h3>
       <OAuthAccountLine icon="mdi-microsoft" type="microsoft" />
       <OAuthAccountLine icon="mdi-github" type="github" />

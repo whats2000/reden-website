@@ -62,6 +62,8 @@ export type Profile = {
   followers?: number;
   following?: number;
   followingProjects?: number;
+  // 中国大陆实名认证信息
+  realName?: string;
 };
 
 export type Preference = {
