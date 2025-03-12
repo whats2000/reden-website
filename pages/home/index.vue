@@ -165,7 +165,7 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
                   rounded="lg"
                   variant="outlined"
                 >
-                  {{ $t('profile.editProfile') }}
+                  {{ t('profile.editProfile') }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -176,7 +176,7 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
       <v-col>
         <div class="d-flex flex-row flex-wrap gap-8">
           <v-btn color="primary" @click="logout">
-            {{ $t('profle.logout') }}
+            {{ t('profile.logout') }}
           </v-btn>
           <v-btn border>
             生成个人密钥

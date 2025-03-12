@@ -177,6 +177,7 @@
     },
     "editProfile": "Edit Profile",
     "link_now": "Link Now!",
+    "logout": "Logout",
     "microsoft_checked_verifying_minecraft": "Microsoft account checked, verifying Minecraft ownership...",
     "my_backup": "My Cloud Backups",
     "no_machines": "This user has no posts yet.",
@@ -190,9 +191,6 @@
     "username": "Username",
     "verified_minecraft": "Verified minecraft account",
     "your_timezone": "(Your timezone)"
-  },
-  "profle": {
-    "logout": "Logout"
   },
   "reden": {
     "card": {

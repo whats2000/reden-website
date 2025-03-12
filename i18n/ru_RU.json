@@ -142,6 +142,7 @@
       "username_timer": "Вы можете снова изменить свое имя пользователя через {0} часов"
     },
     "editProfile": "Редактировать профиль",
+    "logout": "",
     "my_backup": "Мои облачные резервные копии",
     "oauth": {
       "link_account": "Привязать аккаунт",
@@ -263,15 +264,6 @@
       },
       "try": "Пожалуйста, попробуйте позже"
     }
-  },
-  "reset_pass": {
-    "confirm_password": "",
-    "input_password": "",
-    "invalid_link": "",
-    "invalid_link_info": "",
-    "invalid_link_instruction": "",
-    "invalid_link_instruction_link": "",
-    "success": ""
   },
   "ru": "Русский",
   "search": {

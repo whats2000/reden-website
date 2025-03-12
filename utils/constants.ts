@@ -231,40 +231,41 @@ export type ErrorResponse = {
   error_description: string;
 };
 
-export function fetchUser(userRef: Ref<Profile | undefined>) {
+export async function fetchUser(userRef: Ref<Profile | undefined>) {
   useNuxtApp();
-  return doFetchGet('/api/account/profile')
-    .then(async (response) => {
-      if (response.ok) {
-        const data: Profile = await response.json();
-        userRef.value = data;
-        useAppStore().updateCache(data);
-      } else {
-        if (response.status === 401) {
-          toast('Error', {
-            description: 'You are not logged in',
-            duration: 3e3,
-            cardProps: {
-              color: 'error',
-            },
-          });
-          useAppStore().logout();
-          const localeRoute = useLocaleRoute();
-          useRouter().push(
-            localeRoute({
-              path: '/login',
-              hash: '#status=401',
-            })!,
-          );
-          console.log(
-            '%c[Reden] User is not logged in',
-            'color: #f00; font-weight: bold; font-size: 1.2em;background-color: #000',
-          );
-        }
-        return Promise.reject(await response.json());
+  try {
+    let response = await doFetchGet('/api/account/profile');
+    if (response.ok) {
+      const data: Profile = await response.json();
+      userRef.value = data;
+      useAppStore().updateCache(data);
+    } else {
+      if (response.status === 401) {
+        toast('Error', {
+          description: 'You are not logged in',
+          duration: 3e3,
+          cardProps: {
+            color: 'error',
+          },
+        });
+        useAppStore().logout();
+        const localeRoute = useLocaleRoute();
+        await useRouter().push(
+          localeRoute({
+            path: '/login',
+            hash: '#status=401',
+          })!,
+        );
+        console.log(
+          '%c[Reden] User is not logged in',
+          'color: #f00; font-weight: bold; font-size: 1.2em;background-color: #000',
+        );
       }
-    })
-    .catch((e) => toastError(e, 'Failed to get user profile'));
+      return Promise.reject(await response.json());
+    }
+  } catch (e) {
+    return await toastError(e, 'Failed to get user profile');
+  }
 }
 
 export type OAuthAccount = {

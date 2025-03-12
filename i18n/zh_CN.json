@@ -177,6 +177,7 @@
     },
     "editProfile": "编辑个人资料",
     "link_now": "点击链接",
+    "logout": "退出登录",
     "microsoft_checked_verifying_minecraft": "微软账号已绑定，正在检查 Minecraft 所有权...",
     "my_backup": "我的云备份",
     "no_machines": "此用户还没有投稿。",
@@ -190,9 +191,6 @@
     "username": "用户名",
     "verified_minecraft": "已认证的 Minecraft 账号",
     "your_timezone": "（相同时区）"
-  },
-  "profle": {
-    "logout": "退出登录"
   },
   "reden": {
     "card": {

@@ -41,6 +41,13 @@ const mockUser: Profile = {
  */
 const userCopy = ref<Profile>(mockUser);
 const user = ref<Profile>(mockUser);
+watch(user, () => {
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  if (!user.value.preference.timezone) {
+    console.log(`user updated, auto add timezone ${timeZone}`);
+    user.value.preference.timezone = timeZone;
+  }
+});
 const dialogChangePassword = ref(
   router.currentRoute.value?.hash === '#change-password',
 );
@@ -115,26 +122,21 @@ function changePassword() {
 const savingInfo = ref(false);
 const savingPreferences = ref(false);
 
-function saveInfo() {
+async function saveInfo() {
   savingInfo.value = true;
-  doFetchPost('/api/account/update', user.value)
-    .then((response) => {
-      if (response.ok) {
-        toast.success(t('profile.edit.success'), {
-          description: t('profile.edit.information_saved'),
-          duration: 1000,
-        });
-        fetchUser(user).then(() => {
-          userCopy.value = JSON.parse(JSON.stringify(user.value));
-        });
-      } else {
-        return Promise.reject(response);
-      }
-    })
-    .catch((e) => toastError(e, t('profile.edit.failed_to_save_information')))
-    .finally(() => {
-      savingInfo.value = false;
+  const response = await doFetchPost('/api/account/update', user.value);
+  if (response.ok) {
+    toast.success(t('profile.edit.success'), {
+      description: t('profile.edit.information_saved'),
+      duration: 1000,
     });
+    fetchUser(user).then(() => {
+      userCopy.value = JSON.parse(JSON.stringify(user.value));
+    });
+  } else {
+    await toastError(response, t('profile.edit.failed_to_save_information'));
+  }
+  savingInfo.value = false;
 }
 
 function changed(a: Record<string, unknown>, b: Record<string, unknown>) {
@@ -355,7 +357,7 @@ function savePreferences() {
             {{ t('profile.edit.preference.show_timezone') }}
           </p>
           <p class="setting-description">
-            {{ $t('profile.edit.preference.show_timezone_desc') }}
+            {{ t('profile.edit.preference.show_timezone_desc') }}
           </p>
         </v-col>
         <v-spacer />
@@ -399,10 +401,10 @@ function savePreferences() {
       <v-row>
         <v-col>
           <p class="setting-label">
-            {{ $t('profile.edit.preference.timezone') }}
+            {{ t('profile.edit.preference.timezone') }}
           </p>
           <p class="setting-description">
-            {{ $t('profile.edit.preference.timezone_desc') }}
+            {{ t('profile.edit.preference.timezone_desc') }}
           </p>
         </v-col>
         <v-col>
