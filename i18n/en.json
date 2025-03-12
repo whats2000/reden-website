@@ -339,7 +339,11 @@
   "reset_pass": {
     "email_sent": "Email Sent",
     "email_sent_desc": "An email has been sent to your email address. Please check your inbox and follow the instructions to reset your password.",
-    "submit": "Submit"
+    "forgot_password": "Forgot Password",
+    "input_email": "Email or Usernme",
+    "please_wait_for_a_while": "Please wait for a while before trying again",
+    "submit": "Submit",
+    "you_can_only_request": "You can only request password reset once per minutes."
   },
   "ru": "Русский",
   "search": {

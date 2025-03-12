@@ -266,8 +266,10 @@
   },
   "reset_pass": {
     "email_sent": "",
-    "email_sent_desc": "",
-    "submit": ""
+    "forgot_password": "",
+    "input_email": "",
+    "please_wait_for_a_while": "",
+    "you_can_only_request": ""
   },
   "ru": "Русский",
   "search": {
