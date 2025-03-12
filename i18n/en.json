@@ -337,12 +337,19 @@
     }
   },
   "reset_pass": {
+    "confirm_password": "Confirm New Password",
     "email_sent": "Email Sent",
     "email_sent_desc": "An email has been sent to your email address. Please check your inbox and follow the instructions to reset your password.",
     "forgot_password": "Forgot Password",
     "input_email": "Email or Usernme",
+    "input_password": "New Password",
+    "invalid_link": "Invalid link",
+    "invalid_link_info": "The link is malformed or expired.",
+    "invalid_link_instruction": "If you want to reset your password, please request a new link from the",
+    "invalid_link_instruction_link": "forgot password page",
     "please_wait_for_a_while": "Please wait for a while before trying again",
     "submit": "Submit",
+    "success": "Successfully reset password",
     "you_can_only_request": "You can only request password reset once per minutes."
   },
   "ru": "Русский",

@@ -28,12 +28,7 @@ async function submit() {
 
 <template>
   <v-container class="content-common">
-    <v-dialog
-      :model-value="emailSent"
-      activator="parent"
-      close-delay=""
-      max-width="550"
-    >
+    <v-dialog :model-value="emailSent" close-delay="" max-width="550">
       <v-card>
         <v-card-title>{{ t('reset_pass.email_sent') }}</v-card-title>
         <v-card-text>

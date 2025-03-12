@@ -337,12 +337,19 @@
     }
   },
   "reset_pass": {
+    "confirm_password": "确认新密码",
     "email_sent": "邮件已发送",
     "email_sent_desc": "我们已经一封电子邮件发送给你，请检查收件箱并按照其中的指示重置密码。",
     "forgot_password": "忘记密码",
     "input_email": "电子邮件或用户名",
+    "input_password": "新密码",
+    "invalid_link": "链接无效",
+    "invalid_link_info": "此链接格式错误或者已过期。",
+    "invalid_link_instruction": "如果你想重置密码，请前往密码重置页面",
+    "invalid_link_instruction_link": "重新获取一个重置链接",
     "please_wait_for_a_while": "请稍等一下再试",
     "submit": "确认",
+    "success": "密码重置成功",
     "you_can_only_request": "每分钟只能请求一次密码重置邮件。"
   },
   "ru": "Русский",
