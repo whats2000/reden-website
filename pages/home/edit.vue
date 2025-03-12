@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {
   type Captcha,
+  doFetchDelete,
   doFetchPost,
   fetchUser,
   isStrongPassword,
@@ -10,7 +11,6 @@ import {
   zh_cn,
 } from '@/utils/constants';
 import { ref, watch } from 'vue';
-import OAuthAccountLine from '@/components/editProfilePage/OAuthAccountLine.vue';
 import { toast } from 'vuetify-sonner';
 import { useI18n } from 'vue-i18n';
 import CommonCaptcha from '@/components/CommonCaptcha.vue';
@@ -60,6 +60,30 @@ useHead({
 definePageMeta({
   needLogin: true,
 });
+const { data: oauthData, status: oauthLoading } =
+  useFetch<OAuthAccount[]>('/api/account/oauth');
+function getOAuthAccount(type: string) {
+  return oauthData.value?.find((a) => a.type === type);
+}
+async function unlinkAccount(type: string) {
+  let response = await doFetchDelete(`/api/account/${type}`);
+  if (response.ok) {
+    account.value = undefined;
+    toast('Account unlinked', {
+      cardProps: {
+        color: 'success',
+      },
+      duration: 5000,
+    });
+  } else {
+    toast(response.statusText, {
+      cardProps: {
+        color: 'error',
+      },
+      duration: 5000,
+    });
+  }
+}
 
 watch(dialogChangePassword, () => {
   if (dialogChangePassword.value) {
@@ -264,8 +288,8 @@ function savePreferences() {
           <v-btn
             class="text-capitalize setting-button"
             color="primary"
-            variant="outlined"
             disabled
+            variant="outlined"
           >
             {{ user.realName ? '已认证' : '未认证' }}
           </v-btn>
@@ -307,7 +331,7 @@ function savePreferences() {
             {{ t('profile.edit.preference.showEmail') }}
           </p>
           <p class="setting-description">
-            {{ $t('profile.edit.preference.show_email_desc') }}
+            {{ t('profile.edit.preference.show_email_desc') }}
           </p>
         </v-col>
         <v-spacer />
@@ -528,8 +552,55 @@ function savePreferences() {
       <h3 class="setting-section-title">
         {{ t('profile.edit.third_party_accounts') }}
       </h3>
-      <OAuthAccountLine icon="mdi-microsoft" type="microsoft" />
-      <OAuthAccountLine icon="mdi-github" type="github" />
+      <v-list border>
+        <v-list-item
+          v-for="type in [
+            {
+              display: 'Microsoft',
+              name: 'microsoft',
+              icon: 'custom:Microsoft',
+            },
+            { display: 'Github', name: 'github', icon: 'mdi-github' },
+            { display: 'Google', name: 'google', icon: 'custom:Google' },
+          ]"
+        >
+          <v-row class="line">
+            <v-col>
+              <v-icon v-if="type.icon">{{ type.icon }}</v-icon>
+              <span class="setting-label">
+                {{ type.display }}
+              </span>
+            </v-col>
+            <v-col>
+              <p v-if="getOAuthAccount(type.name)">
+                {{ getOAuthAccount(type.name)?.name }}
+              </p>
+            </v-col>
+            <v-col>
+              <v-btn
+                v-if="!getOAuthAccount(type.name)"
+                :href="`/api/oauth/${type}`"
+                :loading="oauthLoading === 'pending'"
+                block
+                class="text-capitalize setting-button"
+                color="primary"
+              >
+                {{ t('profile.oauth.link_account') }}
+              </v-btn>
+              <v-btn
+                v-if="getOAuthAccount(type.name)"
+                :loading="oauthLoading === 'pending'"
+                block
+                class="text-capitalize setting-button"
+                color="error"
+                @click="unlinkAccount(type.name)"
+              >
+                {{ t('profile.oauth.unlink_account') }}
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-list-item>
+      </v-list>
     </v-card>
   </div>
 </template>

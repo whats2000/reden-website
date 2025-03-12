@@ -277,26 +277,6 @@ export type OAuthAccount = {
   name?: string;
 };
 
-export function getOauth(
-  type: string,
-  url: string,
-  account: Ref<OAuthAccount | undefined>,
-): Promise<void | undefined> {
-  return doFetchGet(url)
-    .then((res) => {
-      if (res.ok) {
-        res.json().then((data: OAuthAccount) => {
-          account.value = data;
-        });
-      } else if (res.status == 404) {
-        account.value = undefined;
-      } else {
-        return Promise.reject(res);
-      }
-    })
-    .catch((e) => toastError(e, `Failed to get ${type} account`));
-}
-
 export function isStrongPassword(password: string) {
   return !!(
     password.length >= 8 &&
