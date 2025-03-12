@@ -264,6 +264,11 @@
       "try": "Пожалуйста, попробуйте позже"
     }
   },
+  "reset_pass": {
+    "email_sent": "",
+    "email_sent_desc": "",
+    "submit": ""
+  },
   "ru": "Русский",
   "search": {
     "hover": "Поиск функций Reden"

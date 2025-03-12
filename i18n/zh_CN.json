@@ -336,6 +336,11 @@
       "try": "请稍后再试"
     }
   },
+  "reset_pass": {
+    "email_sent": "",
+    "email_sent_desc": "我们已经一封电子邮件发送给你，请检查收件箱并按照其中的指示重置密码。",
+    "submit": "确认"
+  },
   "ru": "Русский",
   "search": {
     "hover": "搜索 Reden 功能"

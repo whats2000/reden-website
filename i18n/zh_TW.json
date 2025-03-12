@@ -264,6 +264,11 @@
       "try": "請稍後再試"
     }
   },
+  "reset_pass": {
+    "email_sent": "",
+    "email_sent_desc": "",
+    "submit": ""
+  },
   "ru": "Русский",
   "search": {
     "hover": "搜尋 Reden 功能"

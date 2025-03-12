@@ -336,6 +336,11 @@
       "try": "Please try again later"
     }
   },
+  "reset_pass": {
+    "email_sent": "Email Sent",
+    "email_sent_desc": "An email has been sent to your email address. Please check your inbox and follow the instructions to reset your password.",
+    "submit": "Submit"
+  },
   "ru": "Русский",
   "search": {
     "hover": "Search Reden Features"

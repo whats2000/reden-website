@@ -1,18 +1,42 @@
 <script lang="ts" setup>
 const email = ref('');
 const captcha = ref<Captcha>();
+const emailSent = ref(false);
+const localePath = useLocalePath();
+const { t } = useI18n();
 
-function submit() {
+async function submit() {
   console.log(email);
-  doFetchPost('/api/account/forgot-password', {
+  const response = await doFetchPost('/api/account/forgot-password', {
     email: email.value,
     captcha: captcha.value,
   });
+  if (response.ok) {
+    emailSent.value = true;
+  } else {
+    await toastError(response);
+  }
 }
 </script>
 
 <template>
   <v-container class="content-common">
+    <v-dialog
+      max-width="550"
+      :model-value="emailSent"
+      close-delay=""
+      activator="parent"
+    >
+      <v-card>
+        <v-card-title>{{ t('reset_pass.email_sent') }}</v-card-title>
+        <v-card-text>
+          <p>{{ t('reset_pass.email_sent_desc') }}</p>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" :to="localePath('/login')">OK</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-row>
       <v-col cols="12">
         <v-card>
@@ -27,7 +51,7 @@ function submit() {
               />
               <common-captcha v-model="captcha" />
               <v-btn :disabled="!captcha?.token" color="primary" type="submit">
-                Submit
+                {{ t('reset_pass.submit') }}
               </v-btn>
             </v-form>
           </v-card-text>
