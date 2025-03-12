@@ -1,8 +1,13 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 const email = ref('');
+const captcha = ref<Captcha>();
 
 function submit() {
   console.log(email);
+  doFetchPost('/api/account/forgot-password', {
+    email: email.value,
+    captcha: captcha.value,
+  });
 }
 </script>
 
@@ -19,8 +24,11 @@ function submit() {
                 label="Email"
                 required
                 type="email"
-              ></v-text-field>
-              <v-btn type="submit" color="primary">Submit</v-btn>
+              />
+              <common-captcha v-model="captcha" />
+              <v-btn :disabled="!captcha?.token" color="primary" type="submit">
+                Submit
+              </v-btn>
             </v-form>
           </v-card-text>
         </v-card>
