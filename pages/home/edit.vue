@@ -587,7 +587,7 @@ function savePreferences() {
             <v-col>
               <v-btn
                 v-if="!getOAuthAccount(type.name)"
-                :href="`/api/oauth/${type}`"
+                :href="`/api/oauth/${type.name.toLowerCase()}?redirect_url=${encodeURI('/home/edit')}`"
                 :loading="oauthLoading === 'pending'"
                 block
                 class="text-capitalize setting-button"
