@@ -13,6 +13,7 @@ import {
 import { useI18n } from 'vue-i18n';
 import { type SubmitEventPromise } from 'vuetify';
 import RedenRouter from '~/components/RedenRouter.vue';
+import OAuthButtons from '~/components/misc/OAuthButtons.vue';
 
 const email = ref('');
 const username = ref('');
@@ -70,30 +71,9 @@ function register(e: SubmitEventPromise) {
         {{ t('register.quick') }}
       </h2>
 
-      <v-row>
-        <v-col>
-          <v-btn
-            :block="true"
-            :href="'/api/oauth/github?redirect_url=' + encodeURI('/login')"
-            color="blue"
-          >
-            <v-icon left>mdi-github</v-icon>
-            Github
-          </v-btn>
-        </v-col>
-        <v-col>
-          <v-btn
-            :block="true"
-            :href="'/api/oauth/microsoft?redirect_url=' + encodeURI('/login')"
-            color="red"
-          >
-            <v-icon left>mdi-microsoft</v-icon>
-            Microsoft
-          </v-btn>
-        </v-col>
-      </v-row>
+      <o-auth-buttons />
       <h1 class="mt-6">
-        {{ $t('register.title') }}
+        {{ t('register.title') }}
       </h1>
       <v-text-field
         v-model="email"
