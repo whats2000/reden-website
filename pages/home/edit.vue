@@ -60,15 +60,24 @@ useHead({
 definePageMeta({
   needLogin: true,
 });
-const { data: oauthData, status: oauthLoading } =
-  useFetch<OAuthAccount[]>('/api/account/oauth');
+const {
+  data: oauthData,
+  status: oauthLoading,
+  refresh: refreshOAuth,
+} = useFetch<OAuthAccount[]>('/api/account/oauth');
+
+if (import.meta.client) {
+  refreshOAuth();
+}
+
 function getOAuthAccount(type: string) {
   return oauthData.value?.find((a) => a.type === type);
 }
+
 async function unlinkAccount(type: string) {
   let response = await doFetchDelete(`/api/account/${type}`);
   if (response.ok) {
-    account.value = undefined;
+    await refreshOAuth();
     toast('Account unlinked', {
       cardProps: {
         color: 'success',
@@ -556,19 +565,18 @@ function savePreferences() {
         <v-list-item
           v-for="type in [
             {
-              display: 'Microsoft',
-              name: 'microsoft',
+              name: 'Microsoft',
               icon: 'custom:Microsoft',
             },
-            { display: 'Github', name: 'github', icon: 'mdi-github' },
-            { display: 'Google', name: 'google', icon: 'custom:Google' },
+            { name: 'Github', icon: 'mdi-github' },
+            { name: 'Google', icon: 'custom:Google' },
           ]"
         >
           <v-row class="line">
             <v-col>
               <v-icon v-if="type.icon">{{ type.icon }}</v-icon>
               <span class="setting-label">
-                {{ type.display }}
+                {{ type.name }}
               </span>
             </v-col>
             <v-col>
