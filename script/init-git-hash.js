@@ -11,4 +11,5 @@ fs.writeFileSync(
 env node script/fix-i18n.js
 `,
 );
+execSync('chmod +x .git/hooks/pre-commit');
 console.log('🎉[Reden] Initialized pre-commit hook');
