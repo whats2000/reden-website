@@ -8,7 +8,7 @@
       height="48"
     >
       <v-icon left>mdi-github</v-icon>
-      Github
+      <div class="text">Github</div>
     </v-btn>
     <v-btn
       :block="true"
@@ -18,7 +18,7 @@
       height="48"
     >
       <v-icon left>custom:Microsoft</v-icon>
-      Microsoft
+      <div class="text">Microsoft</div>
     </v-btn>
     <v-btn
       :block="true"
@@ -28,7 +28,7 @@
       height="48"
     >
       <v-icon left>custom:Google</v-icon>
-      Google
+      <div class="text">Google</div>
     </v-btn>
   </div>
 </template>
@@ -39,4 +39,10 @@
   font-size: 18px;
   text-transform: none;
 }
+
+.text {
+  text-align: center;
+  width: 120px;
+}
 </style>
+<script setup lang="ts"></script>
