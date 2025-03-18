@@ -23,6 +23,7 @@ import RedenRouter from '~/components/RedenRouter.vue';
 import type { VForm } from 'vuetify/components';
 import { toast } from 'vuetify-sonner';
 import * as localforage from 'localforage';
+import RedenPostStatusChip from '~/components/litematica/RedenPostStatusChip.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -247,10 +248,10 @@ const selectedImage = ref(
 
 <template>
   <v-form ref="form" class="lm-main-content" fast-fail @submit.prevent="submit">
-    <div class="ma-4">
+    <div class="ma-4 d-flex flex-wrap" style="gap: 12px">
       <v-btn
         :to="backUrl ?? localePath('/litematica')"
-        class="text-capitalize mr-3"
+        class="text-capitalize"
         prepend-icon="mdi-arrow-left"
         variant="tonal"
       >
@@ -258,7 +259,7 @@ const selectedImage = ref(
       </v-btn>
       <v-btn
         :to="appStore.logined ? undefined : localePath('/login')"
-        class="text-capitalize mr-3"
+        class="text-capitalize"
         color="primary"
         variant="outlined"
         @click="
@@ -291,25 +292,35 @@ const selectedImage = ref(
           </v-card>
         </v-dialog>
       </v-btn>
-      <v-btn v-if="appStore.userCache?.roles?.includes('archiver')" color="red">
-        下架
-        <v-dialog :max-width="900" activator="parent">
-          <v-card>
-            <v-card-title>下架原因</v-card-title>
-            <v-card-text>
-              <v-text-field
-                v-model="removeReason"
-                color="red"
-                label="下架原因"
-                required
-              />
-            </v-card-text>
-            <v-card-actions>
-              <v-btn color="red" @click="cancelApproval"> 确认</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-btn>
+      <template
+        v-if="
+          appStore.userCache &&
+          (appStore.userCache?.roles?.includes('archiver') ||
+            appStore.userCache?.id === selected.author?.id)
+        "
+      >
+        管理操作：
+        <v-btn color="red">
+          下架
+          <v-dialog :max-width="900" activator="parent">
+            <v-card>
+              <v-card-title>下架原因</v-card-title>
+              <v-card-text>
+                <v-text-field
+                  v-model="removeReason"
+                  color="red"
+                  label="下架原因"
+                  required
+                />
+              </v-card-text>
+              <v-card-actions>
+                <v-btn color="red" @click="cancelApproval"> 确认</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-btn>
+        <v-btn color="red"> 转移所有权</v-btn>
+      </template>
     </div>
 
     <div class="ma-4">
@@ -448,6 +459,10 @@ const selectedImage = ref(
                 <div>
                   {{ new Date(selected.updatedAt || 0).toLocaleString() }}
                 </div>
+              </div>
+              <div class="d-flex mt-3">
+                <div class="w-33 align-content-center">当前状态：</div>
+                <reden-post-status-chip :value="selected.status" />
               </div>
               <div class="d-flex mt-3">
                 <div class="w-33 align-content-center">版本：</div>
