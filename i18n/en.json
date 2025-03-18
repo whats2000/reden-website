@@ -89,6 +89,7 @@
       "random-extra": "Explore (Random)",
       "sort_by": "Sort by:"
     },
+    "status": "Visibility",
     "suggested_values": "Suggested Values: ",
     "suggestion_notice": "These suggested values are for your reference only",
     "title": "Litematica Online Generator",
@@ -96,6 +97,7 @@
       "failed_to_load_litematica_preview": "Failed to load litematica preview"
     },
     "total_downloads": "We have provided {0} downloads in total.",
+    "updated_at": "Updated At",
     "upload": {
       "button_msg": "Upload New Design",
       "edit_or_improve_translation": "Edit or Improve Translation"

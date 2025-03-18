@@ -459,17 +459,23 @@ const selectedImage = ref(
                 </router-link>
               </div>
               <div class="d-flex mt-3">
-                <div class="w-33 align-content-center">更新时间：</div>
+                <div class="w-33 align-content-center">
+                  {{ t('litematica_generator.updated_at') }}
+                </div>
                 <div>
                   {{ new Date(selected.updatedAt || 0).toLocaleString() }}
                 </div>
               </div>
               <div class="d-flex mt-3">
-                <div class="w-33 align-content-center">当前状态：</div>
+                <div class="w-33 align-content-center">
+                  {{ t('litematica_generator.status') }}:
+                </div>
                 <reden-post-status-chip :value="selected.status" />
               </div>
-              <div class="d-flex mt-3">
-                <div class="w-33 align-content-center">版本：</div>
+              <div class="d-flex mt-3" v-if="selected.versions?.length">
+                <div class="w-33 align-content-center">
+                  {{ t('common.supported_version') }}:
+                </div>
                 <div class="w-66">
                   <v-chip
                     v-for="(version, index) in selected.versions"
@@ -481,13 +487,13 @@ const selectedImage = ref(
                   </v-chip>
                 </div>
               </div>
-              <div class="d-flex mt-3">
+              <div class="d-flex mt-3" v-if="selected.categoryTag">
                 <div class="w-33 align-content-center">设计标签：</div>
                 <v-chip v-if="selected.categoryTag" style="margin-right: 8px">
                   {{ selected.categoryTag.name }}
                 </v-chip>
               </div>
-              <div class="d-flex mt-3">
+              <div class="d-flex mt-3" v-if="selected.featureTags?.length">
                 <div class="w-33 align-content-center">特性标签：</div>
                 <v-chip
                   v-for="(tag, index) in selected.featureTags"
