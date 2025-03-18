@@ -42,21 +42,22 @@ const { data: localizedData } = useNuxtData<Record<string, MachineDef>>(
   `edit-${machineId}`,
 );
 
-const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
-  `/api/mc-services/yisibite/${machineId}/info/${locale.value}`,
-  {
-    onResponseError: (error) => {
-      if (error.response.status === 404) {
-        console.error('error', error);
-        throw createError({
-          status: 404,
-          message: t('litematica_generator.toast.not_found'),
-        });
-        router.push(localePath('/litematica'));
-      }
+const { data: serverResponse, refresh } =
+  await useFetch<ListLitematicaResponse>(
+    `/api/mc-services/yisibite/${machineId}/info/${locale.value}`,
+    {
+      onResponseError: (error) => {
+        if (error.response.status === 404) {
+          console.error('error', error);
+          throw createError({
+            status: 404,
+            message: t('litematica_generator.toast.not_found'),
+          });
+          router.push(localePath('/litematica'));
+        }
+      },
     },
-  },
-);
+  );
 
 async function submit(e: SubmitEventPromise) {
   if ((await e).valid) {
@@ -73,7 +74,7 @@ async function submit(e: SubmitEventPromise) {
       window.open(`/api/mc-services/yisibite/${machineId}/download/1`);
     }
     setTimeout(() => {
-      refreshNuxtData();
+      refresh();
     }, 1000);
   }
 }
@@ -86,6 +87,7 @@ function openMaterials() {
       window.open(
         `/api/mc-services/yisibite/${machineId}/materials?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
       );
+      refresh();
     }
   });
 }
@@ -229,16 +231,18 @@ async function vote(vote: 'up' | 'down' | 'cancel') {
     `/api/mc-services/yisibite/${machineId}/vote`,
     { vote },
   );
-  if (!response.ok) {
-    return toastError(response);
+  if (response.ok) {
+    refresh();
   } else {
-    await useFetch<ListLitematicaResponse>(
-      `/api/mc-services/yisibite/${machineId}/info/${locale.value}`,
-      {
-        key: `generators-${machineId}-${locale.value}`,
-      },
-    );
+    return toastError(response);
   }
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(
+    window.location.href.substring(0, window.location.href.indexOf('?')),
+  );
+  toast.success(t('litematica_generator.share_link_copied_to_clipboard'));
 }
 
 const selectedImage = ref(
@@ -544,8 +548,28 @@ const selectedImage = ref(
                 rounded="xl"
                 style="margin-left: 8px"
                 variant="outlined"
+                @click="copyLink"
               >
-                分享
+                <v-dialog activator="parent" max-width="500">
+                  <v-card>
+                    <v-card-title>
+                      {{ t('litematica_generator.share') }}
+                    </v-card-title>
+                    <v-card-item>
+                      <v-icon color="green" size="64">
+                        mdi-check-circle
+                      </v-icon>
+                      <div class="d-inline-block">
+                        {{
+                          t(
+                            'litematica_generator.share_link_copied_to_clipboard',
+                          )
+                        }}
+                      </div>
+                    </v-card-item>
+                  </v-card>
+                </v-dialog>
+                {{ t('litematica_generator.share') }}
               </v-btn>
             </div>
           </div>
@@ -614,13 +638,13 @@ const selectedImage = ref(
                 <v-spacer />
                 <v-btn
                   :loading="loading"
-                  class="ma-3"
+                  class="ma-3 text-capitalize"
                   color="primary"
                   type="button"
                   variant="outlined"
                   @click="openMaterials"
                 >
-                  材料列表
+                  {{ t('litematica_generator.material_list') }}
                 </v-btn>
                 <v-btn
                   :loading="loading"
