@@ -4,37 +4,25 @@ import { useAppStore } from '~/store/app';
 import { type SubmitEventPromise } from 'vuetify';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
-import SizeInput from '~/components/litematica/SizeInput.vue';
 import 'assets/main.css';
 import type {
   ListLitematicaResponse,
   Machine,
   MachineDef,
 } from '~/pages/litematica/index.vue';
-import {
-  number2text,
-  parseBVID,
-  size2text,
-  timeSince,
-} from '~/utils/constants';
+import { number2text, parseBVID } from '~/utils/constants';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
 import { parseCondition } from '~/utils/conditionParser';
 import RedenRouter from '~/components/RedenRouter.vue';
 import type { VForm } from 'vuetify/components';
 import { toast } from 'vuetify-sonner';
-import * as localforage from 'localforage';
 import RedenPostStatusChip from '~/components/litematica/RedenPostStatusChip.vue';
 import TransferOwnershipDialog from '~/components/litematica/TransferOwnershipDialog.vue';
 
 const route = useRoute();
 const router = useRouter();
-const xSize = ref(0);
-const ySize = ref(0);
-const zSize = ref(0);
-const loading = ref(false);
 const machineId = route.params.name as string;
 const { t, locale } = useI18n();
-const localeRoute = useLocaleRoute();
 const localePath = useLocalePath();
 const appStore = useAppStore();
 const openEditDialog = ref(false);
@@ -63,35 +51,16 @@ const { data: serverResponse, refresh } =
 
 async function submit(e: SubmitEventPromise) {
   if ((await e).valid) {
-    // open a new window to download
-    if (selected.value.type == 'LitematicaGen') {
-      window.open(
-        `/api/mc-services/yisibite/${machineId}?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
-      );
-    } else if (
+    if (
       selected.value.type == 'LitematicaShare' &&
       selected.value.attachments?.length
     ) {
-      // unused
       window.open(`/api/mc-services/yisibite/${machineId}/download/1`);
     }
     setTimeout(() => {
       refresh();
     }, 1000);
   }
-}
-
-const formRef = useTemplateRef<VForm>('form');
-
-function openMaterials() {
-  formRef.value?.validate().then((result) => {
-    if (result.valid) {
-      window.open(
-        `/api/mc-services/yisibite/${machineId}/materials?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
-      );
-      refresh();
-    }
-  });
 }
 
 const selected = computed<Machine>(() => ({
@@ -154,63 +123,7 @@ const tabs = computed(() => {
   ret.push(...(selected.value.images ?? []));
   return ret;
 });
-let blob = ref<Blob[]>([]);
 
-async function loadBlob(index: number) {
-  if (blob.value[index]) {
-    return;
-  }
-  const url = selected.value.attachments?.[index]?.url;
-  if (!url) {
-    toast.error(`No url for index #${index}.`);
-    return;
-  }
-  try {
-    blob.value[index] = await (
-      await fetch(
-        url.startsWith('https://reden.oss-cn-shanghai.aliyuncs.com/')
-          ? url
-          : `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-      )
-    ).blob();
-    if (blob.value[index].size === 0) {
-      throw new Error('Blob size is 0.');
-    }
-    blob.value = [...blob.value];
-    console.log('blob.value[index]', blob.value[index]);
-  } catch (e) {
-    toast.error(
-      t('litematica_generator.toast.failed_to_load_litematica_preview') +
-        (e as Error).message,
-    );
-    console.error(`Failed to load blob for index #${index}`, e);
-    previewing.value = -1;
-  }
-}
-
-try {
-  localforage.removeItem('litematica-studio');
-} catch (e) {}
-
-async function editLitematica(index: number) {
-  await loadBlob(index);
-  await doFetchPost(`/api/mc-services/yisibite/${machineId}/add-edit-stat`, {});
-
-  if (blob.value[index]) {
-    await localforage.setItem('litematica-studio', blob.value[index]);
-    await router.push(
-      localeRoute({
-        name: 'studio',
-      })!,
-    );
-  }
-}
-
-watch(blob, () => {
-  console.log('blob changed', blob.value);
-});
-
-const previewing = ref(-1);
 const removeReason = ref('');
 
 async function cancelApproval() {
@@ -234,7 +147,7 @@ async function vote(vote: 'up' | 'down' | 'cancel') {
     { vote },
   );
   if (response.ok) {
-    refresh();
+    await refresh();
   } else {
     return toastError(response);
   }
@@ -306,7 +219,7 @@ const selectedImage = ref(
         "
       >
         {{ t('post.management_op') }}
-        <v-btn color="red">
+        <v-btn class="text-capitalize" color="red">
           {{ t('post.delete') }}
           <v-dialog :max-width="900" activator="parent">
             <v-card>
@@ -314,31 +227,31 @@ const selectedImage = ref(
               <v-card-text>
                 <v-text-field
                   v-model="removeReason"
-                  color="red"
                   :label="t('post.delete_reason')"
+                  color="red"
                   required
                 />
               </v-card-text>
               <v-card-actions>
                 <v-btn color="red" @click="cancelApproval">
-                  {{ t('common.confirm') }}</v-btn
-                >
+                  {{ t('common.confirm') }}
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-btn>
-        <v-btn color="red">
+        <v-btn class="text-capitalize" color="red">
           {{ t('post.transfer_ownership') }}
           <v-dialog
             v-model="openTransferDialog"
+            activator="parent"
             max-width="500"
             persistent
-            activator="parent"
           >
             <TransferOwnershipDialog
               :machine-id="machineId"
-              @transferred="refresh"
               @close="openTransferDialog = false"
+              @transferred="refresh"
             />
           </v-dialog>
         </v-btn>
@@ -488,9 +401,9 @@ const selectedImage = ref(
                 <div class="w-33 align-content-center">
                   {{ t('litematica_generator.status') }}:
                 </div>
-                <reden-post-status-chip :value="selected.status" />
+                <reden-post-status-chip :value="selected.status!" />
               </div>
-              <div class="d-flex mt-3" v-if="selected.versions?.length">
+              <div v-if="selected.versions?.length" class="d-flex mt-3">
                 <div class="w-33 align-content-center">
                   {{ t('common.supported_version') }}:
                 </div>
@@ -505,13 +418,13 @@ const selectedImage = ref(
                   </v-chip>
                 </div>
               </div>
-              <div class="d-flex mt-3" v-if="selected.categoryTag">
+              <div v-if="selected.categoryTag" class="d-flex mt-3">
                 <div class="w-33 align-content-center">设计标签：</div>
                 <v-chip v-if="selected.categoryTag" style="margin-right: 8px">
                   {{ selected.categoryTag.name }}
                 </v-chip>
               </div>
-              <div class="d-flex mt-3" v-if="selected.featureTags?.length">
+              <div v-if="selected.featureTags?.length" class="d-flex mt-3">
                 <div class="w-33 align-content-center">特性标签：</div>
                 <v-chip
                   v-for="(tag, index) in selected.featureTags"
@@ -625,199 +538,14 @@ const selectedImage = ref(
               <v-divider style="margin: 12px 0" />
             </div>
             <!-- 下载内容 -->
-            <template v-if="selected.type === 'LitematicaGen'">
-              <v-row>
-                <v-col>
-                  <v-card
-                    v-if="selected?.hasX || selected?.hasY || selected?.hasZ"
-                    border
-                  >
-                    <v-card-subtitle class="text-wrap pa-3">
-                      {{ t('litematica_generator.size_description') }}
-                    </v-card-subtitle>
-                    <v-card-text>
-                      <SizeInput
-                        v-if="selected.hasX"
-                        v-model="xSize"
-                        :def="selected"
-                        xyz="x"
-                      />
-                      <SizeInput
-                        v-if="selected.hasY"
-                        v-model="ySize"
-                        :def="selected"
-                        xyz="y"
-                      />
-                      <SizeInput
-                        v-if="selected.hasZ"
-                        v-model="zSize"
-                        :def="selected"
-                        xyz="z"
-                      />
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-spacer />
-                <v-btn
-                  :loading="loading"
-                  class="ma-3 text-capitalize"
-                  color="primary"
-                  type="button"
-                  variant="outlined"
-                  @click="openMaterials"
-                >
-                  {{ t('litematica_generator.material_list') }}
-                </v-btn>
-                <v-btn
-                  :loading="loading"
-                  class="ma-3"
-                  color="primary"
-                  type="submit"
-                >
-                  {{ t('litematica_generator.download') }}
-                </v-btn>
-              </v-row>
-              <!--FAQ-->
-              <v-row>
-                <v-col>
-                  <h3>FAQ</h3>
-                  <h4>17x17的空置域应该输入多少？</h4>
-                  <p>17x16=272，272的大小包含了两边各一格的铁砧墙宽度。</p>
-                </v-col>
-              </v-row>
-            </template>
-            <v-no-ssr v-if="selected.type === 'LitematicaShare'">
-              <v-list class="pa-0">
-                <!-- 整体容器 -->
-                <v-list-item
-                  v-for="(attachment, index) in selected.attachments"
-                  border
-                  class="d-flex"
-                >
-                  <template #prepend>
-                    <v-icon
-                      :icon="
-                        attachment.name.endsWith('litematic')
-                          ? 'custom:CubeScan'
-                          : 'custom:ZipArchive'
-                      "
-                      :size="40"
-                    />
-                  </template>
-                  <v-list-item-title>
-                    {{ attachment.name }}
-                  </v-list-item-title>
-                  <!-- 右侧内容区域 -->
-                  <v-list-item-subtitle
-                    class="text-caption opacity-60 justify-space-between d-flex"
-                  >
-                    <span>
-                      {{ size2text(attachment.size) }}
-                    </span>
-                    <span>
-                      {{ timeSince(selected.updatedAt || 0) }}
-                    </span>
-                  </v-list-item-subtitle>
-                  <v-list-item-action class="flex-wrap mt-1" style="gap: 4px">
-                    <v-btn
-                      :href="`/api/mc-services/yisibite/${machineId}/download/${index + 1}`"
-                      color="primary"
-                      density="comfortable"
-                      prepend-icon="mdi-download"
-                      rounded
-                      target="_blank"
-                      variant="outlined"
-                    >
-                      {{ t('litematica_generator.download') }}
-                    </v-btn>
-                    <template v-if="attachment.name.endsWith('.litematic')">
-                      <v-btn
-                        color="primary"
-                        density="comfortable"
-                        prepend-icon="mdi-eye"
-                        rounded
-                        variant="outlined"
-                        @click="loadBlob(index)"
-                      >
-                        {{ t('post.preview') }}
-                        <v-dialog
-                          #default="{ isActive }"
-                          :model-value="previewing === index"
-                          activator="parent"
-                          close-on-back
-                          height="100%"
-                        >
-                          <v-card :loading="!blob[index]">
-                            <v-card-text class="overflow-hidden">
-                              <LazyMinecraftLitematicaPreview
-                                v-if="blob[index]"
-                                id="Preview"
-                                :blob="blob[index]"
-                              />
-                              <div v-else>
-                                <v-progress-circular
-                                  color="primary"
-                                  indeterminate
-                                />
-                                <span style="font-size: 1.25rem">
-                                  {{ t('common.loading___') }}
-                                </span>
-                              </div>
-
-                              <div
-                                class="top-0 right-0 position-absolute mr-6 mt-4 text-white text-caption text-right"
-                                style="user-select: none; line-height: 0.75rem"
-                              >
-                                <div class="flex-row d-flex">
-                                  <div class="opacity-60">
-                                    Credit to misode, Ending Credits &
-                                    Undecentions
-                                    <br />
-                                    This Vue component is made by zly2006 and
-                                    licensed under AGPL v3
-                                  </div>
-
-                                  <v-btn
-                                    color="red"
-                                    icon="mdi-close"
-                                    variant="outlined"
-                                    @click="isActive.value = false"
-                                  />
-                                </div>
-                                <v-switch
-                                  v-model="appStore.invertPreview"
-                                  class="right-0 position-absolute"
-                                  color="primary"
-                                  hide-details
-                                  label="Invert"
-                                  @click="appStore.toggleInvertPreview()"
-                                />
-                              </div>
-                            </v-card-text>
-                          </v-card>
-                        </v-dialog>
-                      </v-btn>
-                      <v-btn
-                        color="primary"
-                        density="comfortable"
-                        prepend-icon="mdi-pencil"
-                        rounded
-                        variant="outlined"
-                        @click="editLitematica(index)"
-                      >
-                        <v-tooltip
-                          :text="t('post.litematica_online_edit_desc')"
-                          activator="parent"
-                        />
-                        {{ t('post.litematica_online_edit') }}
-                      </v-btn>
-                    </template>
-                  </v-list-item-action>
-                </v-list-item>
-              </v-list>
-            </v-no-ssr>
+            <LitematicaGenDownloader
+              v-if="selected.type === 'LitematicaGen'"
+              :selected="selected"
+            />
+            <LitematicaShareDownloader
+              v-else-if="selected.type === 'LitematicaShare'"
+              :selected="selected"
+            />
             <bottom-bar-ad />
             <div class="text-center v-card-subtitle w-100">
               {{

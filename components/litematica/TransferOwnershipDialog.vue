@@ -71,18 +71,14 @@ async function transfer() {
 
     <v-card-actions>
       <v-spacer />
-      <v-btn
-        :disabled="loading"
-        color="grey"
-        variant="text"
-        @click="emit('close')"
-      >
+      <v-btn :disabled="loading" variant="outlined" @click="emit('close')">
         {{ t('common.cancel') }}
       </v-btn>
       <v-btn
         :disabled="!userInfo"
         :loading="loading"
         color="primary"
+        variant="outlined"
         @click="transfer"
       >
         Transfer
