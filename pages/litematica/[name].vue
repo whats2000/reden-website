@@ -24,6 +24,7 @@ import type { VForm } from 'vuetify/components';
 import { toast } from 'vuetify-sonner';
 import * as localforage from 'localforage';
 import RedenPostStatusChip from '~/components/litematica/RedenPostStatusChip.vue';
+import TransferOwnershipDialog from '~/components/litematica/TransferOwnershipDialog.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -37,6 +38,7 @@ const localeRoute = useLocaleRoute();
 const localePath = useLocalePath();
 const appStore = useAppStore();
 const openEditDialog = ref(false);
+const openTransferDialog = ref(false);
 const backUrl = route.query.backUrl as string;
 const { data: localizedData } = useNuxtData<Record<string, MachineDef>>(
   `edit-${machineId}`,
@@ -323,7 +325,21 @@ const selectedImage = ref(
             </v-card>
           </v-dialog>
         </v-btn>
-        <v-btn color="red"> 转移所有权</v-btn>
+        <v-btn color="red">
+          转移所有权
+          <v-dialog
+            v-model="openTransferDialog"
+            max-width="500"
+            persistent
+            activator="parent"
+          >
+            <TransferOwnershipDialog
+              :machine-id="machineId"
+              @transferred="refresh"
+              @close="openTransferDialog = false"
+            />
+          </v-dialog>
+        </v-btn>
       </template>
     </div>
 
