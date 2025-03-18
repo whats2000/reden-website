@@ -14,7 +14,6 @@ import { number2text, parseBVID } from '~/utils/constants';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
 import { parseCondition } from '~/utils/conditionParser';
 import RedenRouter from '~/components/RedenRouter.vue';
-import type { VForm } from 'vuetify/components';
 import { toast } from 'vuetify-sonner';
 import RedenPostStatusChip from '~/components/litematica/RedenPostStatusChip.vue';
 import TransferOwnershipDialog from '~/components/litematica/TransferOwnershipDialog.vue';
@@ -155,7 +154,8 @@ async function vote(vote: 'up' | 'down' | 'cancel') {
 
 function copyLink() {
   navigator.clipboard.writeText(
-    window.location.href.substring(0, window.location.href.indexOf('?')),
+    `【${selected.value.name}】 ` +
+      window.location.href.substring(0, window.location.href.indexOf('?')),
   );
   toast.success(t('litematica_generator.share_link_copied_to_clipboard'));
 }
@@ -541,6 +541,7 @@ const selectedImage = ref(
             <LitematicaGenDownloader
               v-if="selected.type === 'LitematicaGen'"
               :selected="selected"
+              @download="refresh"
             />
             <LitematicaShareDownloader
               v-else-if="selected.type === 'LitematicaShare'"

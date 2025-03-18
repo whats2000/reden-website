@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Machine } from '~/pages/litematica/index.vue';
@@ -9,13 +9,16 @@ import type { SubmitEventPromise } from 'vuetify';
 const props = defineProps<{
   selected: Machine;
 }>();
+const emits = defineEmits<{
+  (e: 'download'): void;
+}>();
 
 const xSize = ref(0);
 const ySize = ref(0);
 const zSize = ref(0);
 const loading = ref(false);
 const { t } = useI18n();
-const formRef = ref<VForm>();
+const formRef = useTemplateRef<VForm>('formRef');
 
 async function submit(e: SubmitEventPromise) {
   if ((await e).valid) {
@@ -26,6 +29,7 @@ async function submit(e: SubmitEventPromise) {
       );
       setTimeout(() => {
         loading.value = false;
+        emits('download');
       }, 1000);
     } catch (error) {
       loading.value = false;
@@ -43,6 +47,7 @@ async function openMaterials() {
         );
         setTimeout(() => {
           loading.value = false;
+          emits('download');
         }, 1000);
       } catch (error) {
         loading.value = false;
