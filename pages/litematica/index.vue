@@ -12,19 +12,6 @@ export type Tag = {
   description: string;
 };
 
-enum PostType {
-  LitematicaGen = 'LitematicaGen',
-  LitematicaShare = 'LitematicaShare',
-}
-
-enum PostStatus {
-  Pending = 'Pending',
-  Approved = 'Approved',
-  Rejected = 'Rejected',
-  Deleted = 'Deleted',
-  TakenDown = 'TakenDown',
-}
-
 type SortType = 'downloads' | 'createdAt' | 'random' | 'random-extra';
 const sortTypes: SortType[] = [
   'downloads',

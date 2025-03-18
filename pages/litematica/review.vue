@@ -1,7 +1,3 @@
-<!--
-显示自己上传的投影。
-可以进入其中的一项进行编辑。
--->
 <script lang="ts" setup>
 import type {
   ListLitematicaResponse,
@@ -10,6 +6,7 @@ import type {
 import { toast } from 'vuetify-sonner';
 import { useI18n } from 'vue-i18n';
 import RedenRouter from '~/components/RedenRouter.vue';
+import RedenPostStatusChip from '~/components/litematica/RedenPostStatusChip.vue';
 
 definePageMeta({
   needLogin: true,
@@ -21,8 +18,14 @@ useHead({
 });
 
 const page = ref(1);
-const { data, status, error } = useFetch<ListLitematicaResponse>(
-  () => `/api/mc-services/litematica/archiver-review?page=${page.value}`,
+const status = useRouteQuery<PostStatus>('status', PostStatus.Pending);
+const {
+  data,
+  status: queryStatus,
+  error,
+} = useFetch<ListLitematicaResponse>(
+  () =>
+    `/api/mc-services/litematica/archiver-review?page=${page.value}&status=${status.value}`,
 );
 
 watch(error, (value) => {
@@ -40,21 +43,22 @@ const rejectReason = ref<string>();
 </script>
 
 <template>
+  <v-select v-model="status" :items="allPostTypes" />
   <v-data-table-server
     v-model:page="page"
     :headers="[
       { title: 'Name', key: 'name' },
       { title: 'Author', key: 'author' },
       { title: 'Type', key: 'type' },
-      { title: 'Description', key: 'description' },
-      { title: 'Updated', key: 'updatedAt' },
+      { title: t('common.description'), key: 'description' },
+      { title: t('litematica_generator.updated_at'), key: 'updatedAt' },
       { title: 'Actions', key: 'edit', minWidth: '180px' },
       { title: 'Status', key: 'status' },
     ]"
     :items="data?.d"
     :items-length="data?.count ?? 100"
     :items-per-page-options="[10]"
-    :loading="status === 'pending'"
+    :loading="queryStatus === 'pending'"
   >
     <template #[`item.description`]="{ value }">
       <div
@@ -180,6 +184,9 @@ const rejectReason = ref<string>();
     </template>
     <template #[`item.updatedAt`]="{ value }">
       {{ new Date(value).toLocaleString() }}
+    </template>
+    <template #[`item.status`]="{ value }">
+      <reden-post-status-chip :value="value" />
     </template>
   </v-data-table-server>
 </template>

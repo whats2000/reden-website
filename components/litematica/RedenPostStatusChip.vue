@@ -6,11 +6,11 @@
 </template>
 <script lang="ts" setup>
 const props = defineProps<{
-  value: string;
+  value: PostStatus;
 }>();
 const { t } = useI18n();
 
-const colorMap: Record<string, string> = {
+const colorMap: Record<PostStatus, string> = {
   Pending: 'grey',
   Approved: 'green',
   Rejected: 'red',

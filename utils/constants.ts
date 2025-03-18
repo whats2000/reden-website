@@ -529,3 +529,24 @@ export function size2text(val: number) {
 }
 
 export const globalTheme = ref<'light' | 'dark'>('light');
+
+export enum PostType {
+  LitematicaGen = 'LitematicaGen',
+  LitematicaShare = 'LitematicaShare',
+}
+
+export enum PostStatus {
+  Pending = 'Pending',
+  Approved = 'Approved',
+  Rejected = 'Rejected',
+  Deleted = 'Deleted',
+  TakenDown = 'TakenDown',
+}
+
+export const allPostTypes = [
+  PostStatus.Pending,
+  PostStatus.Approved,
+  PostStatus.Rejected,
+  PostStatus.Deleted,
+  PostStatus.TakenDown,
+];
