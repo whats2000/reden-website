@@ -37,6 +37,8 @@
   "common": {
     "and": "和",
     "back": "返回",
+    "cancel": "取消",
+    "confirm": "确认",
     "description": "介绍",
     "details": "详细信息",
     "followers": "粉丝",
@@ -130,9 +132,13 @@
     "title": "页面没有找到"
   },
   "post": {
+    "delete": "下架",
+    "delete_reason": "下架原因",
     "litematica_online_edit": "编辑",
     "litematica_online_edit_desc": "下载之前在线编辑此投影，进行个性化设置，你可以批量替换方块，或者转换其版本。",
-    "preview": "预览"
+    "management_op": "管理操作：",
+    "preview": "预览",
+    "transfer_ownership": "转让帖子"
   },
   "profile": {
     "account_not_linked": "未链接账号",

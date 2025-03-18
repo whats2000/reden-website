@@ -5,7 +5,7 @@ import { toastError } from '~/utils/constants';
 const props = defineProps<{
   machineId: string;
 }>();
-
+const { t } = useI18n();
 const emit = defineEmits<{
   (e: 'close'): void;
   (e: 'transferred'): void;
@@ -43,7 +43,7 @@ async function transfer() {
 
 <template>
   <v-card>
-    <v-card-title>Transfer Ownership</v-card-title>
+    <v-card-title>{{ t('post.transfer_ownership') }}</v-card-title>
     <v-card-text>
       <v-text-field v-model="userId" label="New Owner User ID" type="number" />
 
@@ -77,7 +77,7 @@ async function transfer() {
         variant="text"
         @click="emit('close')"
       >
-        Cancel
+        {{ t('common.cancel') }}
       </v-btn>
       <v-btn
         :disabled="!userInfo"

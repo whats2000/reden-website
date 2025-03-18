@@ -37,6 +37,8 @@
   "common": {
     "and": "and",
     "back": "Back",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
     "description": "Description",
     "details": "Details",
     "followers": "followers",
@@ -130,9 +132,13 @@
     "title": "Page not found"
   },
   "post": {
+    "delete": "Delete",
+    "delete_reason": "Deleting Reason",
     "litematica_online_edit": "Edit",
     "litematica_online_edit_desc": "Edit this litematica online before you download, including replace blocks, convert version, etc.",
-    "preview": "Preview"
+    "management_op": "管理操作：",
+    "preview": "Preview",
+    "transfer_ownership": "Transfer Ownership"
   },
   "profile": {
     "account_not_linked": "Account not linked",

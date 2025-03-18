@@ -305,28 +305,30 @@ const selectedImage = ref(
             appStore.userCache?.id === selected.author?.id)
         "
       >
-        管理操作：
+        {{ t('post.management_op') }}
         <v-btn color="red">
-          下架
+          {{ t('post.delete') }}
           <v-dialog :max-width="900" activator="parent">
             <v-card>
-              <v-card-title>下架原因</v-card-title>
+              <v-card-title>{{ t('post.delete_reason') }}</v-card-title>
               <v-card-text>
                 <v-text-field
                   v-model="removeReason"
                   color="red"
-                  label="下架原因"
+                  :label="t('post.delete_reason')"
                   required
                 />
               </v-card-text>
               <v-card-actions>
-                <v-btn color="red" @click="cancelApproval"> 确认</v-btn>
+                <v-btn color="red" @click="cancelApproval">
+                  {{ t('common.confirm') }}</v-btn
+                >
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-btn>
         <v-btn color="red">
-          转移所有权
+          {{ t('post.transfer_ownership') }}
           <v-dialog
             v-model="openTransferDialog"
             max-width="500"
