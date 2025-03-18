@@ -661,14 +661,6 @@ const selectedImage = ref(
                   <h3>FAQ</h3>
                   <h4>17x17的空置域应该输入多少？</h4>
                   <p>17x16=272，272的大小包含了两边各一格的铁砧墙宽度。</p>
-                  <h4>没有找到你想要的机器？</h4>
-                  <p>
-                    {{ t('litematica_generator.contribute') }}
-                    <a class="router" href="mailto:me@redenmc.com"
-                      >me@redenmc.com</a
-                    >
-                  </p>
-                  <br />
                 </v-col>
               </v-row>
             </template>

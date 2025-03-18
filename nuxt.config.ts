@@ -8,7 +8,7 @@ const { resolve } = createResolver(import.meta.url);
 let isPrerender = false;
 if (
   process.argv.find((arg) => arg.includes('/nuxi')) &&
-  process.argv.includes('build') // nuxi build command
+  (process.argv.includes('build') || process.argv.includes('generate')) // nuxi build command
 ) {
   isPrerender = true;
   console.log('\x1b[32m😭 Pre-rendering');
