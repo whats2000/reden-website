@@ -79,6 +79,7 @@ function deleteItem(item: Backup, onSuccess: () => void) {
           sortDesc: false,
         });
         toast.success('删除成功');
+        onSuccess();
       } else {
         toastError(response);
       }
