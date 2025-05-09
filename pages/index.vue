@@ -41,32 +41,22 @@ const topAuthorIds = [
   '%E9%87%91%E5%90%88%E6%AC%A2%E9%85%B1',
   'Molforte',
 ];
-const { data: topAuthors } = useAsyncData<LitematicaAuthorProfile[]>(
-  async () => {
-    const authors = [];
-    for (const id of topAuthorIds) {
-      try {
-        const { data } = await useFetch<LitematicaAuthorProfile>(
-          `/api/mc-services/litematica/profile/${id}?lang=${locale.value}`,
-        );
-        authors.push(data.value!);
-      } catch (error) {
-        console.error(`Error fetching data for id ${id}:`, error);
-      }
+const topAuthors: LitematicaAuthorProfile[] = [];
+for (const id of topAuthorIds) {
+  try {
+    const { data, error } = await useFetch<LitematicaAuthorProfile>(
+      `/api/mc-services/litematica/profile/${id}?lang=${locale.value}`,
+    );
+    if (error.value) {
+      console.error('Error fetching author data:', error.value);
     }
-    return authors;
-  },
-);
-
-const { data: topRedstonePosts } = useAsyncData(
-  async () => {
-    const data: ListLitematicaResponse = await (
-      await doFetchGet(
-        '/api/mc-services/yisibite/?order=random-extra&pageSize=8',
-      )
-    ).json();
-    return data;
-  },
+    topAuthors.push(data.value!);
+  } catch (error) {
+    console.error(`Error fetching data for id ${id}:`, error);
+  }
+}
+const { data: topRedstonePosts } = useFetch<ListLitematicaResponse>(
+  '/api/mc-services/yisibite/?order=random-extra&pageSize=8',
   {
     dedupe: 'cancel',
   },

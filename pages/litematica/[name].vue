@@ -365,9 +365,9 @@ const selectedImage = ref(
                   <v-menu activator="parent">
                     <v-list>
                       <v-list-item
-                        @click="copyLink"
                         v-if="selected.link"
                         v-ripple
+                        @click="copyLink"
                       >
                         <v-list-item-title>
                           <v-icon>mdi-link</v-icon>
@@ -375,24 +375,24 @@ const selectedImage = ref(
                         </v-list-item-title>
                       </v-list-item>
                       <v-list-item
+                        v-ripple
                         @click="
                           vote(selected.ud?.vote === true ? 'cancel' : 'up')
                         "
-                        v-ripple
                       >
                         <v-list-item-title>
                           <v-icon
                             :color="selected.ud?.vote === true ? 'primary' : ''"
-                            >mdi-thumb-up-outline</v-icon
-                          >
+                            >mdi-thumb-up-outline
+                          </v-icon>
                           {{ t('litematica_generator.vote_up') }}
                         </v-list-item-title>
                       </v-list-item>
                       <v-list-item
+                        v-ripple
                         @click="
                           vote(selected.ud?.vote === false ? 'cancel' : 'down')
                         "
-                        v-ripple
                       >
                         <v-list-item-title>
                           <v-icon

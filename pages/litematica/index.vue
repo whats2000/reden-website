@@ -5,6 +5,7 @@ import SidebarAd from '~/components/ads/SidebarAd.vue';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
 import { useElementHover } from '@vueuse/core';
 import { useAppStore } from '~/store/app';
+import { toast } from 'vuetify-sonner';
 
 export type Tag = {
   tag: string;
@@ -114,7 +115,11 @@ export type LitematicaAuthorProfile = {
 };
 const { locale } = useI18n();
 
-const { data: serverResponse, error } = useFetch<ListLitematicaResponse>(
+const {
+  data: serverResponse,
+  error,
+  refresh,
+} = useFetch<ListLitematicaResponse>(
   () =>
     search.value
       ? `/api/mc-services/litematica/search?q=${search.value}&lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}`
@@ -139,11 +144,38 @@ const { data: serverResponse, error } = useFetch<ListLitematicaResponse>(
         };
       }
     },
+    onRequestError: (context) => {
+      if (context) {
+        toast.error(
+          t('litematica_generator.toast.failed_to_load_litematica_list') +
+            (context.error as Error).message,
+        );
+        if (context.error) {
+          console.error(
+            'Failed to load litematica list',
+            context.error,
+            context.request,
+            context.response,
+            context,
+          );
+        }
+      }
+    },
   },
 );
 
-if (error.value?.statusCode) {
-  throw error.value;
+// if (error.value?.statusCode) {
+//   throw error.value;
+// }
+if (import.meta.client) {
+  if (!serverResponse.value || !serverResponse.value.d) {
+    console.error('投影信息加载失败，需要刷新');
+    refresh().finally(() => {
+      if (error.value?.statusCode) {
+        throw error.value;
+      }
+    });
+  }
 }
 
 const isClient = import.meta.client;
