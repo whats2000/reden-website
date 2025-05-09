@@ -31,27 +31,30 @@ const { data: localizedData } = useNuxtData<Record<string, MachineDef>>(
   `edit-${machineId}`,
 );
 
-const { data: serverResponse, refresh } =
-  await useFetch<ListLitematicaResponse>(
-    `/api/mc-services/yisibite/${machineId}/info/${locale.value}`,
-    {
-      onResponseError: (error) => {
-        if (error.response.status === 404) {
-          console.error('error', error);
-          throw createError({
-            status: 404,
-            message: t('litematica_generator.toast.not_found'),
-          });
-          router.push(localePath('/litematica'));
-        }
-      },
+const {
+  data: serverResponse,
+  refresh,
+  error,
+} = await useFetch<ListLitematicaResponse>(
+  `/api/mc-services/yisibite/${machineId}/info/${locale.value}`,
+  {
+    onResponseError: (error) => {
+      if (error.response.status === 404) {
+        console.error('error', error);
+        throw createError({
+          status: 404,
+          message: t('litematica_generator.toast.not_found'),
+        });
+        router.push(localePath('/litematica'));
+      }
     },
-  );
+  },
+);
 
 async function submit(e: SubmitEventPromise) {
   if ((await e).valid) {
     if (
-      selected.value.type == 'LitematicaShare' &&
+      selected.value?.type == 'LitematicaShare' &&
       selected.value.attachments?.length
     ) {
       window.open(`/api/mc-services/yisibite/${machineId}/download/1`);
@@ -62,35 +65,51 @@ async function submit(e: SubmitEventPromise) {
   }
 }
 
-const selected = computed<Machine>(() => ({
-  ...serverResponse.value!.d[0],
-  conditions: {
-    x:
-      serverResponse.value!.d[0].conditions?.x?.map((it) =>
-        parseCondition(it, t),
-      ) ?? [],
-    y:
-      serverResponse.value!.d[0].conditions?.y?.map((it) =>
-        parseCondition(it, t),
-      ) ?? [],
-    z:
-      serverResponse.value!.d[0].conditions?.z?.map((it) =>
-        parseCondition(it, t),
-      ) ?? [],
-  },
-}));
+const selected = computed<Machine | null>(() =>
+  serverResponse.value
+    ? {
+        ...serverResponse.value.d[0],
+        conditions: {
+          x:
+            serverResponse.value.d[0].conditions?.x?.map((it) =>
+              parseCondition(it, t),
+            ) ?? [],
+          y:
+            serverResponse.value!.d[0].conditions?.y?.map((it) =>
+              parseCondition(it, t),
+            ) ?? [],
+          z:
+            serverResponse.value!.d[0].conditions?.z?.map((it) =>
+              parseCondition(it, t),
+            ) ?? [],
+        },
+      }
+    : (console.log('加载失败，serverResponse.value is null, err=', error.value),
+      null),
+);
+
+// workaround
+onMounted(() => {
+  refresh();
+  if (selected.value == null) {
+    console.error('加载失败，selected.value is null, err=', error.value);
+  }
+  if (error.value) {
+    console.error('加载失败，, err=', error.value);
+  }
+});
 
 useSeoMeta({
   title: t('litematica_generator.web_title', {
-    name: selected.value.name,
+    name: selected.value?.name,
   }),
   ogTitle: t('litematica_generator.web_title', {
-    name: selected.value.name,
+    name: selected.value?.name,
   }),
   description:
-    selected.value.description + t('litematica_generator.og_description'),
+    selected.value?.description + t('litematica_generator.og_description'),
   ogDescription:
-    selected.value.description + t('litematica_generator.og_description'),
+    selected.value?.description + t('litematica_generator.og_description'),
   ogImage: 'https://redenmc.com/reden_256.png',
 });
 definePageMeta({
@@ -114,12 +133,12 @@ const tabs = computed(() => {
   if (youtube.value) {
     ret.push('youtube:');
   }
-  if (selected.value.link) {
+  if (selected.value?.link) {
     console.log('selected.value.link', selected.value.link);
     console.log('bvid.value', bvid.value);
     console.log('youtube.value', youtube.value);
   }
-  ret.push(...(selected.value.images ?? []));
+  ret.push(...(selected.value?.images ?? []));
   return ret;
 });
 
@@ -154,14 +173,14 @@ async function vote(vote: 'up' | 'down' | 'cancel') {
 
 function copyLink() {
   navigator.clipboard.writeText(
-    `【${selected.value.name}】 ` +
+    `【${selected.value?.name}】 ` +
       window.location.href.substring(0, window.location.href.indexOf('?')),
   );
   toast.success(t('litematica_generator.share_link_copied_to_clipboard'));
 }
 
 const selectedImage = ref(
-  tabs.value?.[0] ? tabs.value[0] : selected.value.imageUrl,
+  tabs.value?.[0] ? tabs.value[0] : selected.value?.imageUrl,
 );
 </script>
 
@@ -215,7 +234,7 @@ const selectedImage = ref(
         v-if="
           appStore.userCache &&
           (appStore.userCache?.roles?.includes('archiver') ||
-            appStore.userCache?.id === selected.author?.id)
+            appStore.userCache?.id === selected?.author?.id)
         "
         class="d-flex align-center"
         style="gap: 12px"
@@ -289,10 +308,11 @@ const selectedImage = ref(
               >
                 <iframe
                   :height="
-                    (($refs['wrapper-for-ytb']?.clientWidth ?? 0) * 9) / 16
+                    (($refs['wrapper-for-ytb'] as Element)?.clientWidth ?? 0) *
+                    (9 / 16)
                   "
                   :src="`https://www.youtube-nocookie.com/embed/${youtube}`"
-                  :width="$refs['wrapper-for-ytb']?.clientWidth"
+                  :width="($refs['wrapper-for-ytb'] as Element)?.clientWidth"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowfullscreen
                   class="bili-player"
