@@ -114,7 +114,7 @@ export type LitematicaAuthorProfile = {
   top3posts: MachineDef[];
 };
 const { locale } = useI18n();
-
+const isDev = import.meta.dev;
 const {
   data: serverResponse,
   status,
@@ -388,8 +388,8 @@ const isHovering = useElementHover(ad);
             size="32"
           />
         </v-row>
-        <div>
-          Status:
+        <div v-if="isDev">
+          [Dev] Request Status:
           {{ status }}
         </div>
         <template
