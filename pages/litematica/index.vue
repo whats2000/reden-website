@@ -117,6 +117,7 @@ const { locale } = useI18n();
 
 const {
   data: serverResponse,
+  status,
   error,
   refresh,
 } = useFetch<ListLitematicaResponse>(
@@ -387,22 +388,46 @@ const isHovering = useElementHover(ad);
             size="32"
           />
         </v-row>
-        <v-row>
-          <v-col
-            v-for="col in itemDisplayCols"
-            :cols="12 / itemsPerRow"
-            justify="center"
-          >
-            <MinecraftFarmCard
-              v-for="item in col.def"
-              :key="item.key"
-              :back-url="switchLocalePath(locale)"
-              :item="item"
-              class="mt-4"
+        <div>
+          Status:
+          {{ status }}
+        </div>
+        <template
+          v-if="
+            !itemDisplayCols.length ||
+            status === 'pending' ||
+            status === 'error'
+          "
+        >
+          <v-row v-for="key in [1, 2, 3]" :key="key">
+            <v-col
+              v-for="col in Array.from({ length: itemsPerRow }, (_, i) => i)"
+              :cols="12 / itemsPerRow"
+              :key="col"
+              justify="center"
             >
-            </MinecraftFarmCard>
-          </v-col>
-        </v-row>
+              <v-skeleton-loader type="card"></v-skeleton-loader>
+            </v-col>
+          </v-row>
+        </template>
+        <template v-else>
+          <v-row>
+            <v-col
+              v-for="col in itemDisplayCols"
+              :cols="12 / itemsPerRow"
+              justify="center"
+            >
+              <MinecraftFarmCard
+                v-for="item in col.def"
+                :key="item.key"
+                :back-url="switchLocalePath(locale)"
+                :item="item"
+                class="mt-4"
+              >
+              </MinecraftFarmCard>
+            </v-col>
+          </v-row>
+        </template>
         <v-row justify="center">
           <v-pagination
             v-model="page"
