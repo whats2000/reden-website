@@ -528,7 +528,7 @@ export function size2text(val: number) {
   }
 }
 
-export const globalTheme = ref<'light' | 'dark'>('light');
+export const globalTheme = ref<'light' | 'dark'>('dark');
 
 export enum PostType {
   LitematicaGen = 'LitematicaGen',

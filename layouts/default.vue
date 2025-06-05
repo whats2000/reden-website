@@ -39,7 +39,8 @@ onMounted(() => {
     theme.themes.value[appStore.theme]!.colors;
   const css: string[] = [];
   let themeText = `[onMounted layouts/default] theme: ${theme.name.value} app: ${appStore.theme}\n`;
-  globalTheme.value = appStore.theme;
+  //todo: 亮色主题废了，日后修复
+  // globalTheme.value = appStore.theme;
   for (const key in colors) {
     themeText += `%c ${key} %c${colors[key]}`;
     css.push('color:unset;');

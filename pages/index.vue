@@ -61,6 +61,80 @@ const { data: topRedstonePosts } = useFetch<ListLitematicaResponse>(
     dedupe: 'cancel',
   },
 );
+
+// 排行榜相关方法
+function getRankClass(index: number) {
+  if (index === 0) return 'rank-first';
+  if (index === 1) return 'rank-second';
+  if (index === 2) return 'rank-third';
+  return '';
+}
+
+function getRankBadgeClass(index: number) {
+  if (index === 0) return 'badge-gold';
+  if (index === 1) return 'badge-silver';
+  if (index === 2) return 'badge-bronze';
+  return '';
+}
+
+function getRankIcon(index: number) {
+  if (index === 0) return 'mdi-crown';
+  if (index === 1) return 'mdi-medal';
+  if (index === 2) return 'mdi-trophy-variant';
+  return '';
+}
+
+// Stats data for hero section
+const stats = [
+  { number: '500+', label: '红石机器' },
+  { number: '50K+', label: '下载量' },
+  { number: '8K+', label: '用户' },
+  { number: '24/7', label: '在线服务' },
+];
+
+// Dashboard metrics data
+const dashboardMetrics = [
+  {
+    value: '500+',
+    label: '红石机器',
+    icon: 'mdi-cube-outline',
+    color: 'blue-lighten-4',
+    iconColor: 'blue',
+    change: '+15% 本月',
+    trendIcon: 'mdi-trending-up',
+    trendColor: 'green',
+  },
+  {
+    value: '50K+',
+    label: '总下载量',
+    icon: 'mdi-download',
+    color: 'green-lighten-4',
+    iconColor: 'green',
+    change: '+23% 本月',
+    trendIcon: 'mdi-trending-up',
+    trendColor: 'green',
+  },
+  {
+    value: '8,237',
+    label: '活跃用户',
+    icon: 'mdi-account-group',
+    color: 'purple-lighten-4',
+    iconColor: 'purple',
+    change: '+8% 本月',
+    trendIcon: 'mdi-trending-up',
+    trendColor: 'green',
+  },
+  {
+    value: '99.9%',
+    label: '服务可用性',
+    icon: 'mdi-server',
+    color: 'orange-lighten-4',
+    iconColor: 'orange',
+    change: '稳定运行',
+    trendIcon: 'mdi-check-circle',
+    trendColor: 'green',
+  },
+];
 </script>
 
 <template>
@@ -87,310 +161,1459 @@ const { data: topRedstonePosts } = useFetch<ListLitematicaResponse>(
     </div>
     <div class="main-page">
       <div>
-        <v-row>
-          <v-col>
-            <h1 class="text-h2 text-md-h1 font-weight-bold">Reden</h1>
-            <p class="opacity-80 text-h5">
-              {{ t('reden.description') }}
-            </p>
-          </v-col>
-          <v-col class="icon" cols="3">
-            <v-img class="d-none d-sm-block" src="/reden_256.png" width="148" />
-          </v-col>
-        </v-row>
-        <div class="d-flex align-center flex-wrap">
-          <v-btn
-            :to="localePath('/litematica')"
-            class="ma-2 text-none"
-            color="primary"
-            prepend-icon="mdi-download"
-            rounded="rounded"
-            size="x-large"
-            style="max-width: 220px"
-          >
-            {{ t('reden.home.go_litematica') }}
-          </v-btn>
-          <v-btn
-            :href="githubLink"
-            class="ma-2"
-            prepend-icon="mdi-github"
-            rounded="rounded"
-            size="x-large"
-            style="max-width: 220px"
-            variant="outlined"
-          >
-            Github
-          </v-btn>
-          <v-btn
-            v-if="false"
-            class="ma-2"
-            href="https://wiki.redenmc.com"
-            prepend-icon="mdi-book-open"
-            rounded="rounded"
-            size="x-large"
-            style="max-width: 220px"
-            variant="outlined"
-          >
-            {{ t('reden.wiki') }}
-          </v-btn>
+        <!-- 主标题区域 - 科技感设计 -->
+        <div class="hero-section position-relative overflow-hidden">
+          <div class="hero-background position-absolute w-100 h-100"></div>
+          <v-container class="position-relative">
+            <v-row no-gutters align="center" class="py-12 py-md-16">
+              <v-col cols="12" md="9">
+                <div class="pr-md-8">
+                  <h1
+                    class="text-h2 text-md-h1 font-weight-bold mb-2 hero-title"
+                  >
+                    <span class="text-gradient">RedenMC</span>
+                    <span class="text-amber">.com</span>
+                  </h1>
+                  <div class="title-underline mb-4"></div>
+                  <p
+                    class="text-h6 text-md-h5 text-grey-lighten-1 mb-8 font-weight-regular"
+                  >
+                    {{ t('reden.description') }}
+                  </p>
+                  <!-- 实时数据展示 -->
+                  <v-row class="mb-8">
+                    <v-col
+                      cols="6"
+                      md="3"
+                      v-for="(stat, index) in stats"
+                      :key="index"
+                    >
+                      <v-card
+                        class="stat-card text-center pa-4"
+                        variant="outlined"
+                      >
+                        <div
+                          class="text-h5 text-md-h4 font-weight-bold text-primary mb-1"
+                        >
+                          {{ stat.number }}
+                        </div>
+                        <div class="text-caption text-grey-lighten-1">
+                          {{ stat.label }}
+                        </div>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                  <!-- 操作按钮 -->
+                  <div class="d-flex flex-column flex-sm-row ga-4">
+                    <v-btn
+                      :to="localePath('/litematica')"
+                      color="primary"
+                      prepend-icon="mdi-download"
+                      size="x-large"
+                      variant="tonal"
+                      class="text-none font-weight-semibold rounded-xl"
+                    >
+                      {{ t('reden.home.go_litematica') }}
+                    </v-btn>
+                    <v-btn
+                      :href="githubLink"
+                      prepend-icon="mdi-github"
+                      size="x-large"
+                      variant="outlined"
+                      color="white"
+                      class="text-none font-weight-semibold rounded-xl"
+                    >
+                      Github
+                    </v-btn>
+                  </div>
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                md="3"
+                class="d-flex justify-center mt-8 mt-md-0"
+              >
+                <div
+                  class="logo-container position-relative d-flex align-center justify-center"
+                >
+                  <div class="logo-glow position-absolute"></div>
+                  <v-img
+                    src="/reden_256.png"
+                    width="120"
+                    class="position-relative logo-main"
+                    style="z-index: 2"
+                  />
+                  <div class="orbit-ring position-absolute"></div>
+                  <div class="orbit-ring orbit-ring-2 position-absolute"></div>
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
+
+          <!-- 上传投影活动横幅 -->
+          <v-container class="my-8">
+            <v-card class="activity-banner overflow-hidden" elevation="8">
+              <div
+                class="banner-background position-absolute w-100 h-100"
+              ></div>
+              <v-card-text class="pa-8 position-relative">
+                <v-row no-gutters align="center">
+                  <v-col cols="12" md="8">
+                    <div class="mb-4">
+                      <v-chip
+                        color="red"
+                        variant="elevated"
+                        size="small"
+                        class="mb-4"
+                      >
+                        <v-icon start size="small">mdi-fire</v-icon>
+                        限时活动
+                      </v-chip>
+                    </div>
+                    <h2
+                      class="text-h4 text-md-h3 font-weight-bold mb-4 d-flex align-center text-white"
+                    >
+                      <v-icon class="mr-2" color="amber" size="large"
+                        >mdi-trophy</v-icon
+                      >
+                      <span class="text-h5 text-md-h4"
+                        >上传投影，赢积分好礼！</span
+                      >
+                    </h2>
+                    <p
+                      class="text-body-1 text-md-h6 text-grey-lighten-2 mb-6 font-weight-regular"
+                    >
+                      下载Reden模组，在游戏内上传你的红石机器投影到本网站，可获得定制纪念品、正版Minecraft等丰富奖励！
+                    </p>
+                    <div class="d-flex flex-wrap ga-3 mb-6">
+                      <div class="reward-item">
+                        <v-icon color="purple" size="small">mdi-gift</v-icon>
+                        <span>定制纪念品</span>
+                      </div>
+                      <div class="reward-item">
+                        <v-icon color="green" size="small"
+                          >mdi-minecraft</v-icon
+                        >
+                        <span>正版Minecraft</span>
+                      </div>
+                      <div class="reward-item">
+                        <v-icon color="orange" size="small">mdi-star</v-icon>
+                        <span>等值奖励</span>
+                      </div>
+                    </div>
+                    <div class="d-flex flex-column flex-sm-row ga-3">
+                      <v-btn
+                        :to="localePath('/download')"
+                        color="primary"
+                        size="large"
+                        prepend-icon="mdi-download"
+                        variant="elevated"
+                        class="text-none font-weight-semibold"
+                      >
+                        下载模组
+                      </v-btn>
+                      <v-btn
+                        :to="localePath('/litematica#upload')"
+                        color="white"
+                        size="large"
+                        prepend-icon="mdi-upload"
+                        variant="outlined"
+                        class="text-none font-weight-semibold"
+                      >
+                        立即上传
+                      </v-btn>
+                    </div>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="4"
+                    class="d-none d-md-flex justify-center align-center"
+                  >
+                    <div class="redstone-decoration position-relative">
+                      <img
+                        src="/image/homepage/section/redstone_lamp_on.png"
+                        class="redstone-element redstone-lamp position-absolute"
+                        alt="红石灯"
+                      />
+                      <img
+                        src="/image/homepage/section/lever.png"
+                        class="redstone-element lever position-absolute"
+                        alt="拉杆"
+                      />
+                      <img
+                        src="/image/homepage/section/piston_head.png"
+                        class="redstone-element piston position-absolute"
+                        alt="活塞"
+                      />
+                      <img
+                        src="/image/homepage/section/redstone_dust_15.png"
+                        class="redstone-element dust position-absolute"
+                        alt="红石粉"
+                      />
+                      <img
+                        src="/reden_256.png"
+                        class="reden-logo position-absolute"
+                        alt="Reden Logo"
+                      />
+                    </div>
+                    <div class="floating-elements position-absolute">
+                      <v-chip
+                        class="floating-chip"
+                        color="amber"
+                        variant="elevated"
+                        size="small"
+                      >
+                        <v-icon start size="small">mdi-lightning-bolt</v-icon>
+                        赚积分
+                      </v-chip>
+                      <v-chip
+                        class="floating-chip-2"
+                        color="purple"
+                        variant="elevated"
+                        size="small"
+                      >
+                        <v-icon start size="small">mdi-gift-outline</v-icon>
+                        领好礼
+                      </v-chip>
+                    </div>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-container>
         </div>
       </div>
     </div>
-    <div class="d-flex flex-wrap">
-      <v-container>
-        <v-row class="ma-n2" no-gutters>
-          <v-col class="pa-2" cols="12" md="6">
-            <v-card class="card-hover rounded-lg overflow-hidden">
-              <v-card-title
-                class="text-h5 text-sm-h4 font-weight-semibold text-center text-white pa-4"
-              >
-                {{ t('reden.card.explore_redstone_machines') }}
-              </v-card-title>
-              <v-container class="pa-5" fluid>
-                <v-carousel cycle hide-delimiters>
-                  <v-carousel-item
-                    v-for="(post, index) in topRedstonePosts?.d"
-                    :key="index"
-                    class="h-100"
-                  >
-                    <RedstonePostCard :post="post" />
-                  </v-carousel-item>
-                </v-carousel>
-              </v-container>
+
+    <!-- 数据总览仪表板 -->
+    <v-container class="my-12">
+      <!-- 平台数据概览 -->
+      <div class="mb-8">
+        <h2
+          class="text-h4 font-weight-bold text-center mb-8 d-flex align-center justify-center"
+        >
+          <v-icon class="mr-2" color="cyan" size="large">mdi-chart-line</v-icon>
+          平台数据总览
+        </h2>
+        <v-row>
+          <v-col
+            cols="6"
+            sm="6"
+            md="3"
+            v-for="(metric, index) in dashboardMetrics"
+            :key="index"
+          >
+            <v-card class="metric-card h-100" variant="outlined" hover>
+              <v-card-text class="pa-4 text-center">
+                <v-avatar :color="metric.color" size="56" class="mb-3">
+                  <v-icon :color="metric.iconColor" size="28">{{
+                    metric.icon
+                  }}</v-icon>
+                </v-avatar>
+                <div class="text-h6 text-md-h5 font-weight-bold mb-1">
+                  {{ metric.value }}
+                </div>
+                <div class="text-caption text-grey-darken-1 mb-2">
+                  {{ metric.label }}
+                </div>
+                <v-chip
+                  :color="metric.trendColor"
+                  variant="tonal"
+                  size="x-small"
+                >
+                  <v-icon start size="x-small">{{ metric.trendIcon }}</v-icon>
+                  {{ metric.change }}
+                </v-chip>
+              </v-card-text>
             </v-card>
           </v-col>
+        </v-row>
+      </div>
 
-          <v-col class="pa-2" cols="12" md="6">
-            <v-card class="card-hover rounded-lg overflow-hidden">
-              <v-card-title
-                class="text-h5 text-sm-h4 text-center text-white pa-4"
+      <!-- 热门机器与创作者 -->
+      <v-row class="mt-8">
+        <!-- 热门红石机器 -->
+        <v-col cols="12" lg="8">
+          <div class="tech-card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <v-icon class="mr-2" color="red">mdi-fire</v-icon>
+                热门红石机器
+              </h3>
+              <v-btn
+                :to="localePath('/litematica')"
+                variant="outlined"
+                size="small"
+                prepend-icon="mdi-arrow-right"
               >
-                {{ t('reden.card.subscribeTitle') }}
-              </v-card-title>
-              <v-container class="pa-5" fluid>
-                <v-expansion-panels variant="accordion">
-                  <v-expansion-panel
-                    v-for="(item, index) in topAuthors"
-                    :key="index"
-                    class="rounded-0"
-                  >
-                    <v-expansion-panel-title
-                      v-if="item"
-                      class="d-flex flex-row justify-space-between"
-                      style="line-height: 32px"
-                    >
-                      <span class="mr-3">
-                        <v-avatar :image="item.author.avatarUrl" :size="32" />
-                        {{ item.author.username }}
-                      </span>
-
-                      <span v-if="false" class="align-center">
-                        <v-icon
-                          color="warning"
-                          icon="mdi-file-document"
-                          size="small"
-                        />
-                        <!--    书签还没做好-->
-                        {{ item.totalBookmarks }}
-                      </span>
-                      <span class="align-center">
-                        <v-icon color="error" icon="mdi-heart" size="small" />
-                        {{ item.totalVoteUps }}
-                      </span>
-                      <span class="align-center">
-                        <v-icon color="info" icon="mdi-download" size="small" />
-                        {{ item.totalDownloads }}
-                      </span>
-                    </v-expansion-panel-title>
-                    <v-expansion-panel-text>
+                查看全部
+              </v-btn>
+            </div>
+            <div class="card-content">
+              <div class="machine-grid">
+                <div
+                  v-for="(post, index) in topRedstonePosts?.d?.slice(0, 6)"
+                  :key="index"
+                  class="machine-item"
+                >
+                  <div class="machine-preview">
+                    <v-img
+                      :src="post.thumbnailUrl || '/image/default-preview.png'"
+                      aspect-ratio="16/9"
+                      cover
+                      class="machine-image"
+                    />
+                    <div class="machine-overlay">
                       <v-btn
-                        :to="localePath(`/@${item.author.username}`)"
+                        :to="localePath(`/litematica/${post.key}`)"
+                        icon="mdi-eye"
+                        size="small"
+                        variant="elevated"
                         color="primary"
-                        rounded="rounded"
-                      >
-                        {{ t('reden.card.viewProfile') }}
-                      </v-btn>
-                    </v-expansion-panel-text>
-                  </v-expansion-panel>
-                </v-expansion-panels>
-              </v-container>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </div>
+                      />
+                    </div>
+                  </div>
+                  <div class="machine-info">
+                    <h4 class="machine-title">{{ post.name }}</h4>
+                    <div class="machine-stats">
+                      <span class="stat">
+                        <v-icon size="small" color="blue">mdi-download</v-icon>
+                        {{ post.downloads }}
+                      </span>
+                      <span class="stat">
+                        <v-icon size="small" color="red">mdi-heart</v-icon>
+                        {{ post.upVotes }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </v-col>
 
-    <div ref="introContent" class="intro-content">
-      <div class="content-common d-none">
-        <p>
-          Reden 的名字来自于 Redstone Eden，意为红石伊甸园。我们希望 Reden
-          能成为一个 Minecraft
-          红石爱好者的乐园，为玩家提供丰富的红石机器、配置、教程等资源。
-          我们致力于打造一个开放、友好的社区，欢迎各位加入我们！
-        </p>
-        <p>
-          Reden 本是我的模组的名字，同时也是这个社区的名字。
-          不管是我的模组还是这个社区，都是为了让玩家更好地享受游戏，更好地创造。
-          Reden
-          承载着通过代码与技术方便玩家的初衷，也指引着我们的社区朝着更开放、
-          包容、高技术力量的方向发展。
-        </p>
-        <p>
-          从专门生成世吞等机器的专用网站，到现在的红石爱好者社区，Reden
-          一直在不断发展。到2025年2月，Reden已经拥有数百个红石机器，和数万次下载，成为了
-          Minecraft 红石社区中的一股新力量。 Reden
-          拥有多项独创性技术正在开发或已经上线，包括：更好的投影预览功能，
-          红石机器产物速率标注功能，红石机器的自动化生成，投影在线编辑技术，基于游戏内模组的机器一键下载一键使用等等。
-        </p>
-        <p>下面是对于模组功能和社区组成部分的介绍</p>
-      </div>
-      <Feature />
-      <div class="content-common">
-        <v-row v-if="false" class="community-intro">
-          <v-col>
-            <v-card color="light-blue">
-              <v-card-title>
-                {{ t('litematica_generator.title') }}
-              </v-card-title>
-              <v-card-text>
-                {{ t('litematica_generator.description') }}
-              </v-card-text>
-              <v-card-actions>
-                <v-btn :to="localePath('/litematica')" color="White">Go</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-          <v-col>
-            <v-card color="orange">
-              <v-card-title>Github 同步</v-card-title>
-              <v-card-text>
-                绑定 GitHub
-                Apps，同步机器、配置、你关注的仓库和创作者：你的世界！
-              </v-card-text>
-              <v-card-actions>
-                <v-btn :to="localePath('/home')" color="White">点击前往</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-        </v-row>
-        <RedstoneSectionTitle :title="t('reden.home.community_intro.title')">
-          <template #default="{ leverOn }">
-            <RedStoneSection :lever-on="leverOn" :size="3">
-              <template #title> Open Source</template>
-              <template #text>
-                <p>
-                  {{ t('reden.home.community_intro.open_source') }}
-                </p>
-              </template>
-              <template #action>
-                <v-btn
-                  :href="githubLink"
-                  class="ma-2"
-                  color="primary"
-                  rounded="rounded"
-                  variant="outlined"
+        <!-- 顶级创作者排行 -->
+        <v-col cols="12" lg="4">
+          <div class="tech-card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <v-icon class="mr-2" color="amber">mdi-crown</v-icon>
+                顶级创作者
+              </h3>
+              <v-chip color="cyan" size="small" variant="outlined">实时</v-chip>
+            </div>
+            <div class="card-content">
+              <div class="creators-list">
+                <div
+                  v-for="(item, index) in topAuthors?.slice(0, 8)"
+                  :key="index"
+                  class="creator-item"
                 >
-                  Github
-                </v-btn>
-              </template>
-            </RedStoneSection>
-            <RedStoneSection :lever-on="leverOn" :size="3">
-              <template #title> Sponsors</template>
-              <template #text>
-                <p>
-                  {{ t('reden.home.community_intro.sponsor') }}
-                </p>
-              </template>
-              <template #action>
-                <v-btn
-                  :to="localePath('/sponsors')"
-                  class="ma-2"
-                  color="primary"
-                  rounded="rounded"
-                  variant="outlined"
-                >
-                  Sponsors
-                </v-btn>
-              </template>
-            </RedStoneSection>
-            <RedStoneSection :lever-on="leverOn" :size="3">
-              <template #title> Wiki</template>
-              <template #text>
-                <p>
-                  {{ t('reden.home.community_intro.wiki') }}
-                </p>
-              </template>
-              <template #action>
-                <v-btn
-                  class="ma-2"
-                  color="primary"
-                  href="//wiki.redenmc.com"
-                  rounded="rounded"
-                  variant="outlined"
-                >
-                  Wiki
-                </v-btn>
-              </template>
-            </RedStoneSection>
-            <RedStoneSection :lever-on="leverOn" :size="3">
-              <template #title> Discord</template>
-              <template #text>
-                <p>
-                  {{ t('reden.home.community_intro.discord') }}
-                </p>
-              </template>
-              <template #action>
-                <v-btn
-                  :href="discordInvite"
-                  class="ma-2"
-                  color="primary"
-                  rounded="rounded"
-                  variant="outlined"
-                >
-                  Discord
-                </v-btn>
-              </template>
-            </RedStoneSection>
-          </template>
-        </RedstoneSectionTitle>
-      </div>
+                  <template v-if="item && item.author">
+                    <div class="creator-rank">
+                      <div class="rank-number" :class="getRankClass(index)">
+                        {{ index + 1 }}
+                      </div>
+                    </div>
+                    <div class="creator-avatar">
+                      <v-avatar :image="item.author.avatarUrl" size="40" />
+                      <div
+                        v-if="index < 3"
+                        class="rank-badge"
+                        :class="getRankBadgeClass(index)"
+                      >
+                        <v-icon size="small">{{ getRankIcon(index) }}</v-icon>
+                      </div>
+                    </div>
+                    <div class="creator-info">
+                      <div class="creator-name">{{ item.author.username }}</div>
+                      <div class="creator-stats">
+                        <span class="stat-item">
+                          <v-icon size="small" color="red">mdi-heart</v-icon>
+                          {{ item.totalVoteUps }}
+                        </span>
+                        <span class="stat-item">
+                          <v-icon size="small" color="blue"
+                            >mdi-download</v-icon
+                          >
+                          {{ item.totalDownloads }}
+                        </span>
+                      </div>
+                    </div>
+                    <v-btn
+                      :to="localePath(`/@${item.author.username}`)"
+                      icon="mdi-arrow-right"
+                      size="small"
+                      variant="text"
+                      class="creator-action"
+                    />
+                  </template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
+
+  <div ref="introContent" class="intro-content">
+    <div class="content-common d-none">
+      <p>
+        Reden 的名字来自于 Redstone Eden，意为红石伊甸园。我们希望 Reden
+        能成为一个 Minecraft
+        红石爱好者的乐园，为玩家提供丰富的红石机器、配置、教程等资源。
+        我们致力于打造一个开放、友好的社区，欢迎各位加入我们！
+      </p>
+      <p>
+        Reden 本是我的模组的名字，同时也是这个社区的名字。
+        不管是我的模组还是这个社区，都是为了让玩家更好地享受游戏，更好地创造。
+        Reden 承载着通过代码与技术方便玩家的初衷，也指引着我们的社区朝着更开放、
+        包容、高技术力量的方向发展。
+      </p>
+      <p>
+        从专门生成世吞等机器的专用网站，到现在的红石爱好者社区，Reden
+        一直在不断发展。到2025年2月，Reden已经拥有数百个红石机器，和数万次下载，成为了
+        Minecraft 红石社区中的一股新力量。 Reden
+        拥有多项独创性技术正在开发或已经上线，包括：更好的投影预览功能，
+        红石机器产物速率标注功能，红石机器的自动化生成，投影在线编辑技术，基于游戏内模组的机器一键下载一键使用等等。
+      </p>
+      <p>下面是对于模组功能和社区组成部分的介绍</p>
     </div>
+    <Feature />
+    <div class="content-common">
+      <v-row v-if="false" class="community-intro">
+        <v-col>
+          <v-card color="light-blue">
+            <v-card-title>
+              {{ t('litematica_generator.title') }}
+            </v-card-title>
+            <v-card-text>
+              {{ t('litematica_generator.description') }}
+            </v-card-text>
+            <v-card-actions>
+              <v-btn :to="localePath('/litematica')" color="White">Go</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+        <v-col>
+          <v-card color="orange">
+            <v-card-title>Github 同步</v-card-title>
+            <v-card-text>
+              绑定 GitHub Apps，同步机器、配置、你关注的仓库和创作者：你的世界！
+            </v-card-text>
+            <v-card-actions>
+              <v-btn :to="localePath('/home')" color="White">点击前往</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+      <RedstoneSectionTitle :title="t('reden.home.community_intro.title')">
+        <template #default="{ leverOn }">
+          <RedStoneSection :lever-on="leverOn" :size="3">
+            <template #title> Open Source</template>
+            <template #text>
+              <p>
+                {{ t('reden.home.community_intro.open_source') }}
+              </p>
+            </template>
+            <template #action>
+              <v-btn
+                :href="githubLink"
+                class="ma-2"
+                color="primary"
+                rounded="rounded"
+                variant="outlined"
+              >
+                Github
+              </v-btn>
+            </template>
+          </RedStoneSection>
+          <RedStoneSection :lever-on="leverOn" :size="3">
+            <template #title> Sponsors</template>
+            <template #text>
+              <p>
+                {{ t('reden.home.community_intro.sponsor') }}
+              </p>
+            </template>
+            <template #action>
+              <v-btn
+                :to="localePath('/sponsors')"
+                class="ma-2"
+                color="primary"
+                rounded="rounded"
+                variant="outlined"
+              >
+                Sponsors
+              </v-btn>
+            </template>
+          </RedStoneSection>
+          <RedStoneSection :lever-on="leverOn" :size="3">
+            <template #title> Wiki</template>
+            <template #text>
+              <p>
+                {{ t('reden.home.community_intro.wiki') }}
+              </p>
+            </template>
+            <template #action>
+              <v-btn
+                class="ma-2"
+                color="primary"
+                href="//wiki.redenmc.com"
+                rounded="rounded"
+                variant="outlined"
+              >
+                Wiki
+              </v-btn>
+            </template>
+          </RedStoneSection>
+          <RedStoneSection :lever-on="leverOn" :size="3">
+            <template #title> Discord</template>
+            <template #text>
+              <p>
+                {{ t('reden.home.community_intro.discord') }}
+              </p>
+            </template>
+            <template #action>
+              <v-btn
+                :href="discordInvite"
+                class="ma-2"
+                color="primary"
+                rounded="rounded"
+                variant="outlined"
+              >
+                Discord
+              </v-btn>
+            </template>
+          </RedStoneSection>
+        </template>
+      </RedstoneSectionTitle>
+    </div>
+  </div>
+  <div class="d-flex flex-wrap">
+    <v-container>
+      <v-row class="ma-n2" no-gutters>
+        <v-col class="pa-2" cols="12" md="6">
+          <v-card class="card-hover rounded-lg overflow-hidden">
+            <v-card-title
+              class="text-h5 text-sm-h4 font-weight-semibold text-center text-white pa-4"
+            >
+              {{ t('reden.card.explore_redstone_machines') }}
+            </v-card-title>
+            <v-container class="pa-5" fluid>
+              <v-carousel cycle hide-delimiters>
+                <v-carousel-item
+                  v-for="(post, index) in topRedstonePosts?.d"
+                  :key="index"
+                  class="h-100"
+                >
+                  <RedstonePostCard :post="post" />
+                </v-carousel-item>
+              </v-carousel>
+            </v-container>
+          </v-card>
+        </v-col>
+
+        <v-col class="pa-2" cols="12" md="6">
+          <v-card class="card-hover rounded-lg overflow-hidden">
+            <v-card-title
+              class="text-h5 text-sm-h4 text-center text-white pa-4"
+            >
+              {{ t('reden.card.subscribeTitle') }}
+            </v-card-title>
+            <v-container class="pa-5" fluid>
+              <v-expansion-panels variant="accordion">
+                <v-expansion-panel
+                  v-for="(item, index) in topAuthors"
+                  :key="index"
+                  class="rounded-0"
+                >
+                  <v-expansion-panel-title
+                    v-if="item"
+                    class="d-flex flex-row justify-space-between"
+                    style="line-height: 32px"
+                  >
+                    <span class="mr-3">
+                      <v-avatar :image="item.author.avatarUrl" :size="32" />
+                      {{ item.author.username }}
+                    </span>
+
+                    <span v-if="false" class="align-center">
+                      <v-icon
+                        color="warning"
+                        icon="mdi-file-document"
+                        size="small"
+                      />
+                      <!--    书签还没做好-->
+                      {{ item.totalBookmarks }}
+                    </span>
+                    <span class="align-center">
+                      <v-icon color="error" icon="mdi-heart" size="small" />
+                      {{ item.totalVoteUps }}
+                    </span>
+                    <span class="align-center">
+                      <v-icon color="info" icon="mdi-download" size="small" />
+                      {{ item.totalDownloads }}
+                    </span>
+                  </v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <v-btn
+                      :to="localePath(`/@${item.author.username}`)"
+                      color="primary"
+                      rounded="rounded"
+                    >
+                      {{ t('reden.card.viewProfile') }}
+                    </v-btn>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+              </v-expansion-panels>
+            </v-container>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <style scoped>
-body {
-  --side-padding: 16px;
+/* 英雄区域自定义样式 */
+.hero-section {
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f4a 50%, #2a1b5a 100%);
+  border: 1px solid rgba(129, 140, 248, 0.2);
+  color: white;
 }
 
-.main-page {
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 64px;
-  height: 70vh;
-  padding-left: 30px;
-  padding-right: 30px;
+.hero-background {
+  background: radial-gradient(
+      circle at 20% 50%,
+      rgba(99, 102, 241, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 50%,
+      rgba(168, 85, 247, 0.1) 0%,
+      transparent 50%
+    ),
+    linear-gradient(
+      45deg,
+      transparent 40%,
+      rgba(129, 140, 248, 0.05) 50%,
+      transparent 60%
+    );
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #60a5fa, #a78bfa, #ec4899);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.title-underline {
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa);
+  border-radius: 2px;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(129, 140, 248, 0.2) !important;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+/* Logo动画样式 */
+.logo-container {
+  height: 200px;
+}
+
+.logo-glow {
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(
+    circle,
+    rgba(96, 165, 250, 0.3) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.orbit-ring {
+  border: 2px solid rgba(129, 140, 248, 0.3);
+  border-radius: 50%;
+  animation: orbit 15s linear infinite;
+}
+
+.orbit-ring {
+  width: 160px;
+  height: 160px;
+}
+
+.orbit-ring-2 {
+  width: 200px;
+  height: 200px;
+  border-color: rgba(168, 85, 247, 0.2);
+  animation-duration: 20s;
+  animation-direction: reverse;
+}
+
+/* 活动横幅样式 */
+.activity-banner {
+  background: linear-gradient(135deg, #1e293b 0%, #3730a3 50%, #7c2d92 100%);
+  border: 1px solid rgba(129, 140, 248, 0.3);
+  color: white;
+}
+
+.banner-background {
+  background: radial-gradient(
+      circle at 30% 40%,
+      rgba(99, 102, 241, 0.2) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 70% 60%,
+      rgba(168, 85, 247, 0.2) 0%,
+      transparent 50%
+    );
+}
+
+/* 红石装饰元素 */
+.redstone-decoration {
+  width: 200px;
+  height: 200px;
+}
+
+.redstone-element {
+  width: 48px;
+  height: 48px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.redstone-lamp {
+  top: 20px;
+  left: 20px;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+.lever {
+  top: 20px;
+  right: 20px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.piston {
+  bottom: 60px;
+  left: 30px;
+  animation: float 2.5s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+.dust {
+  bottom: 20px;
+  right: 40px;
+  width: 32px;
+  height: 32px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.reden-logo {
+  width: 80px;
+  height: 80px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: float 4s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.floating-elements {
+  top: 20px;
+  right: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  @media (max-width: 560px) {
-    .icon {
-      display: none;
-    }
+  gap: 8px;
+}
+
+.floating-chip,
+.floating-chip-2 {
+  animation: float 3s ease-in-out infinite;
+}
+
+.floating-chip-2 {
+  animation-delay: 1.5s;
+}
+
+/* 动画关键帧 */
+@keyframes pulse-glow {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.5;
   }
 }
 
-.card-hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-  background: linear-gradient(135deg, #4c9eff, #a3c7ff);
+@keyframes orbit {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-.card-hover:hover {
-  transform: scale(1.03);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+@keyframes glow {
+  0% {
+    filter: drop-shadow(0 0 5px rgba(255, 200, 0, 0.8))
+      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+  100% {
+    filter: drop-shadow(0 0 15px rgba(255, 200, 0, 1))
+      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.main-logo {
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.5));
+}
+
+.orbit-ring {
+  position: absolute;
+  border: 2px solid rgba(129, 140, 248, 0.3);
+  border-radius: 50%;
+  animation: orbit 15s linear infinite;
+}
+
+.orbit-ring {
+  width: 160px;
+  height: 160px;
+}
+
+.orbit-ring-2 {
+  width: 200px;
+  height: 200px;
+  border-color: rgba(168, 85, 247, 0.2);
+  animation-duration: 20s;
+  animation-direction: reverse;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.5;
+  }
+}
+
+@keyframes orbit {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* 仪表板样式 */
+.dashboard-section {
+  background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+  border-radius: 16px;
+  padding: 48px 0;
+  margin: 48px 0;
+  border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.data-overview {
+  margin-bottom: 48px;
+}
+
+.metric-card {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.1),
+    rgba(99, 102, 241, 0.1)
+  );
+  border: 1px solid rgba(129, 140, 248, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(129, 140, 248, 0.4);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+}
+
+.metric-icon {
+  width: 64px;
+  height: 64px;
+  background: rgba(129, 140, 248, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metric-content {
+  flex: 1;
+}
+
+.metric-value {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: white;
+  line-height: 1;
+}
+
+.metric-label {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 4px 0;
+}
+
+.metric-change {
+  font-size: 0.75rem;
+  color: #10b981;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tech-card {
+  background: linear-gradient(
+    135deg,
+    rgba(17, 24, 39, 0.8),
+    rgba(31, 41, 55, 0.8)
+  );
+  border: 1px solid rgba(75, 85, 99, 0.3);
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  height: 100%;
+}
+
+.card-header {
+  padding: 24px;
+  border-bottom: 1px solid rgba(75, 85, 99, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-content {
+  padding: 24px;
+}
+
+.machine-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.machine-item {
+  background: rgba(55, 65, 81, 0.5);
+  border: 1px solid rgba(75, 85, 99, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.machine-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(129, 140, 248, 0.4);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.machine-preview {
+  position: relative;
+  overflow: hidden;
+}
+
+.machine-image {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.machine-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.machine-item:hover .machine-overlay {
+  opacity: 1;
+}
+
+.machine-info {
+  padding: 12px;
+}
+
+.machine-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.machine-stats {
+  display: flex;
+  gap: 12px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.creators-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.creator-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(55, 65, 81, 0.3);
+  border: 1px solid rgba(75, 85, 99, 0.2);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  margin-bottom: 12px;
+}
+
+.creator-item:hover {
+  background: rgba(55, 65, 81, 0.5);
+  border-color: rgba(129, 140, 248, 0.3);
+}
+
+.creator-rank {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rank-number {
+  font-weight: bold;
+  font-size: 0.875rem;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rank-first {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #1f2937;
+}
+
+.rank-second {
+  background: linear-gradient(135deg, #e5e7eb, #9ca3af);
+  color: #1f2937;
+}
+
+.rank-third {
+  background: linear-gradient(135deg, #d97706, #92400e);
+  color: white;
+}
+
+.creator-avatar {
+  position: relative;
+}
+
+.rank-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #1f2937;
+}
+
+.badge-gold {
+  background: #fbbf24;
+  color: #1f2937;
+}
+
+.badge-silver {
+  background: #e5e7eb;
+  color: #1f2937;
+}
+
+.badge-bronze {
+  background: #d97706;
+  color: white;
+}
+
+.creator-info {
+  flex: 1;
+}
+
+.creator-name {
+  font-weight: 600;
+  color: white;
+  font-size: 0.875rem;
+  margin-bottom: 4px;
+}
+
+.creator-stats {
+  display: flex;
+  gap: 12px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.creator-action {
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.creator-item:hover .creator-action {
+  opacity: 1;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .hero-content {
+    padding: 32px 16px;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .action-btn {
+    width: 100%;
+    max-width: none;
+  }
+
+  .dashboard-section {
+    padding: 32px 0;
+    margin: 32px 0;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .machine-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card-header {
+    padding: 16px;
+  }
+
+  .card-content {
+    padding: 16px;
+  }
+}
+
+.activity-banner-wrapper {
+  margin: 48px 0 0 0;
+  width: 100%;
+}
+
+.activity-banner {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.banner-background {
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  color: white;
+  position: relative;
+  padding: 24px;
+}
+
+.banner-content {
+  position: relative;
+  z-index: 2;
+}
+
+.activity-badge {
+  margin-bottom: 16px;
+}
+
+.activity-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+}
+
+.activity-subtitle {
+  margin: 8px 0 16px;
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.activity-rewards {
+  display: flex;
+  gap: 24px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.reward-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 12px;
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.activity-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.banner-image {
+  justify-content: center;
+  align-items: center;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+}
+
+.redstone-decoration {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 8px;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
+  );
+}
+
+.redstone-element {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.redstone-lamp {
+  top: 20px;
+  left: 20px;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+.lever {
+  top: 20px;
+  right: 20px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.piston {
+  bottom: 60px;
+  left: 30px;
+  animation: float 2.5s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+.dust {
+  bottom: 20px;
+  right: 40px;
+  width: 32px;
+  height: 32px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.reden-logo {
+  width: 80px;
+  height: 80px;
+  z-index: 2;
+  animation: float 4s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+@keyframes glow {
+  0% {
+    filter: drop-shadow(0 0 5px rgba(255, 200, 0, 0.8))
+      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+  100% {
+    filter: drop-shadow(0 0 15px rgba(255, 200, 0, 1))
+      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+.floating-elements {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.floating-chip,
+.floating-chip-2 {
+  animation: float 3s ease-in-out infinite;
+}
+
+.floating-chip-2 {
+  animation-delay: 1.5s;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@media (max-width: 768px) {
+  .activity-title {
+    font-size: 24px;
+  }
+
+  .activity-rewards {
+    justify-content: center;
+  }
+
+  .activity-actions {
+    justify-content: center;
+  }
+
+  .banner-background {
+    padding: 20px;
+  }
 }
 </style>

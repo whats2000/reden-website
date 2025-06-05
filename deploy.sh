@@ -8,3 +8,4 @@ echo 1 | ssh zly@dcdccssy.cn '~/mt.py'
 
 #nuxi generate && \
 #rsync -va .output/public/ zly@dcdccssy.cn:/www/website/prod/
+#curl -v --connect-to redenmc.com:80:dcdccssy.cn http://redenmc.com/
