@@ -1,5 +1,6 @@
 User-agent: *
 Disallow: /api/
+Disallow: /api*
 Disallow: /admin/
 Disallow: *.mp3
 Disallow: *.mp4
@@ -8,3 +9,6 @@ Disallow: *.ttf
 Disallow: *.eot
 Disallow: *.woff2
 Disallow: /*?q=*
+
+User-agent: Bingbot
+Disallow: /api/*
