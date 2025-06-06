@@ -135,6 +135,12 @@ export default defineNuxtConfig({
     //   prerender: true,
     //   cache: {},
     // },
+    '/**': {
+      swr: 60 * 60, // 1 hour
+      cache: {
+        maxAge: 60 * 60 * 24, // 1 day
+      },
+    },
     '/api/**': {
       proxy:
         // process.env.NODE_ENV === 'development' ||
