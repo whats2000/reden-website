@@ -24,7 +24,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/i18n',
-    '@nuxtjs/sitemap',
+    // '@nuxtjs/sitemap',
     '@nuxt/content',
     '@nuxtjs/mdc',
     '@nuxtjs/color-mode',
@@ -88,6 +88,9 @@ export default defineNuxtConfig({
       useCookie: true,
       cookieKey: 'i18n_redirected',
       redirectOn: 'root',
+    },
+    bundle: {
+      optimizeTranslationDirective: false,
     },
     baseUrl: 'https://redenmc.com',
   },
