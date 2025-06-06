@@ -161,7 +161,6 @@ const dashboardMetrics = [
     </div>
     <div class="main-page">
       <div>
-        <!-- 主标题区域 - 科技感设计 -->
         <div class="hero-section position-relative overflow-hidden">
           <div class="hero-background position-absolute w-100 h-100"></div>
           <v-container class="position-relative">
@@ -251,7 +250,7 @@ const dashboardMetrics = [
           </v-container>
 
           <!-- 上传投影活动横幅 -->
-          <v-container class="my-8">
+          <v-container class="my-8" v-if="false">
             <v-card class="activity-banner overflow-hidden" elevation="8">
               <div
                 class="banner-background position-absolute w-100 h-100"
@@ -385,9 +384,7 @@ const dashboardMetrics = [
       </div>
     </div>
 
-    <!-- 数据总览仪表板 -->
     <v-container class="my-12">
-      <!-- 平台数据概览 -->
       <div class="mb-8">
         <h2
           class="text-h4 font-weight-bold text-center mb-8 d-flex align-center justify-center"

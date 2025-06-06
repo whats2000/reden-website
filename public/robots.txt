@@ -8,7 +8,7 @@ Disallow: *.woff
 Disallow: *.ttf
 Disallow: *.eot
 Disallow: *.woff2
-Disallow: /*?q=*
+Disallow: /*?*q=*
 
 User-agent: Bingbot
 Disallow: /api/*
