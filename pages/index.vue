@@ -438,6 +438,14 @@ const dashboardMetrics = [
                   v-for="(item, index) in homepageData?.profiles?.slice(0, 8)"
                   :key="index"
                   class="creator-item"
+                  v-ripple
+                  @click="
+                    () => {
+                      if (item && item.author) {
+                        $router.push(localePath(`/@${item.author.username}`));
+                      }
+                    }
+                  "
                 >
                   <template v-if="item && item.author">
                     <div class="creator-rank">
