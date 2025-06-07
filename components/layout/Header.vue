@@ -121,6 +121,7 @@
     <p class="text-h5"></p>
     <v-text-field
       id="search"
+      :title="t('reden.header.search')"
       v-model="search"
       :placeholder="t('reden.header.search')"
       class="mx-auto max-w-520px"
@@ -216,7 +217,7 @@ watch(router.currentRoute, (value) => {
   max-width: 520px;
 }
 
-.header-search :deep(.v-input__control > .v-field--appended) {
+:deep(.v-input__control > .v-field--appended) {
   padding-inline-end: 0 !important;
 }
 </style>

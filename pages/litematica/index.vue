@@ -115,55 +115,53 @@ export type LitematicaAuthorProfile = {
 };
 const { locale } = useI18n();
 const isDev = import.meta.dev;
+const url = computed(() => {
+  return search.value
+    ? `/api/mc-services/litematica/search?q=${search.value}&lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}`
+    : `/api/mc-services/yisibite/?lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}&order=${sortType.value}`;
+});
 const {
   data: serverResponse,
   status,
   error,
   refresh,
-} = useFetch<ListLitematicaResponse>(
-  () =>
-    search.value
-      ? `/api/mc-services/litematica/search?q=${search.value}&lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}`
-      : `/api/mc-services/yisibite/?lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}&order=${sortType.value}`,
-  {
-    dedupe: 'defer',
-    key: `generators${locale.value}`,
-    headers: {},
-    transform: (input: any): ListLitematicaResponse => {
-      if (input.d) {
-        return input;
-      } else {
-        input = input as {
-          hits: Record<string, MachineDef>;
-          estimatedTotalHits: number;
-          downloads: number;
-        };
-        return {
-          d: input.hits,
-          count: input.estimatedTotalHits,
-          downloads: input.downloads,
-        };
-      }
-    },
-    onRequestError: (context) => {
-      if (context) {
-        toast.error(
-          t('litematica_generator.toast.failed_to_load_litematica_list') +
-            (context.error as Error).message,
-        );
-        if (context.error) {
-          console.error(
-            'Failed to load litematica list',
-            context.error,
-            context.request,
-            context.response,
-            context,
-          );
-        }
-      }
-    },
+} = useFetch<ListLitematicaResponse>(url, {
+  dedupe: 'defer',
+  headers: {},
+  transform: (input: any): ListLitematicaResponse => {
+    if (input.d) {
+      return input;
+    } else {
+      input = input as {
+        hits: Record<string, MachineDef>;
+        estimatedTotalHits: number;
+        downloads: number;
+      };
+      return {
+        d: input.hits,
+        count: input.estimatedTotalHits,
+        downloads: input.downloads,
+      };
+    }
   },
-);
+  onRequestError: (context) => {
+    if (context) {
+      toast.error(
+        t('litematica_generator.toast.failed_to_load_litematica_list') +
+          (context.error as Error).message,
+      );
+      if (context.error) {
+        console.error(
+          'Failed to load litematica list',
+          context.error,
+          context.request,
+          context.response,
+          context,
+        );
+      }
+    }
+  },
+});
 
 // if (error.value?.statusCode) {
 //   throw error.value;
