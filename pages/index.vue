@@ -14,11 +14,7 @@ import '@/assets/main.css';
 import { useBackendMeta } from '~/store/meta';
 import { toast } from 'vuetify-sonner';
 import { useAppStore } from '~/store/app';
-import type {
-  ListLitematicaResponse,
-  LitematicaAuthorProfile,
-} from '~/pages/litematica/index.vue';
-import RedstonePostCard from '~/components/homePage/RedstonePostCard.vue';
+import type { MachineDef } from '~/pages/litematica/index.vue';
 
 const appStore = useAppStore();
 const introContent = ref<HTMLElement | null>(null);
@@ -34,33 +30,13 @@ useSeoMeta({
 });
 
 const backendInfo = useBackendMeta();
-const topAuthorIds = [
-  '%E7%81%AB%E5%BC%A6%E6%9C%88',
-  'Scorpio',
-  'Menggui233',
-  '%E9%87%91%E5%90%88%E6%AC%A2%E9%85%B1',
-  'Molforte',
-];
-const topAuthors: LitematicaAuthorProfile[] = [];
-for (const id of topAuthorIds) {
-  try {
-    const { data, error } = await useFetch<LitematicaAuthorProfile>(
-      `/api/mc-services/litematica/profile/${id}?lang=${locale.value}`,
-    );
-    if (error.value) {
-      console.error('Error fetching author data:', error.value);
-    }
-    topAuthors.push(data.value!);
-  } catch (error) {
-    console.error(`Error fetching data for id ${id}:`, error);
-  }
-}
-const { data: topRedstonePosts } = useFetch<ListLitematicaResponse>(
-  '/api/mc-services/yisibite/?order=random-extra&pageSize=8',
-  {
-    dedupe: 'cancel',
-  },
-);
+
+const { data: homepageData } = useFetch<{
+  posts: MachineDef[];
+  profiles: { author: Profile; totalDownloads: number; totalVoteUps: number }[];
+}>(`api/mc-services/litematica/homepage-profiles?lang=${locale.value}`, {
+  dedupe: 'cancel',
+});
 
 // 排行榜相关方法
 function getRankClass(index: number) {
@@ -385,50 +361,7 @@ const dashboardMetrics = [
     </div>
 
     <v-container class="my-12">
-      <div class="mb-8">
-        <h2
-          class="text-h4 font-weight-bold text-center mb-8 d-flex align-center justify-center"
-        >
-          <v-icon class="mr-2" color="cyan" size="large">mdi-chart-line</v-icon>
-          平台数据总览
-        </h2>
-        <v-row>
-          <v-col
-            cols="6"
-            sm="6"
-            md="3"
-            v-for="(metric, index) in dashboardMetrics"
-            :key="index"
-          >
-            <v-card class="metric-card h-100" variant="outlined" hover>
-              <v-card-text class="pa-4 text-center">
-                <v-avatar :color="metric.color" size="56" class="mb-3">
-                  <v-icon :color="metric.iconColor" size="28">{{
-                    metric.icon
-                  }}</v-icon>
-                </v-avatar>
-                <div class="text-h6 text-md-h5 font-weight-bold mb-1">
-                  {{ metric.value }}
-                </div>
-                <div class="text-caption text-grey-darken-1 mb-2">
-                  {{ metric.label }}
-                </div>
-                <v-chip
-                  :color="metric.trendColor"
-                  variant="tonal"
-                  size="x-small"
-                >
-                  <v-icon start size="x-small">{{ metric.trendIcon }}</v-icon>
-                  {{ metric.change }}
-                </v-chip>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </div>
-
-      <!-- 热门机器与创作者 -->
-      <v-row class="mt-8">
+      <v-row class="mb-8">
         <!-- 热门红石机器 -->
         <v-col cols="12" lg="8">
           <div class="tech-card">
@@ -449,7 +382,7 @@ const dashboardMetrics = [
             <div class="card-content">
               <div class="machine-grid">
                 <div
-                  v-for="(post, index) in topRedstonePosts?.d?.slice(0, 6)"
+                  v-for="(post, index) in homepageData?.posts?.slice(0, 6)"
                   :key="index"
                   class="machine-item"
                 >
@@ -502,7 +435,7 @@ const dashboardMetrics = [
             <div class="card-content">
               <div class="creators-list">
                 <div
-                  v-for="(item, index) in topAuthors?.slice(0, 8)"
+                  v-for="(item, index) in homepageData?.profiles?.slice(0, 8)"
                   :key="index"
                   class="creator-item"
                 >
@@ -551,6 +484,48 @@ const dashboardMetrics = [
           </div>
         </v-col>
       </v-row>
+
+      <div class="mt-8">
+        <h2
+          class="text-h4 font-weight-bold text-center mb-8 d-flex align-center justify-center"
+        >
+          <v-icon class="mr-2" color="cyan" size="large">mdi-chart-line</v-icon>
+          平台数据总览
+        </h2>
+        <v-row>
+          <v-col
+            cols="6"
+            sm="6"
+            md="3"
+            v-for="(metric, index) in dashboardMetrics"
+            :key="index"
+          >
+            <v-card class="metric-card h-100" variant="outlined" hover>
+              <v-card-text class="pa-4 text-center">
+                <v-avatar :color="metric.color" size="56" class="mb-3">
+                  <v-icon :color="metric.iconColor" size="28">{{
+                    metric.icon
+                  }}</v-icon>
+                </v-avatar>
+                <div class="text-h6 text-md-h5 font-weight-bold mb-1">
+                  {{ metric.value }}
+                </div>
+                <div class="text-caption text-grey-darken-1 mb-2">
+                  {{ metric.label }}
+                </div>
+                <v-chip
+                  :color="metric.trendColor"
+                  variant="tonal"
+                  size="x-small"
+                >
+                  <v-icon start size="x-small">{{ metric.trendIcon }}</v-icon>
+                  {{ metric.change }}
+                </v-chip>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </div>
     </v-container>
   </div>
 
@@ -686,89 +661,6 @@ const dashboardMetrics = [
         </template>
       </RedstoneSectionTitle>
     </div>
-  </div>
-  <div class="d-flex flex-wrap">
-    <v-container>
-      <v-row class="ma-n2" no-gutters>
-        <v-col class="pa-2" cols="12" md="6">
-          <v-card class="card-hover rounded-lg overflow-hidden">
-            <v-card-title
-              class="text-h5 text-sm-h4 font-weight-semibold text-center text-white pa-4"
-            >
-              {{ t('reden.card.explore_redstone_machines') }}
-            </v-card-title>
-            <v-container class="pa-5" fluid>
-              <v-carousel cycle hide-delimiters>
-                <v-carousel-item
-                  v-for="(post, index) in topRedstonePosts?.d"
-                  :key="index"
-                  class="h-100"
-                >
-                  <RedstonePostCard :post="post" />
-                </v-carousel-item>
-              </v-carousel>
-            </v-container>
-          </v-card>
-        </v-col>
-
-        <v-col class="pa-2" cols="12" md="6">
-          <v-card class="card-hover rounded-lg overflow-hidden">
-            <v-card-title
-              class="text-h5 text-sm-h4 text-center text-white pa-4"
-            >
-              {{ t('reden.card.subscribeTitle') }}
-            </v-card-title>
-            <v-container class="pa-5" fluid>
-              <v-expansion-panels variant="accordion">
-                <v-expansion-panel
-                  v-for="(item, index) in topAuthors"
-                  :key="index"
-                  class="rounded-0"
-                >
-                  <v-expansion-panel-title
-                    v-if="item"
-                    class="d-flex flex-row justify-space-between"
-                    style="line-height: 32px"
-                  >
-                    <span class="mr-3">
-                      <v-avatar :image="item.author.avatarUrl" :size="32" />
-                      {{ item.author.username }}
-                    </span>
-
-                    <span v-if="false" class="align-center">
-                      <v-icon
-                        color="warning"
-                        icon="mdi-file-document"
-                        size="small"
-                      />
-                      <!--    书签还没做好-->
-                      {{ item.totalBookmarks }}
-                    </span>
-                    <span class="align-center">
-                      <v-icon color="error" icon="mdi-heart" size="small" />
-                      {{ item.totalVoteUps }}
-                    </span>
-                    <span class="align-center">
-                      <v-icon color="info" icon="mdi-download" size="small" />
-                      {{ item.totalDownloads }}
-                    </span>
-                  </v-expansion-panel-title>
-                  <v-expansion-panel-text>
-                    <v-btn
-                      :to="localePath(`/@${item.author.username}`)"
-                      color="primary"
-                      rounded="rounded"
-                    >
-                      {{ t('reden.card.viewProfile') }}
-                    </v-btn>
-                  </v-expansion-panel-text>
-                </v-expansion-panel>
-              </v-expansion-panels>
-            </v-container>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
   </div>
 </template>
 

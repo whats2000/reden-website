@@ -33,7 +33,7 @@ onMounted(() => {
     script.async = true;
     document.head.appendChild(script);
   })();
-  (function microsoftAnalytics() {
+  function microsoftAnalytics() {
     const script = document.createElement('script');
     script.src = 'https://www.clarity.ms/tag/psoi8pwdek';
     script.async = true;
@@ -44,7 +44,10 @@ onMounted(() => {
       function () {
         (window.clarity.q = window.clarity.q || []).push(arguments);
       };
-  })();
+  }
+  if (!import.meta.dev) {
+    microsoftAnalytics();
+  }
   (function monetag() {
     const script = document.createElement('script');
     script.async = true;

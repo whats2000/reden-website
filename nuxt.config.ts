@@ -136,7 +136,7 @@ export default defineNuxtConfig({
     //   cache: {},
     // },
     '/**': {
-      swr: 60 * 60, // 1 hour
+      swr: 60 * 5, // 5 minutes
       cache: {
         maxAge: 60 * 60 * 24, // 1 day
       },
