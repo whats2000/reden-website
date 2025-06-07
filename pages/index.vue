@@ -31,12 +31,19 @@ useSeoMeta({
 
 const backendInfo = useBackendMeta();
 
-const { data: homepageData } = useFetch<{
+const {
+  data: homepageData,
+  refresh,
+  status,
+} = useFetch<{
   posts: MachineDef[];
   profiles: { author: Profile; totalDownloads: number; totalVoteUps: number }[];
 }>(`api/mc-services/litematica/homepage-profiles?lang=${locale.value}`, {
   dedupe: 'cancel',
 });
+if (import.meta.client) {
+  refresh();
+}
 
 // 排行榜相关方法
 function getRankClass(index: number) {
@@ -381,6 +388,12 @@ const dashboardMetrics = [
             </div>
             <div class="card-content">
               <div class="machine-grid">
+                <v-skeleton-loader
+                  v-for="i in [0, 1, 2, 3, 4, 5]"
+                  v-if="status === 'pending'"
+                  type="card"
+                  class="machine-item"
+                />
                 <div
                   v-for="(post, index) in homepageData?.posts?.slice(0, 6)"
                   :key="index"
@@ -434,6 +447,11 @@ const dashboardMetrics = [
             </div>
             <div class="card-content">
               <div class="creators-list">
+                <v-skeleton-loader
+                  v-if="status === 'pending'"
+                  v-for="i in [2, 0, 0, 6]"
+                  type="list-item-avatar"
+                />
                 <div
                   v-for="(item, index) in homepageData?.profiles?.slice(0, 8)"
                   :key="index"
