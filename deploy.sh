@@ -1,7 +1,19 @@
 echo "\"$(git rev-parse --short HEAD)\"" > assets/hash.json
 
-nuxi build && \
+nuxi cleanup && nuxi build && \
 rsync -vac .output/ zly@dcdccssy.cn:/www/website/node/
+
+cat .output/public/index.html | grep builds/meta
+cat .output/public/_nuxt/builds/latest.json
+
+echo
+echo "==========="
+echo
+echo Press Enter to deploy...
+echo
+echo "==========="
+
+read
 
 ssh zly@dcdccssy.cn 'kill -9 $(lsof -t -i:3000); cd /www/website/node/ && screen -d -m bash -c "node server/index.mjs"'
 echo 1 | ssh zly@dcdccssy.cn '~/mt.py'
