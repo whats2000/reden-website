@@ -120,7 +120,7 @@ export default defineNuxtConfig({
       failOnError: false,
       routes: [
         '/',
-        '/sitemap.xml',
+        // '/sitemap.xml',
         // '/opensearch.xml'
       ],
       ignore: [
