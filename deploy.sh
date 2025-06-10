@@ -1,7 +1,6 @@
 echo "\"$(git rev-parse --short HEAD)\"" > assets/hash.json
 
-nuxi cleanup && nuxi build && \
-rsync -vac .output/ zly@dcdccssy.cn:/www/website/node/
+nuxi cleanup && nuxi build
 
 cat .output/public/index.html | grep builds/meta
 cat .output/public/_nuxt/builds/latest.json
@@ -15,7 +14,8 @@ echo "==========="
 
 read
 
-ssh zly@dcdccssy.cn 'kill -9 $(lsof -t -i:3000); cd /www/website/node/ && screen -d -m bash -c "node server/index.mjs"'
+rsync -vac .output/ zly@dcdccssy.cn:/www/website/node/ && \
+ssh zly@dcdccssy.cn 'kill -9 $(lsof -t -i:3000); cd /www/website/node/ && screen -d -m bash -c "node server/index.mjs"' && \
 echo 1 | ssh zly@dcdccssy.cn '~/mt.py'
 
 #nuxi generate && \

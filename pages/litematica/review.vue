@@ -69,7 +69,7 @@ const rejectReason = ref<string>();
         { title: 'Status', key: 'status' },
       ]"
       :items="data?.d"
-      :items-length="data?.count ?? 100"
+      :items-length="data?.count ?? 10000"
       :items-per-page-options="[10]"
       :loading="queryStatus === 'pending'"
     >
