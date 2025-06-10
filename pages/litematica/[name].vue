@@ -182,6 +182,11 @@ function copyLink() {
 const selectedImage = ref(
   tabs.value?.[0] ? tabs.value[0] : selected.value?.imageUrl,
 );
+watch(tabs, (newTabs) => {
+  if (!selectedImage.value || !newTabs.includes(selectedImage.value)) {
+    selectedImage.value = newTabs[0] || '';
+  }
+});
 </script>
 
 <template>
