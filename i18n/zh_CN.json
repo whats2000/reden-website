@@ -72,6 +72,7 @@
     "download_count": "{count} 次下载",
     "failed_preview_load": "加载投影预览失败",
     "material_list": "材料列表",
+    "no_results": "没有结果，搜搜其他的吧！",
     "not_found": "未找到投影 {name}！",
     "not_logged_in": "游客用户每分钟只能生成 5 次，登录后解锁此限制",
     "og_description": "生成我的世界红石机器投影，包括世吞、盾构等，支持任意大小，完全免费！",

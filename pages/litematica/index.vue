@@ -425,6 +425,14 @@ const isHovering = useElementHover(ad);
               </MinecraftFarmCard>
             </v-col>
           </v-row>
+
+          <v-row v-if="serverResponse.d && serverResponse.d.length === 0">
+            <v-col cols="12" class="text-center">
+              <v-alert type="info" variant="outlined">
+                {{ t('litematica_generator.no_results') }}
+              </v-alert>
+            </v-col>
+          </v-row>
         </template>
         <v-row justify="center">
           <v-pagination

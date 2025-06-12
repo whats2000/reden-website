@@ -72,6 +72,7 @@
     "download_count": "{count} downloads",
     "failed_preview_load": "Failed to load litematica to preview",
     "material_list": "Material List",
+    "no_results": "No results found.",
     "not_found": "Litematica {name} not found!",
     "not_logged_in": "Guest users can only generate 5 times per minute, please log in to unlock this limit",
     "og_description": "Generate amazing redstone / slimestone contraptions online, such as world easters or tunnel bores, in any chunks size!",
