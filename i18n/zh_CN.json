@@ -107,7 +107,7 @@
     "view_all_designs": "查看所有可生成的机器",
     "vote_down": "点踩",
     "vote_up": "点赞",
-    "web_title": "在线生成{name} - Reden投影蓝图在线生成器"
+    "web_title": "{name} - Reden投影蓝图在线生成器"
   },
   "login": {
     "button": {

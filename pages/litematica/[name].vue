@@ -530,20 +530,20 @@ watch(tabs, (newTabs) => {
                   {{ tag.name }}
                 </v-chip>
               </div>
-              <div
-                v-if="!selected.original"
-                class="opacity-60 text-body-2 mx-auto mt-3"
-              >
+              <!-- 非原创提示 -->
+              <div v-if="!selected.original" class="text-body-2 mx-auto mt-3">
                 <span class="text-amber-darken-1">
                   {{
                     t('litematica_generator.by.uploader_not_original_author')
                   }}
                 </span>
-                {{ t('litematica_generator.by.reason_uploaded') }}<br />
-                {{ t('litematica_generator.by.reason_uploaded_a') }}<br />
-                {{ t('litematica_generator.by.reason_uploaded_b') }}<br />
-                {{ t('litematica_generator.by.reason_uploaded_c') }}<br />
-                {{ t('litematica_generator.by.complaint') }}
+                <div class="opacity-60">
+                  {{ t('litematica_generator.by.reason_uploaded') }}<br />
+                  {{ t('litematica_generator.by.reason_uploaded_a') }}<br />
+                  {{ t('litematica_generator.by.reason_uploaded_b') }}<br />
+                  {{ t('litematica_generator.by.reason_uploaded_c') }}<br />
+                  {{ t('litematica_generator.by.complaint') }}
+                </div>
                 <a class="router" href="mailto:info@redenmc.com">contact us.</a>
               </div>
             </div>
