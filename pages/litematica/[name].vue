@@ -489,7 +489,7 @@ watch(tabs, (newTabs) => {
                 <reden-post-status-chip :value="selected.status!" />
                 <v-btn
                   class="ml-2"
-                  color="primary"
+                  color="green"
                   @click="approve"
                   v-if="
                     selected.status === 'Pending' &&
