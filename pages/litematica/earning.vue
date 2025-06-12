@@ -2,6 +2,13 @@
 import countup from 'vue3-countup';
 const { Vue3Countup } = countup;
 const downloads = ref(1000);
+watch(downloads, (newValue) => {
+  if (newValue < 0) {
+    downloads.value = 0;
+  } else if (newValue > 1000000) {
+    downloads.value = 1000000;
+  }
+});
 const localePath = useLocalePath();
 </script>
 
@@ -33,8 +40,6 @@ const localePath = useLocalePath();
               v-model="downloads"
               label="下载量/播放量"
               type="number"
-              min="0"
-              max="1000000"
               step="1"
               outlined
               class="mb-4 tech-input"
