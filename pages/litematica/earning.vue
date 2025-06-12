@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Vue3Countup } from 'vue3-countup';
+import countup from 'vue3-countup';
+const { Vue3Countup } = countup;
 const downloads = ref(1000);
 const localePath = useLocalePath();
 </script>
@@ -124,6 +125,20 @@ const localePath = useLocalePath();
           <v-expansion-panel-text>
             如果投影违反了社区标准或被举报，可能会导致收入暂停或取消。
             如果是您自己删除的投影，已经取得的收入将不会受到影响。
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+
+        <v-expansion-panel>
+          <v-expansion-panel-title>
+            <div class="d-flex align-center qa-title">
+              <v-icon class="mr-2">mdi-content-copy</v-icon>
+              非原创作品能获得收益吗？
+            </div>
+          </v-expansion-panel-title>
+          <v-expansion-panel-text>
+            非原创作品只能获得原创作品收益的四分之一。此外，如果原作者入驻平台并认领作品，非原创上传者将无法继续获得相关收益。我们鼓励创作者上传原创内容，这不仅能获得更高的收益，也是对知识产权的尊重。
+            将非原创作品上传到平台需要遵守相关法律法规，并确保不侵犯他人版权。我们会定期审核上传内容，确保平台内容的合法性和合规性。
+            如果您将非原创作品标记为原创，可能会导致账号被封禁或取消收益资格的惩罚。
           </v-expansion-panel-text>
         </v-expansion-panel>
 
