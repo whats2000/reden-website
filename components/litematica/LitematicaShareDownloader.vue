@@ -115,7 +115,7 @@ async function editLitematica(index: number) {
             prepend-icon="mdi-download"
             rounded
             target="_blank"
-            variant="outlined"
+            variant="elevated"
           >
             {{ t('litematica_generator.download') }}
           </v-btn>

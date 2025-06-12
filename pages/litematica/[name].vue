@@ -144,6 +144,22 @@ const tabs = computed(() => {
 
 const removeReason = ref('');
 
+async function approve() {
+  if (selected.value?.status !== 'Pending') {
+    return toast.error('错误： 此设计已经通过审核或被拒绝');
+  }
+  const response = await doFetchPost(
+    `/api/mc-services/yisibite/${machineId}/approve`,
+    {},
+  );
+  if (response.ok) {
+    toast.success('审核通过');
+    router.back();
+  } else {
+    return toastError(response);
+  }
+}
+
 async function cancelApproval() {
   const response = await doFetchPost(
     `/api/mc-services/yisibite/${machineId}/reject`,
@@ -471,6 +487,17 @@ watch(tabs, (newTabs) => {
                   {{ t('litematica_generator.status') }}:
                 </div>
                 <reden-post-status-chip :value="selected.status!" />
+                <v-btn
+                  class="ml-2"
+                  color="primary"
+                  @click="approve"
+                  v-if="
+                    selected.status === 'Pending' &&
+                    appStore.userCache?.roles?.includes('archiver')
+                  "
+                >
+                  Approve (Admin)
+                </v-btn>
               </div>
               <div v-if="selected.versions?.length" class="d-flex mt-3">
                 <div class="w-33 align-content-center">
