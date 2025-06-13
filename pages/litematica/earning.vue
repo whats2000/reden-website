@@ -13,6 +13,12 @@ watch(downloads, (newValue) => {
     downloads.value = 1000000;
   }
 });
+
+useSeoMeta({
+  title: '创作者激励计划 - Reden',
+  description:
+    '在 Reden，创作即可获取收益。通过上传优质投影作品，您不仅可以分享创意，还能获得实际经济回报。',
+});
 const localePath = useLocalePath();
 const appStore = useAppStore();
 
