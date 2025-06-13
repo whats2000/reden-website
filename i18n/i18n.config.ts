@@ -35,5 +35,7 @@ const messages = {
 export default defineI18nConfig(() => ({
   legacy: false, // Vuetify does not support the legacy mode of vue-i18n
   fallbackLocale: 'en',
+  fallbackWarn: false,
+  missingWarn: false,
   messages,
 }));

@@ -171,7 +171,7 @@ const appStore = useAppStore();
         {{ t(locale) }}
 
         <v-menu :close-on-content-click="true" activator="parent">
-          <v-list active-color="primary">
+          <v-list color="primary">
             <v-list-item
               v-for="locale in $i18n.availableLocales"
               :key="`locale-${locale}`"

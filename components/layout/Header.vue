@@ -154,7 +154,7 @@
       <v-btn icon="mdi-translate" title="Language">
         <v-icon icon="mdi-translate" />
         <v-menu :close-on-content-click="true" activator="parent">
-          <v-list active-color="primary">
+          <v-list color="primary">
             <v-list-item
               v-for="locale in availableLocales"
               :key="`locale-${locale}`"
