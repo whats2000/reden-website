@@ -350,8 +350,22 @@ async function applyForEarningPlan() {
             </div>
           </div>
 
+          <div v-if="!earningPlanEnabled" class="date-restriction">
+            <v-alert
+              color="blue-grey"
+              icon="mdi-clock-outline"
+              variant="tonal"
+              border="start"
+              class="mx-auto"
+              max-width="600"
+            >
+              <div class="text-h6 mb-2">收益计划即将开启</div>
+              <p>收益计划将于2025年6月15日正式开启，届时您可以在此申请加入。</p>
+            </v-alert>
+          </div>
+
           <div
-            v-else-if="
+            v-if="
               earningApplicationStatus === 'PendingRealNameIdentity' ||
               earningApplicationStatus === 'Ok'
             "
@@ -367,20 +381,6 @@ async function applyForEarningPlan() {
             >
               前往收益看板
             </v-btn>
-          </div>
-
-          <div v-else class="date-restriction">
-            <v-alert
-              color="blue-grey"
-              icon="mdi-clock-outline"
-              variant="tonal"
-              border="start"
-              class="mx-auto"
-              max-width="600"
-            >
-              <div class="text-h6 mb-2">收益计划即将开启</div>
-              <p>收益计划将于2025年6月15日正式开启，届时您可以在此申请加入。</p>
-            </v-alert>
           </div>
         </div>
       </div>
