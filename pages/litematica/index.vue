@@ -6,6 +6,7 @@ import BottomBarAd from '~/components/ads/BottomBarAd.vue';
 import { useElementHover } from '@vueuse/core';
 import { useAppStore } from '~/store/app';
 import { toast } from 'vuetify-sonner';
+import EarningBanner from '~/components/litematica/EarningBanner.vue';
 
 export type Tag = {
   tag: string;
@@ -216,6 +217,7 @@ const isHovering = useElementHover(ad);
 </script>
 <template>
   <div>
+    <EarningBanner />
     <p ref="ad" class="w-100 text-center opacity-60">
       <template v-if="isHovering">
         广告位招租！<br />
@@ -316,6 +318,14 @@ const isHovering = useElementHover(ad);
       </div>
       <v-container>
         <div class="d-flex flex-wrap flex-row mb-4" style="gap: 16px">
+          <v-btn
+            v-if="locale === 'zh_cn'"
+            :to="localePath('/litematica/earning')"
+            variant="outlined"
+            color="green"
+          >
+            上传投影得收益！
+          </v-btn>
           <v-btn
             v-if="locale === 'zh_cn'"
             color="primary"
@@ -470,6 +480,7 @@ const isHovering = useElementHover(ad);
 }
 
 .my-ads {
+  position: absolute;
   width: 150px;
   max-width: 8% !important;
 }

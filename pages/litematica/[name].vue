@@ -217,6 +217,16 @@ watch(tabs, (newTabs) => {
         {{ t('litematica_generator.view_all_designs') }}
       </v-btn>
       <v-btn
+        v-if="selected?.author?.id === appStore.userCache?.id"
+        :to="localePath('/litematica/earning')"
+        class="text-capitalize"
+        color="amber-darken-2"
+        prepend-icon="mdi-cash-multiple"
+        variant="tonal"
+      >
+        {{ t('litematica_generator.earning_button') }}
+      </v-btn>
+      <v-btn
         :to="appStore.logined ? undefined : localePath('/login')"
         class="text-capitalize"
         color="primary"

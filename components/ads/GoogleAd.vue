@@ -64,7 +64,8 @@ if (appStore.gads) {
 </script>
 
 <template>
-  <div ref="insFather">
+  <!-- 谷歌广告需要认证地址，暂时停用 -->
+  <div ref="insFather" v-if="false">
     <slot>
       <ins
         :data-ad-format="adFormat ?? 'auto'"
