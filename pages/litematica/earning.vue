@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import countup from 'vue3-countup';
+import { useAppStore } from '~/store/app';
+import { toast } from 'vuetify-sonner';
+import { doFetchGet, doFetchPost } from '~/utils/constants';
+
 const { Vue3Countup } = countup;
 const downloads = ref(1000);
 watch(downloads, (newValue) => {
@@ -10,6 +14,60 @@ watch(downloads, (newValue) => {
   }
 });
 const localePath = useLocalePath();
+const appStore = useAppStore();
+
+// 检查当前日期是否在2025年6月15日之后
+const earningPlanEnabled = ref(false);
+const earningApplicationStatus = ref('None'); // 可能的状态：None, PendingReview, PendingRealNameIdentity, Ok, Rejected, Disabled
+
+onMounted(() => {
+  const launchDate = new Date('2025-06-15');
+  const today = new Date();
+  earningPlanEnabled.value = today >= launchDate;
+
+  // 获取用户申请状态
+  if (appStore.logined) {
+    fetchApplicationStatus();
+  }
+});
+
+// 获取申请状态
+async function fetchApplicationStatus() {
+  try {
+    const response = await doFetchGet('/api/account/earning/status');
+    if (response.ok) {
+      const data = await response.json();
+      earningApplicationStatus.value = data.status || 'None';
+    } else {
+      toast.error('获取收益计划状态失败');
+    }
+  } catch (error) {
+    toast.error('获取收益计划状态失败');
+  }
+}
+
+// 申请收益计划
+async function applyForEarningPlan() {
+  if (!appStore.logined) {
+    // 用户未登录，显示提示并跳转到登录页
+    toast.error('请先登录再申请收益计划');
+    return;
+  }
+
+  try {
+    const response = await doFetchPost('/api/account/earning/enable', {});
+
+    if (response.ok) {
+      earningApplicationStatus.value = 'PendingReview';
+      toast.success('申请已提交，我们将尽快审核');
+    } else {
+      toast.error(`申请失败: 请稍后重试`);
+    }
+  } catch (error) {
+    console.error('申请收益计划失败', error);
+    toast.error('申请提交失败，请稍后重试');
+  }
+}
 </script>
 
 <template>
@@ -220,6 +278,88 @@ const localePath = useLocalePath();
           开始上传您的投影
         </v-btn>
       </div>
+
+      <!-- 收益计划申请区域 -->
+      <div class="application-section my-8 elevation-10 tech-card">
+        <div class="section-title mt-8 ma-4">
+          <v-icon left class="mr-2">mdi-application-edit</v-icon>
+          申请收益计划
+        </div>
+        <div class="application-content ma-4">
+          <p class="application-description">
+            加入我们的收益分成计划，您可以通过作品的下载量获得持续收益。
+            申请简单，审核快速，帮助您更好地实现创作价值。
+            有任何疑问请加QQ群：708842363
+          </p>
+
+          <div v-if="earningPlanEnabled" class="apply-form">
+            <v-btn
+              v-if="earningApplicationStatus === 'None'"
+              class="apply-btn"
+              size="large"
+              elevation="8"
+              @click="applyForEarningPlan"
+              color="success"
+            >
+              申请加入收益计划
+            </v-btn>
+
+            <div
+              v-else-if="earningApplicationStatus === 'PendingReview'"
+              class="status-pending"
+            >
+              <v-progress-circular indeterminate size="24" class="mr-2" />
+              <span>申请已提交，管理员审核中...</span>
+            </div>
+
+            <div
+              v-else-if="earningApplicationStatus === 'PendingRealNameIdentity'"
+              class="status-approved"
+            >
+              <v-icon class="mr-2" color="green">mdi-check-circle</v-icon>
+              <span>申请已通过，您已成功加入收益计划！</span>
+            </div>
+
+            <div
+              v-else-if="earningApplicationStatus === 'Rejected'"
+              class="status-rejected"
+            >
+              <v-icon class="mr-2" color="red">mdi-alert-circle</v-icon>
+              <span>申请被拒绝</span>
+            </div>
+
+            <div
+              v-else-if="earningApplicationStatus === 'Disabled'"
+              class="status-disabled"
+            >
+              <v-icon class="mr-2" color="grey">mdi-block-helper</v-icon>
+              <span>您的收益计划已被禁用</span>
+              <v-btn
+                class="ml-4"
+                color="grey"
+                variant="outlined"
+                href="mailto:me@redenmc.com"
+              >
+                联系客服
+              </v-btn>
+            </div>
+          </div>
+
+          <div v-else class="date-restriction">
+            <v-alert
+              color="blue-grey"
+              icon="mdi-clock-outline"
+              variant="tonal"
+              border="start"
+              class="mx-auto"
+              max-width="600"
+            >
+              <div class="text-h6 mb-2">收益计划即将开启</div>
+              <p>收益计划将于2025年6月15日正式开启，届时您可以在此申请加入。</p>
+            </v-alert>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -289,6 +429,7 @@ const localePath = useLocalePath();
   margin-bottom: 16px;
   background: linear-gradient(90deg, #41b883, #3490dc);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 2px 10px rgba(65, 184, 131, 0.3);
 }
@@ -378,7 +519,9 @@ const localePath = useLocalePath();
   font-weight: 700;
   background: linear-gradient(90deg, #41b883, #3490dc);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .disclaimer {
@@ -524,5 +667,101 @@ const localePath = useLocalePath();
   color: #e2e8f0;
   display: flex;
   align-items: center;
+}
+
+.application-section {
+  margin-top: 60px;
+}
+
+.application-description {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #cbd5e1;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.apply-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.apply-btn {
+  padding: 12px 32px;
+  font-size: 1.1rem;
+  max-width: 400px;
+  margin: 16px auto;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.apply-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(65, 184, 131, 0.4) !important;
+}
+
+.status-pending,
+.status-approved,
+.status-rejected,
+.status-pending-identity,
+.status-disabled {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px auto;
+  width: 100%;
+  max-width: 500px;
+  font-size: 1.1rem;
+}
+
+.status-pending {
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+}
+
+.status-pending-identity {
+  background: rgba(249, 115, 22, 0.1);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  color: #f97316;
+}
+
+.status-approved {
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  color: #34d399;
+}
+
+.status-rejected {
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  color: #f87171;
+}
+
+.status-disabled {
+  background: rgba(156, 163, 175, 0.1);
+  border: 1px solid rgba(156, 163, 175, 0.3);
+  color: #9ca3af;
+}
+
+.status-rejected a {
+  color: #f87171;
+  text-decoration: underline;
+  margin-left: 4px;
+}
+
+.date-restriction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
 }
 </style>
