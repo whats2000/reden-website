@@ -283,6 +283,18 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
               此页面用于管理投稿，编辑投稿，可以查看还在审核中的投稿
             </v-tooltip>
           </v-btn>
+          <v-btn
+            :to="localePath('/litematica/earning-dashboard')"
+            class="text-none"
+            color="success"
+            rounded="lg"
+            variant="outlined"
+          >
+            创作者收益看板
+            <v-tooltip activator="parent" location="bottom">
+              查看你的投影收益、结算与提现数据
+            </v-tooltip>
+          </v-btn>
         </div>
         <UserContentPanel
           v-if="machines"

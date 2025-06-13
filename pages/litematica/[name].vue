@@ -224,7 +224,7 @@ watch(tabs, (newTabs) => {
         prepend-icon="mdi-cash-multiple"
         variant="tonal"
       >
-        {{ t('litematica_generator.earning_button') }}
+        上传投影激励计划
       </v-btn>
       <v-btn
         :to="appStore.logined ? undefined : localePath('/login')"

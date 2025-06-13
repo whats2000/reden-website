@@ -227,6 +227,19 @@ async function applyForEarningPlan() {
               我们通过广告以及其他合作方的支持来维持平台运营并支付奖励。
             </v-expansion-panel-text>
           </v-expansion-panel>
+
+          <v-expansion-panel>
+            <v-expansion-panel-title>
+              <div class="d-flex align-center qa-title">
+                <v-icon class="mr-2">mdi-bank-transfer-out</v-icon>
+                收益结算到哪个账号？有手续费吗？
+              </div>
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              首次领取收入时需要进行支付宝实名认证，认证费用1元由您承担。款项将会支付到您绑定的手机号对应的支付宝账号。
+              请确保您填写的手机号与支付宝账号一致，以避免收款问题。如遇到任何结算相关的问题，请联系客服处理。
+            </v-expansion-panel-text>
+          </v-expansion-panel>
         </v-expansion-panels>
       </div>
 
@@ -313,14 +326,6 @@ async function applyForEarningPlan() {
             </div>
 
             <div
-              v-else-if="earningApplicationStatus === 'PendingRealNameIdentity'"
-              class="status-approved"
-            >
-              <v-icon class="mr-2" color="green">mdi-check-circle</v-icon>
-              <span>申请已通过，您已成功加入收益计划！</span>
-            </div>
-
-            <div
               v-else-if="earningApplicationStatus === 'Rejected'"
               class="status-rejected"
             >
@@ -343,6 +348,25 @@ async function applyForEarningPlan() {
                 联系客服
               </v-btn>
             </div>
+          </div>
+
+          <div
+            v-else-if="
+              earningApplicationStatus === 'PendingRealNameIdentity' ||
+              earningApplicationStatus === 'Ok'
+            "
+            class="status-approved"
+          >
+            <v-icon class="mr-2" color="green">mdi-check-circle</v-icon>
+            <span>申请已通过，您已成功加入收益计划！</span>
+            <v-btn
+              class="ml-4"
+              color="success"
+              variant="outlined"
+              :to="localePath('/litematica/earning-dashboard')"
+            >
+              前往收益看板
+            </v-btn>
           </div>
 
           <div v-else class="date-restriction">
