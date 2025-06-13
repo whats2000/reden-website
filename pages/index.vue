@@ -38,6 +38,9 @@ const {
 } = useFetch<{
   posts: MachineDef[];
   profiles: { author: Profile; totalDownloads: number; totalVoteUps: number }[];
+  totalDownloads: number;
+  totalPosts: number;
+  totalUsers: number;
 }>(`api/mc-services/litematica/homepage-profiles?lang=${locale.value}`, {
   dedupe: 'cancel',
 });
@@ -68,15 +71,15 @@ function getRankIcon(index: number) {
 }
 
 // Stats data for hero section
-const stats = [
+const stats = ref([
   { number: '500+', label: '红石机器' },
-  { number: '124K+', label: '下载量' },
+  { number: '128.4K+', label: '下载量' },
   { number: '8K+', label: '用户' },
   { number: '24/7', label: '在线服务' },
-];
+]);
 
 // Dashboard metrics data
-const dashboardMetrics = [
+const dashboardMetrics = ref([
   {
     value: '500+',
     label: '红石机器',
@@ -88,7 +91,7 @@ const dashboardMetrics = [
     trendColor: 'green',
   },
   {
-    value: '50K+',
+    value: '128.4K+',
     label: '总下载量',
     icon: 'mdi-download',
     color: 'green-lighten-4',
@@ -98,7 +101,7 @@ const dashboardMetrics = [
     trendColor: 'green',
   },
   {
-    value: '8,237',
+    value: '8200+',
     label: '活跃用户',
     icon: 'mdi-account-group',
     color: 'purple-lighten-4',
@@ -117,7 +120,15 @@ const dashboardMetrics = [
     trendIcon: 'mdi-check-circle',
     trendColor: 'green',
   },
-];
+]);
+watch(homepageData, (data) => {
+  stats.value[0].number = `${data?.totalPosts ?? '500'}+`;
+  dashboardMetrics.value[0].value = stats.value[0].number;
+  stats.value[1].number = `${(data?.totalDownloads ?? 124000) / 1000}K+`;
+  dashboardMetrics.value[1].value = stats.value[1].number;
+  stats.value[2].number = `${data?.totalUsers ?? 8000}+`;
+  dashboardMetrics.value[2].value = stats.value[2].number;
+});
 </script>
 
 <template>
