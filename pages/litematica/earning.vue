@@ -13,8 +13,8 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-  <!-- 此 div 很重要，用来保证动画，所有内容必须包裹在其中 -->
   <div data-earning="yes" id="1111">
+    <!-- 上面的 div 很重要，用来保证动画，所有内容必须包裹在其中 -->
     <div class="earning-page">
       <div class="hero-section">
         <div class="tech-overlay"></div>
