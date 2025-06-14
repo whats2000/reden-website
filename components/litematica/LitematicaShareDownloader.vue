@@ -32,7 +32,7 @@ async function loadBlob(index: number) {
     toast.error(`No url for index #${index}.`);
     return;
   }
-  if (props.selected!.attachments[index].size > 5 * 1024) {
+  if (props.selected!.attachments[index].size > 8 * 1024) {
     toast.error(t('这个投影太大了，不支持预览，请下载后在本地查看。'));
     previewing.value = -1;
     return;
