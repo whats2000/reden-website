@@ -189,8 +189,7 @@ async function vote(vote: 'up' | 'down' | 'cancel') {
 
 function copyLink() {
   navigator.clipboard.writeText(
-    `【${selected.value?.name}】 ` +
-      window.location.href.substring(0, window.location.href.indexOf('?')),
+    `【${selected.value?.name}】 \nhttps://redenmc.com/${locale.value}/litematica/${machineId}`,
   );
   toast.success(t('litematica_generator.share_link_copied_to_clipboard'));
 }

@@ -128,6 +128,7 @@
       density="comfortable"
       hide-details
       rounded="xl"
+      clearable
       variant="outlined"
       @keydown.prevent.enter="
         router.push(localePath(`/litematica?q=${search}`))
