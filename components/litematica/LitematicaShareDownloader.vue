@@ -135,7 +135,6 @@ async function editLitematica(index: number) {
             >
               {{ t('post.preview') }}
               <v-dialog
-                #default="{ isActive }"
                 :model-value="previewing === index"
                 activator="parent"
                 close-on-back
@@ -171,7 +170,7 @@ async function editLitematica(index: number) {
                           color="red"
                           icon="mdi-close"
                           variant="outlined"
-                          @click="isActive.value = false"
+                          @click="previewing = -1"
                         />
                       </div>
                       <v-switch

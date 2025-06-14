@@ -498,7 +498,7 @@ watch(tabs, (newTabs) => {
                 </div>
                 <reden-post-status-chip :value="selected.status!" />
                 <v-btn
-                  class="ml-2"
+                  class="ml-2 text-capitalize"
                   color="green"
                   @click="approve"
                   v-if="
