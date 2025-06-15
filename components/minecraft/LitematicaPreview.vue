@@ -330,11 +330,14 @@ function createRenderer(
       evt.preventDefault();
     }
   });
-  canvas.addEventListener('wheel', (evt) => {
-    evt.preventDefault();
-    move3d([0, 0, -evt.deltaY / 200]);
-    redraw();
-  });
+  canvas.addEventListener(
+    'wheel',
+    (evt) => {
+      move3d([0, 0, -evt.deltaY / 200]);
+      redraw();
+    },
+    { passive: true },
+  );
 
   const moveDist = 0.2;
   const keyMoves: Record<string, [number, number, number]> = {
@@ -395,8 +398,8 @@ function createRenderer(
     redraw();
   }, 1000 / 60);
 
-  canvas.addEventListener('touchstart', touchHandler);
-  canvas.addEventListener('touchmove', touchHandler);
+  canvas.addEventListener('touchstart', touchHandler, { passive: true });
+  canvas.addEventListener('touchmove', touchHandler, { passive: true });
   canvas.addEventListener('touchend', () => {
     middleClickPos = null;
     prevDist = 0;
@@ -411,7 +414,6 @@ function createRenderer(
   let prevDist: number;
 
   function touchHandler(evt: TouchEvent) {
-    evt.preventDefault();
     if (evt.touches.length == 1) {
       if (evt.touches && middleClickPos) {
         const dx = evt.touches[0].pageX - middleClickPos[0]; // x movement

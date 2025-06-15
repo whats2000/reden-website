@@ -19,12 +19,9 @@ const previewing = ref(-1);
 const blob = ref<Blob[]>([]);
 const localeRoute = useLocaleRoute();
 
-watch(blob, () => {
-  console.log('blob changed', blob.value);
-});
-
 async function loadBlob(index: number) {
   if (blob.value[index]) {
+    previewing.value = index;
     return;
   }
   const url = props.selected.attachments?.[index]?.url;
@@ -32,12 +29,13 @@ async function loadBlob(index: number) {
     toast.error(`No url for index #${index}.`);
     return;
   }
-  if (props.selected!.attachments[index].size > 8 * 1024) {
-    toast.error(t('这个投影太大了，不支持预览，请下载后在本地查看。'));
+  if (props.selected!.attachments![index].size > 10 * 1024) {
+    toast.error(t('这个投影太大了 (10 KB)，不支持预览，请下载后在本地查看。'));
     previewing.value = -1;
     return;
   }
   try {
+    previewing.value = index;
     blob.value[index] = await (
       await fetch(
         url.startsWith('https://reden.oss-cn-shanghai.aliyuncs.com/')
@@ -136,7 +134,6 @@ async function editLitematica(index: number) {
               {{ t('post.preview') }}
               <v-dialog
                 :model-value="previewing === index"
-                activator="parent"
                 close-on-back
                 height="100%"
               >
