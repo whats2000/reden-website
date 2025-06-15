@@ -21,19 +21,14 @@ Reden is a comprehensive platform for Minecraft redstone enthusiasts, providing 
 
 - **Frontend Framework**: [Nuxt 3](https://nuxt.com/) (Vue.js)
 - **UI Library**: [Vuetify 3](https://vuetifyjs.com/)
-- **Styling**: CSS3 with modern design patterns
 - **Internationalization**: @nuxtjs/i18n for multi-language support
-- **Content Management**: @nuxt/content for documentation
-- **State Management**: Pinia
-- **Authentication**: Microsoft OAuth integration
-- **PWA**: Progressive Web App capabilities
 
 ### 🚀 Getting Started
 
 #### Prerequisites
 
 - Node.js 18.x or higher
-- npm or yarn package manager
+- yarn package manager
 
 #### Installation
 
@@ -45,23 +40,22 @@ cd reden-website
 
 2. Install dependencies:
 ```bash
-npm install
+yarn
 ```
 
 3. Run the development server:
 ```bash
-npm run dev
+yarn dev
 ```
 
 4. Open your browser and visit `http://localhost:3000`
 
 #### Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run generate` - Generate static site
-- `npm run preview` - Preview production build
-- `npm run dev-prod-backend` - Development with production backend
+- `yarn dev` - Start development server
+- `yarn build` - Build for production
+- `yarn generate` - Generate static site
+- `yarn preview` - Preview production build
 
 ### 📁 Project Structure
 
@@ -83,42 +77,12 @@ npm run dev
 └── content/            # Content files (markdown)
 ```
 
-### 🌍 Internationalization
-
-The website supports multiple languages:
-- **en**: English
-- **zh_cn**: Chinese (Simplified)
-- **zh_tw**: Chinese (Traditional)
-- **ru**: Russian
-
-Language files are located in the `i18n/` directory.
-
-### 🤝 Contributing
-
-We welcome contributions to improve Reden! Here's how you can help:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
 ### 📄 License
 
-This project is open source and available under the appropriate license.
-
-### 🙏 Acknowledgments
-
-- Minecraft community for inspiration
-- Contributors and sponsors who make this project possible
-- Open source libraries and tools used in this project
+This project is open source and available under AGPL v3.
 
 ### 📞 Contact
 
 - Discord: [Discord Server](https://discord.gg/fCxmEyFgAd)
 - GitHub: [RedenMC Organization](https://github.com/RedenMC)
 - Website: [redenmc.com](https://redenmc.com)
-
----
-
-**Disclaimer**: This is not an official Minecraft service. Not approved by or associated with Mojang, NetEase or Microsoft.
