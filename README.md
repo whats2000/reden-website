@@ -121,7 +121,7 @@ This project is open source and available under the appropriate license.
 
 - Discord: Join our community server
 - GitHub: [RedenMC Organization](https://github.com/RedenMC)
-- Website: [reden.top](https://reden.top)
+- Website: [redenmc.com](https://redenmc.com)
 
 ---
 
@@ -242,7 +242,7 @@ npm run dev
 
 - Discord: 加入我们的社区服务器
 - GitHub: [RedenMC 组织](https://github.com/RedenMC)
-- 网站: [reden.top](https://reden.top)
+- 网站: [redenmc.com](https://redenmc.com)
 
 ---
 
