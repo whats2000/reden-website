@@ -140,24 +140,34 @@ async function applyTool() {
             );
             blockNbt.set('Name', new NbtString(replacement));
             if (resources.value) {
+              const id = Identifier.parse(replacement);
               const defaultBlockProperties =
-                resources.value.getDefaultBlockProperties(
-                  Identifier.parse(replacement),
-                );
-              if (defaultBlockProperties) {
-                const propertiesNbt = blockNbt.get('Properties') as
-                  | NbtCompound
-                  | undefined;
-                const resultNbt = new NbtCompound();
-                for (const key of Object.keys(defaultBlockProperties)) {
-                  if (propertiesNbt && propertiesNbt.has(key)) {
-                    resultNbt.set(key, propertiesNbt.get(key)!);
-                  } else {
-                    const value = defaultBlockProperties[key];
-                    resultNbt.set(key, new NbtString(value));
+                resources.value.getDefaultBlockProperties(id) ?? {};
+              const allowedProperties = resources.value.getBlockProperties(id);
+              const propertiesNbt = blockNbt.get('Properties') as
+                | NbtCompound
+                | undefined;
+              const resultNbt = new NbtCompound();
+
+              if (propertiesNbt) {
+                propertiesNbt.forEach((key, value) => {
+                  if (!allowedProperties || key in allowedProperties) {
+                    resultNbt.set(key, value);
                   }
+                });
+              }
+
+              for (const key of Object.keys(defaultBlockProperties)) {
+                if (!resultNbt.has(key)) {
+                  const value = defaultBlockProperties[key];
+                  resultNbt.set(key, new NbtString(value));
                 }
+              }
+
+              if (resultNbt.size > 0) {
                 blockNbt.set('Properties', resultNbt);
+              } else {
+                blockNbt.delete('Properties');
               }
             } else {
               console.error('[studio.vue] resource not loaded');
