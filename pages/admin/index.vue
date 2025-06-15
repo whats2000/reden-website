@@ -28,6 +28,11 @@ definePageMeta({
         </v-card>
       </v-col>
       <v-col>
+        <v-card :to="localePath('/litematica/review')" min-width="200">
+          <v-card-title> 投影审核后台 </v-card-title>
+        </v-card>
+      </v-col>
+      <v-col>
         <v-card href="/api/quark" min-width="200">
           <v-card-title> Quark </v-card-title>
           <v-card-text> Quark Maintenance </v-card-text>

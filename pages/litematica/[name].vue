@@ -154,7 +154,6 @@ async function approve() {
   );
   if (response.ok) {
     toast.success('审核通过');
-    router.back();
   } else {
     return toastError(response);
   }
