@@ -149,7 +149,10 @@ async function applyTool() {
                   | NbtCompound
                   | undefined;
                 const resultNbt = new NbtCompound();
-                for (const key of Object.keys(defaultBlockProperties)) {
+                const keys = Object.keys(defaultBlockProperties).concat(
+                  propertiesNbt ? Object.keys(propertiesNbt.toJson()) : [],
+                );
+                for (const key of keys) {
                   if (propertiesNbt && propertiesNbt.has(key)) {
                     resultNbt.set(key, propertiesNbt.get(key)!);
                   } else {
