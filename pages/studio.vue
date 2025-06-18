@@ -160,6 +160,13 @@ async function applyTool() {
                     resultNbt.set(key, new NbtString(value));
                   }
                 }
+                if (
+                  propertiesNbt &&
+                  propertiesNbt.has('waterlogged') &&
+                  !resultNbt.has('waterlogged')
+                ) {
+                  resultNbt.set('waterlogged', propertiesNbt.get('waterlogged')!);
+                }
                 blockNbt.set('Properties', resultNbt);
               }
             } else {
